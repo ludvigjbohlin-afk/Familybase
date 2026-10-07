@@ -357,6 +357,19 @@ html.big-text { font-size: 118.75%; }
 .hist th, .hist td { text-align: left; padding: 4px 6px; border-top: 1px solid var(--line); }
 #mine-later .task-title { font-weight: 500; }
 #mine-err:empty { display: none; }
+.ai-box { margin-bottom: 14px; }
+.ai-box > .btn { width: 100%; }
+#ai-status:empty { display: none; }
+.ai-day { padding: 10px 0; border-top: 1px solid var(--line); }
+.ai-day:first-child { border-top: 0; }
+.ai-day h4 { margin: 0; font-size: 1rem; }
+.ai-day .meta { margin-top: 2px; }
+.ai-ing { margin: 6px 0 0; padding-left: 18px; font-size: .9rem; }
+.ai-ing li { margin: 1px 0; }
+.ai-ing .staple { color: var(--muted); }
+.ai-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.ai-warn { font-size: .85rem; color: var(--muted); margin: 10px 0 0; }
+.meal-row .meal-extra { grid-column: 2; font-size: .82rem; color: var(--muted); }
 .owner-only { display: none; }
 .role-owner .owner-only { display: block; }
 .role-owner .not-owner { display: none; }
@@ -733,6 +746,16 @@ ul.tasks li { border-top: 1px solid var(--line); }
     <section class="card full" id="sec-meals" data-view="shop" aria-labelledby="h-meals" style="order:2">
       <h2 id="h-meals"><span class="dot"></span><span data-i="mealsTitle"></span></h2>
       <p class="summary" style="margin-top:-6px" data-i="mealsHint"></p>
+      <div class="adult-only cloud-only ai-box">
+        <button class="btn" type="button" id="ai-open" aria-expanded="false" aria-controls="ai-panel" data-i="aiOpen"></button>
+        <div id="ai-panel" class="add-panel" hidden>
+          <label for="ai-prefs" data-i="aiDescribe"></label>
+          <textarea id="ai-prefs" maxlength="600" rows="3"></textarea>
+          <div style="margin-top:10px"><button class="btn" type="button" id="ai-go" data-i="aiGo"></button></div>
+          <p class="set-msg" id="ai-status" role="status"></p>
+          <div id="ai-result"></div>
+        </div>
+      </div>
       <div id="meal-days"></div>
       <div style="margin-top:12px" class="adult-only"><button class="btn" type="button" id="meals-to-shop" data-i="mealsToShop"></button></div>
     </section>
@@ -928,6 +951,11 @@ const T = {
     tplLabel: "Templates:", tplAdded: "Added {n} chores from the template",
     syncOffline: "Offline. Saves when you are back online.", mineTitle: "My own things", mineHint: "Only you can see these. They do not count as chores.", mineWhat: "What do you need to do?", mineEmpty: "Nothing for today.",
     mineMore: "Show coming up ({n})", mineLess: "Hide coming up", mineNeedsSql: "Run the SQL file update-4 in Supabase to use your own things.",
+    aiOpen: "✨ Help me plan the week", aiDescribe: "Describe how the food should be", aiPh: "E.g. lactose free, one of us is gluten free, two kids who dislike vegetables but should start eating more, max 30 minutes on weekdays",
+    aiGo: "Plan the week", aiWorking: "Planning this week's dinners …", aiUse: "Use this plan", aiAgain: "Make a new suggestion", aiStaple: "basic", aiWarn: "Always check ingredients and packaging for allergies or coeliac disease.",
+    aiApplied: "This week's dinners are planned", aiNotSetup: "The AI help is not set up yet. Follow the guide to add the key and the function.", aiLimit: "Today's limit for AI planning is reached (15 per person). Try again tomorrow.",
+    aiNotAllowed: "Only adults can use AI planning.", aiNoCredit: "The AI credit has run out. Top up in the Anthropic console.", aiBadKey: "The AI key is wrong. Check ANTHROPIC_API_KEY in Supabase.",
+    aiError: "The AI could not make a plan right now. Try again.", aiNet: "No contact with the AI service. Check your connection.", mealStaples: "Basics: {x}",
     tabShop: "Shopping", shopTitle: "Shopping list", shopAdd: "Add", shopQuick: "Quick add", shopClear: "Clear ticked items", shopCopy: "Copy list", shopCopied: "Copied!",
     shopEmpty: "The list is empty. Add what you need to buy.", shopPh: "Add, for example milk",
     shopItems: ["Milk", "Bread", "Eggs", "Bananas", "Butter", "Cheese", "Coffee", "Pasta", "Rice", "Detergent", "Toilet paper", "Nappies"],
@@ -1028,6 +1056,11 @@ const T = {
     tplLabel: "Mallar:", tplAdded: "La till {n} sysslor från mallen",
     syncOffline: "Offline. Sparas när nätet är tillbaka.", mineTitle: "Mina egna saker", mineHint: "Bara du ser dessa. De räknas inte som sysslor.", mineWhat: "Vad behöver du göra?", mineEmpty: "Inget för idag.",
     mineMore: "Visa kommande ({n})", mineLess: "Dölj kommande", mineNeedsSql: "Kör SQL-filen update-4 i Supabase för att använda egna saker.",
+    aiOpen: "✨ Hjälp mig planera veckan", aiDescribe: "Beskriv hur maten ska vara", aiPh: "T.ex. laktosfritt, en av oss äter glutenfritt, två barn som inte gillar grönsaker men ska börja äta mer, max 30 minuter på vardagar",
+    aiGo: "Planera veckan", aiWorking: "Planerar veckans middagar …", aiUse: "Använd planen", aiAgain: "Gör ett nytt förslag", aiStaple: "basvara", aiWarn: "Kontrollera alltid ingredienser och förpackningar vid allergi eller celiaki.",
+    aiApplied: "Veckans middagar är planerade", aiNotSetup: "AI-hjälpen är inte uppsatt än. Följ guiden för att lägga in nyckeln och funktionen.", aiLimit: "Dagens gräns för AI-planering är nådd (15 per person). Försök igen i morgon.",
+    aiNotAllowed: "Bara vuxna kan använda AI-planeringen.", aiNoCredit: "AI-krediten är slut. Fyll på i Anthropic-konsolen.", aiBadKey: "AI-nyckeln stämmer inte. Kontrollera ANTHROPIC_API_KEY i Supabase.",
+    aiError: "AI:n kunde inte göra en plan just nu. Försök igen.", aiNet: "Ingen kontakt med AI-tjänsten. Kontrollera nätet.", mealStaples: "Basvaror: {x}",
     tabShop: "Inköp", shopTitle: "Inköpslista", shopAdd: "Lägg till", shopQuick: "Snabbval", shopClear: "Rensa avbockade", shopCopy: "Kopiera listan", shopCopied: "Kopierat!",
     shopEmpty: "Listan är tom. Lägg till det ni behöver köpa.", shopPh: "Lägg till, till exempel mjölk",
     shopItems: ["Mjölk", "Bröd", "Ägg", "Bananer", "Smör", "Ost", "Kaffe", "Pasta", "Ris", "Tvättmedel", "Toalettpapper", "Blöjor"],
@@ -1226,6 +1259,7 @@ function normalizeState(d) {
     redeems: Array.isArray(d.redeems) ? d.redeems : [],
     board: Array.isArray(d.board) ? d.board : [],
     meals: d.meals && typeof d.meals === "object" && !Array.isArray(d.meals) ? d.meals : {},
+    mealPrefs: typeof d.mealPrefs === "string" ? d.mealPrefs : "",
     welcomeDismissed: !!d.welcomeDismissed,
     settings: { ...SETTINGS_DEFAULT, ...(d.settings && typeof d.settings === "object" ? d.settings : {}) }
   };
@@ -1446,6 +1480,7 @@ function applyStatic() {
   document.getElementById("checkin").placeholder = t.checkPrompt;
   document.getElementById("shop-in").placeholder = t.shopPh;
   document.getElementById("board-in").placeholder = t.boardPh;
+  document.getElementById("ai-prefs").placeholder = t.aiPh;
   const gear = document.getElementById("open-settings");
   gear.setAttribute("aria-label", t.navSettings); gear.title = t.navSettings;
   document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
@@ -2262,7 +2297,7 @@ function renderShopping() {
   ul.innerHTML = ordered.length
     ? ordered.map(x => `<li>
         <div class="check big" role="checkbox" tabindex="0" aria-checked="${!!x.done}" data-shop-toggle="${x.id}">${x.done ? "✓" : ""}</div>
-        <div class="task-main"><div class="task-title ${x.done ? "done" : ""}">${esc(x.text)}</div><div class="meta">${(x.qty || 1) > 1 ? `<span class="pill">${x.qty} st</span>` : ""}${x.done ? "" : `<span class="pill dept">${esc(t.depts[deptOf(x.text)])}</span>`}</div></div>
+        <div class="task-main"><div class="task-title ${x.done ? "done" : ""}">${esc(x.text)}</div><div class="meta">${x.amount ? `<span class="pill">${esc(x.amount)}</span>` : ""}${(x.qty || 1) > 1 ? `<span class="pill">${x.qty} st</span>` : ""}${x.done ? "" : `<span class="pill dept">${esc(t.depts[deptOf(x.text)])}</span>`}</div></div>
         <button class="ghost" data-shop-del="${x.id}" aria-label="${esc(t.remove)}">✕</button>
       </li>`).join("")
     : `<li class="empty">${esc(t.shopEmpty)}</li>`;
@@ -2274,17 +2309,25 @@ function renderShopping() {
 }
 function addShopItem(text) {
   text = String(text || "").trim().slice(0, 60);
-  let qty = 1;
-  const mq = text.match(/^(\d{1,3})\s*(?:st|x|×|pcs)?\.?\s+(.+)$/i);
-  if (mq) { qty = Math.max(1, Number(mq[1])); text = mq[2].trim(); }
+  let qty = 1, amount = "";
+  const mq = text.match(/^(\d+(?:[.,]\d+)?(?:\s*-\s*\d+)?)\s*(st|x|×|pcs|g|gram|kg|hg|ml|cl|dl|l|liter|msk|tsk|krm|paket|pkt|förp|burk|burkar|påse|påsar|flaska|flaskor|knippe|klyfta|klyftor|skivor|tbsp|tsp|cups?|cans?|packs?|bags?|bottles?|cloves?|slices?)?\.?\s+(.+)$/i);
+  if (mq) {
+    const unit = (mq[2] || "").toLowerCase();
+    if (!unit || /^(st|x|×|pcs)$/.test(unit)) qty = Math.max(1, parseInt(mq[1], 10) || 1);
+    else amount = (mq[1] + " " + mq[2]).slice(0, 20);
+    text = mq[3].trim();
+  }
   if (!text) return;
   text = text.charAt(0).toUpperCase() + text.slice(1);
   state.shopping = state.shopping || [];
   const dup = state.shopping.find(x => !x.done && x.text.toLowerCase() === text.toLowerCase());
-  if (dup) dup.qty = (dup.qty || 1) + (mq ? qty : 1);
-  else {
+  if (dup) {
+    if (amount) dup.amount = dup.amount ? (dup.amount + " + " + amount).slice(0, 40) : amount;
+    else dup.qty = (dup.qty || 1) + (mq ? qty : 1);
+  } else {
     const was = state.shopping.find(x => x.done && x.text.toLowerCase() === text.toLowerCase());
-    if (was) { was.done = false; was.qty = qty; } else state.shopping.push({ id: uid(), text, qty, done: false });
+    if (was) { was.done = false; was.qty = qty; was.amount = amount; }
+    else state.shopping.push(amount ? { id: uid(), text, qty, amount, done: false } : { id: uid(), text, qty, done: false });
   }
   save(); renderShopping();
 }
@@ -2319,7 +2362,7 @@ document.getElementById("shop-clear").onclick = () => {
 };
 document.getElementById("shop-copy").onclick = async () => {
   const btn = document.getElementById("shop-copy"), t = T[lang];
-  const text = (state.shopping || []).filter(x => !x.done).map(x => "- " + ((x.qty || 1) > 1 ? x.qty + " " : "") + x.text).join("\n");
+  const text = (state.shopping || []).filter(x => !x.done).map(x => "- " + ((x.qty || 1) > 1 ? x.qty + " " : "") + x.text + (x.amount ? " (" + x.amount + ")" : "")).join("\n");
   if (await copyText(text)) { btn.textContent = t.shopCopied; setTimeout(() => { btn.textContent = T[lang].shopCopy; }, 1800); }
 };
 
@@ -2740,6 +2783,87 @@ const onMineClick = e => {
   document.getElementById(id).addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.dataset.mineToggle) { e.preventDefault(); e.target.click(); } });
 });
 
+/* ---------- AI dinner planning (Supabase Edge Function "plan-meals") ---------- */
+let aiPlan = null, aiBusy = false;
+function aiErrorText(code) {
+  const t = T[lang];
+  return { not_setup: t.aiNotSetup, limit: t.aiLimit, not_allowed: t.aiNotAllowed, no_credit: t.aiNoCredit, bad_key: t.aiBadKey, net: t.aiNet }[code] || t.aiError;
+}
+function renderAiResult() {
+  const t = T[lang], loc = lang === "sv" ? "sv-SE" : "en-GB", box = document.getElementById("ai-result");
+  if (!aiPlan) { box.innerHTML = ""; return; }
+  box.innerHTML = aiPlan.days.map(d => {
+    const day = new Date(d.date + "T00:00:00").toLocaleDateString(loc, { weekday: "long", day: "numeric", month: "short" });
+    return `<div class="ai-day"><div class="meta" style="margin:0">${esc(day)}</div><h4>${esc(d.dish)}</h4>${d.note ? `<div class="task-note">${esc(d.note)}</div>` : ""}
+      <ul class="ai-ing">${d.ingredients.map(x => `<li class="${x.staple ? "staple" : ""}">${esc([x.amount, x.name].filter(Boolean).join(" "))}${x.staple ? ` (${esc(t.aiStaple)})` : ""}</li>`).join("")}</ul></div>`;
+  }).join("") + (aiPlan.tip ? `<p class="summary">${esc(aiPlan.tip)}</p>` : "")
+    + `<p class="ai-warn">${esc(t.aiWarn)}</p><div class="ai-actions"><button class="btn" type="button" id="ai-use">${esc(t.aiUse)}</button><button class="ghost" type="button" id="ai-again">${esc(t.aiAgain)}</button></div>`;
+}
+async function aiPlanWeek() {
+  if (aiBusy || isChild() || LOCAL_MODE || !state) return;
+  const t = T[lang], status = document.getElementById("ai-status");
+  const prefs = document.getElementById("ai-prefs").value.trim().slice(0, 600);
+  if (prefs !== (state.mealPrefs || "")) { state.mealPrefs = prefs; save(); }
+  const dates = weekDays().map(isoDay);
+  const recent = Object.keys(state.meals || {}).filter(d => !dates.includes(d)).map(d => state.meals[d].dish).filter(Boolean);
+  aiBusy = true; aiPlan = null; renderAiResult();
+  status.classList.remove("err"); status.textContent = t.aiWorking;
+  document.getElementById("ai-go").disabled = true;
+  try {
+    const { data, error } = await sb.functions.invoke("plan-meals", {
+      body: { lang, dates, prefs, people: state.members.length, kids: state.members.filter(isKid).length, avoid: recent.slice(-14) }
+    });
+    if (error) {
+      let code = "";
+      const ctx = error.context;
+      try { if (ctx && typeof ctx.json === "function") code = ((await ctx.json()) || {}).error || ""; } catch (e) {}
+      if (!code && ctx && ctx.status === 404) code = "not_setup";
+      if (!code && (isNetErr(error) || /FunctionsFetchError|FunctionsRelayError/.test(error.name || ""))) code = "net";
+      status.classList.add("err"); status.textContent = aiErrorText(code);
+      return;
+    }
+    if (!data || !data.plan || !Array.isArray(data.plan.days) || !data.plan.days.length) { status.classList.add("err"); status.textContent = t.aiError; return; }
+    aiPlan = data.plan;
+    status.textContent = "";
+    renderAiResult();
+  } catch (e) {
+    status.classList.add("err"); status.textContent = aiErrorText(isNetErr(e) ? "net" : "");
+  } finally {
+    aiBusy = false;
+    document.getElementById("ai-go").disabled = false;
+  }
+}
+function aiApply() {
+  if (!aiPlan || isChild()) return;
+  const before = JSON.parse(JSON.stringify(state.meals || {}));
+  state.meals = state.meals || {};
+  aiPlan.days.forEach(d => {
+    state.meals[d.date] = {
+      dish: d.dish,
+      ing: d.ingredients.filter(x => !x.staple).map(x => [x.amount, x.name].filter(Boolean).join(" ")).join(", ").slice(0, 600),
+      staples: d.ingredients.filter(x => x.staple).map(x => x.name).join(", ").slice(0, 200),
+      note: d.note || ""
+    };
+  });
+  aiPlan = null;
+  renderAiResult();
+  document.getElementById("ai-panel").hidden = true;
+  document.getElementById("ai-open").setAttribute("aria-expanded", "false");
+  showUndo("", () => { state.meals = before; }, T[lang].aiApplied);
+  save(); renderAll();
+}
+document.getElementById("ai-open").onclick = () => {
+  const p = document.getElementById("ai-panel"), open = p.hidden;
+  p.hidden = !open;
+  document.getElementById("ai-open").setAttribute("aria-expanded", String(open));
+  if (open) { const ta = document.getElementById("ai-prefs"); if (!ta.value) ta.value = (state && state.mealPrefs) || ""; ta.focus(); }
+};
+document.getElementById("ai-go").onclick = aiPlanWeek;
+document.getElementById("ai-result").addEventListener("click", e => {
+  if (e.target.id === "ai-use") aiApply();
+  if (e.target.id === "ai-again") aiPlanWeek();
+});
+
 /* ---------- Rewards ---------- */
 function starBalance(id) { return starCount(id) - (state.redeems || []).filter(r => r.m === id).reduce((a, r) => a + (Number(r.cost) || 0), 0); }
 function renderRewards() {
@@ -2887,7 +3011,7 @@ function renderMeals() {
     const iso = isoDay(d), m = (state.meals || {})[iso] || {};
     const day = d.toLocaleDateString(loc, { weekday: "short", day: "numeric" });
     return `<div class="meal-row"><span class="day${iso === today ? " today" : ""}">${esc(day)}</span><input data-meal-dish="${iso}" value="${esc(m.dish || "")}" maxlength="60" placeholder="${esc(t.mealsDish)}" aria-label="${esc(t.mealsDish)} ${esc(day)}"${ro}>
-      <input class="ing" data-meal-ing="${iso}" value="${esc(m.ing || "")}" maxlength="200" placeholder="${esc(t.mealsIng)}" aria-label="${esc(t.mealsIng)}"${ro}></div>`;
+      <input class="ing" data-meal-ing="${iso}" value="${esc(m.ing || "")}" maxlength="600" placeholder="${esc(t.mealsIng)}" aria-label="${esc(t.mealsIng)}"${ro}>${m.note || m.staples ? `<div class="meal-extra">${m.note ? esc(m.note) : ""}${m.note && m.staples ? "<br>" : ""}${m.staples ? esc(t.mealStaples.replace("{x}", m.staples)) : ""}</div>` : ""}</div>`;
   }).join("");
 }
 document.getElementById("meal-days").addEventListener("change", e => {
@@ -2897,7 +3021,7 @@ document.getElementById("meal-days").addEventListener("change", e => {
   if (!iso) return;
   state.meals = state.meals || {};
   const cur = { ...(state.meals[iso] || {}) };
-  if (dish) cur.dish = dish.value.trim().slice(0, 60); else cur.ing = ing.value.trim().slice(0, 200);
+  if (dish) cur.dish = dish.value.trim().slice(0, 60); else cur.ing = ing.value.trim().slice(0, 600);
   if (cur.dish || cur.ing) state.meals[iso] = cur; else delete state.meals[iso];
   const old = isoDay(new Date(Date.now() - 14 * 86400000));
   Object.keys(state.meals).forEach(k => { if (k < old) delete state.meals[k]; });
@@ -2909,7 +3033,7 @@ document.getElementById("meals-to-shop").onclick = () => {
   let n = 0;
   weekDays().forEach(d => {
     const m = (state.meals || {})[isoDay(d)];
-    if (m && m.ing) m.ing.split(",").map(x => x.trim()).filter(Boolean).forEach(x => { addShopItem(x); n++; });
+    if (m && m.ing) m.ing.split(/,(?!\d)/).map(x => x.trim()).filter(Boolean).forEach(x => { addShopItem(x); n++; });
   });
   if (n) {
     const ids = new Set((state.shopping || []).slice(before).map(x => x.id));
