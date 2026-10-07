@@ -37,6 +37,7 @@
   --c: #2e8a64;
   --radius: 22px;
   --shadow: none;
+  --m0: #2f6fb3; --m1: #d8434a; --m2: #2e8a64; --m3: #8a5ba8; --m4: #c47a12; --m5: #1592a8;
   --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
   --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -45,12 +46,14 @@
     --bg: #17302a; --surface: #1f3b33; --tint: #26463d; --field: #1b352e; --ink: #eaf2ee; --muted: #9db5ab;
     --line: #2e5047; --line-strong: #3f6559; --primary: #6cc3a0; --spruce: #2a5f4d; --lingon: #ff6b5e; --sun: #f4c542;
     --accent: #ff6b5e; --a: #7fb2e6; --b: #ff7f73; --c: #6cc3a0;
+    --m0: #4f8fd8; --m1: #e85a50; --m2: #35a37a; --m3: #9f72c9; --m4: #c9801a; --m5: #22a2b7;
   }
 }
 :root[data-theme="dark"] {
   --bg: #17302a; --surface: #1f3b33; --tint: #26463d; --field: #1b352e; --ink: #eaf2ee; --muted: #9db5ab;
   --line: #2e5047; --line-strong: #3f6559; --primary: #6cc3a0; --spruce: #2a5f4d; --lingon: #ff6b5e; --sun: #f4c542;
   --accent: #ff6b5e; --a: #7fb2e6; --b: #ff7f73; --c: #6cc3a0;
+  --m0: #4f8fd8; --m1: #e85a50; --m2: #35a37a; --m3: #9f72c9; --m4: #c9801a; --m5: #22a2b7;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
@@ -319,6 +322,39 @@ html.big-text { font-size: 118.75%; }
 .role-child #today-list .cat-ico { font-size: 1.5rem; vertical-align: -3px; }
 .bday-line { background: rgba(255,255,255,.12); border-radius: 12px; padding: 8px 12px; margin-bottom: 12px; font-weight: 700; }
 .pill.dept { background: transparent; border: 1px solid var(--line-strong); }
+#sec-shop { order: 1; }
+.tpl-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+.tpl-row .chip { padding: 6px 12px; font-size: .9rem; }
+.task-note { font-size: .88rem; color: var(--muted); font-style: italic; margin-top: 4px; }
+#sec-today .task-note { color: #cfe3da; }
+.steps { display: grid; gap: 4px; margin-top: 8px; }
+.step { display: flex; gap: 8px; align-items: center; font-size: .92rem; margin: 0; color: inherit; }
+.step input { width: 18px; height: 18px; flex: none; accent-color: var(--sun); }
+.step.done span { text-decoration: line-through; opacity: .65; }
+.rewards { display: flex; gap: 8px; flex-wrap: wrap; margin: -4px 0 14px; }
+.rewards button { background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: .88rem; cursor: pointer; }
+.rewards button:disabled { opacity: .45; cursor: default; }
+.meal-row { display: grid; grid-template-columns: 92px 1fr; gap: 6px 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.meal-row:first-child { border-top: 0; }
+.meal-row .day { font-weight: 700; font-size: .92rem; }
+.meal-row .day.today { color: var(--primary); }
+.meal-row .ing { grid-column: 2; font-size: .9rem; padding: 7px 10px; }
+.dinner-line { color: #d9ebe3; margin: -6px 0 14px; }
+.hist { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.hist h3 { margin: 0 0 8px; font-size: 1rem; }
+.hist-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .85rem; color: var(--muted); margin-bottom: 8px; }
+.hist-legend span { display: inline-flex; gap: 6px; align-items: center; }
+.hist-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.hist-row { display: grid; grid-template-columns: 44px 1fr 92px; gap: 10px; align-items: center; padding: 4px 0; font-size: .85rem; }
+.hist-bar { display: flex; gap: 2px; height: 14px; }
+.hist-bar span { height: 100%; min-width: 3px; }
+.hist-bar span:first-child { border-radius: 4px 0 0 4px; }
+.hist-bar span:last-child { border-radius: 0 4px 4px 0; }
+.hist-bar span:only-child { border-radius: 4px; }
+.hist-empty { height: 14px; border-radius: 4px; background: var(--tint); }
+.hist-score { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.hist table { width: 100%; border-collapse: collapse; font-size: .85rem; margin-top: 8px; }
+.hist th, .hist td { text-align: left; padding: 4px 6px; border-top: 1px solid var(--line); }
 .owner-only { display: none; }
 .role-owner .owner-only { display: block; }
 .role-owner .not-owner { display: none; }
@@ -526,12 +562,19 @@ ul.tasks li { border-top: 1px solid var(--line); }
       <h2 id="h-today"><span class="dot"></span><span id="today-hi"></span></h2>
       <div id="today-stars"></div>
       <div id="today-swaps"></div>
+      <div id="today-rewards"></div>
       <div id="today-who" class="chips adult-only"></div>
       <div id="today-progress"></div>
       <ul class="tasks big" id="today-list"></ul>
     </section>
 
     <section class="card full welcome adult-only" id="welcome" data-view="today" hidden></section>
+
+    <section class="card full" id="sec-board" data-view="today" aria-labelledby="h-board">
+      <h2 id="h-board"><span class="dot"></span><span data-i="boardTitle"></span></h2>
+      <form id="board-form" class="shop-add"><input id="board-in" maxlength="140" autocomplete="off" required aria-label="Message"><button class="btn" type="submit" data-i="boardPost"></button></form>
+      <ul class="tasks" id="board-list" style="margin-top:10px"></ul>
+    </section>
 
     <section class="card full" id="sec-report" data-view="family" aria-labelledby="h-report" hidden>
       <h2 id="h-report"><span class="dot"></span><span data-i="reportTitle"></span></h2>
@@ -546,7 +589,8 @@ ul.tasks li { border-top: 1px solid var(--line); }
       <div id="load"></div>
       <p class="summary" id="load-note"></p>
       <div id="fair"></div>
-      <div class="copy-row"><button class="ghost" type="button" id="copy-summary" data-i="copySummary"></button></div>
+      <div class="copy-row"><button class="ghost" type="button" id="copy-summary" data-i="copySummary"></button><button class="ghost" type="button" id="share-img" data-i="shareImg"></button></div>
+      <div id="history"></div>
       <textarea id="summary-out" readonly hidden></textarea>
     </section>
 
@@ -669,6 +713,25 @@ ul.tasks li { border-top: 1px solid var(--line); }
       </div>
     </section>
 
+    <section class="card full" id="sec-meals" data-view="shop" aria-labelledby="h-meals" style="order:2">
+      <h2 id="h-meals"><span class="dot"></span><span data-i="mealsTitle"></span></h2>
+      <p class="summary" style="margin-top:-6px" data-i="mealsHint"></p>
+      <div id="meal-days"></div>
+      <div style="margin-top:12px" class="adult-only"><button class="btn" type="button" id="meals-to-shop" data-i="mealsToShop"></button></div>
+    </section>
+
+    <section class="card adult-only" id="sec-rewards" data-view="family" aria-labelledby="h-rewards">
+      <h2 id="h-rewards"><span class="dot"></span><span data-i="rewardsTitle"></span></h2>
+      <p class="summary" style="margin-top:-6px" data-i="rewardsHint"></p>
+      <ul class="tasks" id="reward-list"></ul>
+      <form id="reward-form" class="row" style="margin-top:10px">
+        <div style="flex:2 1 180px"><label for="rw-title" data-i="rewardName"></label><input id="rw-title" maxlength="40" required></div>
+        <div class="narrow" style="flex:0 0 100px"><label for="rw-cost" data-i="rewardCost"></label><input id="rw-cost" type="number" min="1" max="500" value="10" required></div>
+        <div class="narrow"><button class="btn" type="submit" data-i="add"></button></div>
+      </form>
+      <div id="redeem-log"></div>
+    </section>
+
     <section class="card full" id="sec-shop" data-view="shop" aria-labelledby="h-shop">
       <h2 id="h-shop"><span class="dot"></span><span data-i="shopTitle"></span></h2>
       <form id="shop-form" class="shop-add">
@@ -698,11 +761,14 @@ ul.tasks li { border-top: 1px solid var(--line); }
         <div id="k-date-row"><label for="k-date" data-i="kDate"></label><input id="k-date" type="date"></div>
         <div class="narrow" style="flex:0 0 120px"><label for="k-time" data-i="kTime"></label><input id="k-time" type="time"></div>
         <div class="narrow"><label for="k-min" data-i="minutes"></label><input id="k-min" type="number" min="1" max="600" value="15"></div>
+        <div style="flex:1 1 100%"><label for="k-note" data-i="noteLabel"></label><input id="k-note" maxlength="200"></div>
+        <div style="flex:1 1 100%"><label for="k-steps" data-i="stepsLabel"></label><textarea id="k-steps" rows="3" style="min-height:70px"></textarea></div>
         <div id="k-rot-row" style="flex:1 1 100%"><label data-i="rotLabel"></label><div class="chips" id="k-rot" style="margin:0"></div><p class="meta" style="margin:4px 0 0" data-i="rotHint"></p></div>
         <div class="narrow"><button class="btn" type="submit" data-i="addTask"></button></div>
         <div class="narrow"><button class="ghost" type="button" id="cancel-edit" data-i="cancel" hidden></button></div>
       </form>
         </div>
+        <div class="tpl-row"><span class="meta" style="margin:0" data-i="tplLabel"></span><span id="tpl-btns"></span></div>
         <div class="clean-search">
           <h3 class="clean-h" data-i="cleanTitle"></h3>
           <input id="clean-q" type="search" autocomplete="off">
@@ -837,6 +903,12 @@ const T = {
     undo: "Undo", undone: "Removed: {x}", themeLabel: "Appearance", themeAuto: "Same as the phone", themeLight: "Light", themeDark: "Dark", bigText: "Larger text",
     bdayLabel: "Birthday", bdayToday: "Happy birthday, {name}!", bdayTurns: "{name} turns {n}", bdayCal: "{name}'s birthday",
     depts: ["Fruit and veg", "Dairy", "Bread", "Meat and fish", "Pantry", "Frozen", "Household", "Baby and kids", "Other"],
+    boardTitle: "Notice board", boardPost: "Post", boardPh: "Write a short message to everyone", boardEmpty: "No messages yet.",
+    shareImg: "Share as image", histTitle: "The last weeks", histNone: "No ticked chores yet", histScore: "fairness {s}", histTable: "Show as table", histWeek: "Week",
+    mealsTitle: "This week's dinners", mealsHint: "Write the dish and the ingredients, separated by commas.", mealsDish: "Dish", mealsIng: "Ingredients, e.g. tacos, mince, cheese", mealsToShop: "Add the ingredients to the shopping list", mealsAdded: "{n} items added to the list", dinnerToday: "Dinner today: {d}",
+    rewardsTitle: "Rewards", rewardsHint: "Children spend their stars on these. You decide what they cost.", rewardName: "Reward", rewardCost: "Stars", rewardsNone: "No rewards yet. Add one below.", redeemBtn: "{r} ({c} ★)", redeemed: "Redeemed: {r}", redeemLog: "{m} redeemed {r} ({c} ★)", redeemTitle: "Recently redeemed",
+    noteLabel: "Note (optional)", stepsLabel: "Steps (optional, one per line)", stepsPill: "{n} steps",
+    tplLabel: "Templates:", tplAdded: "Added {n} chores from the template",
     tabShop: "Shopping", shopTitle: "Shopping list", shopAdd: "Add", shopQuick: "Quick add", shopClear: "Clear ticked items", shopCopy: "Copy list", shopCopied: "Copied!",
     shopEmpty: "The list is empty. Add what you need to buy.", shopPh: "Add, for example milk",
     shopItems: ["Milk", "Bread", "Eggs", "Bananas", "Butter", "Cheese", "Coffee", "Pasta", "Rice", "Detergent", "Toilet paper", "Nappies"],
@@ -929,6 +1001,12 @@ const T = {
     undo: "Ångra", undone: "Borttaget: {x}", themeLabel: "Utseende", themeAuto: "Samma som telefonen", themeLight: "Ljust", themeDark: "Mörkt", bigText: "Större text",
     bdayLabel: "Födelsedag", bdayToday: "Grattis på födelsedagen, {name}!", bdayTurns: "{name} fyller {n}", bdayCal: "{name} fyller år",
     depts: ["Frukt och grönt", "Mejeri", "Bröd", "Kött och fisk", "Skafferi", "Fryst", "Hushåll", "Barn", "Övrigt"],
+    boardTitle: "Anslagstavla", boardPost: "Skicka", boardPh: "Skriv ett kort meddelande till alla", boardEmpty: "Inga meddelanden än.",
+    shareImg: "Dela som bild", histTitle: "De senaste veckorna", histNone: "Inga avbockade sysslor än", histScore: "rättvisa {s}", histTable: "Visa som tabell", histWeek: "Vecka",
+    mealsTitle: "Veckans middagar", mealsHint: "Skriv rätten och ingredienserna, separerade med komma.", mealsDish: "Rätt", mealsIng: "Ingredienser, t.ex. tacoskal, köttfärs, ost", mealsToShop: "Lägg ingredienserna i inköpslistan", mealsAdded: "{n} varor tillagda i listan", dinnerToday: "Middag idag: {d}",
+    rewardsTitle: "Belöningar", rewardsHint: "Barnen använder sina stjärnor på dessa. Ni bestämmer vad de kostar.", rewardName: "Belöning", rewardCost: "Stjärnor", rewardsNone: "Inga belöningar än. Lägg till en nedan.", redeemBtn: "{r} ({c} ★)", redeemed: "Inlöst: {r}", redeemLog: "{m} löste in {r} ({c} ★)", redeemTitle: "Senast inlöst",
+    noteLabel: "Anteckning (valfritt)", stepsLabel: "Delmoment (valfritt, ett per rad)", stepsPill: "{n} delmoment",
+    tplLabel: "Mallar:", tplAdded: "La till {n} sysslor från mallen",
     tabShop: "Inköp", shopTitle: "Inköpslista", shopAdd: "Lägg till", shopQuick: "Snabbval", shopClear: "Rensa avbockade", shopCopy: "Kopiera listan", shopCopied: "Kopierat!",
     shopEmpty: "Listan är tom. Lägg till det ni behöver köpa.", shopPh: "Lägg till, till exempel mjölk",
     shopItems: ["Mjölk", "Bröd", "Ägg", "Bananer", "Smör", "Ost", "Kaffe", "Pasta", "Ris", "Tvättmedel", "Toalettpapper", "Blöjor"],
@@ -956,7 +1034,7 @@ const T = {
   }
 };
 
-const COLORS = ["var(--a)", "var(--b)", "var(--c)", "#8a5ba8", "#d9901f", "#2a9ba6"];
+const COLORS = ["var(--m0)", "var(--m1)", "var(--m2)", "var(--m3)", "var(--m4)", "var(--m5)"];
 
 const HOUSEHOLD = [
   { sv: "Dammsuga", en: "Vacuum", c: 2, m: 20 },
@@ -1109,6 +1187,11 @@ function normalizeState(d) {
     shopping: Array.isArray(d.shopping) ? d.shopping : [],
     swaps: Array.isArray(d.swaps) ? d.swaps : [],
     starLog: Array.isArray(d.starLog) ? d.starLog : [],
+    doneLog: Array.isArray(d.doneLog) ? d.doneLog : [],
+    rewards: Array.isArray(d.rewards) ? d.rewards : [],
+    redeems: Array.isArray(d.redeems) ? d.redeems : [],
+    board: Array.isArray(d.board) ? d.board : [],
+    meals: d.meals && typeof d.meals === "object" && !Array.isArray(d.meals) ? d.meals : {},
     welcomeDismissed: !!d.welcomeDismissed,
     settings: { ...SETTINGS_DEFAULT, ...(d.settings && typeof d.settings === "object" ? d.settings : {}) }
   };
@@ -1136,6 +1219,15 @@ function mergeStates(base, local, remote) {
   out.shopping = mergeById(bs.shopping, local.shopping, remote.shopping);
   out.swaps = mergeById(bs.swaps, local.swaps, remote.swaps);
   out.starLog = mergeById(bs.starLog, local.starLog, remote.starLog);
+  out.doneLog = mergeById(bs.doneLog, local.doneLog, remote.doneLog);
+  out.rewards = mergeById(bs.rewards, local.rewards, remote.rewards);
+  out.redeems = mergeById(bs.redeems, local.redeems, remote.redeems);
+  out.board = mergeById(bs.board, local.board, remote.board);
+  out.meals = { ...(remote.meals || {}) };
+  Object.keys(local.meals || {}).forEach(d => {
+    if (JSON.stringify((local.meals || {})[d]) !== JSON.stringify((bs.meals || {})[d])) out.meals[d] = local.meals[d];
+  });
+  Object.keys(bs.meals || {}).forEach(d => { if (!(d in (local.meals || {})) && JSON.stringify((remote.meals || {})[d]) === JSON.stringify(bs.meals[d])) delete out.meals[d]; });
   if (local.guide === false || remote.guide === false) out.guide = false;
   out.leave = { ...(remote.leave || {}) };
   Object.keys(local.leave || {}).forEach(id => {
@@ -1265,7 +1357,7 @@ function autoReset() {
   let changed = false;
   state.tasks.forEach(k => {
     if (k.done && k.doneAt && k.freq && k.freq !== "once") {
-      if (periodKey(k.freq, new Date(k.doneAt)) !== periodKey(k.freq, now)) { k.done = false; k.doneAt = null; changed = true; }
+      if (periodKey(k.freq, new Date(k.doneAt)) !== periodKey(k.freq, now)) { k.done = false; k.doneAt = null; (k.steps || []).forEach(x => { x.done = false; }); changed = true; }
     }
   });
   if (applyRotation()) changed = true;
@@ -1301,6 +1393,7 @@ function applyStatic() {
   document.querySelectorAll("[data-i]").forEach(el => { el.textContent = t[el.dataset.i]; });
   document.getElementById("checkin").placeholder = t.checkPrompt;
   document.getElementById("shop-in").placeholder = t.shopPh;
+  document.getElementById("board-in").placeholder = t.boardPh;
   const gear = document.getElementById("open-settings");
   gear.setAttribute("aria-label", t.navSettings); gear.title = t.navSettings;
   document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
@@ -1373,7 +1466,7 @@ function renderMembers() {
       <div class="leave-item" style="border-top:0;padding-top:0">
         <span class="swatch" style="background:${COLORS[m.color % COLORS.length]}"></span>
         <span class="leave-name">${esc(m.name)}</span>
-        ${memberBadge(m)}${isKid(m) ? `<span class="star-mini">★ ${starCount(m.id)}</span>` : ""}
+        ${memberBadge(m)}${isKid(m) ? `<span class="star-mini">★ ${starBalance(m.id)}</span>` : ""}
         ${state.members.length > 1 && !accountOf(m) ? `<button class="ghost${confirmRemove === m.id ? " danger" : ""}" data-remove-member="${m.id}">${confirmRemove === m.id ? t.sure : t.remove}</button>` : ""}
       </div>`).join("")
     : `<p class="empty">${t.noTasks}</p>`;
@@ -1416,9 +1509,10 @@ function renderTasks() {
           <span class="owner" style="background:${color}">${m ? esc(m.name) : esc(t.unassigned)}</span>
           <span class="pill">${esc(t.cats[k.cat] || t.cats[6])}</span>
           <span class="pill">${k.minutes} ${t.minLabel}</span>
-          <span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span>${whenText(k) ? `<span class="pill">${esc(whenText(k))}</span>` : ""}${rotNames(k) ? `<span class="pill">${esc(t.rotPill.replace("{names}", rotNames(k)))}</span>` : ""}${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}
+          <span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span>${whenText(k) ? `<span class="pill">${esc(whenText(k))}</span>` : ""}${rotNames(k) ? `<span class="pill">${esc(t.rotPill.replace("{names}", rotNames(k)))}</span>` : ""}${(k.steps || []).length ? `<span class="pill">${esc(t.stepsPill.replace("{n}", k.steps.length))}</span>` : ""}${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}
         </div>
       </div>
+      ${k.note ? `<div class="task-note" style="grid-column:2">${esc(k.note)}</div>` : ""}
       <button class="ghost adult-only" data-edit="${k.id}">${t.edit}</button>
       <button class="ghost adult-only" data-delete="${k.id}">${t.remove}</button>
     </li>`;
@@ -1466,7 +1560,9 @@ function computeSuggestion() {
   const total = totals.reduce((a, x) => a + x.mins, 0);
   if (!total) return null;
   const hi = totals.reduce((a, b) => (b.mins > a.mins ? b : a));
-  const lo = totals.reduce((a, b) => (b.mins < a.mins ? b : a));
+  const adultsLeft = totals.filter(x => x.m.id !== hi.m.id && !isKid(x.m));
+  const pool = adultsLeft.length ? adultsLeft : totals;
+  const lo = pool.reduce((a, b) => (b.mins < a.mins ? b : a));
   if (hi.m.id === lo.m.id || hi.mins / total <= 0.6) return null;
   const diff = hi.mins - lo.mins;
   let best = null;
@@ -1701,6 +1797,8 @@ function setEditMode(id) {
     document.getElementById("k-time").value = k.time || "";
     document.getElementById("k-wday").value = k.wday === null || k.wday === undefined ? "" : String(k.wday);
     renderRotPicker(k.rot ? k.rot.ids : []);
+    document.getElementById("k-note").value = k.note || "";
+    document.getElementById("k-steps").value = (k.steps || []).map(x => x.text).join("\n");
     document.getElementById("k-title").focus();
   } else {
     document.getElementById("task-form").reset();
@@ -1724,6 +1822,11 @@ function renderAll() {
   renderCalendar();
   renderReport();
   renderGuide();
+  renderBoard();
+  renderMeals();
+  renderRewards();
+  renderHistory();
+  renderTemplates();
   justDone = null;
   renderLoad();
   renderOverview();
@@ -1773,6 +1876,10 @@ document.getElementById("task-form").onsubmit = e => {
   data.time = kt || "";
   data.date = (data.freq === "once" || data.freq === "monthly") ? (kd || "") : "";
   data.wday = data.freq === "weekly" && kw !== "" ? Number(kw) : null;
+  data.note = document.getElementById("k-note").value.trim().slice(0, 200);
+  const prevSteps = (editId && (state.tasks.find(x => x.id === editId) || {}).steps) || [];
+  data.steps = document.getElementById("k-steps").value.split("\n").map(x => x.trim().slice(0, 60)).filter(Boolean).slice(0, 12)
+    .map(text => { const old = prevSteps.find(x => x.text === text); return old ? old : { id: uid(), text, done: false }; });
   const rotIds = [...document.querySelectorAll("#k-rot [aria-pressed=true]")].map(b => b.dataset.rot).filter(id => memberById(id));
   const prevTask = editId ? state.tasks.find(x => x.id === editId) : null;
   if (rotIds.length >= 2 && data.freq !== "once") {
@@ -2034,7 +2141,11 @@ function renderToday() {
   const bdays = state.members.filter(x => x.birthday && x.birthday.slice(5) === isoDay(new Date()).slice(5));
   const st = document.getElementById("today-stars");
   st.innerHTML = bdays.map(x => `<div class="bday-line">🎂 ${esc(t.bdayToday.replace("{name}", x.name))}</div>`).join("");
-  if (m && isKid(m)) { const n = starCount(m.id); st.innerHTML += `<span class="stars">★ ${esc(n === 1 ? t.starsOne : t.starsN.replace("{n}", n))}</span>`; }
+  const din = (state.meals || {})[isoDay(new Date())];
+  if (din && din.dish) st.innerHTML += `<p class="dinner-line">${esc(t.dinnerToday.replace("{d}", din.dish))}</p>`;
+  if (m && isKid(m)) { const n = starBalance(m.id); st.innerHTML += `<span class="stars">★ ${esc(n === 1 ? t.starsOne : t.starsN.replace("{n}", n))}</span>`; }
+  const rw = document.getElementById("today-rewards");
+  rw.innerHTML = m && isKid(m) && (state.rewards || []).length ? `<div class="rewards">${state.rewards.map(r => `<button type="button" data-redeem="${r.id}" data-for="${m.id}"${starBalance(m.id) < r.cost ? " disabled" : ""}>${esc(t.redeemBtn.replace("{r}", r.title).replace("{c}", r.cost))}</button>`).join("")}</div>` : "";
   const incoming = m ? (state.swaps || []).filter(w => w.to === m.id && state.tasks.some(k => k.id === w.task)) : [];
   document.getElementById("today-swaps").innerHTML = incoming.map(w => {
     const from = memberById(w.from), k = state.tasks.find(x => x.id === w.task);
@@ -2064,7 +2175,7 @@ function renderToday() {
     return `<li>
       <div class="check big${justDone === k.id ? " pop" : ""}" role="checkbox" tabindex="0" aria-checked="${k.done}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
       <div class="task-main"><div class="task-title ${k.done ? "done" : ""}"><span class="cat-ico" aria-hidden="true">${CAT_ICONS[k.cat] || CAT_ICONS[6]}</span>${esc(taskName(k))}</div>
-      <div class="meta">${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}${k.time ? `<span class="pill">${esc(t.atTime.replace("{t}", k.time))}</span>` : ""}<span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span><span class="pill">${k.minutes} ${t.minLabel}</span></div>${extra}</div>
+      <div class="meta">${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}${k.time ? `<span class="pill">${esc(t.atTime.replace("{t}", k.time))}</span>` : ""}<span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span><span class="pill">${k.minutes} ${t.minLabel}</span></div>${k.note ? `<div class="task-note">${esc(k.note)}</div>` : ""}${(k.steps || []).length ? `<div class="steps">${k.steps.map(x => `<label class="step${x.done ? " done" : ""}"><input type="checkbox" data-step="${k.id}|${x.id}"${x.done ? " checked" : ""}><span>${esc(x.text)}</span></label>`).join("")}</div>` : ""}${extra}</div>
     </li>`;
   }).join("");
 }
@@ -2319,7 +2430,7 @@ function renderReport() {
     const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
     const color = m ? COLORS[m.color % COLORS.length] : "var(--line-strong)";
     return `<div class="rep-person">
-      <div class="rep-head"><span><span class="swatch" style="background:${color}"></span>${m ? esc(m.name) : esc(t.unassigned)}${m && isKid(m) ? ` <span class="star-mini">★ ${starCount(m.id)}</span>` : ""}</span><span class="meta" style="margin:0">${tasks.length ? esc(t.reportDone.replace("{done}", done).replace("{total}", tasks.length)) : esc(t.reportNone)}</span></div>
+      <div class="rep-head"><span><span class="swatch" style="background:${color}"></span>${m ? esc(m.name) : esc(t.unassigned)}${m && isKid(m) ? ` <span class="star-mini">★ ${starBalance(m.id)}</span>` : ""}</span><span class="meta" style="margin:0">${tasks.length ? esc(t.reportDone.replace("{done}", done).replace("{total}", tasks.length)) : esc(t.reportNone)}</span></div>
       ${tasks.length ? `<div class="bar" style="margin-top:8px"><span style="width:${pct}%;background:${color}"></span></div>
       <div class="rep-tasks">${tasks.slice().sort((x, y) => Number(x.done) - Number(y.done)).map(k => {
         const late = !k.done && dueStatus(k) === "late";
@@ -2362,10 +2473,10 @@ document.getElementById("del-account").onclick = async () => {
 /* ---------- Small comforts: undo, confetti, theme, birthdays, shop departments ---------- */
 const CAT_ICONS = ["🎒", "🍽️", "🏠", "🩺", "💰", "👋", "📦"];
 let justDone = null, undoFn = null, undoTimer = null;
-function showUndo(label, restore) {
+function showUndo(label, restore, msg) {
   const t = T[lang];
   undoFn = restore;
-  document.getElementById("toast-text").textContent = t.undone.replace("{x}", label);
+  document.getElementById("toast-text").textContent = msg || t.undone.replace("{x}", label);
   document.getElementById("toast").hidden = false;
   clearTimeout(undoTimer);
   undoTimer = setTimeout(() => { document.getElementById("toast").hidden = true; undoFn = null; }, 6000);
@@ -2424,6 +2535,256 @@ function deptOf(text) {
   return 8;
 }
 
+/* ---------- Rewards ---------- */
+function starBalance(id) { return starCount(id) - (state.redeems || []).filter(r => r.m === id).reduce((a, r) => a + (Number(r.cost) || 0), 0); }
+function renderRewards() {
+  const t = T[lang];
+  const list = state.rewards || [];
+  document.getElementById("reward-list").innerHTML = list.length
+    ? list.map(r => `<li><div class="task-main"><div class="task-title">${esc(r.title)}</div><div class="meta"><span class="pill">${r.cost} ★</span></div></div><button class="ghost" data-del-reward="${r.id}" aria-label="${esc(t.remove)}">✕</button></li>`).join("")
+    : `<li class="empty">${esc(t.rewardsNone)}</li>`;
+  const log = (state.redeems || []).slice(-5).reverse();
+  document.getElementById("redeem-log").innerHTML = log.length
+    ? `<h3 class="clean-h" style="margin-top:16px">${esc(t.redeemTitle)}</h3>` + log.map(r => { const m = memberById(r.m); return `<p class="meta" style="margin:4px 0">${esc(t.redeemLog.replace("{m}", m ? m.name : "?").replace("{r}", r.title).replace("{c}", r.cost))}, ${esc(fmtDate(isoDay(new Date(r.at))))}</p>`; }).join("")
+    : "";
+}
+document.getElementById("reward-form").onsubmit = e => {
+  e.preventDefault();
+  if (isChild()) return;
+  const title = document.getElementById("rw-title").value.trim().slice(0, 40);
+  const cost = Math.max(1, Math.min(500, Number(document.getElementById("rw-cost").value) || 10));
+  if (!title) return;
+  state.rewards = state.rewards || [];
+  state.rewards.push({ id: uid(), title, cost });
+  document.getElementById("rw-title").value = "";
+  save(); renderAll();
+};
+document.getElementById("reward-list").addEventListener("click", e => {
+  const b = e.target.closest("[data-del-reward]");
+  if (!b || isChild()) return;
+  const idx = state.rewards.findIndex(r => r.id === b.dataset.delReward), gone = state.rewards[idx];
+  state.rewards = state.rewards.filter(r => r.id !== b.dataset.delReward);
+  if (gone) showUndo(gone.title, () => { state.rewards.splice(Math.min(idx, state.rewards.length), 0, gone); });
+  save(); renderAll();
+});
+document.getElementById("today-rewards").addEventListener("click", e => {
+  const b = e.target.closest("[data-redeem]");
+  if (!b) return;
+  const r = (state.rewards || []).find(x => x.id === b.dataset.redeem), m = memberById(b.dataset.for);
+  if (!r || !m) return;
+  if (isChild() && m.id !== hh.memberId) return;
+  if (starBalance(m.id) < r.cost) return;
+  state.redeems = state.redeems || [];
+  const entry = { id: uid(), m: m.id, r: r.id, title: r.title, cost: r.cost, at: Date.now() };
+  state.redeems.push(entry);
+  showUndo(r.title, () => { state.redeems = state.redeems.filter(x => x.id !== entry.id); }, T[lang].redeemed.replace("{r}", r.title));
+  confetti();
+  save(); renderAll();
+});
+
+/* ---------- Steps on chores ---------- */
+document.getElementById("today-list").addEventListener("change", e => {
+  const cb = e.target.closest("[data-step]");
+  if (!cb) return;
+  const [kid, sid] = cb.dataset.step.split("|");
+  const k = state.tasks.find(x => x.id === kid);
+  const st = k && (k.steps || []).find(x => x.id === sid);
+  if (!st || (isChild() && (!settings().childCheck || k.owner !== hh.memberId))) { renderToday(); return; }
+  st.done = cb.checked;
+  if (k.steps.every(x => x.done) && !k.done) { toggleDone(k); justDone = k.id; }
+  save(); renderAll();
+});
+
+/* ---------- Templates ---------- */
+const TEMPLATES = {
+  clean: { sv: "Storstädning", en: "Deep clean", freq: "once", items: ["Dammsuga", "Moppa golv", "Putsa fönster", "Torka av lister", "Städa badrummet", "Städa köket", "Damma lampor", "Städa kylskåpet"] },
+  holiday: { sv: "Inför semestern", en: "Before the holiday", freq: "once", items: ["Vattna växter", "Städa kylskåpet", "Betala räkningar",
+    { sv: "Packa väskorna", en: "Pack the bags", c: 6, m: 60 }, { sv: "Be grannen ta in posten", en: "Ask a neighbour to take in the post", c: 5, m: 10 }, { sv: "Dra ur sladdar och stäng fönster", en: "Unplug and close the windows", c: 2, m: 10 }] },
+  morning: { sv: "Morgonrutin för barnen", en: "Kids' morning routine", freq: "daily", kids: true, items: [
+    { sv: "Bädda sängen", en: "Make the bed", c: 0, m: 5 }, { sv: "Borsta tänderna", en: "Brush teeth", c: 0, m: 5 }, { sv: "Klä på sig", en: "Get dressed", c: 0, m: 5 }, { sv: "Packa väskan", en: "Pack the school bag", c: 0, m: 5 }] }
+};
+function renderTemplates() {
+  document.getElementById("tpl-btns").innerHTML = Object.keys(TEMPLATES).map(key => `<button type="button" class="chip" data-tpl="${key}">${esc(TEMPLATES[key][lang])}</button>`).join(" ");
+}
+function addTemplate(key) {
+  const tpl = TEMPLATES[key];
+  if (!tpl || isChild() || !state.members.length) return;
+  const items = tpl.items.map(x => typeof x === "string" ? HOUSEHOLD.find(h => h.sv === x) : x).filter(Boolean);
+  const added = [];
+  const mk = (it, owner) => ({ id: uid(), title: it[lang], ref: HOUSEHOLD.includes(it) ? it.sv : null, cat: it.c, minutes: it.m, freq: tpl.freq, owner, done: false });
+  if (tpl.kids) {
+    const kids = state.members.filter(isKid);
+    const targets = kids.length ? kids : [memberById(todayPerson()) || state.members[0]];
+    targets.forEach(m => items.forEach(it => added.push(mk(it, m.id))));
+  } else {
+    const adults = state.members.filter(m => !isKid(m));
+    const pool = adults.length ? adults : state.members;
+    const load = new Map(pool.map(m => [m.id, state.tasks.filter(k => k.owner === m.id).reduce((a, k) => a + weeklyMins(k), 0)]));
+    items.forEach(it => {
+      const k = mk(it, "");
+      let best = pool[0];
+      pool.forEach(m => { if (load.get(m.id) < load.get(best.id)) best = m; });
+      k.owner = best.id; load.set(best.id, load.get(best.id) + weeklyMins(k));
+      added.push(k);
+    });
+  }
+  state.tasks.push(...added);
+  const ids = new Set(added.map(k => k.id));
+  showUndo("", () => { state.tasks = state.tasks.filter(k => !ids.has(k.id)); }, T[lang].tplAdded.replace("{n}", added.length));
+  closeAdd();
+  save(); renderAll();
+}
+document.getElementById("tpl-btns").addEventListener("click", e => {
+  const b = e.target.closest("[data-tpl]");
+  if (b) addTemplate(b.dataset.tpl);
+});
+
+/* ---------- Notice board ---------- */
+function boardAuthor() { return !LOCAL_MODE && hh ? hh.memberId : todayPerson(); }
+function renderBoard() {
+  const t = T[lang];
+  const items = (state.board || []).slice().sort((a, b) => b.at - a.at);
+  const me = boardAuthor();
+  document.getElementById("board-list").innerHTML = items.length
+    ? items.map(x => { const m = memberById(x.by); const mine = x.by === me; return `<li><span class="swatch" style="background:${m ? COLORS[m.color % COLORS.length] : "var(--line-strong)"};flex:none"></span><div class="task-main"><div class="task-title" style="font-weight:500">${esc(x.text)}</div><div class="meta">${esc(m ? m.name : "?")}, ${esc(fmtDate(isoDay(new Date(x.at))))}</div></div>${mine || !isChild() ? `<button class="ghost" data-del-note="${x.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}</li>`; }).join("")
+    : `<li class="empty">${esc(t.boardEmpty)}</li>`;
+}
+document.getElementById("board-form").onsubmit = e => {
+  e.preventDefault();
+  const inp = document.getElementById("board-in");
+  const text = inp.value.trim().slice(0, 140);
+  if (!text) return;
+  state.board = (state.board || []).concat({ id: uid(), text, by: boardAuthor(), at: Date.now() }).sort((a, b) => a.at - b.at).slice(-30);
+  inp.value = "";
+  save(); renderBoard();
+};
+document.getElementById("board-list").addEventListener("click", e => {
+  const b = e.target.closest("[data-del-note]");
+  if (!b) return;
+  const x = (state.board || []).find(n => n.id === b.dataset.delNote);
+  if (!x || (isChild() && x.by !== boardAuthor())) return;
+  state.board = state.board.filter(n => n.id !== x.id);
+  showUndo(x.text.slice(0, 30), () => { state.board.push(x); });
+  save(); renderBoard();
+});
+
+/* ---------- Dinner plan ---------- */
+function weekDays() {
+  const st = weekStartOf(new Date());
+  return [...Array(7)].map((_, i) => { const d = new Date(st); d.setDate(st.getDate() + i); return d; });
+}
+function renderMeals() {
+  const t = T[lang], loc = lang === "sv" ? "sv-SE" : "en-GB", today = isoDay(new Date());
+  const box = document.getElementById("meal-days");
+  if (box.contains(document.activeElement)) return;
+  const ro = isChild() ? " disabled" : "";
+  box.innerHTML = weekDays().map(d => {
+    const iso = isoDay(d), m = (state.meals || {})[iso] || {};
+    const day = d.toLocaleDateString(loc, { weekday: "short", day: "numeric" });
+    return `<div class="meal-row"><span class="day${iso === today ? " today" : ""}">${esc(day)}</span><input data-meal-dish="${iso}" value="${esc(m.dish || "")}" maxlength="60" placeholder="${esc(t.mealsDish)}" aria-label="${esc(t.mealsDish)} ${esc(day)}"${ro}>
+      <input class="ing" data-meal-ing="${iso}" value="${esc(m.ing || "")}" maxlength="200" placeholder="${esc(t.mealsIng)}" aria-label="${esc(t.mealsIng)}"${ro}></div>`;
+  }).join("");
+}
+document.getElementById("meal-days").addEventListener("change", e => {
+  if (isChild()) return;
+  const dish = e.target.closest("[data-meal-dish]"), ing = e.target.closest("[data-meal-ing]");
+  const iso = (dish || ing) && (dish ? dish.dataset.mealDish : ing.dataset.mealIng);
+  if (!iso) return;
+  state.meals = state.meals || {};
+  const cur = { ...(state.meals[iso] || {}) };
+  if (dish) cur.dish = dish.value.trim().slice(0, 60); else cur.ing = ing.value.trim().slice(0, 200);
+  if (cur.dish || cur.ing) state.meals[iso] = cur; else delete state.meals[iso];
+  const old = isoDay(new Date(Date.now() - 14 * 86400000));
+  Object.keys(state.meals).forEach(k => { if (k < old) delete state.meals[k]; });
+  save(); renderToday();
+});
+document.getElementById("meals-to-shop").onclick = () => {
+  if (isChild()) return;
+  const before = (state.shopping || []).length;
+  let n = 0;
+  weekDays().forEach(d => {
+    const m = (state.meals || {})[isoDay(d)];
+    if (m && m.ing) m.ing.split(",").map(x => x.trim()).filter(Boolean).forEach(x => { addShopItem(x); n++; });
+  });
+  if (n) {
+    const ids = new Set((state.shopping || []).slice(before).map(x => x.id));
+    showUndo("", () => { state.shopping = state.shopping.filter(x => !ids.has(x.id)); }, T[lang].mealsAdded.replace("{n}", n));
+  }
+};
+
+/* ---------- History (done log, last 6 weeks) ---------- */
+function renderHistory() {
+  const t = T[lang], box = document.getElementById("history");
+  const log = state.doneLog || [];
+  const st = weekStartOf(new Date());
+  const weeks = [...Array(6)].map((_, i) => { const a = new Date(st); a.setDate(st.getDate() - 7 * (5 - i)); const b = new Date(a); b.setDate(a.getDate() + 7); return { a, b, wk: isoWeek(a).week }; });
+  const rows = weeks.map(w => {
+    const mins = new Map(state.members.map(m => [m.id, 0]));
+    log.forEach(e => { if (e.at >= w.a.getTime() && e.at < w.b.getTime() && mins.has(e.m)) mins.set(e.m, mins.get(e.m) + (Number(e.min) || 0)); });
+    const total = [...mins.values()].reduce((x, y) => x + y, 0);
+    let score = null;
+    const n = state.members.length;
+    if (n >= 2 && total) { const e = 100 / n, mx = Math.max(...mins.values()) / total * 100; score = Math.max(0, Math.round(100 * (1 - (mx - e) / (100 - e)))); }
+    return { ...w, mins, total, score };
+  });
+  if (!log.length) { box.innerHTML = `<div class="hist"><h3>${esc(t.histTitle)}</h3><p class="meta">${esc(t.histNone)}</p></div>`; return; }
+  const legend = state.members.map(m => `<span><i style="background:${COLORS[m.color % COLORS.length]}"></i>${esc(m.name)}</span>`).join("");
+  const bars = rows.map(r => {
+    const segs = state.members.filter(m => r.mins.get(m.id) > 0).map(m => {
+      const v = r.mins.get(m.id), pct = Math.round(v / r.total * 100);
+      return `<span style="width:${v / r.total * 100}%;background:${COLORS[m.color % COLORS.length]}" title="${esc(m.name)}: ${pct}% (${v} ${t.minLabel})" aria-label="${esc(m.name)} ${pct}%"></span>`;
+    }).join("");
+    return `<div class="hist-row"><span class="meta" style="margin:0">v${r.wk}</span>${r.total ? `<div class="hist-bar">${segs}</div>` : `<div class="hist-empty"></div>`}<span class="hist-score">${r.score === null ? "" : esc(t.histScore.replace("{s}", r.score))}</span></div>`;
+  }).join("");
+  const table = `<details><summary class="meta" style="cursor:pointer">${esc(t.histTable)}</summary><table><tr><th>${esc(t.histWeek)}</th>${state.members.map(m => `<th>${esc(m.name)}</th>`).join("")}</tr>${rows.map(r => `<tr><td>${r.wk}</td>${state.members.map(m => `<td>${r.mins.get(m.id)} ${t.minLabel}</td>`).join("")}</tr>`).join("")}</table></details>`;
+  box.innerHTML = `<div class="hist"><h3>${esc(t.histTitle)}</h3><div class="hist-legend">${legend}</div>${bars}${table}</div>`;
+}
+
+/* ---------- Weekly summary as image ---------- */
+function summaryCanvas() {
+  const t = T[lang];
+  const c = document.createElement("canvas");
+  c.width = 1080; c.height = 1350;
+  const g = c.getContext("2d");
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  g.fillStyle = "#1f5a47"; g.fillRect(0, 0, c.width, c.height);
+  const disp = '"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif', body = '"Atkinson Hyperlegible", system-ui, sans-serif';
+  g.fillStyle = "#ffffff"; g.font = `800 84px ${disp}`; g.fillText(t.title, 80, 170);
+  g.fillStyle = "#cfe3da"; g.font = `400 40px ${body}`; g.fillText(t.weekN.replace("{n}", isoWeek(new Date()).week) + (hh && hh.name ? ", " + hh.name : ""), 80, 235);
+  const totals = state.members.map(m => ({ m, mins: state.tasks.filter(k => k.owner === m.id).reduce((s, k) => s + weeklyMins(k), 0) }));
+  const total = totals.reduce((s, x) => s + x.mins, 0) || 1;
+  let y = 340;
+  totals.slice(0, 6).forEach(({ m, mins }) => {
+    const pct = Math.round(mins / total * 100);
+    g.fillStyle = "#ffffff"; g.font = `700 44px ${body}`; g.fillText(m.name, 80, y);
+    g.fillStyle = "#d9ebe3"; g.font = `400 36px ${body}`; const txt = pct + "%"; g.fillText(txt, 1000 - g.measureText(txt).width, y);
+    g.fillStyle = "rgba(255,255,255,.16)"; g.fillRect(80, y + 22, 920, 26);
+    g.fillStyle = css("--m" + (m.color % 6)) || "#f4c542"; g.fillRect(80, y + 22, Math.max(6, 920 * mins / total), 26);
+    y += 130;
+  });
+  const sc = computeScore();
+  g.fillStyle = "#f4c542"; g.font = `800 120px ${disp}`; g.fillText(sc === null ? "–" : String(sc), 80, 1180);
+  g.fillStyle = "#ffffff"; g.font = `700 40px ${body}`; g.fillText(t.scoreTitle, 80 + g.measureText(sc === null ? "–" : String(sc)).width + 30, 1150);
+  g.fillStyle = "#cfe3da"; g.font = `400 34px ${body}`;
+  g.fillText(t.summaryDone.replace("{done}", state.tasks.filter(k => k.done).length).replace("{total}", state.tasks.length), 80, 1260);
+  return c;
+}
+document.getElementById("share-img").onclick = () => {
+  if (isChild() || !state) return;
+  summaryCanvas().toBlob(async blob => {
+    if (!blob) return;
+    const name = "hushall-vecka-" + isoWeek(new Date()).week + ".png";
+    const file = new File([blob], name, { type: "image/png" });
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: T[lang].title }); return; }
+    } catch (e) { if (e && e.name === "AbortError") return; }
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }, "image/png");
+};
+
 /* ---------- Stars, rotation, swaps ---------- */
 function isKid(m) {
   if (!m) return false;
@@ -2437,9 +2798,13 @@ function toggleDone(k) {
   if (k.done) {
     k.doneAt = Date.now();
     if (isKid(memberById(k.owner))) state.starLog.push({ id: uid(), m: k.owner, k: k.id, at: k.doneAt });
+    const cutoff = Date.now() - 120 * 86400000;
+    state.doneLog = (state.doneLog || []).filter(e => e.at >= cutoff);
+    state.doneLog.push({ id: uid(), m: k.owner, k: k.id, at: k.doneAt, min: Number(k.minutes) || 0 });
   } else {
     const at = k.doneAt;
     state.starLog = state.starLog.filter(e => !(e.k === k.id && e.at === at));
+    state.doneLog = (state.doneLog || []).filter(e => !(e.k === k.id && e.at === at));
     k.doneAt = null;
   }
 }
