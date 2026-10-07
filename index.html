@@ -1,0 +1,2831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Household Balance</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1f5a47">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Hushåll">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root {
+  /* Kakel (tile), gran (spruce), lingon, sol */
+  --bg: #e6eeea;
+  --surface: #ffffff;
+  --tint: #edf3f0;
+  --field: #f7faf9;
+  --ink: #183a31;
+  --muted: #587168;
+  --line: #d6e2dc;
+  --line-strong: #b9cbc3;
+  --primary: #1f6b52;
+  --spruce: #1f5a47;
+  --lingon: #d8434a;
+  --sun: #f4c542;
+  --accent: #d8434a;
+  --a: #2f6fb3;
+  --b: #d8434a;
+  --c: #2e8a64;
+  --radius: 22px;
+  --shadow: none;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17302a; --surface: #1f3b33; --tint: #26463d; --field: #1b352e; --ink: #eaf2ee; --muted: #9db5ab;
+    --line: #2e5047; --line-strong: #3f6559; --primary: #6cc3a0; --spruce: #2a5f4d; --lingon: #ff6b5e; --sun: #f4c542;
+    --accent: #ff6b5e; --a: #7fb2e6; --b: #ff7f73; --c: #6cc3a0;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17302a; --surface: #1f3b33; --tint: #26463d; --field: #1b352e; --ink: #eaf2ee; --muted: #9db5ab;
+  --line: #2e5047; --line-strong: #3f6559; --primary: #6cc3a0; --spruce: #2a5f4d; --lingon: #ff6b5e; --sun: #f4c542;
+  --accent: #ff6b5e; --a: #7fb2e6; --b: #ff7f73; --c: #6cc3a0;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 24px 18px 56px; }
+header {
+  display: flex; flex-wrap: nowrap; gap: 12px; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 22px;
+}
+header > div:first-child { min-width: 0; flex: 1; }
+h1 { font-size: 1.7rem; margin: 0; letter-spacing: -.02em; }
+.sub { color: var(--muted); margin: 2px 0 0; font-size: .95rem; }
+.lang { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.lang button {
+  border: 0; background: transparent; color: var(--muted); padding: 6px 14px; border-radius: 999px;
+  cursor: pointer; font: inherit; font-size: .9rem;
+}
+.lang button[aria-pressed="true"] { background: var(--primary); color: #fff; }
+.grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
+@media (min-width: 800px) { .grid { grid-template-columns: 1.4fr 1fr; } }
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px;
+}
+.card h2 { font-size: 1.05rem; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+.card h2 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.full { grid-column: 1 / -1; }
+label { font-size: .85rem; color: var(--muted); display: block; margin-bottom: 4px; }
+input, select, textarea {
+  width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px;
+}
+textarea { min-height: 84px; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.row > * { flex: 1 1 120px; }
+.row > .narrow { flex: 0 0 90px; }
+button.btn {
+  background: var(--primary); color: #fff; border: 0; border-radius: 10px;
+  padding: 10px 16px; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+button.btn:hover { filter: brightness(1.08); }
+button.btn:disabled { opacity: .6; cursor: default; }
+button.ghost {
+  background: transparent; color: var(--muted); border: 1px solid var(--line);
+  border-radius: 8px; padding: 4px 9px; font: inherit; font-size: .8rem; cursor: pointer;
+}
+ul.tasks { list-style: none; margin: 0; padding: 0; }
+ul.tasks li {
+  display: flex; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line);
+}
+ul.tasks li:first-child { border-top: 0; }
+.check {
+  width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--line); display: grid;
+  place-items: center; cursor: pointer; flex: 0 0 22px; background: var(--bg);
+}
+.check[aria-checked="true"] { background: var(--c); border-color: var(--c); color: #fff; font-size: 13px; }
+.task-main { flex: 1; min-width: 0; }
+.task-title { font-weight: 600; word-break: break-word; }
+.task-title.done { text-decoration: line-through; color: var(--muted); }
+.meta { font-size: .8rem; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.pill { padding: 1px 8px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); }
+.owner { font-weight: 700; font-size: .75rem; padding: 2px 8px; border-radius: 999px; color: #fff; }
+.empty { color: var(--muted); font-size: .95rem; padding: 10px 0; }
+.bar-wrap { margin-bottom: 14px; }
+.bar-head { display: flex; justify-content: space-between; font-size: .9rem; margin-bottom: 6px; }
+.bar { height: 14px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; display: flex; }
+.bar span { height: 100%; transition: width .4s ease; }
+.summary { font-size: .92rem; color: var(--muted); margin-top: 6px; }
+.badge-fair { display: inline-block; font-size: .8rem; padding: 3px 10px; border-radius: 999px; margin-top: 6px; }
+.leave-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.leave-item:first-of-type { border-top: 0; }
+.leave-name { flex: 1; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.swatch { width: 10px; height: 10px; border-radius: 50%; }
+.stepper { display: flex; align-items: center; gap: 6px; }
+.stepper button {
+  width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg);
+  color: var(--ink); font-size: 1.1rem; cursor: pointer;
+}
+.stepper output { min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; font-weight: 600; }
+.clean-search { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.clean-h { font-size: .95rem; margin: 0 0 10px; }
+.clean-results { list-style: none; margin: 10px 0 0; padding: 0; max-height: 280px; overflow-y: auto; }
+.clean-results li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
+.clean-results li:first-child { border-top: 0; }
+.clean-results .empty { padding: 6px 0; }
+.footnote { color: var(--muted); font-size: .8rem; margin-top: 18px; text-align: center; }
+.assign { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.assign .meta { width: 100%; margin: 0 0 2px; }
+.profile-grid { display: grid; gap: 22px; grid-template-columns: 1fr; }
+@media (min-width: 800px) { .profile-grid { grid-template-columns: 1fr 1.3fr; } }
+.login { position: fixed; inset: 0; background: var(--bg); display: grid; place-items: center; padding: 20px; z-index: 10; }
+.login[hidden] { display: none; }
+.login-card { max-width: 380px; width: 100%; }
+.login-card h2 { margin-bottom: 14px; }
+#auth-err { color: #b5452b; min-height: 1.2em; text-align: left; font-size: .85rem; }
+#auth-info { color: var(--c); min-height: 1.2em; text-align: left; font-size: .85rem; }
+.pw-wrap { position: relative; }
+.pw-wrap input { padding-right: 64px; }
+.pw-toggle {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  background: transparent; border: 0; color: var(--primary); font: inherit; font-size: .8rem;
+  font-weight: 600; cursor: pointer; padding: 4px 6px;
+}
+.sync { font-size: .78rem; color: var(--muted); }
+html { scroll-behavior: smooth; }
+section[id^="sec-"] { scroll-margin-top: 64px; }
+.nav {
+  position: sticky; top: 0; z-index: 5; display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 10px;
+  margin: -10px 0 14px; background: var(--bg); scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav a {
+  flex: 0 0 auto; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); text-decoration: none; font-size: .88rem; font-weight: 600;
+}
+.nav a:hover { border-color: var(--primary); color: var(--primary); }
+.welcome { background: linear-gradient(135deg, var(--primary), #3a78ad); color: #fff; border: 0; }
+.welcome h2 { font-size: 1.25rem; color: #fff; }
+.welcome p { margin: 0 0 12px; opacity: .92; }
+.welcome ol { margin: 0 0 16px; padding-left: 20px; }
+.welcome li { margin-bottom: 6px; }
+.welcome button { background: #fff; color: var(--primary); border: 0; border-radius: 10px; padding: 9px 16px; font: inherit; font-weight: 700; cursor: pointer; }
+.score { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.score-ring {
+  width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center; flex: 0 0 84px;
+  background: conic-gradient(var(--c) calc(var(--p) * 1%), var(--line) 0);
+}
+.score-ring span {
+  width: 64px; height: 64px; border-radius: 50%; background: var(--surface); display: grid; place-items: center;
+  font-size: 1.35rem; font-weight: 800;
+}
+.score-text strong { display: block; font-size: 1rem; }
+.score-text small { color: var(--muted); font-size: .85rem; }
+.progress { margin-bottom: 16px; }
+.banner { margin-top: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(95,143,107,.18); font-weight: 600; font-size: .92rem; }
+.copy-row { margin-top: 14px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+#summary-out { margin-top: 10px; min-height: 120px; }
+.checkin-item .task-title { font-weight: 500; white-space: pre-wrap; }
+#task-form > div:not(.narrow) { min-width: 0; }
+#task-form select { text-overflow: ellipsis; }
+.suggest { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: rgba(224,165,38,.16); font-size: .9rem; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+button.ghost.danger { color: #b5452b; border-color: #b5452b; }
+.role-child .adult-only { display: none !important; }
+.local-mode .cloud-only { display: none !important; }
+[data-view] { display: none; }
+body[data-cur="today"] [data-view="today"], body[data-cur="shop"] [data-view="shop"], body[data-cur="chores"] [data-view="chores"], body[data-cur="family"] [data-view="family"],
+body[data-cur="week"] [data-view="week"], body[data-cur="settings"] [data-view="settings"] { display: block; }
+[data-view][hidden] { display: none !important; }
+#set-general { order: 1; } #sec-settings { order: 2; } #sec-household { order: 3; }
+.wrap { padding-bottom: 120px; }
+.gear { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.gear:hover { border-color: var(--primary); color: var(--primary); }
+.gear svg, .tabbar svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; background: var(--surface); border-top: 1px solid var(--line); padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
+.tabbar-in { max-width: 560px; margin: 0 auto; display: flex; gap: 4px; }
+.tabbar button { flex: 1; background: none; border: 0; display: grid; justify-items: center; gap: 2px; font: inherit; font-size: .75rem; color: var(--muted); padding: 6px 4px; cursor: pointer; border-radius: 12px; }
+.tabbar button[aria-current="page"] { color: var(--primary); font-weight: 700; background: var(--bg); }
+button.btn.big { width: 100%; padding: 14px 16px; font-size: 1.05rem; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip { border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 7px 16px; font: inherit; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
+ul.tasks.big li { padding: 16px 0; }
+ul.tasks.big .task-title { font-size: 1.08rem; }
+.check.big { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; font-size: 18px; }
+.add-panel { margin-top: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
+.add-panel[hidden] { display: none; }
+.own-wrap { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+.own-wrap summary { cursor: pointer; font-weight: 600; color: var(--primary); }
+.own-wrap form { margin-top: 12px; }
+.view-head { margin-bottom: 10px; }
+.hint { color: var(--muted); font-size: .95rem; margin: 0 0 14px; }
+.shop-add { display: flex; gap: 8px; }
+.shop-add input { flex: 1; }
+.shop-quick { margin-top: 12px; }
+.shop-quick .chip { padding: 5px 12px; font-size: .88rem; }
+.invite-note { background: rgba(224,165,38,.18); border-radius: 10px; padding: 10px 12px; font-size: .9rem; margin: 0 0 12px; }
+.invite-note[hidden] { display: none; }
+.setup .card.invited { border: 2px solid var(--accent); }
+.tabbar button span { font-size: .72rem; }
+.own-btn { width: 100%; padding: 12px 14px; font-size: .98rem; background: var(--surface); border: 1.5px dashed var(--line-strong); }
+.own-wrap { margin: 12px 0 0; border: 0; padding: 0; }
+.own-wrap[hidden] { display: none; }
+.clean-search { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.clean-results { max-height: none; margin-top: 10px; }
+.clean-group { margin: 14px 0 6px; font-weight: 700; font-size: .92rem; color: var(--muted); }
+.clean-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.clean-chips .chip { padding: 6px 12px; font-size: .9rem; }
+.assign-box { background: var(--surface); border-radius: 14px; padding: 12px 14px; margin: 8px 0 4px; }
+.assign-box .task-title { margin-bottom: 2px; }
+.assign-box .assign { margin-top: 8px; }
+.pill.late { background: color-mix(in srgb, var(--lingon) 16%, transparent); color: var(--lingon); font-weight: 700; }
+.cal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.cal-head .ghost { font-size: 1.3rem; line-height: 1; padding: 6px 14px; }
+.cal-day { padding: 10px 0; border-top: 1px solid var(--line); }
+.cal-day:first-child { border-top: 0; }
+.cal-day h3 { margin: 0 0 6px; font-size: .95rem; font-weight: 700; display: flex; gap: 8px; align-items: center; }
+.cal-day.today h3 { color: var(--primary); }
+.cal-day .tag { background: var(--primary); color: var(--surface); border-radius: 6px; padding: 0 7px; font-size: .75rem; }
+.cal-item { display: flex; align-items: center; gap: 10px; padding: 5px 0; }
+.cal-item .bar-dot { width: 4px; align-self: stretch; min-height: 22px; border-radius: 4px; flex: none; }
+.cal-item .ci-time { font-variant-numeric: tabular-nums; min-width: 44px; color: var(--muted); font-size: .9rem; }
+.cal-item .ci-main { flex: 1; min-width: 0; }
+.cal-item .ci-who { color: var(--muted); font-size: .82rem; }
+.cal-item.done .ci-title { text-decoration: line-through; color: var(--muted); }
+.cal-empty { color: var(--muted); font-size: .9rem; }
+.cal-form { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.child-noprofile #cal-form, .child-noprofile [data-del-ev] { display: none !important; }
+.rep-person { padding: 12px 0; border-top: 1px solid var(--line); }
+.rep-person:first-child { border-top: 0; padding-top: 0; }
+.rep-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-weight: 700; }
+.rep-head .swatch { display: inline-block; margin-right: 6px; }
+.rep-tasks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.rep-task { font-size: .85rem; border-radius: 8px; padding: 3px 9px; background: var(--tint); }
+.rep-task.done { background: color-mix(in srgb, var(--c) 20%, transparent); }
+.rep-task.late { background: color-mix(in srgb, var(--lingon) 16%, transparent); color: var(--lingon); font-weight: 700; }
+.danger-block h3 { color: var(--lingon); }
+.mem-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.mem-actions [hidden] { display: none; }
+#member-form[hidden] { display: none; }
+.guide .setup-inner { max-width: 520px; }
+.guide-steps { margin: 0 0 6px; font-size: .85rem; color: var(--muted); font-weight: 700; }
+.guide-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; }
+.guide-nav [hidden] { visibility: hidden; display: inline-block; }
+.guide-nav button { white-space: nowrap; }
+#sec-today ul.tasks.big li { align-items: flex-start; }
+#sec-today .check.big { margin-top: 2px; }
+.g-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid var(--line); }
+.g-row:first-child { border-top: 0; }
+.g-row .grow { flex: 1; font-weight: 700; min-width: 0; }
+.g-add { display: flex; gap: 8px; margin-top: 10px; }
+.g-add input { flex: 1; }
+.g-assign { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; }
+.g-assign select { padding: 7px 9px; }
+.stars { display: inline-flex; align-items: center; gap: 6px; background: var(--sun); color: #2b2a12; border-radius: 999px; padding: 4px 12px; font-weight: 700; margin-bottom: 14px; }
+.star-mini { font-size: .85rem; font-weight: 700; color: #8a6a00; }
+.swap-banner { background: rgba(255,255,255,.12); border-radius: 14px; padding: 12px 14px; margin-bottom: 12px; }
+.swap-banner .row-btns { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.swap-banner button { border: 0; border-radius: 10px; padding: 7px 14px; font: inherit; font-weight: 700; cursor: pointer; }
+.swap-banner .yes { background: var(--sun); color: #2b2a12; }
+.swap-banner .no { background: rgba(255,255,255,.18); color: #fff; }
+#sec-today .swap-ask { background: transparent; color: #cfe3da; border: 1px solid rgba(255,255,255,.3); border-radius: 8px; font: inherit; font-size: .8rem; padding: 3px 9px; cursor: pointer; }
+.swap-pick { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+#sec-today .swap-pick button { background: #fff; color: var(--spruce); border: 0; border-radius: 8px; padding: 5px 10px; font: inherit; font-weight: 700; cursor: pointer; }
+#sec-today .swap-pick button.cancel { background: transparent; color: #cfe3da; border: 1px solid rgba(255,255,255,.3); }
+.swap-wait { font-size: .82rem; color: #f4dd8f; }
+.owner-only { display: none; }
+.role-owner .owner-only { display: block; }
+.role-owner .not-owner { display: none; }
+.set-block { padding: 14px 0; border-top: 1px solid var(--line); }
+.set-block:first-of-type { border-top: 0; padding-top: 0; }
+.set-block h3 { margin: 0 0 4px; font-size: 1rem; }
+.set-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); align-items: end; }
+.set-msg { min-height: 1.2em; font-size: .88rem; color: var(--primary); margin: 6px 0 0; }
+.set-msg.err { color: #b5452b; }
+.set-check { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; }
+.set-check input { width: auto; margin-top: 3px; flex: none; }
+.swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+.swatches button { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; padding: 0; cursor: pointer; }
+.swatches button[aria-pressed="true"] { border-color: var(--text, #222); }
+.child-nocheck .check { pointer-events: none; opacity: .55; }
+.child-noprofile #hobby-form, .child-noprofile #event-form, .child-noprofile [data-del-hobby], .child-noprofile [data-del-event] { display: none !important; }
+.setup { place-items: start center; overflow-y: auto; }
+.setup-inner { width: 100%; max-width: 420px; display: grid; gap: 14px; margin: 8px auto 28px; }
+.setup-inner input { margin-bottom: 10px; }
+#setup-err { color: #b5452b; min-height: 1.2em; font-size: .85rem; margin: 0; }
+.code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.05rem; letter-spacing: .08em; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 3px 9px; user-select: all; }
+.hh-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid var(--line); }
+.hh-row:first-child { border-top: 0; }
+.hh-row .grow { flex: 1; min-width: 140px; font-weight: 600; }
+.hh-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ===== Theme: gran, lingon och sol ===== */
+body { font-family: var(--body); font-size: 17px; line-height: 1.55; }
+h1, .card h2, .login-card h2, .setup h2 { font-family: var(--display); font-optical-sizing: auto; }
+h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -.025em; }
+.sub { font-size: .92rem; max-width: 34ch; }
+.card { border: 0; box-shadow: none; border-radius: var(--radius); padding: 22px; }
+.card h2 { font-size: 1.35rem; font-weight: 800; letter-spacing: -.015em; margin: 0 0 14px; }
+.card h2 .dot { display: none; }
+.clean-h, .set-block h3 { font-family: var(--body); font-weight: 700; }
+label { color: var(--muted); font-size: .88rem; }
+input, select, textarea { background: var(--field); border: 1.5px solid var(--line-strong); border-radius: 12px; padding: 11px 13px; }
+input:focus, select:focus, textarea:focus, button:focus-visible, .check:focus-visible, summary:focus-visible { outline: 3px solid color-mix(in srgb, var(--primary) 45%, transparent); outline-offset: 2px; }
+button.btn { background: var(--primary); border-radius: 14px; padding: 12px 18px; font-weight: 700; letter-spacing: .005em; }
+:root:not([data-theme="light"]) button.btn { color: #fff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) button.btn { color: #0e2a22; } }
+button.ghost { background: var(--tint); border: 0; color: var(--ink); border-radius: 10px; padding: 6px 12px; font-size: .85rem; font-weight: 700; }
+button.ghost:hover { background: var(--line); }
+button.ghost.danger { color: var(--lingon); background: color-mix(in srgb, var(--lingon) 12%, transparent); border: 0; }
+.pill { background: var(--tint); border: 0; border-radius: 6px; padding: 1px 8px; }
+.owner { border-radius: 6px; }
+.check { border-radius: 8px; border: 2px solid var(--line-strong); background: var(--field); }
+.check[aria-checked="true"] { background: var(--primary); border-color: var(--primary); }
+ul.tasks li { border-top: 1px solid var(--line); }
+.bar { background: var(--tint); border: 0; height: 12px; }
+.gear { border: 0; background: var(--surface); }
+.gear:hover { color: var(--primary); }
+.chip { background: var(--surface); border: 1.5px solid var(--line-strong); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+.add-panel { background: var(--tint); border: 0; border-radius: 16px; }
+.add-panel input { background: var(--surface); }
+.suggest { background: color-mix(in srgb, var(--sun) 30%, transparent); border-radius: 14px; }
+.banner { background: color-mix(in srgb, var(--c) 18%, transparent); border-radius: 14px; }
+.invite-note { background: color-mix(in srgb, var(--sun) 35%, transparent); border-radius: 12px; }
+.setup .card.invited { border: 3px solid var(--sun); }
+.code { font-family: var(--body); font-weight: 700; letter-spacing: .12em; background: var(--tint); border: 0; }
+.badge-fair { border-radius: 6px; }
+
+/* Välkommen: platt sol-gul lapp */
+.welcome { background: var(--sun); color: #2b2a12; }
+.welcome h2 { color: #2b2a12; }
+.welcome p { opacity: 1; }
+.welcome button { background: #2b2a12; color: var(--sun); border-radius: 12px; }
+
+/* Idag: den enda mörka ytan, appens hjärta */
+#sec-today { background: var(--spruce); color: #fff; padding: 26px 22px 18px; }
+#sec-today h2 { font-size: clamp(2rem, 8vw, 2.8rem); line-height: 1.02; letter-spacing: -.035em; margin-bottom: 18px; color: #fff; }
+#sec-today .chip { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
+#sec-today .chip[aria-pressed="true"] { background: #fff; color: var(--spruce); border-color: #fff; }
+#sec-today .bar-head { color: #d9ebe3; }
+#sec-today .bar { background: rgba(255,255,255,.16); }
+#sec-today .bar span { background: var(--sun) !important; }
+#sec-today .summary, #sec-today .hint { color: #cfe3da; }
+#sec-today ul.tasks li { border-top-color: rgba(255,255,255,.14); }
+#sec-today .task-title { color: #fff; }
+#sec-today .task-title.done { color: rgba(255,255,255,.55); }
+#sec-today .pill { background: rgba(255,255,255,.12); color: #d9ebe3; }
+#sec-today .check.big { border: 2.5px solid rgba(255,255,255,.6); background: transparent; color: #183a31; }
+#sec-today .check.big[aria-checked="true"] { background: var(--sun); border-color: var(--sun); }
+#sec-today .btn { background: var(--sun); color: #2b2a12; }
+.check.big { border-radius: 50%; }
+
+/* Inloggning: granbakgrund med namnet stort */
+#login { background: var(--spruce); }
+.login-stack { width: 100%; max-width: 400px; }
+.login-brand { margin: 0 0 18px; color: #fff; }
+.login-brand span { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(2.3rem, 10vw, 3rem); line-height: 1; letter-spacing: -.035em; }
+.login-brand small { display: block; margin-top: 10px; font-size: 1rem; color: #cfe3da; max-width: 30ch; }
+.login-card { max-width: none; }
+
+/* Sysslelistan: knapparna staplas i egen kolumn så titeln får plats */
+#tasks li { display: grid; grid-template-columns: auto 1fr auto; column-gap: 12px; row-gap: 6px; align-items: start; }
+#tasks li > .check { grid-row: 1 / span 2; margin-top: 2px; }
+#tasks li > .task-main { grid-row: 1 / span 2; }
+#tasks li > [data-edit] { grid-column: 3; grid-row: 1; }
+#tasks li > [data-delete] { grid-column: 3; grid-row: 2; }
+#tasks li.empty { display: block; }
+
+/* Menyn: lingonstreck över aktiv flik */
+.tabbar { border-top: 1px solid var(--line); }
+.tabbar button { position: relative; border-radius: 0; padding-top: 9px; }
+.tabbar button[aria-current="page"] { background: none; color: var(--ink); }
+.tabbar button[aria-current="page"]::before { content: ""; position: absolute; top: -7px; left: 50%; width: 28px; height: 4px; margin-left: -14px; border-radius: 0 0 4px 4px; background: var(--lingon); }
+.tabbar button span { font-size: .74rem; }
+
+.login-card h2, .setup h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.02em; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div id="setup" class="login setup" hidden>
+  <div class="setup-inner">
+    <div class="card"><h2 data-i="setupTitle"></h2><p class="summary" style="margin:0" data-i="setupIntro"></p><p class="invite-note" id="invite-note-setup" hidden style="margin-top:12px"></p></div>
+    <div class="card">
+      <h2 data-i="createTitle"></h2>
+      <form id="create-form">
+        <label for="s-hhname" data-i="hhName"></label><input id="s-hhname" maxlength="60">
+        <label for="s-name1" data-i="displayName"></label><input id="s-name1" maxlength="40" required autocomplete="name">
+        <button class="btn" type="submit" style="width:100%" data-i="createBtn"></button>
+      </form>
+    </div>
+    <div class="card">
+      <h2 data-i="joinTitle"></h2>
+      <form id="join-form">
+        <label for="s-code" data-i="codeLabel"></label><input id="s-code" maxlength="20" required autocomplete="off" autocapitalize="characters">
+        <label for="s-name2" data-i="displayName"></label><input id="s-name2" maxlength="40" required autocomplete="name">
+        <button class="btn" type="submit" style="width:100%" data-i="joinBtn"></button>
+      </form>
+    </div>
+    <p id="setup-err"></p>
+    <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
+      <button class="ghost" type="button" id="setup-logout" data-i="logout"></button>
+      <div class="lang" role="group" aria-label="Language / Språk">
+        <button type="button" data-lang="sv" aria-pressed="false">Svenska</button>
+        <button type="button" data-lang="en" aria-pressed="false">English</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="guide" class="login setup guide" hidden role="dialog" aria-modal="true" aria-labelledby="guide-title">
+  <div class="setup-inner">
+    <div class="card">
+      <p class="guide-steps" id="guide-steps"></p>
+      <h2 id="guide-title"></h2>
+      <p class="summary" id="guide-hint" style="margin-top:0"></p>
+      <div id="guide-body"></div>
+      <div class="guide-nav">
+        <button class="ghost" type="button" id="guide-back" data-i="back"></button>
+        <button class="btn" type="button" id="guide-next"></button>
+      </div>
+    </div>
+    <p style="text-align:center;margin:0"><button class="ghost" type="button" id="guide-skip" data-i="guideSkip"></button></p>
+  </div>
+</div>
+<div id="login" class="login">
+  <div class="login-stack">
+  <p class="login-brand"><span data-i="title"></span><small data-i="sub"></small></p>
+  <div class="card login-card">
+    <p class="invite-note" id="invite-note-login" hidden></p>
+    <h2 id="auth-title"></h2>
+    <form id="auth-form">
+      <div id="reg-only" hidden><label for="a-name" data-i="yourName"></label><input id="a-name" maxlength="24" autocomplete="name"></div>
+      <div style="margin-top:10px"><label for="a-email" data-i="email"></label><input id="a-email" type="email" inputmode="email" autocomplete="email" required></div>
+      <div style="margin-top:10px"><label for="a-pw" data-i="password"></label>
+        <div class="pw-wrap"><input id="a-pw" type="password" autocomplete="current-password" required minlength="6"><button class="pw-toggle" type="button" data-target="a-pw" data-i="show" aria-label="Show password"></button></div>
+      </div>
+      <p id="pw-hint" class="footnote" style="text-align:left;margin:4px 0 0" hidden></p>
+      <div id="pw2-row" style="margin-top:10px" hidden><label for="a-pw2" data-i="confirmPassword"></label>
+        <div class="pw-wrap"><input id="a-pw2" type="password" autocomplete="new-password" minlength="6"><button class="pw-toggle" type="button" data-target="a-pw2" data-i="show" aria-label="Show password"></button></div>
+      </div>
+      <div style="margin-top:14px"><button class="btn" type="submit" id="auth-submit" style="width:100%"></button></div>
+    </form>
+    <p class="footnote"><button class="ghost" id="auth-switch" type="button"></button></p>
+    <p id="auth-err"></p>
+    <p id="auth-info"></p>
+    <p class="footnote" data-i="authNote"></p>
+    <div style="display:flex;justify-content:center;margin-top:14px">
+      <div class="lang" role="group" aria-label="Language / Språk">
+        <button type="button" data-lang="sv" aria-pressed="false">Svenska</button>
+        <button type="button" data-lang="en" aria-pressed="false">English</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="wrap">
+  <header>
+    <div>
+      <h1 id="t-title"></h1>
+      <p class="sub" id="t-sub"></p>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span class="sync" id="sync-status"></span>
+      <button class="gear" id="open-settings" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="card full" id="sec-today" data-view="today" aria-labelledby="h-today">
+      <h2 id="h-today"><span class="dot"></span><span id="today-hi"></span></h2>
+      <div id="today-stars"></div>
+      <div id="today-swaps"></div>
+      <div id="today-who" class="chips adult-only"></div>
+      <div id="today-progress"></div>
+      <ul class="tasks big" id="today-list"></ul>
+    </section>
+
+    <section class="card full welcome adult-only" id="welcome" data-view="today" hidden></section>
+
+    <section class="card full" id="sec-report" data-view="family" aria-labelledby="h-report" hidden>
+      <h2 id="h-report"><span class="dot"></span><span data-i="reportTitle"></span></h2>
+      <p class="summary" style="margin-top:-8px" id="report-stamp"></p>
+      <div id="report-body"></div>
+    </section>
+
+    <section class="card adult-only" id="sec-overview" data-view="family" aria-labelledby="h-load">
+      <h2 id="h-load"><span class="dot"></span><span data-i="loadTitle"></span></h2>
+      <div id="score"></div>
+      <div id="progress" class="progress"></div>
+      <div id="load"></div>
+      <p class="summary" id="load-note"></p>
+      <div id="fair"></div>
+      <div class="copy-row"><button class="ghost" type="button" id="copy-summary" data-i="copySummary"></button></div>
+      <textarea id="summary-out" readonly hidden></textarea>
+    </section>
+
+    <section class="card adult-only" id="sec-members" data-view="family" aria-labelledby="h-members">
+      <h2 id="h-members"><span class="dot"></span><span data-i="membersTitle"></span></h2>
+      <div id="members"></div>
+      <p class="summary cloud-only" id="members-hint" style="margin:12px 0 10px"></p>
+      <div class="cloud-only mem-actions">
+        <button class="btn" type="button" id="mem-invite" data-i="memInvite"></button>
+        <button class="ghost" type="button" id="mem-noacc" aria-expanded="false" data-i="memNoAcc"></button>
+      </div>
+      <form id="member-form" class="row" style="margin-top:14px">
+        <div><label for="m-name" data-i="name"></label><input id="m-name" maxlength="24" required></div>
+        <div class="narrow" style="flex:0 0 auto"><label class="set-check" style="padding:10px 0 0;margin:0"><input type="checkbox" id="m-kid"><span data-i="kidLabel"></span></label></div>
+        <div class="narrow"><button class="btn" type="submit" data-i="add"></button></div>
+      </form>
+    </section>
+
+    <section class="card full" id="set-general" data-view="settings" aria-labelledby="h-gen">
+      <div class="view-head"><button class="ghost" id="settings-back" type="button" data-i="back"></button></div>
+      <h2 id="h-gen"><span class="dot"></span><span data-i="generalTitle"></span></h2>
+      <label data-i="langLabel"></label>
+      <div class="lang" role="group" aria-label="Language / Spr&aring;k">
+        <button id="lang-sv" type="button" data-lang="sv" aria-pressed="false">Svenska</button>
+        <button id="lang-en" type="button" data-lang="en" aria-pressed="false">English</button>
+      </div>
+      <div class="cloud-only" id="set-install" style="margin-top:18px" hidden>
+        <h3 style="margin:0 0 4px;font-size:1rem" data-i="installTitle"></h3>
+        <p class="summary" style="margin:0 0 10px" id="install-hint"></p>
+        <button class="btn" type="button" id="install-btn" hidden data-i="installBtn"></button>
+      </div>
+      <div style="margin-top:16px"><button class="ghost" id="logout" data-i="logout" hidden></button></div>
+    </section>
+
+    <section class="card full adult-only cloud-only" id="sec-household" data-view="settings" aria-labelledby="h-hh">
+      <h2 id="h-hh"><span class="dot"></span><span data-i="hhTitle"></span></h2>
+      <div id="hh-body"></div>
+      <p id="hh-msg" class="summary" style="color:#b5452b"></p>
+    </section>
+
+    <section class="card full cloud-only" id="sec-settings" data-view="settings" aria-labelledby="h-set">
+      <h2 id="h-set"><span class="dot"></span><span data-i="setTitle"></span></h2>
+
+      <div class="set-block owner-only" id="set-admin">
+        <h3 data-i="setAdminTitle"></h3>
+        <p class="summary" style="margin-top:0" data-i="setAdminHint"></p>
+        <form id="set-hh-form" class="set-grid">
+          <div><label for="set-hhname" data-i="hhName"></label><input id="set-hhname" maxlength="60"></div>
+          <div><button class="btn" type="submit" data-i="save"></button></div>
+        </form>
+        <div class="set-grid" style="margin-top:12px">
+          <div><label for="set-weekstart" data-i="setWeekStart"></label><select id="set-weekstart"></select></div>
+          <div><label for="set-deflang" data-i="setDefLang"></label><select id="set-deflang"></select></div>
+        </div>
+        <h3 style="margin-top:16px" data-i="setChildTitle"></h3>
+        <label class="set-check"><input type="checkbox" id="set-c-seeall"><span data-i="setChildSeeAll"></span></label>
+        <label class="set-check"><input type="checkbox" id="set-c-check"><span data-i="setChildCheck"></span></label>
+        <label class="set-check"><input type="checkbox" id="set-c-profile"><span data-i="setChildProfile"></span></label>
+        <p class="footnote" data-i="setChildNote"></p>
+        <p class="set-msg" id="set-admin-msg" role="status"></p>
+      </div>
+      <div class="set-block adult-only not-owner"><p class="summary" style="margin:0" data-i="setNotOwner"></p></div>
+
+      <div class="set-block adult-only" id="set-people">
+        <h3 data-i="setPeopleTitle"></h3>
+        <p class="summary" style="margin-top:0" data-i="setPeopleHint"></p>
+        <div id="set-people-list"></div>
+      </div>
+
+      <div class="set-block" id="set-account">
+        <h3 data-i="setAccountTitle"></h3>
+        <form id="set-name-form" class="set-grid">
+          <div><label for="set-name" data-i="displayName"></label><input id="set-name" maxlength="40" required autocomplete="name"></div>
+          <div><button class="btn" type="submit" data-i="save"></button></div>
+        </form>
+        <form id="set-email-form" class="set-grid" style="margin-top:10px">
+          <div><label for="set-email" data-i="email"></label><input id="set-email" type="email" required autocomplete="email"></div>
+          <div><button class="btn" type="submit" data-i="setChangeEmail"></button></div>
+        </form>
+        <form id="set-pw-form" class="set-grid" style="margin-top:10px">
+          <div><label for="set-pw" data-i="setNewPw"></label>
+            <div class="pw-wrap"><input id="set-pw" type="password" autocomplete="new-password" minlength="6" required><button class="pw-toggle" type="button" data-target="set-pw" data-i="show" aria-label="Show password"></button></div></div>
+          <div><label for="set-pw2" data-i="confirmPassword"></label>
+            <div class="pw-wrap"><input id="set-pw2" type="password" autocomplete="new-password" minlength="6" required><button class="pw-toggle" type="button" data-target="set-pw2" data-i="show" aria-label="Show password"></button></div></div>
+          <div><button class="btn" type="submit" data-i="setChangePw"></button></div>
+        </form>
+        <p class="set-msg" id="set-account-msg" role="status"></p>
+        <div class="danger-block" style="margin-top:18px">
+          <h3 data-i="delTitle"></h3>
+          <p class="summary" style="margin:0 0 10px" data-i="delHint"></p>
+          <div class="set-grid">
+            <div><input id="del-confirm" autocomplete="off" aria-label="Confirm"></div>
+            <div><button class="ghost danger" type="button" id="del-account" data-i="delBtn"></button></div>
+          </div>
+          <p class="set-msg err" id="del-msg" role="status"></p>
+        </div>
+      </div>
+
+      <div class="set-block adult-only" id="set-export">
+        <h3 data-i="setExportTitle"></h3>
+        <p class="summary" style="margin-top:0" data-i="setExportHint"></p>
+        <button class="ghost" type="button" id="set-export-btn" data-i="setExportBtn"></button>
+      </div>
+    </section>
+
+    <section class="card full" id="sec-profile" data-view="family" aria-labelledby="h-profile">
+      <h2 id="h-profile"><span class="dot"></span><span data-i="profileTitle"></span></h2>
+      <div style="max-width:280px"><label for="p-member" data-i="profileFor"></label><select id="p-member"></select></div>
+      <div class="profile-grid" style="margin-top:14px">
+        <div>
+          <h3 class="clean-h" data-i="hobbies"></h3>
+          <form id="hobby-form" class="row"><div><input id="hobby-in" maxlength="40" required></div><div class="narrow"><button class="btn" type="submit" data-i="addHobby"></button></div></form>
+          <ul class="tasks" id="hobby-list" style="margin-top:10px"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card full" id="sec-shop" data-view="shop" aria-labelledby="h-shop">
+      <h2 id="h-shop"><span class="dot"></span><span data-i="shopTitle"></span></h2>
+      <form id="shop-form" class="shop-add">
+        <input id="shop-in" maxlength="60" autocomplete="off" required aria-label="Item">
+        <button class="btn" type="submit" data-i="shopAdd"></button>
+      </form>
+      <div class="shop-quick"><div class="meta" style="margin-bottom:6px" data-i="shopQuick"></div><div class="chips" id="shop-quick" style="margin:0"></div></div>
+      <ul class="tasks big" id="shop-list" style="margin-top:12px"></ul>
+      <div class="row" style="margin-top:8px">
+        <button class="ghost" type="button" id="shop-clear" data-i="shopClear" hidden></button>
+        <button class="ghost" type="button" id="shop-copy" data-i="shopCopy" hidden></button>
+      </div>
+    </section>
+
+    <section class="card full" id="sec-chores" data-view="chores" aria-labelledby="h-tasks">
+      <h2 id="h-tasks"><span class="dot"></span><span data-i="tasksTitle"></span></h2>
+      <div class="adult-only"><button class="btn big" id="add-toggle" type="button" aria-expanded="false" aria-controls="add-panel" data-i="addToggle"></button></div>
+      <div id="add-panel" class="add-panel adult-only" hidden>
+        <button class="ghost own-btn" type="button" id="own-toggle" aria-expanded="false" aria-controls="own-wrap" data-i="ownTask"></button>
+        <div id="own-wrap" class="own-wrap" hidden>
+      <form id="task-form" class="row">
+        <div style="flex:2 1 220px"><label for="k-title" data-i="taskName"></label><input id="k-title" maxlength="80" required></div>
+        <div><label for="k-owner" data-i="owner"></label><select id="k-owner"></select></div>
+        <div><label for="k-cat" data-i="category"></label><select id="k-cat"></select></div>
+        <div><label for="k-freq" data-i="repeats"></label><select id="k-freq"></select></div>
+        <div id="k-wday-row"><label for="k-wday" data-i="kWday"></label><select id="k-wday"></select></div>
+        <div id="k-date-row"><label for="k-date" data-i="kDate"></label><input id="k-date" type="date"></div>
+        <div class="narrow" style="flex:0 0 120px"><label for="k-time" data-i="kTime"></label><input id="k-time" type="time"></div>
+        <div class="narrow"><label for="k-min" data-i="minutes"></label><input id="k-min" type="number" min="1" max="600" value="15"></div>
+        <div id="k-rot-row" style="flex:1 1 100%"><label data-i="rotLabel"></label><div class="chips" id="k-rot" style="margin:0"></div><p class="meta" style="margin:4px 0 0" data-i="rotHint"></p></div>
+        <div class="narrow"><button class="btn" type="submit" data-i="addTask"></button></div>
+        <div class="narrow"><button class="ghost" type="button" id="cancel-edit" data-i="cancel" hidden></button></div>
+      </form>
+        </div>
+        <div class="clean-search">
+          <h3 class="clean-h" data-i="cleanTitle"></h3>
+          <input id="clean-q" type="search" autocomplete="off">
+          <div class="clean-results" id="clean-results"></div>
+        </div>
+      </div>
+      <div class="row adult-only" id="tasks-controls" style="margin-top:14px">
+        <div style="flex:1 1 180px"><select id="f-owner"></select></div>
+        <div style="flex:0 0 auto;display:flex;gap:8px;flex-wrap:wrap"><button class="ghost" id="clear-done" type="button" data-i="clearDone" hidden></button><button class="ghost" id="reset-week" type="button" data-i="resetWeek"></button></div>
+      </div>
+      <ul class="tasks" id="tasks" style="margin-top:12px"></ul>
+    </section>
+
+    <section class="card full" id="sec-cal" data-view="week" aria-labelledby="h-cal">
+      <div class="cal-head">
+        <button class="ghost" type="button" id="cal-prev" aria-label="Previous week">‹</button>
+        <h2 id="h-cal" style="margin:0"><span id="cal-title"></span></h2>
+        <button class="ghost" type="button" id="cal-next" aria-label="Next week">›</button>
+      </div>
+      <p class="summary" id="cal-range" style="margin:4px 0 10px"></p>
+      <div id="cal-days"></div>
+      <form id="cal-form" class="row cal-form">
+        <div style="flex:2 1 200px"><label for="e-title" data-i="eventTitle"></label><input id="e-title" maxlength="60" required></div>
+        <div><label for="e-date" data-i="date"></label><input id="e-date" type="date" required></div>
+        <div class="narrow" style="flex:0 0 120px"><label for="e-time" data-i="time"></label><input id="e-time" type="time"></div>
+        <div><label for="e-who" data-i="calWho"></label><select id="e-who"></select></div>
+        <div class="narrow"><button class="btn" type="submit" data-i="calAdd"></button></div>
+      </form>
+    </section>
+
+    <section class="card adult-only" id="sec-leave" data-view="week" aria-labelledby="h-leave">
+      <h2 id="h-leave"><span class="dot"></span><span data-i="leaveTitle"></span></h2>
+      <div id="leave"></div>
+      <p class="footnote" data-i="leaveNote"></p>
+    </section>
+
+    <section class="card adult-only" id="sec-week" data-view="week" aria-labelledby="h-check">
+      <h2 id="h-check"><span class="dot"></span><span data-i="checkTitle"></span></h2>
+      <label for="checkin" data-i="checkPrompt"></label>
+      <textarea id="checkin"></textarea>
+      <div style="margin-top:10px"><button class="btn" type="button" id="save-checkin" data-i="saveCheckin"></button></div>
+      <h3 class="clean-h" style="margin-top:18px" data-i="checkinHistory"></h3>
+      <ul class="tasks" id="checkin-list"></ul>
+      <p class="footnote" style="text-align:left" data-i="checkNote"></p>
+    </section>
+  </div>
+  <p class="footnote" data-i="footer"></p>
+</div>
+
+<nav class="tabbar" id="tabbar" aria-label="Menu"><div class="tabbar-in">
+  <button type="button" data-tab="today"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg><span data-i="tabToday"></span></button>
+  <button type="button" data-tab="chores"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg><span data-i="tabChores"></span></button>
+  <button type="button" data-tab="shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.5l2 11h10.5l2-8H6.5"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg><span data-i="tabShop"></span></button>
+  <button type="button" data-tab="family"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c3 .3 5 2.5 5 5.3"/></svg><span data-i="tabFamily"></span></button>
+  <button type="button" data-tab="week"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span data-i="tabWeek"></span></button>
+</div></nav>
+
+<script>
+/* ---------- Supabase ---------- */
+const SUPABASE_URL = "https://gkqbqrtmpftjsgguxiff.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_6NBnPWJE2b9bWenLr3wXVA_XQeord9e";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const LOCAL_MODE = false;
+
+/* ---------- Text ---------- */
+const T = {
+  en: {
+    title: "Household Balance", sub: "Make the invisible work of family life visible, and share it fairly.",
+    loadTitle: "How are we sharing the work?", membersTitle: "Family members", name: "Name", add: "Add",
+    tasksTitle: "All chores", taskName: "Chore", owner: "Responsible", category: "Area", minutes: "Time (min)",
+    addTask: "Add chore", leaveTitle: "Parental leave days", leaveNote: "Days taken, per family member. The figures are for your own planning.",
+    checkTitle: "Weekly check-in", checkPrompt: "What felt heavy this week, and what felt fair?",
+    cleanTitle: "Or pick a suggestion", cleanPlaceholder: "Search, for example laundry, dentist or windows", cleanNone: "No chores found.", cleanAdd: "Add",
+    checkNote: "Saved to your account.", edit: "Edit", save: "Save", cancel: "Cancel", allOwners: "Everyone", logout: "Log out",
+    email: "Email address", password: "Password", yourName: "Your name", logIn: "Log in", createAccount: "Create account",
+    haveAccount: "Already have an account? Log in", noAccount: "Don't have an account? Create one",
+    badLogin: "Incorrect email address or password.", emailTaken: "An account with this email address already exists.",
+    weakPw: "The password must be at least 6 characters long.", authNote: "Your household is saved to your account and available on all your devices.",
+    checkEmail: "We have sent you a confirmation email. Click the link in it, then log in.",
+    namePh: "For example Anna Svensson", emailPh: "name@example.com", pwPh: "At least 6 characters", pwHint: "Choose a password with at least 6 characters.", confirmPassword: "Repeat password", pwMismatch: "The passwords do not match.", show: "Show", hide: "Hide", notConfirmed: "Your email address is not confirmed yet. Click the link in the confirmation email we sent you, then log in.", noConnection: "Could not reach the server. Check your internet connection, and make sure the page is opened from its own address, not inside a preview.", otherError: "Something went wrong:",
+    profileTitle: "Profiles", profileFor: "Show profile for", hobbies: "Activities", addHobby: "Add", calendar: "Personal calendar",
+    date: "Date", time: "Time", eventTitle: "Event", addEvent: "Add", noHobbies: "No activities added yet.", noEvents: "No events added yet.",
+    whoDoes: "Who takes this one?", resetWeek: "Start a new week", footer: "Saved to your account.",
+    unassigned: "Nobody yet", done: "Done", remove: "Remove", minLabel: "min", balanced: "The week is evenly shared",
+    lean: "{name} is doing {pct}% of the work. It may be time to redistribute.", noTasks: "No chores yet. Tap Add a chore.",
+    noLoad: "Add chores to see how they are shared.", fairOk: "Within a fair range (40–60%).", fairOff: "Outside a fair range (40–60%).",
+    days: "days", cats: ["Kids and school", "Food", "Home", "Health", "Finances", "Social", "Other"],
+    initialTasks: [["Plan the week's dinners","Food",40,"weekly"],["Fill in preschool and school forms","Kids and school",20,"once"],["Book a dentist appointment","Health",15,"once"],["Do the laundry","Home",30,"weekly"]],
+    filterBy: "Show chores for", hobbyPh: "For example running or choir", noFiltered: "No chores for this person.", sure: "Sure?", clearDone: "Clear completed one-time chores",
+    suggest: 'Suggestion: move "{task}" from {from} to {to} to even things out.', move: "Move", maxMembers: "A household can have up to 6 members.",
+    navOverview: "Overview", navChores: "Chores", navProfiles: "Profiles", navWeek: "This week",
+    repeats: "Repeats", freqs: { once: "Once", daily: "Daily", weekly: "Weekly", monthly: "Monthly" }, minWeek: "min/week",
+    scoreTitle: "How fair is it?", scoreHigh: "The load is shared very evenly.", scoreMid: "Fairly even, with room to improve.", scoreLow: "One person carries most of the load.", scoreNeed: "Add at least two family members and some chores to see your score.",
+    progressText: "{done} of {total} chores done", allDone: "Everything is done. Great work together!",
+    copySummary: "Copy weekly summary", copied: "Copied!", copyManual: "Select the text below and copy it.",
+    summaryHead: "Household Balance, week {week}", summaryScore: "Fairness score: {score}/100", summaryDone: "Chores done: {done} of {total}",
+    saveCheckin: "Save this week's check-in", checkinHistory: "Previous check-ins", noCheckins: "No saved check-ins yet.", weekN: "Week {n}",
+    welcomeTitle: "Welcome to Household Balance", welcomeIntro: "A shared overview that shows who really does what at home, so the load can be shared fairly.",
+    welcomeSteps: ["Open Family and add everyone in the household.", "Open Chores, tap Add a chore and search for what needs doing.", "Check how fair it is under Family, and talk about it under Week."], welcomeBtn: "Got it, let's start",
+    navHousehold: "Household", setupTitle: "Set up your household", setupIntro: "You are signed in. Create a new household, or join one that already exists with an invite code.",
+    createTitle: "Create a new household", hhName: "Household name", hhNamePh: "For example The Svensson family", displayName: "Your name", createBtn: "Create household",
+    joinTitle: "Join with a code", codeLabel: "Invite code", codePh: "10 characters", joinBtn: "Join household",
+    badCode: "That code is not valid. Check it and try again.", alreadyIn: "This account already belongs to a household.",
+    dbNotReady: "The database is not set up yet. Run the SQL file in Supabase first.", hhError: "Something went wrong:",
+    errNotOwner: "Only the owner can do that.", errNeedAdult: "Ownership can only be given to an adult.", errOwnerLeave: "The owner cannot leave. Hand over ownership first.",
+    hhTitle: "Household accounts", roleOwner: "Owner", roleAdult: "Adult", roleChild: "Child", youLabel: "you",
+    inviteTitle: "Invite codes", inviteHint: "Give a code to someone so they can create their own account and join. Adults can edit everything. Children only see their own chores and profile.",
+    codeAdult: "Code for adults", codeChild: "Code for children", copyCode: "Copy", newCodes: "Create new codes",
+    makeChild: "Make child", makeAdult: "Make adult", makeOwner: "Make owner", removeAccess: "Remove access", leaveHh: "Leave household", deleteHh: "Delete household",
+    deleteWarn: "Deleting removes all data for everyone in the household.", ownerNote: "Only the owner can manage accounts.",
+    tabToday: "Today", tabChores: "Chores", tabFamily: "Family", tabWeek: "Week",
+    todayHi: "Hi {name}!", todayFor: "Today: {name}", todayEmpty: "No chores here yet.", todayEmptyBtn: "Add the first chore",
+    addToggle: "+ Add a chore", ownTask: "✎ Write your own chore", back: "← Back", generalTitle: "General", langLabel: "Language",
+    todayLeft: "{n} left today", kDate: "Date (optional)", kTime: "Time (optional)", kWday: "Which day?", wdayAny: "Any day",
+    wdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], late: "Late", atTime: "at {t}", monthDay: "day {d} each month",
+    calTitle: "The family's week", calWho: "Who?", calAdd: "Add to calendar", calEmpty: "Nothing planned", calToday: "Today",
+    reportTitle: "This week, live", reportStamp: "Updates by itself. Last checked {t}.", reportDone: "{done} of {total} done", reportNone: "No chores",
+    delTitle: "Delete my account", delHint: "Your account and login are removed for good. If you own the household and others are in it, hand over ownership first.",
+    delWord: "DELETE", delPh: "Type DELETE to confirm", delBtn: "Delete account", delWrong: "Type DELETE in the box first.",
+    delOwnerFirst: "Hand over ownership to another adult under Household accounts first.", delDone: "Your account has been deleted.",
+    memHint: "Everyone who joins with an invite shows up here by themselves.", memHintAdult: "Everyone who joins with an invite shows up here by themselves. Ask the owner for an invite link.",
+    memInvite: "Invite the family", memNoAcc: "+ Add someone without an account", noAccLabel: "No account",
+    guideSkip: "Skip the guide", guideStep: "Step {n} of {total}", guideNext: "Next", guideDone: "Done, start using the app",
+    g1Title: "Who lives at home?", g1Hint: "Add everyone who should share the chores. People with their own phone join with an invite in the next step. Ask them to use the same name.", gYou: "you",
+    g2Title: "Invite the family", g2Hint: "Send the link to each person. Adults and children get different links.", gLinkAdult: "Link for adults", gLinkChild: "Link for children",
+    g3Title: "Which chores do you have?", g3Hint: "Tap to choose. You can always add more later.",
+    g4Title: "Who does what?", g4Hint: "Share them out evenly with one tap, then adjust. Children get lighter loads.", gEven: "Share out evenly", gRotate: "Take turns",
+    kidLabel: "Child", rotLabel: "Take turns between", rotHint: "Choose two or more. The chore moves to the next person every week.", rotPill: "Takes turns: {names}",
+    swapAsk: "Ask to swap", swapTo: "Who should take it?", swapWait: "Waiting for {name}", swapUndo: "Undo", swapIncoming: "{from} asks you to take \"{task}\".", swapYes: "Take it", swapNo: "No thanks",
+    starsN: "{n} stars", starsOne: "1 star",
+    tabShop: "Shopping", shopTitle: "Shopping list", shopAdd: "Add", shopQuick: "Quick add", shopClear: "Clear ticked items", shopCopy: "Copy list", shopCopied: "Copied!",
+    shopEmpty: "The list is empty. Add what you need to buy.", shopPh: "Add, for example milk",
+    shopItems: ["Milk", "Bread", "Eggs", "Bananas", "Butter", "Cheese", "Coffee", "Pasta", "Rice", "Detergent", "Toilet paper", "Nappies"],
+    inviteLinkBtn: "Copy link", inviteShareBtn: "Share", linkCopied: "Link copied!", inviteShareText: "Join our household in Hushållsbalans:",
+    invitedLogin: "You have been invited to a household. Create an account or log in and you will continue to it.",
+    invitedSetup: "You have been invited! Enter your name below and tap Join.",
+    installTitle: "Install the app", installBtn: "Install", installDone: "The app is installed.",
+    installIos: "On iPhone: tap the Share button in Safari, then choose Add to Home Screen.",
+    installGeneric: "Open your browser menu and choose Install app, or Add to Home screen.",
+    installReady: "Put the app on your home screen so it opens like any other app.",
+    syncSaved: "Saved", syncSaving: "Saving…", syncError: "Could not save",
+    navSettings: "Settings", setTitle: "Settings",
+    setAdminTitle: "Admin settings", setAdminHint: "Only the owner sees and can change these.",
+    setWeekStart: "Week starts on", setDefLang: "Default language for new members", setMon: "Monday", setSun: "Sunday", setLangNone: "Each person's own choice",
+    setChildTitle: "What children may do", setChildSeeAll: "Children can see everyone's chores (read only)",
+    setChildCheck: "Children can tick off their own chores", setChildProfile: "Children can edit their own activities and calendar",
+    setChildNote: "These limits apply in the app's interface. They are not a security lock.",
+    setNotOwner: "The owner manages household name, week start and what children may do.",
+    setPeopleTitle: "People", setPeopleHint: "Change names and colours. This is the list used for assigning chores.",
+    setAccountTitle: "My account", setChangeEmail: "Change email", setNewPw: "New password", setChangePw: "Change password",
+    setExportTitle: "Export data", setExportHint: "Download all household data as a backup file.", setExportBtn: "Download backup",
+    setSaved: "Saved.", setPwMismatch: "The passwords do not match.", setPwShort: "The password must be at least 6 characters.",
+    setPwDone: "Password changed.", setEmailSent: "Check your inbox and confirm the new address.", setNeedRelogin: "For security, log in again and retry.",
+    setNameEmpty: "The name cannot be empty."
+  },
+  sv: {
+    title: "Hushållsbalans", sub: "Gör familjelivets osynliga arbete synligt och dela det rättvist.",
+    loadTitle: "Hur delar vi på arbetet?", membersTitle: "Familjemedlemmar", name: "Namn", add: "Lägg till",
+    tasksTitle: "Alla sysslor", taskName: "Syssla", owner: "Ansvarig", category: "Område", minutes: "Tid (min)",
+    addTask: "Lägg till syssla", leaveTitle: "Dagar med föräldrapenning", leaveNote: "Antal uttagna dagar per familjemedlem. Siffrorna är till för er egen planering.",
+    checkTitle: "Veckans avstämning", checkPrompt: "Vad kändes tungt den här veckan, och vad kändes rättvist?",
+    cleanTitle: "Eller välj bland förslagen", cleanPlaceholder: "Sök, till exempel tvätt, tandläkare eller fönster", cleanNone: "Inga sysslor hittades.", cleanAdd: "Lägg till",
+    checkNote: "Sparas på ditt konto.", edit: "Redigera", save: "Spara", cancel: "Avbryt", allOwners: "Alla", logout: "Logga ut",
+    email: "E-postadress", password: "Lösenord", yourName: "Ditt namn", logIn: "Logga in", createAccount: "Skapa konto",
+    haveAccount: "Har du redan ett konto? Logga in", noAccount: "Har du inget konto? Skapa ett",
+    badLogin: "Fel e-postadress eller lösenord.", emailTaken: "Det finns redan ett konto med den e-postadressen.",
+    weakPw: "Lösenordet måste vara minst 6 tecken långt.", authNote: "Ditt hushåll sparas på ditt konto och finns på alla dina enheter.",
+    checkEmail: "Vi har skickat ett bekräftelsemejl. Klicka på länken i det och logga sedan in.",
+    namePh: "Till exempel Anna Svensson", emailPh: "namn@exempel.se", pwPh: "Minst 6 tecken", pwHint: "Välj ett lösenord med minst 6 tecken.", confirmPassword: "Upprepa lösenordet", pwMismatch: "Lösenorden matchar inte.", show: "Visa", hide: "Dölj", notConfirmed: "Din e-postadress är inte bekräftad ännu. Klicka på länken i bekräftelsemejlet vi skickade och logga sedan in.", noConnection: "Det gick inte att nå servern. Kontrollera din internetanslutning och att sidan är öppnad från sin egen adress, inte i en förhandsvisning.", otherError: "Något gick fel:",
+    profileTitle: "Profiler", profileFor: "Visa profil för", hobbies: "Aktiviteter", addHobby: "Lägg till", calendar: "Personlig kalender",
+    date: "Datum", time: "Tid", eventTitle: "Händelse", addEvent: "Lägg till", noHobbies: "Inga aktiviteter tillagda än.", noEvents: "Inga händelser tillagda än.",
+    whoDoes: "Vem tar den här?", resetWeek: "Börja ny vecka", footer: "Sparas på ditt konto.",
+    unassigned: "Ingen ännu", done: "Klar", remove: "Ta bort", minLabel: "min", balanced: "Veckan är jämnt fördelad",
+    lean: "{name} står för {pct} % av arbetet. Det kan vara dags att fördela om.", noTasks: "Inga sysslor än. Tryck på Lägg till syssla.",
+    noLoad: "Lägg till sysslor för att se hur de fördelas.", fairOk: "Inom ett rättvist spann (40–60 %).", fairOff: "Utanför ett rättvist spann (40–60 %).",
+    days: "dagar", cats: ["Barn och skola", "Mat", "Hem", "Hälsa", "Ekonomi", "Socialt", "Övrigt"],
+    initialTasks: [["Planera veckans middagar","Mat",40,"weekly"],["Fylla i blanketter för förskola och skola","Barn och skola",20,"once"],["Boka tandläkartid","Hälsa",15,"once"],["Tvätta","Hem",30,"weekly"]],
+    filterBy: "Visa sysslor för", hobbyPh: "Till exempel löpning eller kör", noFiltered: "Inga sysslor för den här personen.", sure: "Säker?", clearDone: "Rensa klara engångssysslor",
+    suggest: 'Förslag: flytta "{task}" från {from} till {to} för att jämna ut.', move: "Flytta", maxMembers: "Ett hushåll kan ha upp till 6 medlemmar.",
+    navOverview: "Översikt", navChores: "Sysslor", navProfiles: "Profiler", navWeek: "Veckan",
+    repeats: "Återkommer", freqs: { once: "En gång", daily: "Varje dag", weekly: "Varje vecka", monthly: "Varje månad" }, minWeek: "min/vecka",
+    scoreTitle: "Hur rättvist är det?", scoreHigh: "Arbetet är mycket jämnt fördelat.", scoreMid: "Ganska jämnt, men det finns utrymme att förbättra.", scoreLow: "En person bär det mesta av arbetet.", scoreNeed: "Lägg till minst två familjemedlemmar och några sysslor för att se poängen.",
+    progressText: "{done} av {total} sysslor klara", allDone: "Allt är klart. Bra jobbat tillsammans!",
+    copySummary: "Kopiera veckosammanfattning", copied: "Kopierat!", copyManual: "Markera texten nedan och kopiera den.",
+    summaryHead: "Hushållsbalans, vecka {week}", summaryScore: "Rättvisepoäng: {score}/100", summaryDone: "Klara sysslor: {done} av {total}",
+    saveCheckin: "Spara veckans avstämning", checkinHistory: "Tidigare avstämningar", noCheckins: "Inga sparade avstämningar än.", weekN: "Vecka {n}",
+    welcomeTitle: "Välkommen till Hushållsbalans", welcomeIntro: "En gemensam översikt som visar vem som faktiskt gör vad hemma, så att bördan kan delas rättvist.",
+    welcomeSteps: ["Gå till Familj och lägg till alla i hushållet.", "Gå till Sysslor, tryck på Lägg till syssla och sök fram det som ska göras.", "Se hur rättvist det är under Familj, och prata om det under Vecka."], welcomeBtn: "Uppfattat, nu kör vi",
+    navHousehold: "Hushåll", setupTitle: "Skapa ditt hushåll", setupIntro: "Du är inloggad. Skapa ett nytt hushåll, eller gå med i ett som redan finns med en inbjudningskod.",
+    createTitle: "Skapa ett nytt hushåll", hhName: "Hushållets namn", hhNamePh: "Till exempel Familjen Svensson", displayName: "Ditt namn", createBtn: "Skapa hushåll",
+    joinTitle: "Gå med med en kod", codeLabel: "Inbjudningskod", codePh: "10 tecken", joinBtn: "Gå med i hushållet",
+    badCode: "Koden stämmer inte. Kontrollera den och försök igen.", alreadyIn: "Det här kontot tillhör redan ett hushåll.",
+    dbNotReady: "Databasen är inte konfigurerad än. Kör SQL-filen i Supabase först.", hhError: "Något gick fel:",
+    errNotOwner: "Bara ägaren kan göra det.", errNeedAdult: "Ägarskapet kan bara lämnas till en vuxen.", errOwnerLeave: "Ägaren kan inte lämna. Lämna först över ägarskapet.",
+    hhTitle: "Hushållets konton", roleOwner: "Ägare", roleAdult: "Vuxen", roleChild: "Barn", youLabel: "du",
+    inviteTitle: "Inbjudningskoder", inviteHint: "Ge en kod till den som ska gå med, så kan hen skapa ett eget konto. Vuxna kan ändra allt. Barn ser bara sina egna sysslor och sin profil.",
+    codeAdult: "Kod för vuxna", codeChild: "Kod för barn", copyCode: "Kopiera", newCodes: "Skapa nya koder",
+    makeChild: "Gör till barn", makeAdult: "Gör till vuxen", makeOwner: "Gör till ägare", removeAccess: "Ta bort åtkomst", leaveHh: "Lämna hushållet", deleteHh: "Radera hushållet",
+    deleteWarn: "Raderingen tar bort all data för alla i hushållet.", ownerNote: "Bara ägaren kan hantera konton.",
+    tabToday: "Idag", tabChores: "Sysslor", tabFamily: "Familj", tabWeek: "Vecka",
+    todayHi: "Hej {name}!", todayFor: "Idag: {name}", todayEmpty: "Inga sysslor här än.", todayEmptyBtn: "Lägg till första sysslan",
+    addToggle: "+ Lägg till syssla", ownTask: "✎ Skriv en egen syssla", back: "← Tillbaka", generalTitle: "Allmänt", langLabel: "Språk",
+    todayLeft: "{n} kvar idag", kDate: "Datum (valfritt)", kTime: "Tid (valfritt)", kWday: "Vilken dag?", wdayAny: "Valfri dag",
+    wdays: ["söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag"], late: "Sen", atTime: "kl {t}", monthDay: "den {d}:e varje månad",
+    calTitle: "Familjens vecka", calWho: "Vem?", calAdd: "Lägg till i kalendern", calEmpty: "Inget planerat", calToday: "Idag",
+    reportTitle: "Veckan just nu", reportStamp: "Uppdateras av sig själv. Senast kollad {t}.", reportDone: "{done} av {total} klara", reportNone: "Inga sysslor",
+    delTitle: "Radera mitt konto", delHint: "Kontot och inloggningen tas bort för alltid. Är du ägare och det finns fler i hushållet behöver du först lämna över ägarskapet.",
+    delWord: "RADERA", delPh: "Skriv RADERA för att bekräfta", delBtn: "Radera kontot", delWrong: "Skriv RADERA i rutan först.",
+    delOwnerFirst: "Lämna först över ägarskapet till en annan vuxen under Hushållets konton.", delDone: "Ditt konto är raderat.",
+    memHint: "Alla som går med via en inbjudan dyker upp här av sig själva.", memHintAdult: "Alla som går med via en inbjudan dyker upp här av sig själva. Be ägaren om en inbjudningslänk.",
+    memInvite: "Bjud in familjen", memNoAcc: "+ Lägg till någon utan konto, t.ex. ett litet barn", noAccLabel: "Utan konto",
+    guideSkip: "Hoppa över guiden", guideStep: "Steg {n} av {total}", guideNext: "Nästa", guideDone: "Klart, börja använda appen",
+    g1Title: "Vilka bor hemma?", g1Hint: "Lägg till alla som ska dela på sysslorna. Den som har egen telefon går med via en inbjudan i nästa steg. Be dem skriva samma namn.", gYou: "du",
+    g2Title: "Bjud in familjen", g2Hint: "Skicka länken till var och en. Vuxna och barn får olika länkar.", gLinkAdult: "Länk för vuxna", gLinkChild: "Länk för barn",
+    g3Title: "Vilka sysslor har ni?", g3Hint: "Tryck för att välja. Du kan alltid lägga till fler sedan.",
+    g4Title: "Vem gör vad?", g4Hint: "Fördela jämnt med ett tryck och justera sedan. Barn får lättare sysslor.", gEven: "Fördela jämnt", gRotate: "Turas om",
+    kidLabel: "Barn", rotLabel: "Turas om mellan", rotHint: "Välj två eller fler. Sysslan går vidare till nästa person varje vecka.", rotPill: "Turas om: {names}",
+    swapAsk: "Be om byte", swapTo: "Vem ska ta den?", swapWait: "Väntar på {name}", swapUndo: "Ångra", swapIncoming: "{from} ber dig ta \"{task}\".", swapYes: "Ta den", swapNo: "Nej tack",
+    starsN: "{n} stjärnor", starsOne: "1 stjärna",
+    tabShop: "Inköp", shopTitle: "Inköpslista", shopAdd: "Lägg till", shopQuick: "Snabbval", shopClear: "Rensa avbockade", shopCopy: "Kopiera listan", shopCopied: "Kopierat!",
+    shopEmpty: "Listan är tom. Lägg till det ni behöver köpa.", shopPh: "Lägg till, till exempel mjölk",
+    shopItems: ["Mjölk", "Bröd", "Ägg", "Bananer", "Smör", "Ost", "Kaffe", "Pasta", "Ris", "Tvättmedel", "Toalettpapper", "Blöjor"],
+    inviteLinkBtn: "Kopiera länk", inviteShareBtn: "Dela", linkCopied: "Länk kopierad!", inviteShareText: "Gå med i vårt hushåll i Hushållsbalans:",
+    invitedLogin: "Du är inbjuden till ett hushåll. Skapa ett konto eller logga in, så kommer du direkt dit.",
+    invitedSetup: "Du är inbjuden! Skriv ditt namn nedan och tryck på Gå med.",
+    installTitle: "Installera appen", installBtn: "Installera", installDone: "Appen är installerad.",
+    installIos: "På iPhone: tryck på Dela-knappen i Safari och välj Lägg till på hemskärmen.",
+    installGeneric: "Öppna webbläsarens meny och välj Installera app eller Lägg till på startskärmen.",
+    installReady: "Lägg appen på hemskärmen så öppnas den som vilken app som helst.",
+    syncSaved: "Sparat", syncSaving: "Sparar …", syncError: "Det gick inte att spara",
+    navSettings: "Inställningar", setTitle: "Inställningar",
+    setAdminTitle: "Admininställningar", setAdminHint: "Bara ägaren ser och kan ändra dessa.",
+    setWeekStart: "Veckan börjar på", setDefLang: "Standardspråk för nya medlemmar", setMon: "Måndag", setSun: "Söndag", setLangNone: "Var och ens eget val",
+    setChildTitle: "Vad barn får göra", setChildSeeAll: "Barn kan se allas sysslor (bara läsa)",
+    setChildCheck: "Barn kan bocka av sina egna sysslor", setChildProfile: "Barn kan ändra sina egna aktiviteter och sin kalender",
+    setChildNote: "Gränserna gäller i appens gränssnitt. De är inget säkerhetslås.",
+    setNotOwner: "Ägaren styr hushållets namn, veckostart och vad barn får göra.",
+    setPeopleTitle: "Personer", setPeopleHint: "Ändra namn och färger. Listan används när sysslor delas ut.",
+    setAccountTitle: "Mitt konto", setChangeEmail: "Byt e-post", setNewPw: "Nytt lösenord", setChangePw: "Byt lösenord",
+    setExportTitle: "Exportera data", setExportHint: "Ladda ned hushållets alla uppgifter som en säkerhetskopia.", setExportBtn: "Ladda ned säkerhetskopia",
+    setSaved: "Sparat.", setPwMismatch: "Lösenorden matchar inte.", setPwShort: "Lösenordet måste vara minst 6 tecken.",
+    setPwDone: "Lösenordet är bytt.", setEmailSent: "Kolla din inkorg och bekräfta den nya adressen.", setNeedRelogin: "Av säkerhetsskäl: logga in igen och försök på nytt.",
+    setNameEmpty: "Namnet får inte vara tomt."
+  }
+};
+
+const COLORS = ["var(--a)", "var(--b)", "var(--c)", "#8a5ba8", "#d9901f", "#2a9ba6"];
+
+const HOUSEHOLD = [
+  { sv: "Dammsuga", en: "Vacuum", c: 2, m: 20 },
+  { sv: "Moppa golv", en: "Mop floors", c: 2, m: 20 },
+  { sv: "Sopa", en: "Sweep", c: 2, m: 10 },
+  { sv: "Damma möbler och ytor", en: "Dust furniture and surfaces", c: 2, m: 15 },
+  { sv: "Torka av bord och bänkar", en: "Wipe tables and countertops", c: 2, m: 5 },
+  { sv: "Putsa speglar", en: "Clean mirrors", c: 2, m: 5 },
+  { sv: "Putsa fönster", en: "Clean windows", c: 2, m: 30 },
+  { sv: "Torka av dörrar och handtag", en: "Clean doors and handles", c: 2, m: 10 },
+  { sv: "Torka av lister", en: "Clean skirting boards", c: 2, m: 15 },
+  { sv: "Dammsuga under möbler", en: "Clean under furniture", c: 2, m: 20 },
+  { sv: "Damma lampor", en: "Clean lamps", c: 2, m: 15 },
+  { sv: "Tömma papperskorgar", en: "Empty waste bins", c: 2, m: 5 },
+  { sv: "Tvätta sopkärl", en: "Clean wheelie bins", c: 2, m: 10 },
+  { sv: "Städa badrummet", en: "Clean the bathroom", c: 2, m: 30 },
+  { sv: "Städa köket", en: "Clean the kitchen", c: 2, m: 30 },
+  { sv: "Byta sängkläder", en: "Change bed linen", c: 2, m: 15 },
+  { sv: "Tvätta", en: "Do the laundry", c: 2, m: 10 },
+  { sv: "Hänga upp tvätt", en: "Hang up laundry", c: 2, m: 15 },
+  { sv: "Vika och stryka tvätt", en: "Fold and iron laundry", c: 2, m: 30 },
+  { sv: "Lägga undan kläder", en: "Put away clothes", c: 2, m: 15 },
+  { sv: "Byta glödlampa", en: "Change a light bulb", c: 2, m: 5 },
+  { sv: "Sortera sopor och återvinning", en: "Sort waste and recycling", c: 2, m: 10 },
+  { sv: "Klippa gräset", en: "Mow the lawn", c: 2, m: 45 },
+  { sv: "Skotta snö", en: "Shovel snow", c: 2, m: 30 },
+  { sv: "Vattna växter", en: "Water plants", c: 2, m: 10 },
+  { sv: "Tvätta bilen", en: "Wash the car", c: 2, m: 45 },
+  { sv: "Planera veckans middagar", en: "Plan the week's dinners", c: 1, m: 40 },
+  { sv: "Handla mat", en: "Grocery shopping", c: 1, m: 60 },
+  { sv: "Laga middag", en: "Cook dinner", c: 1, m: 45 },
+  { sv: "Packa matlådor", en: "Pack lunch boxes", c: 1, m: 15 },
+  { sv: "Diska", en: "Wash dishes", c: 1, m: 15 },
+  { sv: "Plocka i och ur diskmaskinen", en: "Empty and load the dishwasher", c: 1, m: 10 },
+  { sv: "Städa kylskåpet", en: "Clean the fridge", c: 1, m: 20 },
+  { sv: "Fylla i blanketter för förskola och skola", en: "Fill in preschool and school forms", c: 0, m: 20 },
+  { sv: "Packa väskan till förskolan", en: "Pack the preschool bag", c: 0, m: 10 },
+  { sv: "Hämta och lämna barn", en: "Pick up and drop off children", c: 0, m: 40 },
+  { sv: "Boka tandläkartid till barnen", en: "Book the children's dentist appointment", c: 0, m: 15 },
+  { sv: "Planera lekträffar", en: "Plan playdates", c: 0, m: 15 },
+  { sv: "Hjälpa till med läxor", en: "Homework help", c: 0, m: 30 },
+  { sv: "Boka tandläkartid", en: "Book a dentist appointment", c: 3, m: 15 },
+  { sv: "Hämta ut recept på apoteket", en: "Pick up prescriptions", c: 3, m: 20 },
+  { sv: "Hålla koll på barnens vaccinationer", en: "Track vaccinations", c: 3, m: 10 },
+  { sv: "Betala räkningar", en: "Pay bills", c: 4, m: 20 },
+  { sv: "Gå igenom kontoutdrag", en: "Review bank statements", c: 4, m: 20 },
+  { sv: "Deklarera", en: "File the tax return", c: 4, m: 60 },
+  { sv: "Se över försäkringar", en: "Review insurance", c: 4, m: 30 },
+  { sv: "Planera helgens aktiviteter", en: "Plan the weekend activity", c: 5, m: 20 },
+  { sv: "Skicka födelsedagskort", en: "Send birthday cards", c: 5, m: 10 },
+  { sv: "Ringa släktingar", en: "Call family", c: 5, m: 15 },
+  { sv: "Mata husdjuret", en: "Feed the pet", c: 6, m: 5 },
+  { sv: "Gå ut med hunden", en: "Walk the dog", c: 6, m: 20 },
+  { sv: "Boka hantverkare", en: "Book a tradesperson", c: 6, m: 20 }
+];
+
+const uid = () => Math.random().toString(36).slice(2, 9);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function norm(str) {
+  return String(str).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
+
+let lang = (navigator.language || "sv").toLowerCase().startsWith("en") ? "en" : "sv";
+try { const saved = localStorage.getItem("hb-lang"); if (saved === "sv" || saved === "en") lang = saved; } catch (e) {}
+let state = null;
+let pendingClean = null;
+let editId = null;
+let profileId = null;
+let currentUser = null;
+
+function defaultState(ownerName) {
+  const s = { members: [{ id: uid(), name: ownerName || (lang === "sv" ? "Jag" : "Me"), color: 0 }], tasks: [], leave: {}, checkin: "", guide: true };
+  s.tasks = T[lang].initialTasks.map(([title, cat, min, freq], i) => ({
+    id: uid(), title, ref: (HOUSEHOLD.find(h => h[lang] === title) || {}).sv, cat: T[lang].cats.indexOf(cat), owner: s.members[i % s.members.length].id, minutes: min, freq, done: false
+  }));
+  return s;
+}
+
+/* ---------- Cloud sync ---------- */
+let saveTimer = null, saving = false, again = false, hh = null, baseState = null, pollTimer = null;
+const clone = o => JSON.parse(JSON.stringify(o));
+const deepEq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+let draft = lsGet("hb-draft") || "";
+function isChild() { return !LOCAL_MODE && !!hh && hh.role === "child"; }
+function isOwner() { return LOCAL_MODE || (!!hh && hh.role === "owner"); }
+function setSyncStatus(key) {
+  document.getElementById("sync-status").textContent = key ? T[lang][key] : "";
+}
+function queueSave() {
+  setSyncStatus("syncSaving");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { saveTimer = null; doSave(); }, 600);
+}
+async function doSave() {
+  if (!currentUser || !state) return;
+  if (saving) { again = true; return; }
+  saving = true;
+  try {
+    if (LOCAL_MODE) {
+      const { error } = await sb.from("household_data").upsert({ user_id: currentUser.id, data: state, updated_at: new Date().toISOString() });
+      setSyncStatus(error ? "syncError" : "syncSaved");
+    } else {
+      for (let attempt = 0; attempt < 5 && state; attempt++) {
+        if (deepEq(state, baseState)) { setSyncStatus("syncSaved"); break; }
+        const payload = clone(state);
+        const { data, error } = await sb.rpc("save_household", { p_id: hh.id, p_data: payload, p_expected: hh.version });
+        if (error) { setSyncStatus("syncError"); break; }
+        if (data.ok) { hh.version = data.version; baseState = payload; setSyncStatus("syncSaved"); break; }
+        // someone else saved first: combine their changes with ours and try again
+        const remote = normalizeState(data.data);
+        state = mergeStates(baseState, state, remote);
+        baseState = clone(remote);
+        hh.version = data.version;
+        autoReset();
+        renderAll();
+      }
+    }
+  } catch (e) {
+    setSyncStatus("syncError");
+  } finally {
+    saving = false;
+    if (again) { again = false; doSave(); }
+  }
+}
+function save() { queueSave(); }
+function flushSave() {
+  if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; doSave(); }
+}
+async function saveNow() {
+  clearTimeout(saveTimer); saveTimer = null;
+  while (saving) await new Promise(r => setTimeout(r, 50));
+  await doSave();
+}
+window.addEventListener("pagehide", flushSave);
+document.addEventListener("visibilitychange", () => { if (document.hidden) flushSave(); });
+
+/* ---------- Shared household (cloud) ---------- */
+const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true };
+function settings() { return { ...SETTINGS_DEFAULT, ...((state && state.settings) || {}) }; }
+function normalizeState(d) {
+  d = d && typeof d === "object" && !Array.isArray(d) ? d : {};
+  return {
+    ...d,
+    members: Array.isArray(d.members) ? d.members : [],
+    tasks: Array.isArray(d.tasks) ? d.tasks : [],
+    checkins: Array.isArray(d.checkins) ? d.checkins : [],
+    leave: d.leave && typeof d.leave === "object" ? d.leave : {},
+    shopping: Array.isArray(d.shopping) ? d.shopping : [],
+    swaps: Array.isArray(d.swaps) ? d.swaps : [],
+    starLog: Array.isArray(d.starLog) ? d.starLog : [],
+    welcomeDismissed: !!d.welcomeDismissed,
+    settings: { ...SETTINGS_DEFAULT, ...(d.settings && typeof d.settings === "object" ? d.settings : {}) }
+  };
+}
+function mergeById(base, local, remote) {
+  const b = new Map((base || []).map(x => [x.id, x]));
+  const l = new Map((local || []).map(x => [x.id, x]));
+  const r = new Map((remote || []).map(x => [x.id, x]));
+  const order = [...(remote || []).map(x => x.id), ...(local || []).map(x => x.id).filter(id => !r.has(id))];
+  const out = [];
+  for (const id of order) {
+    const bi = b.get(id), li = l.get(id), ri = r.get(id);
+    if (li && ri) out.push(deepEq(li, bi) ? ri : li);
+    else if (li && !ri) { if (!bi || !deepEq(li, bi)) out.push(li); }
+    else if (!li && ri) { if (!bi || !deepEq(ri, bi)) out.push(ri); }
+  }
+  return out;
+}
+function mergeStates(base, local, remote) {
+  const bs = base || {};
+  const out = { ...remote };
+  out.members = mergeById(bs.members, local.members, remote.members);
+  out.tasks = mergeById(bs.tasks, local.tasks, remote.tasks);
+  out.checkins = mergeById(bs.checkins, local.checkins, remote.checkins);
+  out.shopping = mergeById(bs.shopping, local.shopping, remote.shopping);
+  out.swaps = mergeById(bs.swaps, local.swaps, remote.swaps);
+  out.starLog = mergeById(bs.starLog, local.starLog, remote.starLog);
+  if (local.guide === false || remote.guide === false) out.guide = false;
+  out.leave = { ...(remote.leave || {}) };
+  Object.keys(local.leave || {}).forEach(id => {
+    if ((local.leave[id] || 0) !== ((bs.leave || {})[id] || 0)) out.leave[id] = local.leave[id];
+  });
+  Object.keys(out.leave).forEach(id => { if (!out.members.some(m => m.id === id)) delete out.leave[id]; });
+  out.welcomeDismissed = !!(local.welcomeDismissed || remote.welcomeDismissed);
+  out.settings = { ...SETTINGS_DEFAULT, ...(remote.settings || {}) };
+  Object.keys(SETTINGS_DEFAULT).forEach(key => {
+    const lv = (local.settings || {})[key], bv = (bs.settings || {})[key];
+    if (lv !== undefined && JSON.stringify(lv) !== JSON.stringify(bv)) out.settings[key] = lv;
+  });
+  return out;
+}
+async function loadCloud() {
+  const { data, error } = await sb.rpc("my_household");
+  if (error) throw error;
+  if (!data) return false;
+  hh = {
+    id: data.household.id, name: data.household.name, version: data.household.version,
+    role: data.role, memberId: data.member_id, members: data.members || [], invites: data.invites || null
+  };
+  state = normalizeState(data.household.data);
+  baseState = clone(state);
+  return true;
+}
+async function ensureOwnMember() {
+  const mine = hh.members.find(a => a.user_id === currentUser.id);
+  const name = (mine && mine.display_name) || "Förälder";
+  const linked = new Set(hh.members.map(a => a.member_id).filter(Boolean));
+  let m = state.members.find(x => !linked.has(x.id) && String(x.name).trim().toLowerCase() === name.trim().toLowerCase());
+  if (!m) { m = { id: uid(), name, color: nextColor() }; state.members.push(m); }
+  hh.memberId = m.id;
+  const { error } = await sb.rpc("link_member", { p_member_id: m.id });
+  if (error) throw error;
+  save();
+}
+async function openHousehold() {
+  if (!(await loadCloud())) return false;
+  if (!hh.memberId || !memberById(hh.memberId)) await ensureOwnMember();
+  if (!lsGet("hb-lang") && (settings().lang === "sv" || settings().lang === "en")) lang = settings().lang;
+  return true;
+}
+function startPolling() {
+  stopPolling();
+  if (LOCAL_MODE) return;
+  pollTimer = setInterval(() => { if (!document.hidden) refreshHousehold(); }, 10000);
+}
+function stopPolling() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
+async function refreshHousehold(force) {
+  if (LOCAL_MODE || !currentUser || !hh) return;
+  if (force) { while (saving) await new Promise(r => setTimeout(r, 50)); } else if (saving) return;
+  const { data, error } = await sb.rpc("my_household");
+  if (error) return;
+  if (!data) {
+    stopPolling(); hh = null; state = null; baseState = null;
+    applyRole(); showSetup();
+    return;
+  }
+  const sig = () => JSON.stringify([hh.role, hh.members, hh.name, hh.invites]);
+  const before = sig();
+  hh.role = data.role; hh.members = data.members || []; hh.name = data.household.name; hh.invites = data.invites || null;
+  let changed = before !== sig();
+  if (data.household.version !== hh.version) {
+    const remote = normalizeState(data.household.data);
+    state = mergeStates(baseState, state, remote);
+    baseState = clone(remote);
+    hh.version = data.household.version;
+    autoReset();
+    if (!deepEq(state, baseState)) queueSave();
+    changed = true;
+  }
+  if (changed || force) { applyRole(); renderAll(); }
+}
+function applyRole() {
+  document.body.classList.toggle("role-child", isChild());
+  document.body.classList.toggle("role-owner", !LOCAL_MODE && isOwner());
+  document.body.classList.toggle("child-nocheck", isChild() && !settings().childCheck);
+  document.body.classList.toggle("child-noprofile", isChild() && !settings().childProfile);
+  document.body.classList.toggle("local-mode", LOCAL_MODE);
+  if (isChild()) profileId = hh.memberId;
+}
+
+async function loadHouseholdFor(user) {
+  const { data, error } = await sb.from("household_data").select("data").eq("user_id", user.id).maybeSingle();
+  if (error) { console.error(error); return defaultState(user.user_metadata && user.user_metadata.name); }
+  if (data && data.data) return data.data;
+  const fresh = defaultState(user.user_metadata && user.user_metadata.name);
+  await sb.from("household_data").upsert({ user_id: user.id, data: fresh, updated_at: new Date().toISOString() });
+  return fresh;
+}
+
+
+/* ---------- Repeats, weekly load, auto-reset ---------- */
+const WEEK_W = { once: 1, daily: 7, weekly: 1, monthly: 0.25 };
+const FREQ_BY_SV = {
+  "Diska": "daily", "Laga middag": "daily", "Packa matlådor": "daily", "Packa väskan till förskolan": "daily",
+  "Hämta och lämna barn": "daily", "Mata husdjuret": "daily", "Gå ut med hunden": "daily", "Plocka i och ur diskmaskinen": "daily",
+  "Tömma papperskorgar": "weekly", "Tvätta sopkärl": "monthly", "Tvätta bilen": "monthly", "Betala räkningar": "monthly",
+  "Gå igenom kontoutdrag": "monthly", "Se över försäkringar": "once", "Deklarera": "once", "Boka tandläkartid": "once",
+  "Boka tandläkartid till barnen": "once", "Boka hantverkare": "once", "Skicka födelsedagskort": "once", "Byta glödlampa": "once",
+  "Fylla i blanketter för förskola och skola": "once", "Hämta ut recept på apoteket": "once"
+};
+function freqFor(item) { return FREQ_BY_SV[item.sv] || "weekly"; }
+function weeklyMins(k) { return Number(k.minutes || 0) * (WEEK_W[k.freq || "weekly"] || 1); }
+function isoWeek(d) {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - day);
+  const y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  return { year: t.getUTCFullYear(), week: Math.ceil(((t - y) / 86400000 + 1) / 7) };
+}
+function periodKey(freq, d) {
+  if (freq === "daily") return d.toDateString();
+  if (freq === "weekly") {
+    const ws = Number(settings().weekStart) === 0 ? 0 : 1;
+    const st = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    st.setDate(st.getDate() - ((st.getDay() - ws + 7) % 7));
+    return "w" + st.toDateString();
+  }
+  if (freq === "monthly") return d.getFullYear() + "-" + d.getMonth();
+  return "once";
+}
+function autoReset() {
+  if (!state) return;
+  const now = new Date();
+  let changed = false;
+  state.tasks.forEach(k => {
+    if (k.done && k.doneAt && k.freq && k.freq !== "once") {
+      if (periodKey(k.freq, new Date(k.doneAt)) !== periodKey(k.freq, now)) { k.done = false; k.doneAt = null; changed = true; }
+    }
+  });
+  if (applyRotation()) changed = true;
+  if (changed) save();
+}
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && state) { autoReset(); renderAll(); refreshHousehold(); }
+});
+
+function computeScore() {
+  const n = state.members.length;
+  const totals = state.members.map(m => state.tasks.filter(k => k.owner === m.id).reduce((s, k) => s + weeklyMins(k), 0));
+  const total = totals.reduce((a, b) => a + b, 0);
+  if (n < 2 || !total) return null;
+  const e = 100 / n;
+  const maxShare = Math.max(...totals) / total * 100;
+  return Math.max(0, Math.round(100 * (1 - (maxShare - e) / (100 - e))));
+}
+
+/* ---------- Rendering ---------- */
+function seedTasks() {
+  if (state.tasks.length) return;
+  state.tasks = T[lang].initialTasks.map(([title, cat, min, freq], i) => ({
+    id: uid(), title, cat: T[lang].cats.indexOf(cat), owner: state.members[i % state.members.length].id, minutes: min, freq, done: false
+  }));
+}
+
+function applyStatic() {
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.getElementById("t-title").textContent = t.title;
+  document.getElementById("t-sub").textContent = t.sub;
+  document.querySelectorAll("[data-i]").forEach(el => { el.textContent = t[el.dataset.i]; });
+  document.getElementById("checkin").placeholder = t.checkPrompt;
+  document.getElementById("shop-in").placeholder = t.shopPh;
+  const gear = document.getElementById("open-settings");
+  gear.setAttribute("aria-label", t.navSettings); gear.title = t.navSettings;
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  const catSel = document.getElementById("k-cat");
+  const prev = catSel.value || "0";
+  catSel.innerHTML = t.cats.map((c, i) => `<option value="${i}">${esc(c)}</option>`).join("");
+  catSel.value = prev;
+  document.getElementById("clean-q").placeholder = t.cleanPlaceholder;
+  document.title = t.title;
+  document.getElementById("f-owner").setAttribute("aria-label", t.filterBy);
+  document.getElementById("hobby-in").setAttribute("aria-label", t.hobbies);
+  document.getElementById("hobby-in").placeholder = t.hobbyPh;
+  document.getElementById("s-hhname").placeholder = t.hhNamePh;
+  document.getElementById("s-code").placeholder = t.codePh;
+  const fSel = document.getElementById("k-freq");
+  const prevF = fSel.value || "weekly";
+  fSel.innerHTML = Object.keys(t.freqs).map(k => `<option value="${k}"${k === "weekly" ? " selected" : ""}>${esc(t.freqs[k])}</option>`).join("");
+  fSel.value = prevF;
+  const wSel = document.getElementById("k-wday");
+  const prevW = wSel.value;
+  const ws = Number(settings().weekStart) === 0 ? 0 : 1;
+  wSel.innerHTML = `<option value="">${esc(t.wdayAny)}</option>` + [0, 1, 2, 3, 4, 5, 6].map(i => (i + ws) % 7).map(d => `<option value="${d}">${esc(t.wdays[d])}</option>`).join("");
+  wSel.value = prevW;
+  document.getElementById("cal-prev").setAttribute("aria-label", lang === "sv" ? "Förra veckan" : "Previous week");
+  document.getElementById("cal-next").setAttribute("aria-label", lang === "sv" ? "Nästa vecka" : "Next week");
+  document.getElementById("del-confirm").placeholder = t.delPh;
+  syncFreqFields();
+}
+function renderRotPicker(sel) {
+  const box = document.getElementById("k-rot");
+  if (!state) { box.innerHTML = ""; return; }
+  const chosen = sel || [...box.querySelectorAll("[aria-pressed=true]")].map(b => b.dataset.rot);
+  box.innerHTML = state.members.map(m => `<button type="button" class="chip" data-rot="${m.id}" aria-pressed="${chosen.includes(m.id)}">${esc(m.name)}</button>`).join("");
+}
+function syncFreqFields() {
+  const f = document.getElementById("k-freq").value || "weekly";
+  document.getElementById("k-rot-row").hidden = f === "once";
+  document.getElementById("k-wday-row").hidden = f !== "weekly";
+  document.getElementById("k-date-row").hidden = !(f === "once" || f === "monthly");
+}
+
+function memberById(id) { return state.members.find(m => m.id === id); }
+function nextColor() {
+  const used = state.members.map(m => m.color);
+  for (let i = 0; i < COLORS.length; i++) if (!used.includes(i)) return i;
+  return state.members.length % COLORS.length;
+}
+function taskName(k) {
+  if (k.ref) { const it = HOUSEHOLD.find(x => x.sv === k.ref); if (it) return it[lang]; }
+  return k.title;
+}
+
+let confirmRemove = null;
+let memberFormOpen = false;
+function accountOf(m) { return !LOCAL_MODE && hh ? hh.members.find(a => a.member_id === m.id) || null : null; }
+function memberBadge(m) {
+  if (LOCAL_MODE || !hh) return "";
+  const t = T[lang], a = accountOf(m);
+  const label = !a ? t.noAccLabel : a.role === "owner" ? t.roleOwner : a.role === "child" ? t.roleChild : t.roleAdult;
+  return `<span class="pill">${esc(label)}</span>`;
+}
+function renderMembers() {
+  const t = T[lang];
+  document.getElementById("members").innerHTML = state.members.length
+    ? state.members.map(m => `
+      <div class="leave-item" style="border-top:0;padding-top:0">
+        <span class="swatch" style="background:${COLORS[m.color % COLORS.length]}"></span>
+        <span class="leave-name">${esc(m.name)}</span>
+        ${memberBadge(m)}${isKid(m) ? `<span class="star-mini">★ ${starCount(m.id)}</span>` : ""}
+        ${state.members.length > 1 && !accountOf(m) ? `<button class="ghost${confirmRemove === m.id ? " danger" : ""}" data-remove-member="${m.id}">${confirmRemove === m.id ? t.sure : t.remove}</button>` : ""}
+      </div>`).join("")
+    : `<p class="empty">${t.noTasks}</p>`;
+  if (!LOCAL_MODE && hh) {
+    document.getElementById("members-hint").textContent = isOwner() ? t.memHint : t.memHintAdult;
+    document.getElementById("mem-invite").hidden = !isOwner();
+    document.getElementById("member-form").hidden = !memberFormOpen;
+    document.getElementById("mem-noacc").setAttribute("aria-expanded", String(memberFormOpen));
+  } else document.getElementById("member-form").hidden = false;
+  const addBtn = document.querySelector('#member-form button[type="submit"]');
+  addBtn.disabled = state.members.length >= 6;
+  addBtn.title = state.members.length >= 6 ? t.maxMembers : "";
+  const ownerSel = document.getElementById("k-owner");
+  const prev = ownerSel.value;
+  ownerSel.innerHTML = state.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+  renderRotPicker();
+  if (prev && memberById(prev)) ownerSel.value = prev;
+  const fo = document.getElementById("f-owner");
+  const prevF = fo.value;
+  fo.innerHTML = `<option value="">${t.allOwners}</option>` + state.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+  if (prevF && memberById(prevF)) fo.value = prevF;
+}
+
+function renderTasks() {
+  const t = T[lang];
+  const ul = document.getElementById("tasks");
+  document.getElementById("clear-done").hidden = !state.tasks.some(k => k.done && (k.freq || "weekly") === "once");
+  if (!state.tasks.length) { ul.innerHTML = `<li class="empty">${t.noTasks}</li>`; return; }
+  const fo = isChild() ? (settings().childSeeAll ? "" : hh.memberId) : document.getElementById("f-owner").value;
+  const shown = fo ? state.tasks.filter(k => k.owner === fo) : state.tasks;
+  if (!shown.length) { ul.innerHTML = `<li class="empty">${t.noFiltered}</li>`; return; }
+  ul.innerHTML = shown.map(k => {
+    const m = memberById(k.owner);
+    const color = m ? COLORS[m.color % COLORS.length] : "var(--muted)";
+    return `<li>
+      <div class="check" role="checkbox" tabindex="0" aria-checked="${k.done}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
+      <div class="task-main">
+        <div class="task-title ${k.done ? "done" : ""}">${esc(taskName(k))}</div>
+        <div class="meta">
+          <span class="owner" style="background:${color}">${m ? esc(m.name) : esc(t.unassigned)}</span>
+          <span class="pill">${esc(t.cats[k.cat] || t.cats[6])}</span>
+          <span class="pill">${k.minutes} ${t.minLabel}</span>
+          <span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span>${whenText(k) ? `<span class="pill">${esc(whenText(k))}</span>` : ""}${rotNames(k) ? `<span class="pill">${esc(t.rotPill.replace("{names}", rotNames(k)))}</span>` : ""}${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}
+        </div>
+      </div>
+      <button class="ghost adult-only" data-edit="${k.id}">${t.edit}</button>
+      <button class="ghost adult-only" data-delete="${k.id}">${t.remove}</button>
+    </li>`;
+  }).join("");
+}
+
+function renderLoad() {
+  const t = T[lang];
+  const totals = state.members.map(m => ({
+    m, mins: state.tasks.filter(k => k.owner === m.id).reduce((s, k) => s + weeklyMins(k), 0)
+  }));
+  const total = totals.reduce((s, x) => s + x.mins, 0);
+  const loadEl = document.getElementById("load");
+  const note = document.getElementById("load-note");
+  const fair = document.getElementById("fair");
+  if (!total) {
+    loadEl.innerHTML = ""; note.textContent = t.noLoad; fair.innerHTML = ""; return;
+  }
+  loadEl.innerHTML = totals.map(({ m, mins }) => {
+    const pct = Math.round((mins / total) * 100);
+    return `<div class="bar-wrap">
+      <div class="bar-head"><span>${esc(m.name)}</span><span>${pct}% (${Math.round(mins)} ${t.minWeek})</span></div>
+      <div class="bar"><span style="width:${pct}%;background:${COLORS[m.color % COLORS.length]}"></span></div>
+    </div>`;
+  }).join("");
+  const top = totals.reduce((a, b) => (b.mins > a.mins ? b : a));
+  const topPct = Math.round((top.mins / total) * 100);
+  const inRange = totals.length < 2 || totals.every(x => {
+    const p = (x.mins / total) * 100; return p >= 40 && p <= 60;
+  });
+  note.textContent = totals.length >= 2 && topPct > 60
+    ? t.lean.replace("{name}", top.m.name).replace("{pct}", topPct)
+    : t.balanced;
+  fair.innerHTML = `<span class="badge-fair" style="background:${inRange ? "rgba(95,143,107,.18)" : "rgba(224,165,38,.2)"};color:var(--ink)">${inRange ? t.fairOk : t.fairOff}</span>`;
+  const sg = computeSuggestion();
+  if (sg) {
+    const text = t.suggest.replace("{task}", esc(taskName(sg.k))).replace("{from}", esc(sg.from.name)).replace("{to}", esc(sg.to.name));
+    fair.innerHTML += `<div class="suggest"><span>${text}</span><button class="ghost" data-move-task="${sg.k.id}" data-move-to="${sg.to.id}">${t.move}</button></div>`;
+  }
+}
+
+function computeSuggestion() {
+  if (state.members.length < 2) return null;
+  const totals = state.members.map(m => ({ m, mins: state.tasks.filter(k => k.owner === m.id).reduce((a, k) => a + weeklyMins(k), 0) }));
+  const total = totals.reduce((a, x) => a + x.mins, 0);
+  if (!total) return null;
+  const hi = totals.reduce((a, b) => (b.mins > a.mins ? b : a));
+  const lo = totals.reduce((a, b) => (b.mins < a.mins ? b : a));
+  if (hi.m.id === lo.m.id || hi.mins / total <= 0.6) return null;
+  const diff = hi.mins - lo.mins;
+  let best = null;
+  state.tasks.filter(k => k.owner === hi.m.id && !(k.done && (k.freq || "weekly") === "once")).forEach(k => {
+    const w = weeklyMins(k);
+    if (w <= 0 || w >= diff) return;
+    const after = Math.abs((hi.mins - w) - (lo.mins + w));
+    if (!best || after < best.after) best = { k, after };
+  });
+  return best ? { k: best.k, from: hi.m, to: lo.m } : null;
+}
+
+function renderOverview() {
+  const t = T[lang];
+  const sc = computeScore();
+  document.getElementById("score").innerHTML = sc === null
+    ? `<p class="summary">${t.scoreNeed}</p>`
+    : `<div class="score"><div class="score-ring" style="--p:${sc}"><span>${sc}</span></div>
+        <div class="score-text"><strong>${t.scoreTitle}</strong><small>${sc >= 80 ? t.scoreHigh : sc >= 55 ? t.scoreMid : t.scoreLow}</small></div></div>`;
+  const total = state.tasks.length;
+  const done = state.tasks.filter(k => k.done).length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById("progress").innerHTML = total
+    ? `<div class="bar-head"><span>${t.progressText.replace("{done}", done).replace("{total}", total)}</span><span>${pct}%</span></div>
+       <div class="bar"><span style="width:${pct}%;background:var(--c)"></span></div>
+       ${done === total ? `<div class="banner">${t.allDone}</div>` : ""}`
+    : "";
+  const w = document.getElementById("welcome");
+  w.hidden = !!state.welcomeDismissed;
+  if (!state.welcomeDismissed) {
+    w.innerHTML = `<h2>${t.welcomeTitle}</h2><p>${t.welcomeIntro}</p><ol>${t.welcomeSteps.map(x => `<li>${x}</li>`).join("")}</ol><button type="button" id="welcome-dismiss">${t.welcomeBtn}</button>`;
+  }
+}
+
+let hhConfirm = null;
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand("copy");
+    ta.remove();
+    return ok;
+  } catch (e) { return false; }
+}
+function renderHousehold() {
+  const el = document.getElementById("hh-body");
+  if (LOCAL_MODE || !hh || !currentUser) { el.innerHTML = ""; return; }
+  const t = T[lang];
+  const owner = isOwner();
+  const roleLabel = r => r === "owner" ? t.roleOwner : r === "child" ? t.roleChild : t.roleAdult;
+  const btn = (act, user, text, extra) => {
+    const key = act + ":" + user;
+    const pending = hhConfirm === key;
+    return `<button class="ghost${pending ? " danger" : ""}" data-hh="${act}" data-user="${user}"${extra || ""}>${pending ? t.sure : text}</button>`;
+  };
+  let html = `<p class="summary" style="margin-top:0"><strong>${esc(hh.name)}</strong></p><div>`;
+  html += hh.members.map(a => {
+    const me = a.user_id === currentUser.id;
+    let actions = "";
+    if (owner && !me) {
+      actions += `<button class="ghost" data-hh="role" data-user="${a.user_id}" data-role="${a.role === "child" ? "adult" : "child"}">${a.role === "child" ? t.makeAdult : t.makeChild}</button>`;
+      if (a.role === "adult") actions += btn("owner", a.user_id, t.makeOwner);
+      actions += btn("remove", a.user_id, t.removeAccess);
+    }
+    return `<div class="hh-row"><span class="grow">${esc(a.display_name)}${me ? ` <span class="meta" style="display:inline">(${t.youLabel})</span>` : ""}</span><span class="pill">${roleLabel(a.role)}</span><div class="hh-actions">${actions}</div></div>`;
+  }).join("");
+  html += `</div>`;
+  if (owner && hh.invites) {
+    html += `<h3 class="clean-h" style="margin-top:18px">${t.inviteTitle}</h3><p class="summary" style="margin-top:0">${t.inviteHint}</p>`;
+    html += [["adult_code", t.codeAdult], ["child_code", t.codeChild]].map(([k, label]) =>
+      `<div class="hh-row"><span class="grow">${label}</span><code class="code">${esc(hh.invites[k])}</code><button class="ghost" data-hh="copy" data-code="${esc(hh.invites[k])}">${t.copyCode}</button><button class="ghost" data-hh="copylink" data-code="${esc(hh.invites[k])}">${t.inviteLinkBtn}</button>${navigator.share ? `<button class="ghost" data-hh="share" data-code="${esc(hh.invites[k])}">${t.inviteShareBtn}</button>` : ""}</div>`).join("");
+    html += `<div style="margin-top:10px">${btn("codes", "-", t.newCodes)}</div>`;
+  }
+  html += `<div class="hh-row" style="margin-top:14px;border-top:1px solid var(--line)">`;
+  if (owner) html += `<span class="summary" style="margin:0;flex:1 1 220px">${t.deleteWarn}</span>${btn("delete", "-", t.deleteHh)}`;
+  else html += `<span class="summary" style="margin:0;flex:1 1 220px">${t.ownerNote}</span>${btn("leave", "-", t.leaveHh)}`;
+  html += `</div>`;
+  el.innerHTML = html;
+}
+document.getElementById("hh-body").addEventListener("click", async e => {
+  const b = e.target.closest("[data-hh]");
+  if (!b || LOCAL_MODE || !hh || isChild()) return;
+  const act = b.dataset.hh, user = b.dataset.user || "";
+  if (act === "copy") {
+    if (await copyText(b.dataset.code)) { b.textContent = T[lang].copied; setTimeout(renderHousehold, 1500); }
+    return;
+  }
+  if (act === "copylink") {
+    if (await copyText(inviteUrl(b.dataset.code))) { b.textContent = T[lang].linkCopied; setTimeout(renderHousehold, 1500); }
+    return;
+  }
+  if (act === "share") {
+    try { await navigator.share({ title: T[lang].title, text: T[lang].inviteShareText, url: inviteUrl(b.dataset.code) }); } catch (e) {}
+    return;
+  }
+  const key = act + ":" + user;
+  if (["remove", "owner", "leave", "delete", "codes"].includes(act) && hhConfirm !== key) {
+    hhConfirm = key;
+    renderHousehold();
+    setTimeout(() => { if (hhConfirm === key) { hhConfirm = null; if (hh) renderHousehold(); } }, 4000);
+    return;
+  }
+  hhConfirm = null;
+  const msg = document.getElementById("hh-msg");
+  msg.textContent = "";
+  let res = null;
+  try {
+    if (act === "role") res = await sb.rpc("set_member_role", { p_id: hh.id, p_user: user, p_role: b.dataset.role });
+    else if (act === "remove") res = await sb.rpc("remove_member", { p_id: hh.id, p_user: user });
+    else if (act === "owner") res = await sb.rpc("transfer_ownership", { p_id: hh.id, p_user: user });
+    else if (act === "codes") res = await sb.rpc("regenerate_invites", { p_id: hh.id });
+    else if (act === "leave") { await saveNow(); res = await sb.rpc("leave_household"); }
+    else if (act === "delete") res = await sb.rpc("delete_household", { p_id: hh.id });
+  } catch (ex) { res = { error: ex }; }
+  if (res && res.error) { msg.textContent = rpcErrorText(res.error); renderHousehold(); return; }
+  await refreshHousehold(true);
+});
+
+function renderCheckins() {
+  const t = T[lang];
+  const list = (state.checkins || []).slice().reverse().slice(0, 6);
+  document.getElementById("checkin-list").innerHTML = list.length
+    ? list.map(c => `<li class="checkin-item"><div class="task-main"><div class="task-title">${esc(c.text)}</div><div class="meta"><span class="pill">${t.weekN.replace("{n}", c.week)}</span><span class="pill">${esc(c.date)}</span></div></div><button class="ghost" data-del-checkin="${c.id}">${t.remove}</button></li>`).join("")
+    : `<li class="empty">${t.noCheckins}</li>`;
+}
+
+function renderLeave() {
+  const t = T[lang];
+  document.getElementById("leave").innerHTML = state.members.length
+    ? state.members.map(m => {
+      const days = state.leave[m.id] || 0;
+      return `<div class="leave-item">
+        <span class="leave-name"><span class="swatch" style="background:${COLORS[m.color % COLORS.length]}"></span>${esc(m.name)}</span>
+        <div class="stepper">
+          <button data-leave="${m.id}" data-d="-1" aria-label="-1">−</button>
+          <output>${days} ${t.days}</output>
+          <button data-leave="${m.id}" data-d="1" aria-label="+1">+</button>
+        </div>
+      </div>`;
+    }).join("")
+    : `<p class="empty">${t.noTasks}</p>`;
+}
+
+function renderCleaning() {
+  const t = T[lang];
+  const q = norm(document.getElementById("clean-q").value.trim());
+  const box = document.getElementById("clean-results");
+  const hits = HOUSEHOLD.filter(item => {
+    if (!q) return true;
+    const cat = norm(t.cats[item.c]);
+    return norm(item.sv).includes(q) || norm(item.en).includes(q) || cat.includes(q);
+  });
+  if (!hits.length) { box.innerHTML = `<p class="empty">${t.cleanNone}</p>`; return; }
+  let html = "";
+  if (pendingClean !== null && HOUSEHOLD[pendingClean]) {
+    const item = HOUSEHOLD[pendingClean];
+    html += `<div class="assign-box" role="group"><div class="task-title">${esc(item[lang])}</div>
+      <div class="meta"><span class="pill">${esc(t.cats[item.c])}</span><span class="pill">${item.m} ${t.minLabel}</span><span class="pill">${esc(t.freqs[freqFor(item)])}</span></div>
+      <div class="assign"><span class="meta">${t.whoDoes}</span>${state.members.map(m => `<button class="ghost" data-assign="${m.id}" data-item="${pendingClean}">${esc(m.name)}</button>`).join("")}<button class="ghost" data-cancel-clean="1">${t.cancel}</button></div></div>`;
+  }
+  const cats = [...new Set(hits.map(x => x.c))].sort((x, y) => x - y);
+  html += cats.map(c => `<div class="clean-group">${esc(t.cats[c])}</div><div class="clean-chips">${hits.filter(x => x.c === c).map(item => {
+    const i = HOUSEHOLD.indexOf(item);
+    return `<button type="button" class="chip" data-clean="${i}" aria-pressed="${pendingClean === i}">${esc(item[lang])}</button>`;
+  }).join("")}</div>`).join("");
+  box.innerHTML = html;
+}
+
+function fmtDate(iso) {
+  const d = new Date(iso + "T00:00:00");
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString(lang === "sv" ? "sv-SE" : "en-GB", { weekday: "short", day: "numeric", month: "short" });
+}
+function curProfile() {
+  if (isChild()) profileId = hh.memberId;
+  const m = state.members.find(x => x.id === profileId) || (isChild() ? null : state.members[0]);
+  if (m) { m.hobbies = m.hobbies || []; m.events = m.events || []; profileId = m.id; }
+  return m;
+}
+function renderProfile() {
+  const t = T[lang];
+  const sel = document.getElementById("p-member");
+  sel.innerHTML = (isChild() ? state.members.filter(x => x.id === hh.memberId) : state.members).map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+  const m = curProfile();
+  if (!m) return;
+  sel.value = m.id;
+  document.getElementById("hobby-list").innerHTML = m.hobbies.length
+    ? m.hobbies.map((h, i) => `<li><div class="task-main"><div class="task-title">${esc(h)}</div></div><button class="ghost" data-del-hobby="${i}">${t.remove}</button></li>`).join("")
+    : `<li class="empty">${t.noHobbies}</li>`;
+}
+
+function syncEdit() {
+  const btn = document.querySelector('#task-form button[type="submit"]');
+  btn.textContent = editId ? T[lang].save : T[lang].addTask;
+  document.getElementById("cancel-edit").hidden = !editId;
+}
+function openAdd(own) {
+  document.getElementById("add-panel").hidden = false;
+  document.getElementById("add-toggle").setAttribute("aria-expanded", "true");
+  if (own) setOwn(true);
+}
+function setOwn(open) {
+  document.getElementById("own-wrap").hidden = !open;
+  document.getElementById("own-toggle").setAttribute("aria-expanded", String(open));
+}
+function closeAdd() {
+  document.getElementById("add-panel").hidden = true;
+  document.getElementById("add-toggle").setAttribute("aria-expanded", "false");
+  setOwn(false);
+}
+document.getElementById("add-toggle").onclick = () => {
+  if (isChild()) return;
+  if (document.getElementById("add-panel").hidden) { openAdd(false); document.getElementById("clean-q").focus(); } else closeAdd();
+};
+function setEditMode(id) {
+  editId = id;
+  const k = id && state.tasks.find(x => x.id === id);
+  if (k) {
+    openAdd(true);
+    document.getElementById("k-title").value = taskName(k);
+    document.getElementById("k-owner").value = k.owner;
+    document.getElementById("k-cat").value = k.cat;
+    document.getElementById("k-min").value = k.minutes;
+    document.getElementById("k-freq").value = k.freq || "weekly";
+    syncFreqFields();
+    document.getElementById("k-date").value = k.date || "";
+    document.getElementById("k-time").value = k.time || "";
+    document.getElementById("k-wday").value = k.wday === null || k.wday === undefined ? "" : String(k.wday);
+    renderRotPicker(k.rot ? k.rot.ids : []);
+    document.getElementById("k-title").focus();
+  } else {
+    document.getElementById("task-form").reset();
+    editId = null;
+    syncFreqFields();
+    renderRotPicker([]);
+  }
+  syncEdit();
+}
+
+function renderAll() {
+  applyStatic();
+  renderAuth();
+  if (!state) { document.getElementById("guide").hidden = true; return; }
+  applyRole();
+  if (editId && !state.tasks.some(k => k.id === editId)) setEditMode(null);
+  renderMembers();
+  renderTasks();
+  renderToday();
+  renderShopping();
+  renderCalendar();
+  renderReport();
+  renderGuide();
+  renderLoad();
+  renderOverview();
+  renderLeave();
+  renderCheckins();
+  renderHousehold();
+  renderSettings();
+  renderInstall();
+  document.getElementById("checkin").value = draft;
+  renderCleaning();
+  syncEdit();
+  renderProfile();
+}
+
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("hb-lang", l); } catch (e) {}
+  renderAll();
+}
+document.querySelectorAll("[data-lang]").forEach(b => { b.onclick = () => setLang(b.dataset.lang); });
+
+document.getElementById("member-form").onsubmit = e => {
+  e.preventDefault();
+  if (isChild()) return;
+  const name = document.getElementById("m-name").value.trim();
+  if (!name || state.members.length >= 6) return;
+  state.members.push({ id: uid(), name, color: nextColor(), kid: document.getElementById("m-kid").checked });
+  document.getElementById("m-name").value = "";
+  document.getElementById("m-kid").checked = false;
+  memberFormOpen = false;
+  save(); renderAll();
+};
+
+document.getElementById("task-form").onsubmit = e => {
+  e.preventDefault();
+  if (isChild()) return;
+  const title = document.getElementById("k-title").value.trim();
+  const owner = document.getElementById("k-owner").value;
+  if (!title || !owner) return;
+  const data = {
+    title, owner,
+    cat: Number(document.getElementById("k-cat").value),
+    minutes: Math.max(1, Number(document.getElementById("k-min").value) || 15),
+    freq: document.getElementById("k-freq").value
+  };
+  const kd = document.getElementById("k-date").value, kt = document.getElementById("k-time").value, kw = document.getElementById("k-wday").value;
+  data.time = kt || "";
+  data.date = (data.freq === "once" || data.freq === "monthly") ? (kd || "") : "";
+  data.wday = data.freq === "weekly" && kw !== "" ? Number(kw) : null;
+  const rotIds = [...document.querySelectorAll("#k-rot [aria-pressed=true]")].map(b => b.dataset.rot).filter(id => memberById(id));
+  const prevTask = editId ? state.tasks.find(x => x.id === editId) : null;
+  if (rotIds.length >= 2 && data.freq !== "once") {
+    if (!rotIds.includes(data.owner)) data.owner = rotIds[0];
+    const same = prevTask && prevTask.rot && JSON.stringify(prevTask.rot.ids) === JSON.stringify(rotIds) && prevTask.owner === data.owner;
+    data.rot = same ? prevTask.rot : { ids: rotIds, first: data.owner, start: isoDay(weekStartOf(new Date())) };
+  } else data.rot = null;
+  if (editId) {
+    const k = state.tasks.find(x => x.id === editId);
+    if (k) { if (data.title !== taskName(k)) k.ref = null; Object.assign(k, data); }
+  } else {
+    state.tasks.push({ id: uid(), ...data, done: false });
+  }
+  setEditMode(null);
+  closeAdd();
+  save(); renderAll();
+};
+
+const onTaskClick = e => {
+  const tog = e.target.closest("[data-toggle]");
+  const del = e.target.closest("[data-delete]");
+  const edit = e.target.closest("[data-edit]");
+  if (isChild() && (edit || del)) return;
+  if (edit) { setEditMode(edit.dataset.edit); return; }
+  if (tog) {
+    const k = state.tasks.find(x => x.id === tog.dataset.toggle);
+    if (k && (!isChild() || (settings().childCheck && k.owner === hh.memberId))) toggleDone(k);
+  } else if (del) {
+    if (editId === del.dataset.delete) setEditMode(null);
+    state.tasks = state.tasks.filter(x => x.id !== del.dataset.delete);
+  } else return;
+  save(); renderAll();
+};
+const onTaskKey = e => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.dataset.toggle) {
+    e.preventDefault(); e.target.click();
+  }
+};
+["tasks", "today-list"].forEach(id => {
+  document.getElementById(id).addEventListener("click", onTaskClick);
+  document.getElementById(id).addEventListener("keydown", onTaskKey);
+});
+
+document.getElementById("mem-noacc").onclick = () => {
+  memberFormOpen = !memberFormOpen;
+  renderMembers();
+  if (memberFormOpen) document.getElementById("m-name").focus();
+};
+document.getElementById("mem-invite").onclick = () => {
+  setView("settings");
+  setTimeout(() => { const el = document.getElementById("sec-household"); if (el) el.scrollIntoView({ block: "start" }); }, 30);
+};
+document.getElementById("members").onclick = e => {
+  const rm = e.target.closest("[data-remove-member]");
+  if (!rm || isChild()) return;
+  const id = rm.dataset.removeMember;
+  if (confirmRemove !== id) {
+    confirmRemove = id;
+    renderMembers();
+    setTimeout(() => { if (confirmRemove === id) { confirmRemove = null; if (state) renderMembers(); } }, 4000);
+    return;
+  }
+  confirmRemove = null;
+  if (state.members.length <= 1) return;
+  if (accountOf(memberById(id) || {})) return;
+  state.members = state.members.filter(m => m.id !== id);
+  state.tasks.forEach(k => { if (k.owner === id) k.owner = ""; });
+  delete state.leave[id];
+  save(); renderAll();
+};
+
+document.getElementById("leave").onclick = e => {
+  const b = e.target.closest("[data-leave]");
+  if (!b || isChild()) return;
+  const id = b.dataset.leave;
+  state.leave[id] = Math.max(0, (state.leave[id] || 0) + Number(b.dataset.d));
+  save(); renderLeave();
+};
+
+document.getElementById("checkin").oninput = e => {
+  draft = e.target.value; lsSet("hb-draft", draft);
+};
+
+
+document.getElementById("fair").addEventListener("click", e => {
+  const b = e.target.closest("[data-move-task]");
+  if (!b || isChild()) return;
+  const k = state.tasks.find(x => x.id === b.dataset.moveTask);
+  if (!k || !memberById(b.dataset.moveTo)) return;
+  k.owner = b.dataset.moveTo;
+  save(); renderAll();
+});
+
+document.getElementById("welcome").addEventListener("click", e => {
+  if (e.target.id === "welcome-dismiss") { state.welcomeDismissed = true; save(); renderOverview(); }
+});
+
+document.getElementById("save-checkin").onclick = () => {
+  if (isChild()) return;
+  const text = draft.trim();
+  if (!text) return;
+  state.checkins = state.checkins || [];
+  state.checkins.push({ id: uid(), text, week: isoWeek(new Date()).week, date: new Date().toLocaleDateString(lang === "sv" ? "sv-SE" : "en-GB") });
+  draft = ""; lsSet("hb-draft", "");
+  document.getElementById("checkin").value = "";
+  save(); renderCheckins();
+};
+document.getElementById("checkin-list").onclick = e => {
+  const b = e.target.closest("[data-del-checkin]");
+  if (!b) return;
+  state.checkins = (state.checkins || []).filter(c => c.id !== b.dataset.delCheckin);
+  save(); renderCheckins();
+};
+
+function buildSummary() {
+  const t = T[lang];
+  const totals = state.members.map(m => ({ m, mins: state.tasks.filter(k => k.owner === m.id).reduce((s, k) => s + weeklyMins(k), 0) }));
+  const total = totals.reduce((s, x) => s + x.mins, 0);
+  const lines = [t.summaryHead.replace("{week}", isoWeek(new Date()).week)];
+  totals.forEach(({ m, mins }) => lines.push(`${m.name}: ${total ? Math.round(mins / total * 100) : 0}% (${Math.round(mins)} ${t.minWeek})`));
+  const sc = computeScore();
+  if (sc !== null) lines.push(t.summaryScore.replace("{score}", sc));
+  lines.push(t.summaryDone.replace("{done}", state.tasks.filter(k => k.done).length).replace("{total}", state.tasks.length));
+  return lines.join("\n");
+}
+document.getElementById("copy-summary").onclick = async () => {
+  if (isChild()) return;
+  const t = T[lang];
+  const btn = document.getElementById("copy-summary");
+  const out = document.getElementById("summary-out");
+  const text = buildSummary();
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {}
+  if (!ok) {
+    out.hidden = false; out.value = text; out.focus(); out.select();
+    try { ok = document.execCommand("copy"); } catch (e) {}
+  }
+  if (ok) {
+    out.hidden = true;
+    btn.textContent = t.copied;
+    setTimeout(() => { btn.textContent = T[lang].copySummary; }, 2000);
+  } else {
+    btn.textContent = t.copyManual;
+  }
+};
+
+document.getElementById("clear-done").onclick = () => {
+  if (isChild()) return;
+  state.tasks = state.tasks.filter(k => !(k.done && (k.freq || "weekly") === "once"));
+  save(); renderAll();
+};
+document.getElementById("cancel-edit").onclick = () => setEditMode(null);
+document.getElementById("f-owner").onchange = renderTasks;
+document.getElementById("reset-week").onclick = () => {
+  if (isChild()) return;
+  state.tasks.forEach(k => { k.done = false; k.doneAt = null; });
+  save(); renderAll();
+};
+
+document.getElementById("clean-q").oninput = renderCleaning;
+document.getElementById("own-toggle").onclick = () => {
+  const open = document.getElementById("own-wrap").hidden;
+  setOwn(open);
+  if (open) document.getElementById("k-title").focus();
+};
+document.getElementById("k-freq").addEventListener("change", syncFreqFields);
+document.getElementById("clean-results").onclick = e => {
+  if (isChild()) return;
+  const pick = e.target.closest("[data-clean]");
+  const assign = e.target.closest("[data-assign]");
+  const cancel = e.target.closest("[data-cancel-clean]");
+  if (pick) {
+    pendingClean = Number(pick.dataset.clean);
+    renderCleaning();
+  } else if (cancel) {
+    pendingClean = null;
+    renderCleaning();
+  } else if (assign) {
+    const item = HOUSEHOLD[Number(assign.dataset.item)];
+    state.tasks.push({ id: uid(), title: item[lang], owner: assign.dataset.assign, cat: item.c, minutes: item.m, ref: item.sv, freq: freqFor(item), done: false });
+    pendingClean = null;
+    document.getElementById("clean-q").value = "";
+    closeAdd();
+    save(); renderAll();
+  }
+};
+
+document.getElementById("p-member").onchange = e => { profileId = e.target.value; renderProfile(); };
+const childProfileLocked = () => isChild() && !settings().childProfile;
+document.getElementById("hobby-form").onsubmit = e => {
+  e.preventDefault();
+  if (childProfileLocked()) return;
+  const m = curProfile();
+  const input = document.getElementById("hobby-in");
+  const v = input.value.trim();
+  if (!m || !v) return;
+  m.hobbies.push(v); input.value = "";
+  save(); renderProfile();
+};
+document.getElementById("hobby-list").onclick = e => {
+  const b = e.target.closest("[data-del-hobby]");
+  const m = curProfile();
+  if (!b || !m || childProfileLocked()) return;
+  m.hobbies.splice(Number(b.dataset.delHobby), 1);
+  save(); renderProfile();
+};
+
+/* ---------- Views (tabs), Today ---------- */
+const TAB_VIEWS = ["today", "chores", "shop", "family", "week"];
+let view = "today", lastTab = "today";
+{ const sv0 = lsGet("hb-view"); if (TAB_VIEWS.includes(sv0)) { view = sv0; lastTab = sv0; } }
+function setView(v, noScroll) {
+  if (!TAB_VIEWS.includes(v) && v !== "settings") v = "today";
+  if (v !== "settings") { lastTab = v; lsSet("hb-view", v); }
+  view = v;
+  document.body.dataset.cur = v;
+  document.querySelectorAll("[data-tab]").forEach(b => {
+    if (b.dataset.tab === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+  });
+  if (!noScroll) window.scrollTo(0, 0);
+}
+document.querySelectorAll("[data-tab]").forEach(b => { b.onclick = () => setView(b.dataset.tab); });
+document.getElementById("open-settings").onclick = () => setView("settings");
+document.getElementById("settings-back").onclick = () => setView(lastTab);
+document.addEventListener("click", e => {
+  const g = e.target.closest("[data-goto]");
+  if (g) { setView(g.dataset.goto); if (g.dataset.goto === "chores" && !isChild()) { openAdd(false); } }
+});
+setView(view, true);
+
+let todayWho = null;
+function todayPerson() {
+  if (!state) return null;
+  if (isChild()) return hh.memberId;
+  if (todayWho && memberById(todayWho)) return todayWho;
+  if (!LOCAL_MODE && hh && memberById(hh.memberId)) return hh.memberId;
+  return state.members[0] ? state.members[0].id : null;
+}
+function renderToday() {
+  const t = T[lang];
+  const pid = todayPerson();
+  const m = pid ? memberById(pid) : null;
+  const who = document.getElementById("today-who");
+  who.innerHTML = state.members.length > 1
+    ? state.members.map(x => `<button type="button" class="chip" data-today-who="${x.id}" aria-pressed="${x.id === pid}">${esc(x.name)}</button>`).join("")
+    : "";
+  const own = !LOCAL_MODE && hh && pid === hh.memberId;
+  document.getElementById("today-hi").textContent = m ? (own ? t.todayHi : t.todayFor).replace("{name}", m.name) : t.tabToday;
+  const st = document.getElementById("today-stars");
+  if (m && isKid(m)) { const n = starCount(m.id); st.innerHTML = `<span class="stars">★ ${esc(n === 1 ? t.starsOne : t.starsN.replace("{n}", n))}</span>`; } else st.innerHTML = "";
+  const incoming = m ? (state.swaps || []).filter(w => w.to === m.id && state.tasks.some(k => k.id === w.task)) : [];
+  document.getElementById("today-swaps").innerHTML = incoming.map(w => {
+    const from = memberById(w.from), k = state.tasks.find(x => x.id === w.task);
+    return `<div class="swap-banner"><div>${esc(t.swapIncoming.replace("{from}", from ? from.name : "?").replace("{task}", taskName(k)))}</div><div class="row-btns"><button type="button" class="yes" data-swap-accept="${w.id}">${esc(t.swapYes)}</button><button type="button" class="no" data-swap-decline="${w.id}">${esc(t.swapNo)}</button></div></div>`;
+  }).join("");
+  const mine = m ? state.tasks.filter(k => k.owner === pid && dueStatus(k) !== "later") : [];
+  const done = mine.filter(k => k.done).length;
+  const prog = document.getElementById("today-progress");
+  if (mine.length) {
+    const pct = Math.round(done / mine.length * 100);
+    prog.innerHTML = `<div class="bar-wrap"><div class="bar-head"><span>${esc(t.progressText.replace("{done}", done).replace("{total}", mine.length))}</span><span>${pct}%</span></div><div class="bar"><span style="width:${pct}%;background:var(--c)"></span></div>${done === mine.length ? `<p class="summary">${esc(t.allDone)}</p>` : ""}</div>`;
+  } else prog.innerHTML = "";
+  const ul = document.getElementById("today-list");
+  if (!mine.length) {
+    ul.innerHTML = `<li class="empty" style="display:block"><p class="hint">${esc(t.todayEmpty)}</p>${isChild() ? "" : `<button class="btn big" type="button" data-goto="chores">${esc(t.todayEmptyBtn)}</button>`}</li>`;
+    return;
+  }
+  const rank = k => k.done ? 3 : dueStatus(k) === "late" ? 0 : (k.time ? 1 : 2);
+  const ordered = mine.slice().sort((x, y) => rank(x) - rank(y) || String(x.time || "").localeCompare(String(y.time || "")));
+  ul.innerHTML = ordered.map(k => {
+    const pend = (state.swaps || []).find(w => w.task === k.id);
+    const pendTo = pend ? memberById(pend.to) : null;
+    let extra = "";
+    if (!k.done && pend && pendTo) extra = `<div class="swap-wait">${esc(t.swapWait.replace("{name}", pendTo.name))} <button type="button" class="swap-ask" data-swap-cancel="${pend.id}">${esc(t.swapUndo)}</button></div>`;
+    else if (!k.done && swapAsk === k.id) extra = `<div class="meta" style="color:#cfe3da;margin-top:6px">${esc(t.swapTo)}</div><div class="swap-pick">${state.members.filter(x => x.id !== k.owner).map(x => `<button type="button" data-swap-to="${x.id}" data-swap-task="${k.id}">${esc(x.name)}</button>`).join("")}<button type="button" class="cancel" data-swap-close="1">${esc(t.cancel)}</button></div>`;
+    else if (!k.done && state.members.length > 1 && canSwap(k)) extra = `<div style="margin-top:6px"><button type="button" class="swap-ask" data-swap-open="${k.id}">${esc(t.swapAsk)}</button></div>`;
+    return `<li>
+      <div class="check big" role="checkbox" tabindex="0" aria-checked="${k.done}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
+      <div class="task-main"><div class="task-title ${k.done ? "done" : ""}">${esc(taskName(k))}</div>
+      <div class="meta">${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}${k.time ? `<span class="pill">${esc(t.atTime.replace("{t}", k.time))}</span>` : ""}<span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span><span class="pill">${k.minutes} ${t.minLabel}</span></div>${extra}</div>
+    </li>`;
+  }).join("");
+}
+document.getElementById("today-who").addEventListener("click", e => {
+  const b = e.target.closest("[data-today-who]");
+  if (!b || isChild()) return;
+  todayWho = b.dataset.todayWho;
+  renderToday();
+});
+
+/* ---------- Invite link ---------- */
+function getInvite() { return LOCAL_MODE ? "" : (lsGet("hb-invite") || ""); }
+function inviteUrl(code) { return location.href.split("#")[0].split("?")[0] + "?code=" + encodeURIComponent(code); }
+try {
+  const u = new URL(location.href);
+  const c = u.searchParams.get("code") || u.searchParams.get("invite");
+  if (c && /^[A-Za-z0-9]{4,20}$/.test(c)) {
+    lsSet("hb-invite", c.toUpperCase());
+    u.searchParams.delete("code"); u.searchParams.delete("invite");
+    try { history.replaceState(null, "", u.pathname + u.search + u.hash); } catch (e) {}
+  }
+} catch (e) {}
+
+/* ---------- Shopping list ---------- */
+function renderShopping() {
+  const t = T[lang];
+  const list = state.shopping || (state.shopping = []);
+  const ul = document.getElementById("shop-list");
+  const open = list.filter(x => !x.done), done = list.filter(x => x.done);
+  const ordered = open.concat(done);
+  ul.innerHTML = ordered.length
+    ? ordered.map(x => `<li>
+        <div class="check big" role="checkbox" tabindex="0" aria-checked="${!!x.done}" data-shop-toggle="${x.id}">${x.done ? "✓" : ""}</div>
+        <div class="task-main"><div class="task-title ${x.done ? "done" : ""}">${esc(x.text)}</div></div>
+        <button class="ghost" data-shop-del="${x.id}" aria-label="${esc(t.remove)}">✕</button>
+      </li>`).join("")
+    : `<li class="empty">${esc(t.shopEmpty)}</li>`;
+  const have = new Set(open.map(x => x.text.toLowerCase()));
+  document.getElementById("shop-quick").innerHTML = t.shopItems.filter(n => !have.has(n.toLowerCase()))
+    .map(n => `<button type="button" class="chip" data-shop-quick="${esc(n)}">+ ${esc(n)}</button>`).join("");
+  document.getElementById("shop-clear").hidden = !done.length;
+  document.getElementById("shop-copy").hidden = !open.length;
+}
+function addShopItem(text) {
+  text = String(text || "").trim().slice(0, 60);
+  if (!text) return;
+  state.shopping = state.shopping || [];
+  const dup = state.shopping.find(x => !x.done && x.text.toLowerCase() === text.toLowerCase());
+  if (!dup) {
+    const was = state.shopping.find(x => x.done && x.text.toLowerCase() === text.toLowerCase());
+    if (was) { was.done = false; } else state.shopping.push({ id: uid(), text, done: false });
+  }
+  save(); renderShopping();
+}
+document.getElementById("shop-form").onsubmit = e => {
+  e.preventDefault();
+  const inp = document.getElementById("shop-in");
+  addShopItem(inp.value);
+  inp.value = ""; inp.focus();
+};
+document.getElementById("shop-quick").addEventListener("click", e => {
+  const b = e.target.closest("[data-shop-quick]");
+  if (b) addShopItem(b.dataset.shopQuick);
+});
+const onShopClick = e => {
+  const tg = e.target.closest("[data-shop-toggle]"), del = e.target.closest("[data-shop-del]");
+  if (tg) { const x = state.shopping.find(i => i.id === tg.dataset.shopToggle); if (x) x.done = !x.done; }
+  else if (del) state.shopping = state.shopping.filter(i => i.id !== del.dataset.shopDel);
+  else return;
+  save(); renderShopping();
+};
+document.getElementById("shop-list").addEventListener("click", onShopClick);
+document.getElementById("shop-list").addEventListener("keydown", e => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.dataset.shopToggle) { e.preventDefault(); e.target.click(); }
+});
+document.getElementById("shop-clear").onclick = () => {
+  state.shopping = (state.shopping || []).filter(x => !x.done);
+  save(); renderShopping();
+};
+document.getElementById("shop-copy").onclick = async () => {
+  const btn = document.getElementById("shop-copy"), t = T[lang];
+  const text = (state.shopping || []).filter(x => !x.done).map(x => "- " + x.text).join("\n");
+  if (await copyText(text)) { btn.textContent = t.shopCopied; setTimeout(() => { btn.textContent = T[lang].shopCopy; }, 1800); }
+};
+
+/* ---------- Install as app ---------- */
+let deferredInstall = null;
+function isStandalone() {
+  return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+}
+function renderInstall() {
+  const box = document.getElementById("set-install");
+  if (LOCAL_MODE) { box.hidden = true; return; }
+  const t = T[lang];
+  if (isStandalone()) { box.hidden = true; return; }
+  box.hidden = false;
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const btn = document.getElementById("install-btn");
+  btn.hidden = !deferredInstall;
+  document.getElementById("install-hint").textContent = deferredInstall ? t.installReady : (ios ? t.installIos : t.installGeneric);
+}
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredInstall = e; renderInstall(); });
+window.addEventListener("appinstalled", () => { deferredInstall = null; renderInstall(); });
+document.getElementById("install-btn").onclick = async () => {
+  if (!deferredInstall) return;
+  deferredInstall.prompt();
+  try { await deferredInstall.userChoice; } catch (e) {}
+  deferredInstall = null; renderInstall();
+};
+if (!LOCAL_MODE && "serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+
+/* ---------- Dates on chores ---------- */
+function isoDay(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function weekStartOf(d) {
+  const ws = Number(settings().weekStart) === 0 ? 0 : 1;
+  const st = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  st.setDate(st.getDate() - ((st.getDay() - ws + 7) % 7));
+  return st;
+}
+// The date this chore falls on in the current period, or null when it has no fixed day.
+function occurrence(k, now) {
+  now = now || new Date();
+  const f = k.freq || "weekly";
+  if (f === "daily") return isoDay(now);
+  if (f === "weekly") {
+    if (k.wday === null || k.wday === undefined || k.wday === "") return null;
+    const st = weekStartOf(now);
+    const off = (Number(k.wday) - st.getDay() + 7) % 7;
+    const d = new Date(st); d.setDate(st.getDate() + off);
+    return isoDay(d);
+  }
+  if (!k.date) return null;
+  if (f === "monthly") {
+    const day = Number(k.date.slice(8, 10));
+    const last = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    return isoDay(new Date(now.getFullYear(), now.getMonth(), Math.min(day, last)));
+  }
+  return k.date;
+}
+// "open" (no fixed day), "today", "late", "later" (upcoming this period)
+function dueStatus(k) {
+  const o = occurrence(k);
+  if (!o) return "open";
+  const today = isoDay(new Date());
+  if (o === today) return "today";
+  if (o < today) return k.done ? "today" : "late";
+  return "later";
+}
+function whenText(k) {
+  const t = T[lang], f = k.freq || "weekly", parts = [];
+  if (f === "weekly" && k.wday !== null && k.wday !== undefined && k.wday !== "") parts.push(t.wdays[Number(k.wday)]);
+  if (f === "once" && k.date) parts.push(fmtDate(k.date));
+  if (f === "monthly" && k.date) parts.push(t.monthDay.replace("{d}", Number(k.date.slice(8, 10))));
+  if (k.time) parts.push(t.atTime.replace("{t}", k.time));
+  return parts.join(", ");
+}
+// Does chore k fall on day iso (for the calendar)? Daily chores are left out to keep the week readable.
+function choreOnDay(k, iso) {
+  const f = k.freq || "weekly", d = new Date(iso + "T00:00:00");
+  if (f === "daily") return false;
+  if (f === "weekly") return k.wday !== null && k.wday !== undefined && k.wday !== "" && Number(k.wday) === d.getDay();
+  if (!k.date) return false;
+  if (f === "monthly") { const day = Number(k.date.slice(8, 10)); const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); return d.getDate() === Math.min(day, last); }
+  return k.date === iso;
+}
+
+/* ---------- Family week calendar ---------- */
+let calOffset = 0;
+function renderCalendar() {
+  const t = T[lang], loc = lang === "sv" ? "sv-SE" : "en-GB";
+  const start = weekStartOf(new Date());
+  start.setDate(start.getDate() + calOffset * 7);
+  const days = [...Array(7)].map((_, i) => { const d = new Date(start); d.setDate(start.getDate() + i); return d; });
+  const today = isoDay(new Date());
+  document.getElementById("cal-title").textContent = calOffset === 0 ? t.calTitle : t.weekN.replace("{n}", isoWeek(start).week);
+  document.getElementById("cal-range").textContent = days[0].toLocaleDateString(loc, { day: "numeric", month: "short" }) + " – " + days[6].toLocaleDateString(loc, { day: "numeric", month: "short" }) + (calOffset === 0 ? "" : "");
+  const curWeek = calOffset === 0;
+  const canEditEv = m => !isChild() || (m.id === hh.memberId && settings().childProfile);
+  document.getElementById("cal-days").innerHTML = days.map(d => {
+    const iso = isoDay(d);
+    const items = [];
+    state.members.forEach(m => (m.events || []).forEach(ev => { if (ev.date === iso) items.push({ kind: "ev", m, time: ev.time || "", title: ev.title, id: ev.id, del: canEditEv(m) }); }));
+    state.tasks.forEach(k => { if (choreOnDay(k, iso)) items.push({ kind: "task", m: memberById(k.owner), time: k.time || "", title: taskName(k), done: curWeek && !!k.done }); });
+    items.sort((x, y) => (x.time || "99").localeCompare(y.time || "99"));
+    const head = d.toLocaleDateString(loc, { weekday: "long", day: "numeric", month: "short" });
+    return `<div class="cal-day${iso === today ? " today" : ""}"><h3>${esc(head.charAt(0).toUpperCase() + head.slice(1))}${iso === today ? `<span class="tag">${esc(t.calToday)}</span>` : ""}</h3>${items.length ? items.map(it => `<div class="cal-item${it.done ? " done" : ""}">
+        <span class="bar-dot" style="background:${it.m ? COLORS[it.m.color % COLORS.length] : "var(--line-strong)"}"></span>
+        <span class="ci-time">${esc(it.time)}</span>
+        <div class="ci-main"><div class="ci-title">${it.kind === "task" ? (it.done ? "✓ " : "") : ""}${esc(it.title)}</div><div class="ci-who">${it.m ? esc(it.m.name) : esc(t.unassigned)}${it.kind === "task" ? ", " + esc(t.tabChores.toLowerCase()) : ""}</div></div>
+        ${it.kind === "ev" && it.del ? `<button class="ghost" data-del-ev="${it.id}" data-who="${it.m.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}
+      </div>`).join("") : `<div class="cal-empty">${esc(t.calEmpty)}</div>`}</div>`;
+  }).join("");
+  const who = document.getElementById("e-who");
+  const prev = who.value;
+  const list = isChild() ? state.members.filter(x => x.id === hh.memberId) : state.members;
+  who.innerHTML = list.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+  if (prev && list.some(x => x.id === prev)) who.value = prev;
+  else if (!LOCAL_MODE && hh && list.some(x => x.id === hh.memberId)) who.value = hh.memberId;
+  const dIn = document.getElementById("e-date");
+  if (!dIn.value) dIn.value = today;
+}
+document.getElementById("cal-prev").onclick = () => { calOffset--; renderCalendar(); };
+document.getElementById("cal-next").onclick = () => { calOffset++; renderCalendar(); };
+document.getElementById("cal-form").onsubmit = e => {
+  e.preventDefault();
+  const m = memberById(document.getElementById("e-who").value);
+  const date = document.getElementById("e-date").value;
+  const title = document.getElementById("e-title").value.trim();
+  if (!m || !date || !title) return;
+  if (isChild() && (m.id !== hh.memberId || !settings().childProfile)) return;
+  m.events = m.events || [];
+  m.events.push({ id: uid(), date, time: document.getElementById("e-time").value, title });
+  document.getElementById("e-title").value = "";
+  document.getElementById("e-time").value = "";
+  save(); renderCalendar();
+};
+document.getElementById("cal-days").addEventListener("click", e => {
+  const b = e.target.closest("[data-del-ev]");
+  if (!b) return;
+  const m = memberById(b.dataset.who);
+  if (!m) return;
+  if (isChild() && (m.id !== hh.memberId || !settings().childProfile)) return;
+  m.events = (m.events || []).filter(x => x.id !== b.dataset.delEv);
+  save(); renderCalendar();
+});
+
+/* ---------- Live weekly report (owner) ---------- */
+function renderReport() {
+  const sec = document.getElementById("sec-report");
+  sec.hidden = !isOwner();
+  if (sec.hidden) return;
+  const t = T[lang];
+  const groups = state.members.map(m => ({ m, tasks: state.tasks.filter(k => k.owner === m.id) }));
+  const orphan = state.tasks.filter(k => !memberById(k.owner));
+  if (orphan.length) groups.push({ m: null, tasks: orphan });
+  document.getElementById("report-body").innerHTML = groups.map(({ m, tasks }) => {
+    const done = tasks.filter(k => k.done).length;
+    const pct = tasks.length ? Math.round(done / tasks.length * 100) : 0;
+    const color = m ? COLORS[m.color % COLORS.length] : "var(--line-strong)";
+    return `<div class="rep-person">
+      <div class="rep-head"><span><span class="swatch" style="background:${color}"></span>${m ? esc(m.name) : esc(t.unassigned)}${m && isKid(m) ? ` <span class="star-mini">★ ${starCount(m.id)}</span>` : ""}</span><span class="meta" style="margin:0">${tasks.length ? esc(t.reportDone.replace("{done}", done).replace("{total}", tasks.length)) : esc(t.reportNone)}</span></div>
+      ${tasks.length ? `<div class="bar" style="margin-top:8px"><span style="width:${pct}%;background:${color}"></span></div>
+      <div class="rep-tasks">${tasks.slice().sort((x, y) => Number(x.done) - Number(y.done)).map(k => {
+        const late = !k.done && dueStatus(k) === "late";
+        return `<span class="rep-task${k.done ? " done" : ""}${late ? " late" : ""}">${k.done ? "✓" : late ? "!" : "○"} ${esc(taskName(k))}</span>`;
+      }).join("")}</div>` : ""}
+    </div>`;
+  }).join("");
+  const now = new Date();
+  document.getElementById("report-stamp").textContent = t.reportStamp.replace("{t}", now.toLocaleTimeString(lang === "sv" ? "sv-SE" : "en-GB", { hour: "2-digit", minute: "2-digit" }));
+}
+
+/* ---------- Delete my account ---------- */
+document.getElementById("del-account").onclick = async () => {
+  const t = T[lang], msg = document.getElementById("del-msg");
+  msg.textContent = "";
+  if (LOCAL_MODE || !currentUser) return;
+  if (document.getElementById("del-confirm").value.trim().toUpperCase() !== t.delWord) { msg.textContent = t.delWrong; return; }
+  if (hh && hh.role === "owner" && hh.members.length > 1) { msg.textContent = t.delOwnerFirst; return; }
+  const btn = document.getElementById("del-account");
+  btn.disabled = true;
+  try {
+    const { error } = await sb.rpc("delete_my_account");
+    if (error) { msg.textContent = /owner_has_members/.test(error.message || "") ? t.delOwnerFirst : rpcErrorText(error); return; }
+    stopPolling();
+    clearTimeout(saveTimer); saveTimer = null;
+    try { await sb.auth.signOut(); } catch (e) {}
+    currentUser = null; state = null; hh = null; baseState = null;
+    applyRole();
+    document.getElementById("del-confirm").value = "";
+    document.getElementById("logout").hidden = true;
+    document.getElementById("setup").hidden = true;
+    authMode = "login";
+    document.getElementById("login").hidden = false;
+    renderAll();
+    document.getElementById("auth-info").textContent = t.delDone;
+  } catch (ex) { msg.textContent = rpcErrorText(ex); }
+  finally { btn.disabled = false; }
+};
+
+/* ---------- Stars, rotation, swaps ---------- */
+function isKid(m) {
+  if (!m) return false;
+  const a = accountOf(m);
+  return a ? a.role === "child" : !!m.kid;
+}
+function starCount(id) { return (state.starLog || []).filter(e => e.m === id).length; }
+function toggleDone(k) {
+  k.done = !k.done;
+  state.starLog = state.starLog || [];
+  if (k.done) {
+    k.doneAt = Date.now();
+    if (isKid(memberById(k.owner))) state.starLog.push({ id: uid(), m: k.owner, k: k.id, at: k.doneAt });
+  } else {
+    const at = k.doneAt;
+    state.starLog = state.starLog.filter(e => !(e.k === k.id && e.at === at));
+    k.doneAt = null;
+  }
+}
+function rotNames(k) {
+  if (!k.rot || !Array.isArray(k.rot.ids)) return "";
+  const ms = k.rot.ids.map(memberById).filter(Boolean);
+  return ms.length >= 2 ? ms.map(m => m.name).join(", ") : "";
+}
+function rotOwner(k) {
+  const r = k.rot;
+  if (!r || !Array.isArray(r.ids)) return null;
+  const ids = r.ids.filter(id => memberById(id));
+  if (ids.length < 2) return null;
+  const cur = isoDay(weekStartOf(new Date()));
+  const n = Math.round((new Date(cur + "T00:00:00") - new Date((r.start || cur) + "T00:00:00")) / 604800000);
+  const base = Math.max(0, ids.indexOf(r.first));
+  return ids[(((base + n) % ids.length) + ids.length) % ids.length];
+}
+function applyRotation() {
+  if (!state) return false;
+  let ch = false;
+  const cur = isoDay(weekStartOf(new Date()));
+  state.tasks.forEach(k => {
+    const o = rotOwner(k);
+    if (!o) return;
+    const want = k.swap && k.swap.week === cur && memberById(k.swap.to) ? k.swap.to : o;
+    if (k.owner !== want) { k.owner = want; ch = true; }
+  });
+  return ch;
+}
+let swapAsk = null;
+function canSwap(k) { return !isChild() || k.owner === hh.memberId; }
+document.getElementById("today-list").addEventListener("click", e => {
+  const open = e.target.closest("[data-swap-open]"), to = e.target.closest("[data-swap-to]");
+  const close = e.target.closest("[data-swap-close]"), cancel = e.target.closest("[data-swap-cancel]");
+  if (open) { swapAsk = open.dataset.swapOpen; renderToday(); return; }
+  if (close) { swapAsk = null; renderToday(); return; }
+  if (to) {
+    const k = state.tasks.find(x => x.id === to.dataset.swapTask);
+    if (!k || !canSwap(k)) return;
+    state.swaps = (state.swaps || []).filter(w => w.task !== k.id);
+    state.swaps.push({ id: uid(), task: k.id, from: k.owner, to: to.dataset.swapTo, at: Date.now() });
+    swapAsk = null; save(); renderToday(); return;
+  }
+  if (cancel) { state.swaps = (state.swaps || []).filter(w => w.id !== cancel.dataset.swapCancel); save(); renderToday(); }
+});
+document.getElementById("today-swaps").addEventListener("click", e => {
+  const yes = e.target.closest("[data-swap-accept]"), no = e.target.closest("[data-swap-decline]");
+  const id = (yes || no) && (yes ? yes.dataset.swapAccept : no.dataset.swapDecline);
+  if (!id) return;
+  const w = (state.swaps || []).find(x => x.id === id);
+  if (!w) return;
+  if (isChild() && w.to !== hh.memberId) return;
+  if (yes) {
+    const k = state.tasks.find(x => x.id === w.task);
+    if (k && memberById(w.to)) {
+      k.owner = w.to;
+      if (k.rot) k.swap = { week: isoDay(weekStartOf(new Date())), to: w.to };
+    }
+  }
+  state.swaps = state.swaps.filter(x => x.id !== id);
+  save(); renderAll();
+});
+document.getElementById("k-rot").addEventListener("click", e => {
+  const b = e.target.closest("[data-rot]");
+  if (!b) return;
+  b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"));
+});
+
+/* ---------- Start guide ---------- */
+let guideStep = 1;
+const GUIDE_PICKS = ["Dammsuga", "Diska", "Laga middag", "Tvätta", "Handla mat", "Tömma papperskorgar", "Städa badrummet", "Byta sängkläder", "Planera veckans middagar",
+  "Hämta och lämna barn", "Packa väskan till förskolan", "Moppa golv", "Torka av bord och bänkar", "Plocka i och ur diskmaskinen", "Vika och stryka tvätt", "Betala räkningar", "Vattna växter", "Sortera sopor och återvinning"];
+function guideOn() { return !!(state && state.guide && isOwner() && !isChild()); }
+function guideSteps() { return LOCAL_MODE ? [1, 3, 4] : [1, 2, 3, 4]; }
+function renderGuide() {
+  const box = document.getElementById("guide");
+  box.hidden = !guideOn();
+  if (box.hidden) return;
+  const t = T[lang], steps = guideSteps();
+  if (!steps.includes(guideStep)) guideStep = steps[0];
+  const pos = steps.indexOf(guideStep);
+  document.getElementById("guide-steps").textContent = t.guideStep.replace("{n}", pos + 1).replace("{total}", steps.length);
+  document.getElementById("guide-back").hidden = pos === 0;
+  document.getElementById("guide-next").textContent = pos === steps.length - 1 ? t.guideDone : t.guideNext;
+  const title = document.getElementById("guide-title"), hint = document.getElementById("guide-hint"), body = document.getElementById("guide-body");
+  title.textContent = t["g" + guideStep + "Title"];
+  hint.textContent = t["g" + guideStep + "Hint"];
+  if (guideStep === 1) {
+    const meId = !LOCAL_MODE && hh ? hh.memberId : state.members[0] && state.members[0].id;
+    body.innerHTML = `<div>${state.members.map(m => `<div class="g-row"><span class="swatch" style="background:${COLORS[m.color % COLORS.length]}"></span><span class="grow">${esc(m.name)}${m.id === meId ? ` (${esc(t.gYou)})` : ""}</span>${m.id === meId || accountOf(m) ? "" : `<button type="button" class="chip" data-g-kid="${m.id}" aria-pressed="${!!m.kid}">${esc(t.kidLabel)}</button><button type="button" class="ghost" data-g-del="${m.id}" aria-label="${esc(t.remove)}">✕</button>`}</div>`).join("")}</div>
+      <form class="g-add" id="g-add-form"><input id="g-name" maxlength="24" placeholder="${esc(t.name)}" aria-label="${esc(t.name)}" required><button class="btn" type="submit"${state.members.length >= 6 ? " disabled" : ""}>${esc(t.add)}</button></form>`;
+  } else if (guideStep === 2) {
+    const inv = hh && hh.invites;
+    body.innerHTML = inv ? [["adult_code", t.gLinkAdult], ["child_code", t.gLinkChild]].map(([k, label]) => `<div class="g-row"><span class="grow">${esc(label)}</span><button type="button" class="ghost" data-g-copy="${esc(inv[k])}">${esc(t.inviteLinkBtn)}</button>${navigator.share ? `<button type="button" class="ghost" data-g-share="${esc(inv[k])}">${esc(t.inviteShareBtn)}</button>` : ""}</div>`).join("") : "";
+  } else if (guideStep === 3) {
+    const have = new Set(state.tasks.map(k => k.ref || taskName(k)));
+    const picks = GUIDE_PICKS.map(sv => HOUSEHOLD.find(h => h.sv === sv)).filter(Boolean);
+    const extra = state.tasks.filter(k => !picks.some(h => h.sv === k.ref));
+    body.innerHTML = `<div class="chips">${extra.map(k => `<button type="button" class="chip" data-g-task="${k.id}" aria-pressed="true">${esc(taskName(k))}</button>`).join("")}${picks.map(h => {
+      const on = have.has(h.sv);
+      return `<button type="button" class="chip" data-g-pick="${esc(h.sv)}" aria-pressed="${on}">${esc(h[lang])}</button>`;
+    }).join("")}</div>`;
+  } else {
+    body.innerHTML = `<p><button type="button" class="btn" id="g-even">${esc(t.gEven)}</button></p><div class="g-assign">${state.tasks.map(k => `<span>${esc(taskName(k))}${k.rot ? ` <span class="pill">${esc(t.gRotate)}</span>` : ""}</span><select data-g-owner="${k.id}" aria-label="${esc(t.owner)}">${state.members.map(m => `<option value="${m.id}"${m.id === k.owner ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select>`).join("")}</div>`;
+  }
+}
+function shareEvenly() {
+  const cap = m => isKid(m) ? 0.4 : 1;
+  const load = new Map(state.members.map(m => [m.id, 0]));
+  const sorted = state.tasks.slice().sort((x, y) => weeklyMins(y) - weeklyMins(x));
+  sorted.forEach(k => {
+    let best = null, bestScore = Infinity;
+    state.members.forEach(m => {
+      const heavy = isKid(m) && Number(k.minutes) > 25;
+      const score = (load.get(m.id) + weeklyMins(k)) / cap(m) + (heavy ? 1e6 : 0);
+      if (score < bestScore) { bestScore = score; best = m; }
+    });
+    if (best) { k.owner = best.id; k.rot = null; load.set(best.id, load.get(best.id) + weeklyMins(k)); }
+  });
+}
+document.getElementById("guide").addEventListener("click", async e => {
+  const t = T[lang];
+  const kid = e.target.closest("[data-g-kid]"), del = e.target.closest("[data-g-del]");
+  const pick = e.target.closest("[data-g-pick]"), tk = e.target.closest("[data-g-task]");
+  const copy = e.target.closest("[data-g-copy]"), share = e.target.closest("[data-g-share]");
+  if (kid) { const m = memberById(kid.dataset.gKid); if (m) { m.kid = !m.kid; save(); renderGuide(); } return; }
+  if (del) { const id = del.dataset.gDel; state.members = state.members.filter(m => m.id !== id); state.tasks.forEach(k => { if (k.owner === id) k.owner = state.members[0].id; }); save(); renderAll(); return; }
+  if (pick) {
+    const h = HOUSEHOLD.find(x => x.sv === pick.dataset.gPick);
+    const ex = state.tasks.find(k => k.ref === h.sv);
+    if (ex) state.tasks = state.tasks.filter(k => k !== ex);
+    else state.tasks.push({ id: uid(), title: h[lang], ref: h.sv, cat: h.c, minutes: h.m, freq: freqFor(h), owner: state.members[0].id, done: false });
+    save(); renderAll(); return;
+  }
+  if (tk) { state.tasks = state.tasks.filter(k => k.id !== tk.dataset.gTask); save(); renderAll(); return; }
+  if (copy) { if (await copyText(inviteUrl(copy.dataset.gCopy))) { copy.textContent = t.linkCopied; setTimeout(renderGuide, 1500); } return; }
+  if (share) { try { await navigator.share({ title: t.title, text: t.inviteShareText, url: inviteUrl(share.dataset.gShare) }); } catch (ex) {} return; }
+  if (e.target.id === "g-even") { shareEvenly(); save(); renderAll(); return; }
+});
+document.getElementById("guide").addEventListener("change", e => {
+  const sel = e.target.closest("[data-g-owner]");
+  if (!sel) return;
+  const k = state.tasks.find(x => x.id === sel.dataset.gOwner);
+  if (k && memberById(sel.value)) { k.owner = sel.value; k.rot = null; save(); renderAll(); }
+});
+document.getElementById("guide").addEventListener("submit", e => {
+  if (e.target.id !== "g-add-form") return;
+  e.preventDefault();
+  const inp = document.getElementById("g-name");
+  const name = inp.value.trim();
+  if (!name || state.members.length >= 6) return;
+  state.members.push({ id: uid(), name, color: nextColor(), kid: false });
+  save(); renderAll();
+  const again = document.getElementById("g-name"); if (again) again.focus();
+});
+document.getElementById("guide-next").onclick = () => {
+  const steps = guideSteps(), pos = steps.indexOf(guideStep);
+  if (pos < steps.length - 1) { guideStep = steps[pos + 1]; renderGuide(); return; }
+  state.guide = false; state.welcomeDismissed = true; guideStep = 1; save(); setView("today"); renderAll();
+};
+document.getElementById("guide-back").onclick = () => {
+  const steps = guideSteps(), pos = steps.indexOf(guideStep);
+  if (pos > 0) { guideStep = steps[pos - 1]; renderGuide(); }
+};
+document.getElementById("guide-skip").onclick = () => { state.guide = false; state.welcomeDismissed = true; save(); renderAll(); };
+
+/* ---------- Settings ---------- */
+function setMsg(id, text, isErr) {
+  const el = document.getElementById(id);
+  el.textContent = text || "";
+  el.classList.toggle("err", !!isErr);
+}
+function renderSettings() {
+  if (LOCAL_MODE || !hh || !state || !currentUser) return;
+  const t = T[lang], st = settings();
+  const active = document.activeElement;
+  const editing = id => active && active.id === id;
+  if (isOwner()) {
+    if (!editing("set-hhname")) document.getElementById("set-hhname").value = hh.name || "";
+    const ws = document.getElementById("set-weekstart");
+    ws.innerHTML = `<option value="1">${t.setMon}</option><option value="0">${t.setSun}</option>`;
+    ws.value = String(Number(st.weekStart) === 0 ? 0 : 1);
+    const dl = document.getElementById("set-deflang");
+    dl.innerHTML = `<option value="">${t.setLangNone}</option><option value="sv">Svenska</option><option value="en">English</option>`;
+    dl.value = st.lang || "";
+    document.getElementById("set-c-seeall").checked = !!st.childSeeAll;
+    document.getElementById("set-c-check").checked = !!st.childCheck;
+    document.getElementById("set-c-profile").checked = !!st.childProfile;
+  }
+  if (!editing("set-name")) {
+    const mine = hh.members.find(a => a.user_id === currentUser.id);
+    document.getElementById("set-name").value = (mine && mine.display_name) || "";
+  }
+  if (!editing("set-email")) document.getElementById("set-email").value = currentUser.email || "";
+  const list = document.getElementById("set-people-list");
+  if (!isChild() && !(list.contains(active) && active.tagName === "INPUT")) {
+    list.innerHTML = state.members.map(m => `<div class="hh-row" data-pm="${m.id}">
+      <input class="grow" data-pm-name="${m.id}" value="${esc(m.name)}" maxlength="24" aria-label="${esc(t.name)}">
+      <div class="swatches">${COLORS.map((c, i) => `<button type="button" data-pm-color="${m.id}" data-c="${i}" aria-pressed="${m.color % COLORS.length === i}" style="background:${c}" aria-label="${i + 1}"></button>`).join("")}</div>
+    </div>`).join("");
+  }
+}
+function updateSettings(patch) {
+  if (!isOwner() || LOCAL_MODE) return;
+  state.settings = { ...settings(), ...patch };
+  save(); applyRole(); renderAll();
+  setMsg("set-admin-msg", T[lang].setSaved);
+}
+document.getElementById("set-hh-form").onsubmit = async e => {
+  e.preventDefault();
+  if (!isOwner() || !hh) return;
+  const name = document.getElementById("set-hhname").value.trim();
+  if (!name) { setMsg("set-admin-msg", T[lang].setNameEmpty, true); return; }
+  try {
+    const { error } = await sb.rpc("rename_household", { p_id: hh.id, p_name: name });
+    if (error) { setMsg("set-admin-msg", rpcErrorText(error), true); return; }
+    hh.name = name.slice(0, 60);
+    renderHousehold();
+    setMsg("set-admin-msg", T[lang].setSaved);
+  } catch (ex) { setMsg("set-admin-msg", rpcErrorText(ex), true); }
+};
+document.getElementById("set-weekstart").onchange = e => updateSettings({ weekStart: Number(e.target.value) === 0 ? 0 : 1 });
+document.getElementById("set-deflang").onchange = e => updateSettings({ lang: e.target.value });
+document.getElementById("set-c-seeall").onchange = e => updateSettings({ childSeeAll: e.target.checked });
+document.getElementById("set-c-check").onchange = e => updateSettings({ childCheck: e.target.checked });
+document.getElementById("set-c-profile").onchange = e => updateSettings({ childProfile: e.target.checked });
+
+const peopleBox = document.getElementById("set-people-list");
+peopleBox.addEventListener("change", e => {
+  const inp = e.target.closest("[data-pm-name]");
+  if (!inp || isChild()) return;
+  const m = memberById(inp.dataset.pmName);
+  const v = inp.value.trim();
+  if (!m) return;
+  if (!v) { inp.value = m.name; return; }
+  m.name = v.slice(0, 24);
+  save(); renderAll();
+});
+peopleBox.addEventListener("click", e => {
+  const b = e.target.closest("[data-pm-color]");
+  if (!b || isChild()) return;
+  const m = memberById(b.dataset.pmColor);
+  if (!m) return;
+  m.color = Number(b.dataset.c);
+  save(); renderAll();
+});
+
+document.getElementById("set-name-form").onsubmit = async e => {
+  e.preventDefault();
+  if (!hh || !currentUser) return;
+  const name = document.getElementById("set-name").value.trim().slice(0, 40);
+  if (!name) { setMsg("set-account-msg", T[lang].setNameEmpty, true); return; }
+  try {
+    const { error } = await sb.rpc("set_display_name", { p_name: name });
+    if (error) { setMsg("set-account-msg", rpcErrorText(error), true); return; }
+    try { await sb.auth.updateUser({ data: { name } }); } catch (ex) {}
+    const mine = hh.members.find(a => a.user_id === currentUser.id);
+    if (mine) mine.display_name = name;
+    const me = memberById(hh.memberId);
+    if (me) { me.name = name.slice(0, 24); save(); }
+    renderAll();
+    setMsg("set-account-msg", T[lang].setSaved);
+  } catch (ex) { setMsg("set-account-msg", rpcErrorText(ex), true); }
+};
+document.getElementById("set-email-form").onsubmit = async e => {
+  e.preventDefault();
+  const email = document.getElementById("set-email").value.trim();
+  if (!email || email === currentUser.email) return;
+  try {
+    const { error } = await sb.auth.updateUser({ email });
+    if (error) { setMsg("set-account-msg", authErrorText(error), true); return; }
+    setMsg("set-account-msg", T[lang].setEmailSent);
+  } catch (ex) { setMsg("set-account-msg", authErrorText(ex), true); }
+};
+document.getElementById("set-pw-form").onsubmit = async e => {
+  e.preventDefault();
+  const t = T[lang];
+  const a = document.getElementById("set-pw").value, b = document.getElementById("set-pw2").value;
+  if (a.length < 6) { setMsg("set-account-msg", t.setPwShort, true); return; }
+  if (a !== b) { setMsg("set-account-msg", t.setPwMismatch, true); return; }
+  try {
+    const { error } = await sb.auth.updateUser({ password: a });
+    if (error) {
+      setMsg("set-account-msg", /reauth|recent|session/i.test(error.message || "") ? t.setNeedRelogin : authErrorText(error), true);
+      return;
+    }
+    document.getElementById("set-pw").value = ""; document.getElementById("set-pw2").value = "";
+    setMsg("set-account-msg", t.setPwDone);
+  } catch (ex) { setMsg("set-account-msg", authErrorText(ex), true); }
+};
+document.getElementById("set-export-btn").onclick = () => {
+  if (isChild() || !state) return;
+  const payload = { exportedAt: new Date().toISOString(), household: hh ? hh.name : "", data: state };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "hushall-" + new Date().toISOString().slice(0, 10) + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+};
+
+/* ---------- Auth ---------- */
+let authMode = "login";
+function authErrorText(error) {
+  const t = T[lang];
+  const msg = String((error && error.message) || "");
+  if (/invalid login credentials/i.test(msg)) return t.badLogin;
+  if (/email not confirmed/i.test(msg)) return t.notConfirmed;
+  if (/already registered|already been registered/i.test(msg)) return t.emailTaken;
+  if (/my_household|could not find the function/i.test(msg)) return t.dbNotReady;
+  if (/failed to fetch|networkerror|load failed|network request failed/i.test(msg)) return t.noConnection;
+  return t.otherError + " " + msg;
+}
+function renderAuth() {
+  const t = T[lang];
+  const invNote = document.getElementById("invite-note-login");
+  invNote.hidden = !getInvite();
+  invNote.textContent = t.invitedLogin;
+  const reg = authMode === "register";
+  document.getElementById("auth-title").textContent = reg ? t.createAccount : t.logIn;
+  document.getElementById("reg-only").hidden = !reg;
+  document.getElementById("a-name").required = reg;
+  document.getElementById("auth-submit").textContent = reg ? t.createAccount : t.logIn;
+  document.getElementById("auth-switch").textContent = reg ? t.haveAccount : t.noAccount;
+  document.getElementById("a-name").placeholder = t.namePh;
+  document.getElementById("a-email").placeholder = t.emailPh;
+  document.getElementById("a-pw").placeholder = t.pwPh;
+  document.getElementById("a-pw").autocomplete = reg ? "new-password" : "current-password";
+  document.querySelectorAll(".pw-toggle").forEach(btn => {
+    const input = document.getElementById(btn.dataset.target);
+    btn.textContent = input.type === "password" ? t.show : t.hide;
+  });
+  const hint = document.getElementById("pw-hint");
+  hint.textContent = t.pwHint;
+  hint.hidden = !reg;
+  document.getElementById("pw2-row").hidden = !reg;
+  document.getElementById("a-pw2").required = reg;
+  if (!reg) document.getElementById("a-pw2").value = "";
+}
+document.querySelectorAll(".pw-toggle").forEach(btn => {
+  btn.onclick = () => {
+    const t = T[lang];
+    const input = document.getElementById(btn.dataset.target);
+    const show = input.type === "password";
+    input.type = show ? "text" : "password";
+    btn.textContent = show ? t.hide : t.show;
+  };
+  btn.textContent = T[lang].show;
+});
+document.getElementById("auth-switch").onclick = () => {
+  authMode = authMode === "login" ? "register" : "login";
+  document.getElementById("auth-err").textContent = "";
+  document.getElementById("auth-info").textContent = "";
+  renderAuth();
+};
+
+document.getElementById("auth-form").onsubmit = async e => {
+  e.preventDefault();
+  const t = T[lang];
+  const err = document.getElementById("auth-err");
+  const info = document.getElementById("auth-info");
+  err.textContent = ""; info.textContent = "";
+  const btn = document.getElementById("auth-submit");
+  const email = document.getElementById("a-email").value.trim().toLowerCase();
+  const pw = document.getElementById("a-pw").value;
+  btn.disabled = true;
+  try {
+    if (authMode === "register") {
+      const name = document.getElementById("a-name").value.trim();
+      const pw2 = document.getElementById("a-pw2").value;
+      if (pw.length < 6) { err.textContent = t.weakPw; return; }
+      if (pw !== pw2) { err.textContent = t.pwMismatch; return; }
+      const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { name } } });
+      if (error) { err.textContent = authErrorText(error); return; }
+      if (!data.session) {
+        info.textContent = t.checkEmail;
+        authMode = "login"; renderAuth();
+        return;
+      }
+      await onSignedIn(data.user);
+    } else {
+      const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+      if (error) { err.textContent = authErrorText(error); return; }
+      await onSignedIn(data.user);
+    }
+  } catch (ex) {
+    err.textContent = authErrorText(ex);
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+async function onSignedIn(user) {
+  currentUser = user;
+  document.getElementById("a-pw").value = "";
+  document.getElementById("a-pw2").value = "";
+  let opened = true;
+  if (LOCAL_MODE) state = await loadHouseholdFor(user);
+  else opened = await openHousehold();
+  document.getElementById("login").hidden = true;
+  if (!opened) { showSetup(); return; }
+  finishSignIn();
+}
+function finishSignIn() {
+  lsSet("hb-invite", "");
+  document.getElementById("setup").hidden = true;
+  document.getElementById("logout").hidden = false;
+  autoReset();
+  profileId = null;
+  applyRole();
+  renderAll();
+  startPolling();
+}
+function showSetup() {
+  stopPolling();
+  document.getElementById("login").hidden = true;
+  document.getElementById("logout").hidden = true;
+  document.getElementById("setup").hidden = false;
+  const nm = (currentUser && currentUser.user_metadata && currentUser.user_metadata.name) || "";
+  ["s-name1", "s-name2"].forEach(id => { const el = document.getElementById(id); if (!el.value) el.value = nm; });
+  document.getElementById("setup-err").textContent = "";
+  const inv = getInvite();
+  const joinCard = document.getElementById("join-form").closest(".card");
+  const note = document.getElementById("invite-note-setup");
+  note.hidden = !inv;
+  joinCard.classList.toggle("invited", !!inv);
+  joinCard.style.order = inv ? "-1" : "";
+  if (inv) {
+    note.textContent = T[lang].invitedSetup;
+    document.getElementById("s-code").value = inv;
+    setTimeout(() => { try { joinCard.scrollIntoView({ block: "center" }); } catch (e) {} }, 50);
+  }
+}
+function rpcErrorText(error) {
+  const t = T[lang];
+  const msg = String((error && error.message) || "");
+  if (/invalid_code/.test(msg)) return t.badCode;
+  if (/already_in_household|duplicate key/i.test(msg)) return t.alreadyIn;
+  if (/not_owner/.test(msg)) return t.errNotOwner;
+  if (/target_must_be_adult/.test(msg)) return t.errNeedAdult;
+  if (/owner_cannot_leave/.test(msg)) return t.errOwnerLeave;
+  if (/my_household|schema cache|could not find the function|does not exist/i.test(msg)) return t.dbNotReady;
+  if (/failed to fetch|networkerror|load failed/i.test(msg)) return t.noConnection;
+  return t.hhError + " " + msg;
+}
+async function enterHousehold() {
+  const err = document.getElementById("setup-err");
+  if (!(await openHousehold())) { err.textContent = T[lang].hhError; return; }
+  finishSignIn();
+}
+document.getElementById("create-form").onsubmit = async e => {
+  e.preventDefault();
+  const err = document.getElementById("setup-err");
+  err.textContent = "";
+  const name = document.getElementById("s-hhname").value.trim();
+  const disp = document.getElementById("s-name1").value.trim();
+  if (!disp) return;
+  const btn = e.target.querySelector("button[type=submit]");
+  btn.disabled = true;
+  try {
+    const { error } = await sb.rpc("create_household", { p_name: name, p_display_name: disp, p_data: defaultState(disp) });
+    if (error) { err.textContent = rpcErrorText(error); return; }
+    await enterHousehold();
+  } catch (ex) { err.textContent = rpcErrorText(ex); }
+  finally { btn.disabled = false; }
+};
+document.getElementById("join-form").onsubmit = async e => {
+  e.preventDefault();
+  const err = document.getElementById("setup-err");
+  err.textContent = "";
+  const code = document.getElementById("s-code").value.trim();
+  const disp = document.getElementById("s-name2").value.trim();
+  if (!code || !disp) return;
+  const btn = e.target.querySelector("button[type=submit]");
+  btn.disabled = true;
+  try {
+    const { error } = await sb.rpc("join_household", { p_code: code, p_display_name: disp });
+    if (error) { err.textContent = rpcErrorText(error); return; }
+    await enterHousehold();
+  } catch (ex) { err.textContent = rpcErrorText(ex); }
+  finally { btn.disabled = false; }
+};
+
+async function doLogout() {
+  stopPolling();
+  if (state && currentUser) { try { await saveNow(); } catch (e) {} }
+  await sb.auth.signOut();
+  currentUser = null; state = null; hh = null; baseState = null;
+  applyRole();
+  document.getElementById("logout").hidden = true;
+  document.getElementById("setup").hidden = true;
+  authMode = "login";
+  document.getElementById("login").hidden = false;
+  renderAll();
+}
+document.getElementById("logout").onclick = doLogout;
+document.getElementById("setup-logout").onclick = doLogout;
+
+async function initAuth() {
+  renderAll();
+  try {
+    const { data } = await sb.auth.getSession();
+    if (data.session && data.session.user) await onSignedIn(data.session.user);
+  } catch (ex) {
+    document.getElementById("auth-err").textContent = rpcErrorText(ex);
+    document.getElementById("login").hidden = false;
+  }
+}
+
+initAuth();
+</script>
+</body>
+</html>
