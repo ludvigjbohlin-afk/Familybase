@@ -909,7 +909,7 @@ const T = {
     rewardsTitle: "Rewards", rewardsHint: "Children spend their stars on these. You decide what they cost.", rewardName: "Reward", rewardCost: "Stars", rewardsNone: "No rewards yet. Add one below.", redeemBtn: "{r} ({c} ★)", redeemed: "Redeemed: {r}", redeemLog: "{m} redeemed {r} ({c} ★)", redeemTitle: "Recently redeemed",
     noteLabel: "Note (optional)", stepsLabel: "Steps (optional, one per line)", stepsPill: "{n} steps",
     tplLabel: "Templates:", tplAdded: "Added {n} chores from the template",
-    tabShop: "Shopping", shopTitle: "Shopping list", shopAdd: "Add", shopQuick: "Quick add", shopClear: "Clear ticked items", shopCopy: "Copy list", shopCopied: "Copied!",
+    syncOffline: "Offline. Saves when you are back online.", tabShop: "Shopping", shopTitle: "Shopping list", shopAdd: "Add", shopQuick: "Quick add", shopClear: "Clear ticked items", shopCopy: "Copy list", shopCopied: "Copied!",
     shopEmpty: "The list is empty. Add what you need to buy.", shopPh: "Add, for example milk",
     shopItems: ["Milk", "Bread", "Eggs", "Bananas", "Butter", "Cheese", "Coffee", "Pasta", "Rice", "Detergent", "Toilet paper", "Nappies"],
     inviteLinkBtn: "Copy link", inviteShareBtn: "Share", linkCopied: "Link copied!", inviteShareText: "Join our household in Hushållsbalans:",
@@ -1007,7 +1007,7 @@ const T = {
     rewardsTitle: "Belöningar", rewardsHint: "Barnen använder sina stjärnor på dessa. Ni bestämmer vad de kostar.", rewardName: "Belöning", rewardCost: "Stjärnor", rewardsNone: "Inga belöningar än. Lägg till en nedan.", redeemBtn: "{r} ({c} ★)", redeemed: "Inlöst: {r}", redeemLog: "{m} löste in {r} ({c} ★)", redeemTitle: "Senast inlöst",
     noteLabel: "Anteckning (valfritt)", stepsLabel: "Delmoment (valfritt, ett per rad)", stepsPill: "{n} delmoment",
     tplLabel: "Mallar:", tplAdded: "La till {n} sysslor från mallen",
-    tabShop: "Inköp", shopTitle: "Inköpslista", shopAdd: "Lägg till", shopQuick: "Snabbval", shopClear: "Rensa avbockade", shopCopy: "Kopiera listan", shopCopied: "Kopierat!",
+    syncOffline: "Offline. Sparas när nätet är tillbaka.", tabShop: "Inköp", shopTitle: "Inköpslista", shopAdd: "Lägg till", shopQuick: "Snabbval", shopClear: "Rensa avbockade", shopCopy: "Kopiera listan", shopCopied: "Kopierat!",
     shopEmpty: "Listan är tom. Lägg till det ni behöver köpa.", shopPh: "Lägg till, till exempel mjölk",
     shopItems: ["Mjölk", "Bröd", "Ägg", "Bananer", "Smör", "Ost", "Kaffe", "Pasta", "Ris", "Tvättmedel", "Toalettpapper", "Blöjor"],
     inviteLinkBtn: "Kopiera länk", inviteShareBtn: "Dela", linkCopied: "Länk kopierad!", inviteShareText: "Gå med i vårt hushåll i Hushållsbalans:",
@@ -1126,7 +1126,8 @@ function setSyncStatus(key) {
   document.getElementById("sync-status").textContent = key ? T[lang][key] : "";
 }
 function queueSave() {
-  setSyncStatus("syncSaving");
+  setSyncStatus(navigator.onLine === false ? "syncOffline" : "syncSaving");
+  writeCache();
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => { saveTimer = null; doSave(); }, 600);
 }
@@ -1143,8 +1144,19 @@ async function doSave() {
         if (deepEq(state, baseState)) { setSyncStatus("syncSaved"); break; }
         const payload = clone(state);
         const { data, error } = await sb.rpc("save_household", { p_id: hh.id, p_data: payload, p_expected: hh.version });
-        if (error) { setSyncStatus("syncError"); break; }
-        if (data.ok) { hh.version = data.version; baseState = payload; setSyncStatus("syncSaved"); break; }
+        if (error) { setSyncStatus(isNetErr(error) ? "syncOffline" : "syncError"); break; }
+        if (data.ok) {
+          hh.version = data.version;
+          if (data.data) {
+            // the server removed something this account may not change: show what was really saved
+            const cleaned = normalizeState(data.data);
+            state = mergeStates(payload, state, cleaned);
+            baseState = clone(cleaned);
+            renderAll();
+          } else baseState = payload;
+          setSyncStatus("syncSaved");
+          break;
+        }
         // someone else saved first: combine their changes with ours and try again
         const remote = normalizeState(data.data);
         state = mergeStates(baseState, state, remote);
@@ -1155,9 +1167,10 @@ async function doSave() {
       }
     }
   } catch (e) {
-    setSyncStatus("syncError");
+    setSyncStatus(isNetErr(e) ? "syncOffline" : "syncError");
   } finally {
     saving = false;
+    writeCache();
     if (again) { again = false; doSave(); }
   }
 }
@@ -1266,7 +1279,23 @@ async function ensureOwnMember() {
   save();
 }
 async function openHousehold() {
-  if (!(await loadCloud())) return false;
+  const cached = readCache();
+  let loaded;
+  try { loaded = await loadCloud(); }
+  catch (ex) {
+    if (isNetErr(ex) && cached && cached.hh && cached.state) {
+      hh = cached.hh; state = normalizeState(cached.state); baseState = normalizeState(cached.base || cached.state);
+      setSyncStatus("syncOffline");
+      return true;
+    }
+    throw ex;
+  }
+  if (!loaded) return false;
+  if (cached && cached.hh && cached.hh.id === hh.id && cached.state && cached.base && !deepEq(cached.state, cached.base)) {
+    // changes made while offline: combine them with what is on the server now
+    state = mergeStates(normalizeState(cached.base), normalizeState(cached.state), state);
+    queueSave();
+  }
   if (!hh.memberId || !memberById(hh.memberId)) await ensureOwnMember();
   if (!lsGet("hb-lang") && (settings().lang === "sv" || settings().lang === "en")) lang = settings().lang;
   return true;
@@ -1275,8 +1304,9 @@ function startPolling() {
   stopPolling();
   if (LOCAL_MODE) return;
   pollTimer = setInterval(() => { if (!document.hidden) refreshHousehold(); }, 10000);
+  startRealtime();
 }
-function stopPolling() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
+function stopPolling() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } stopRealtime(); }
 async function refreshHousehold(force) {
   if (LOCAL_MODE || !currentUser || !hh) return;
   if (force) { while (saving) await new Promise(r => setTimeout(r, 50)); } else if (saving) return;
@@ -1301,6 +1331,7 @@ async function refreshHousehold(force) {
     changed = true;
   }
   if (changed || force) { applyRole(); renderAll(); }
+  writeCache();
 }
 function applyRole() {
   document.body.classList.toggle("role-child", isChild());
@@ -2456,6 +2487,7 @@ document.getElementById("del-account").onclick = async () => {
     if (error) { msg.textContent = /owner_has_members/.test(error.message || "") ? t.delOwnerFirst : rpcErrorText(error); return; }
     stopPolling();
     clearTimeout(saveTimer); saveTimer = null;
+    if (cacheKey()) { try { localStorage.removeItem(cacheKey()); } catch (e) {} }
     try { await sb.auth.signOut(); } catch (e) {}
     currentUser = null; state = null; hh = null; baseState = null;
     applyRole();
@@ -2533,6 +2565,49 @@ function deptOf(text) {
   const s = String(text || "").toLowerCase();
   for (let i = 0; i < DEPT_WORDS.length; i++) if (DEPT_WORDS[i].some(w => s.includes(w))) return i;
   return 8;
+}
+
+/* ---------- Offline cache and live updates ---------- */
+function isNetErr(e) {
+  const msg = String((e && (e.message || e.details)) || e || "");
+  return navigator.onLine === false || /failed to fetch|networkerror|network request failed|load failed|fetch failed/i.test(msg);
+}
+function cacheKey() { return currentUser ? "hb-cache-" + currentUser.id : null; }
+function readCache() {
+  const k = cacheKey();
+  if (LOCAL_MODE || !k) return null;
+  try { return JSON.parse(lsGet(k) || "null"); } catch (e) { return null; }
+}
+function writeCache() {
+  const k = cacheKey();
+  if (LOCAL_MODE || !k || !hh || !state) return;
+  lsSet(k, JSON.stringify({ hh: { id: hh.id, name: hh.name, version: hh.version, role: hh.role, memberId: hh.memberId, members: hh.members, invites: null }, state, base: baseState, at: Date.now() }));
+}
+window.addEventListener("online", () => {
+  if (LOCAL_MODE || !state || !currentUser || !hh) return;
+  setSyncStatus("syncSaving");
+  doSave().then(() => refreshHousehold(true));
+});
+window.addEventListener("offline", () => { if (state && !LOCAL_MODE) setSyncStatus("syncOffline"); });
+let rtChannel = null, rtTimer = null;
+function startRealtime() {
+  stopRealtime();
+  if (LOCAL_MODE || !hh || !sb.channel) return;
+  const onChange = () => {
+    clearTimeout(rtTimer);
+    const tryNow = () => { if (saving || saveTimer) { rtTimer = setTimeout(tryNow, 400); return; } refreshHousehold(); };
+    rtTimer = setTimeout(tryNow, 150);
+  };
+  try {
+    rtChannel = sb.channel("hh-" + hh.id)
+      .on("postgres_changes", { event: "*", schema: "public", table: "households", filter: "id=eq." + hh.id }, onChange)
+      .on("postgres_changes", { event: "*", schema: "public", table: "household_members", filter: "household_id=eq." + hh.id }, onChange)
+      .subscribe();
+  } catch (e) { rtChannel = null; }
+}
+function stopRealtime() {
+  clearTimeout(rtTimer);
+  if (rtChannel) { try { sb.removeChannel(rtChannel); } catch (e) {} rtChannel = null; }
 }
 
 /* ---------- Rewards ---------- */
@@ -3292,6 +3367,7 @@ document.getElementById("join-form").onsubmit = async e => {
 async function doLogout() {
   stopPolling();
   if (state && currentUser) { try { await saveNow(); } catch (e) {} }
+  if (cacheKey()) { try { localStorage.removeItem(cacheKey()); } catch (e) {} }
   await sb.auth.signOut();
   currentUser = null; state = null; hh = null; baseState = null;
   applyRole();
