@@ -1,4 +1,4 @@
-const CACHE = "hb-v8";
+const CACHE = "hb-v9";
 const SHARED = ["cdn.jsdelivr.net", "fonts.googleapis.com", "fonts.gstatic.com"];
 self.addEventListener("install", e => {
   self.skipWaiting();

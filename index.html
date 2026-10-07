@@ -355,6 +355,8 @@ html.big-text { font-size: 118.75%; }
 .hist-score { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
 .hist table { width: 100%; border-collapse: collapse; font-size: .85rem; margin-top: 8px; }
 .hist th, .hist td { text-align: left; padding: 4px 6px; border-top: 1px solid var(--line); }
+#mine-later .task-title { font-weight: 500; }
+#mine-err:empty { display: none; }
 .owner-only { display: none; }
 .role-owner .owner-only { display: block; }
 .role-owner .not-owner { display: none; }
@@ -566,6 +568,21 @@ ul.tasks li { border-top: 1px solid var(--line); }
       <div id="today-who" class="chips adult-only"></div>
       <div id="today-progress"></div>
       <ul class="tasks big" id="today-list"></ul>
+    </section>
+
+    <section class="card full" id="sec-mine" data-view="today" aria-labelledby="h-mine">
+      <h2 id="h-mine"><span class="dot"></span><span data-i="mineTitle"></span></h2>
+      <p class="summary" style="margin-top:-8px" data-i="mineHint"></p>
+      <p class="set-msg err" id="mine-err" role="status"></p>
+      <ul class="tasks" id="mine-list"></ul>
+      <form id="mine-form" class="row" style="margin-top:12px">
+        <div style="flex:2 1 200px"><label for="mine-title" data-i="mineWhat"></label><input id="mine-title" maxlength="120" autocomplete="off" required></div>
+        <div><label for="mine-date" data-i="date"></label><input id="mine-date" type="date"></div>
+        <div class="narrow" style="flex:0 0 120px"><label for="mine-time" data-i="time"></label><input id="mine-time" type="time"></div>
+        <div class="narrow"><button class="btn" type="submit" data-i="add"></button></div>
+      </form>
+      <p style="margin:10px 0 0"><button class="ghost" type="button" id="mine-more" hidden></button></p>
+      <ul class="tasks" id="mine-later" hidden></ul>
     </section>
 
     <section class="card full welcome adult-only" id="welcome" data-view="today" hidden></section>
@@ -909,7 +926,9 @@ const T = {
     rewardsTitle: "Rewards", rewardsHint: "Children spend their stars on these. You decide what they cost.", rewardName: "Reward", rewardCost: "Stars", rewardsNone: "No rewards yet. Add one below.", redeemBtn: "{r} ({c} ★)", redeemed: "Redeemed: {r}", redeemLog: "{m} redeemed {r} ({c} ★)", redeemTitle: "Recently redeemed",
     noteLabel: "Note (optional)", stepsLabel: "Steps (optional, one per line)", stepsPill: "{n} steps",
     tplLabel: "Templates:", tplAdded: "Added {n} chores from the template",
-    syncOffline: "Offline. Saves when you are back online.", tabShop: "Shopping", shopTitle: "Shopping list", shopAdd: "Add", shopQuick: "Quick add", shopClear: "Clear ticked items", shopCopy: "Copy list", shopCopied: "Copied!",
+    syncOffline: "Offline. Saves when you are back online.", mineTitle: "My own things", mineHint: "Only you can see these. They do not count as chores.", mineWhat: "What do you need to do?", mineEmpty: "Nothing for today.",
+    mineMore: "Show coming up ({n})", mineLess: "Hide coming up", mineNeedsSql: "Run the SQL file update-4 in Supabase to use your own things.",
+    tabShop: "Shopping", shopTitle: "Shopping list", shopAdd: "Add", shopQuick: "Quick add", shopClear: "Clear ticked items", shopCopy: "Copy list", shopCopied: "Copied!",
     shopEmpty: "The list is empty. Add what you need to buy.", shopPh: "Add, for example milk",
     shopItems: ["Milk", "Bread", "Eggs", "Bananas", "Butter", "Cheese", "Coffee", "Pasta", "Rice", "Detergent", "Toilet paper", "Nappies"],
     inviteLinkBtn: "Copy link", inviteShareBtn: "Share", linkCopied: "Link copied!", inviteShareText: "Join our household in Hushållsbalans:",
@@ -1007,7 +1026,9 @@ const T = {
     rewardsTitle: "Belöningar", rewardsHint: "Barnen använder sina stjärnor på dessa. Ni bestämmer vad de kostar.", rewardName: "Belöning", rewardCost: "Stjärnor", rewardsNone: "Inga belöningar än. Lägg till en nedan.", redeemBtn: "{r} ({c} ★)", redeemed: "Inlöst: {r}", redeemLog: "{m} löste in {r} ({c} ★)", redeemTitle: "Senast inlöst",
     noteLabel: "Anteckning (valfritt)", stepsLabel: "Delmoment (valfritt, ett per rad)", stepsPill: "{n} delmoment",
     tplLabel: "Mallar:", tplAdded: "La till {n} sysslor från mallen",
-    syncOffline: "Offline. Sparas när nätet är tillbaka.", tabShop: "Inköp", shopTitle: "Inköpslista", shopAdd: "Lägg till", shopQuick: "Snabbval", shopClear: "Rensa avbockade", shopCopy: "Kopiera listan", shopCopied: "Kopierat!",
+    syncOffline: "Offline. Sparas när nätet är tillbaka.", mineTitle: "Mina egna saker", mineHint: "Bara du ser dessa. De räknas inte som sysslor.", mineWhat: "Vad behöver du göra?", mineEmpty: "Inget för idag.",
+    mineMore: "Visa kommande ({n})", mineLess: "Dölj kommande", mineNeedsSql: "Kör SQL-filen update-4 i Supabase för att använda egna saker.",
+    tabShop: "Inköp", shopTitle: "Inköpslista", shopAdd: "Lägg till", shopQuick: "Snabbval", shopClear: "Rensa avbockade", shopCopy: "Kopiera listan", shopCopied: "Kopierat!",
     shopEmpty: "Listan är tom. Lägg till det ni behöver köpa.", shopPh: "Lägg till, till exempel mjölk",
     shopItems: ["Mjölk", "Bröd", "Ägg", "Bananer", "Smör", "Ost", "Kaffe", "Pasta", "Ris", "Tvättmedel", "Toalettpapper", "Blöjor"],
     inviteLinkBtn: "Kopiera länk", inviteShareBtn: "Dela", linkCopied: "Länk kopierad!", inviteShareText: "Gå med i vårt hushåll i Hushållsbalans:",
@@ -1395,7 +1416,7 @@ function autoReset() {
   if (changed) save();
 }
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && state) { autoReset(); renderAll(); refreshHousehold(); }
+  if (!document.hidden && state) { autoReset(); renderAll(); refreshHousehold(); mineFetch(); }
 });
 
 function computeScore() {
@@ -1853,6 +1874,7 @@ function renderAll() {
   renderCalendar();
   renderReport();
   renderGuide();
+  renderMine();
   renderBoard();
   renderMeals();
   renderRewards();
@@ -2488,6 +2510,7 @@ document.getElementById("del-account").onclick = async () => {
     stopPolling();
     clearTimeout(saveTimer); saveTimer = null;
     if (cacheKey()) { try { localStorage.removeItem(cacheKey()); } catch (e) {} }
+    try { localStorage.removeItem(mineKey()); } catch (e) {} mine = [];
     try { await sb.auth.signOut(); } catch (e) {}
     currentUser = null; state = null; hh = null; baseState = null;
     applyRole();
@@ -2588,6 +2611,7 @@ window.addEventListener("online", () => {
   setSyncStatus("syncSaving");
   doSave().then(() => refreshHousehold(true));
 });
+window.addEventListener("online", () => { mineSync(); });
 window.addEventListener("offline", () => { if (state && !LOCAL_MODE) setSyncStatus("syncOffline"); });
 let rtChannel = null, rtTimer = null;
 function startRealtime() {
@@ -2609,6 +2633,112 @@ function stopRealtime() {
   clearTimeout(rtTimer);
   if (rtChannel) { try { sb.removeChannel(rtChannel); } catch (e) {} rtChannel = null; }
 }
+
+/* ---------- My own things (private: separate table, only the owner can read it) ---------- */
+let mine = [], mineShowAll = false, mineErr = "", mineSyncing = false;
+function mineKey() { return "hb-mine-" + (currentUser ? currentUser.id : "local"); }
+function mineStore() { lsSet(mineKey(), JSON.stringify(mine)); }
+function mineLoadLocal() { try { mine = JSON.parse(lsGet(mineKey()) || "[]") || []; } catch (e) { mine = []; } }
+function newId() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === "x" ? r : (r & 3 | 8)).toString(16); });
+}
+async function mineFetch() {
+  mineLoadLocal();
+  if (LOCAL_MODE || !currentUser) { renderMine(); return; }
+  try {
+    const { data, error } = await sb.from("personal_items").select("id,title,due_date,due_time,done,done_at").order("due_date", { ascending: true });
+    if (error) {
+      mineErr = isNetErr(error) ? "" : (/personal_items|relation|schema cache|does not exist|not find/i.test(error.message || "") ? T[lang].mineNeedsSql : rpcErrorText(error));
+      renderMine(); return;
+    }
+    mineErr = "";
+    const local = new Map(mine.map(x => [x.id, x]));
+    const server = (data || []).map(r => ({ id: r.id, title: r.title, date: r.due_date || "", time: String(r.due_time || "").slice(0, 5), done: !!r.done, doneAt: r.done_at || null }));
+    const ids = new Set(server.map(x => x.id));
+    mine = server.map(x => { const l = local.get(x.id); return l && (l._dirty || l._del) ? l : x; })
+      .concat(mine.filter(x => !ids.has(x.id) && x._dirty && !x._del));
+    // tidy away things that were done more than 30 days ago
+    const old = Date.now() - 30 * 86400000;
+    mine.forEach(x => { if (x.done && x.doneAt && new Date(x.doneAt).getTime() < old) x._del = true; });
+    mineStore(); renderMine(); mineSync();
+  } catch (e) { renderMine(); }
+}
+async function mineSync() {
+  if (LOCAL_MODE || !currentUser || mineSyncing) return;
+  const dirty = mine.filter(x => x._dirty && !x._del), dels = mine.filter(x => x._del);
+  if (!dirty.length && !dels.length) return;
+  mineSyncing = true;
+  try {
+    if (dirty.length) {
+      const rows = dirty.map(x => ({ id: x.id, title: x.title, due_date: x.date || null, due_time: x.time || null, done: !!x.done, done_at: x.doneAt || null }));
+      const { error } = await sb.from("personal_items").upsert(rows);
+      if (!error) { dirty.forEach(x => { delete x._dirty; }); mineErr = ""; }
+      else if (!isNetErr(error)) mineErr = /personal_items|relation|schema cache|does not exist|not find/i.test(error.message || "") ? T[lang].mineNeedsSql : rpcErrorText(error);
+    }
+    if (dels.length) {
+      const { error } = await sb.from("personal_items").delete().in("id", dels.map(x => x.id));
+      if (!error) { const gone = new Set(dels.map(x => x.id)); mine = mine.filter(x => !gone.has(x.id)); }
+    }
+  } catch (e) {}
+  finally { mineSyncing = false; mineStore(); renderMine(); }
+}
+function mineChanged() { mineStore(); renderMine(); mineSync(); }
+function mineRow(x, today, showDate) {
+  const t = T[lang];
+  const late = !x.done && x.date && x.date < today;
+  return `<li><div class="check big" role="checkbox" tabindex="0" aria-checked="${!!x.done}" data-mine-toggle="${x.id}">${x.done ? "✓" : ""}</div>
+    <div class="task-main"><div class="task-title ${x.done ? "done" : ""}">${esc(x.title)}</div><div class="meta">${late ? `<span class="pill late">${esc(t.late)}</span>` : ""}${(showDate || late) && x.date ? `<span class="pill">${esc(fmtDate(x.date))}</span>` : ""}${x.time ? `<span class="pill">${esc(t.atTime.replace("{t}", x.time))}</span>` : ""}</div></div>
+    <button class="ghost" data-mine-del="${x.id}" aria-label="${esc(t.remove)}">✕</button></li>`;
+}
+function renderMine() {
+  const t = T[lang], today = isoDay(new Date());
+  document.getElementById("mine-err").textContent = mineErr;
+  const vis = mine.filter(x => !x._del);
+  const isNow = x => (!x.date || x.date <= today) && (!x.done || (x.doneAt && isoDay(new Date(x.doneAt)) === today));
+  const rank = x => x.done ? 2 : (x.date && x.date < today ? 0 : 1);
+  const now = vis.filter(isNow).sort((a, b) => rank(a) - rank(b) || String(a.time || "99").localeCompare(String(b.time || "99")));
+  const later = vis.filter(x => x.date && x.date > today && !x.done).sort((a, b) => (a.date + (a.time || "")).localeCompare(b.date + (b.time || "")));
+  document.getElementById("mine-list").innerHTML = now.length ? now.map(x => mineRow(x, today, false)).join("") : `<li class="empty">${esc(t.mineEmpty)}</li>`;
+  const more = document.getElementById("mine-more");
+  more.hidden = !later.length;
+  more.textContent = mineShowAll ? t.mineLess : t.mineMore.replace("{n}", later.length);
+  const lw = document.getElementById("mine-later");
+  lw.hidden = !mineShowAll || !later.length;
+  lw.innerHTML = later.map(x => mineRow(x, today, true)).join("");
+  const d = document.getElementById("mine-date");
+  if (!d.value && document.activeElement !== d) d.value = today;
+}
+document.getElementById("mine-form").onsubmit = e => {
+  e.preventDefault();
+  const title = document.getElementById("mine-title").value.trim().slice(0, 120);
+  if (!title) return;
+  mine.push({ id: newId(), title, date: document.getElementById("mine-date").value || "", time: document.getElementById("mine-time").value || "", done: false, doneAt: null, _dirty: true });
+  document.getElementById("mine-title").value = "";
+  document.getElementById("mine-time").value = "";
+  document.getElementById("mine-date").value = isoDay(new Date());
+  mineChanged();
+};
+document.getElementById("mine-more").onclick = () => { mineShowAll = !mineShowAll; renderMine(); };
+const onMineClick = e => {
+  const tg = e.target.closest("[data-mine-toggle]"), del = e.target.closest("[data-mine-del]");
+  if (tg) {
+    const x = mine.find(i => i.id === tg.dataset.mineToggle);
+    if (!x) return;
+    x.done = !x.done; x.doneAt = x.done ? new Date().toISOString() : null; x._dirty = true;
+    mineChanged();
+  } else if (del) {
+    const x = mine.find(i => i.id === del.dataset.mineDel);
+    if (!x) return;
+    x._del = true;
+    showUndo(x.title, () => { if (!mine.includes(x)) mine.push(x); delete x._del; x._dirty = true; mineChanged(); });
+    mineChanged();
+  }
+};
+["mine-list", "mine-later"].forEach(id => {
+  document.getElementById(id).addEventListener("click", onMineClick);
+  document.getElementById(id).addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.dataset.mineToggle) { e.preventDefault(); e.target.click(); } });
+});
 
 /* ---------- Rewards ---------- */
 function starBalance(id) { return starCount(id) - (state.redeems || []).filter(r => r.m === id).reduce((a, r) => a + (Number(r.cost) || 0), 0); }
@@ -3293,6 +3423,7 @@ function finishSignIn() {
   applyRole();
   renderAll();
   startPolling();
+  mineFetch();
 }
 function showSetup() {
   stopPolling();
@@ -3368,6 +3499,7 @@ async function doLogout() {
   stopPolling();
   if (state && currentUser) { try { await saveNow(); } catch (e) {} }
   if (cacheKey()) { try { localStorage.removeItem(cacheKey()); } catch (e) {} }
+  if (!LOCAL_MODE) { try { await mineSync(); } catch (e) {} try { localStorage.removeItem(mineKey()); } catch (e) {} mine = []; }
   await sb.auth.signOut();
   currentUser = null; state = null; hh = null; baseState = null;
   applyRole();
