@@ -303,6 +303,22 @@ ul.tasks.big .task-title { font-size: 1.08rem; }
 #sec-today .swap-pick button { background: #fff; color: var(--spruce); border: 0; border-radius: 8px; padding: 5px 10px; font: inherit; font-weight: 700; cursor: pointer; }
 #sec-today .swap-pick button.cancel { background: transparent; color: #cfe3da; border: 1px solid rgba(255,255,255,.3); }
 .swap-wait { font-size: .82rem; color: #f4dd8f; }
+body { font-size: 1.0625rem; }
+html.big-text { font-size: 118.75%; }
+@media (max-width: 520px) { .sub { display: none; } h1 { font-size: 1.45rem; } header { margin-bottom: 14px; } }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(78px + env(safe-area-inset-bottom, 0px)); z-index: 20; background: var(--ink); color: var(--surface); border-radius: 14px; padding: 10px 12px 10px 16px; display: flex; gap: 12px; align-items: center; max-width: calc(100% - 32px); box-shadow: 0 6px 24px rgba(0,0,0,.18); }
+.toast[hidden] { display: none; }
+.toast button { background: var(--sun); color: #2b2a12; border: 0; border-radius: 10px; padding: 6px 12px; font: inherit; font-weight: 700; cursor: pointer; }
+@keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
+.check.pop { animation: pop .35s ease-out; }
+.confetti { position: fixed; top: -12px; width: 9px; height: 14px; z-index: 30; border-radius: 2px; pointer-events: none; animation: fall 1.3s ease-in forwards; }
+@keyframes fall { to { transform: translateY(105vh) rotate(540deg); opacity: .9; } }
+@media (prefers-reduced-motion: reduce) { .check.pop, .confetti { animation: none; } .confetti { display: none; } }
+.cat-ico { margin-right: 6px; }
+.role-child #today-list .task-title { font-size: 1.25rem; }
+.role-child #today-list .cat-ico { font-size: 1.5rem; vertical-align: -3px; }
+.bday-line { background: rgba(255,255,255,.12); border-radius: 12px; padding: 8px 12px; margin-bottom: 12px; font-weight: 700; }
+.pill.dept { background: transparent; border: 1px solid var(--line-strong); }
 .owner-only { display: none; }
 .role-owner .owner-only { display: block; }
 .role-owner .not-owner { display: none; }
@@ -562,6 +578,10 @@ ul.tasks li { border-top: 1px solid var(--line); }
         <p class="summary" style="margin:0 0 10px" id="install-hint"></p>
         <button class="btn" type="button" id="install-btn" hidden data-i="installBtn"></button>
       </div>
+      <div class="set-grid" style="margin-top:16px">
+        <div><label for="set-theme" data-i="themeLabel"></label><select id="set-theme"></select></div>
+        <label class="set-check" style="align-self:end"><input type="checkbox" id="set-bigtext"><span data-i="bigText"></span></label>
+      </div>
       <div style="margin-top:16px"><button class="ghost" id="logout" data-i="logout" hidden></button></div>
     </section>
 
@@ -638,7 +658,8 @@ ul.tasks li { border-top: 1px solid var(--line); }
 
     <section class="card full" id="sec-profile" data-view="family" aria-labelledby="h-profile">
       <h2 id="h-profile"><span class="dot"></span><span data-i="profileTitle"></span></h2>
-      <div style="max-width:280px"><label for="p-member" data-i="profileFor"></label><select id="p-member"></select></div>
+      <div class="row" style="max-width:560px"><div><label for="p-member" data-i="profileFor"></label><select id="p-member"></select></div>
+        <div><label for="p-bday" data-i="bdayLabel"></label><input id="p-bday" type="date"></div></div>
       <div class="profile-grid" style="margin-top:14px">
         <div>
           <h3 class="clean-h" data-i="hobbies"></h3>
@@ -731,6 +752,7 @@ ul.tasks li { border-top: 1px solid var(--line); }
   <p class="footnote" data-i="footer"></p>
 </div>
 
+<div class="toast" id="toast" role="status" hidden><span id="toast-text"></span><button type="button" id="toast-undo" data-i="undo"></button></div>
 <nav class="tabbar" id="tabbar" aria-label="Menu"><div class="tabbar-in">
   <button type="button" data-tab="today"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg><span data-i="tabToday"></span></button>
   <button type="button" data-tab="chores"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg><span data-i="tabChores"></span></button>
@@ -812,6 +834,9 @@ const T = {
     kidLabel: "Child", rotLabel: "Take turns between", rotHint: "Choose two or more. The chore moves to the next person every week.", rotPill: "Takes turns: {names}",
     swapAsk: "Ask to swap", swapTo: "Who should take it?", swapWait: "Waiting for {name}", swapUndo: "Undo", swapIncoming: "{from} asks you to take \"{task}\".", swapYes: "Take it", swapNo: "No thanks",
     starsN: "{n} stars", starsOne: "1 star",
+    undo: "Undo", undone: "Removed: {x}", themeLabel: "Appearance", themeAuto: "Same as the phone", themeLight: "Light", themeDark: "Dark", bigText: "Larger text",
+    bdayLabel: "Birthday", bdayToday: "Happy birthday, {name}!", bdayTurns: "{name} turns {n}", bdayCal: "{name}'s birthday",
+    depts: ["Fruit and veg", "Dairy", "Bread", "Meat and fish", "Pantry", "Frozen", "Household", "Baby and kids", "Other"],
     tabShop: "Shopping", shopTitle: "Shopping list", shopAdd: "Add", shopQuick: "Quick add", shopClear: "Clear ticked items", shopCopy: "Copy list", shopCopied: "Copied!",
     shopEmpty: "The list is empty. Add what you need to buy.", shopPh: "Add, for example milk",
     shopItems: ["Milk", "Bread", "Eggs", "Bananas", "Butter", "Cheese", "Coffee", "Pasta", "Rice", "Detergent", "Toilet paper", "Nappies"],
@@ -901,6 +926,9 @@ const T = {
     kidLabel: "Barn", rotLabel: "Turas om mellan", rotHint: "Välj två eller fler. Sysslan går vidare till nästa person varje vecka.", rotPill: "Turas om: {names}",
     swapAsk: "Be om byte", swapTo: "Vem ska ta den?", swapWait: "Väntar på {name}", swapUndo: "Ångra", swapIncoming: "{from} ber dig ta \"{task}\".", swapYes: "Ta den", swapNo: "Nej tack",
     starsN: "{n} stjärnor", starsOne: "1 stjärna",
+    undo: "Ångra", undone: "Borttaget: {x}", themeLabel: "Utseende", themeAuto: "Samma som telefonen", themeLight: "Ljust", themeDark: "Mörkt", bigText: "Större text",
+    bdayLabel: "Födelsedag", bdayToday: "Grattis på födelsedagen, {name}!", bdayTurns: "{name} fyller {n}", bdayCal: "{name} fyller år",
+    depts: ["Frukt och grönt", "Mejeri", "Bröd", "Kött och fisk", "Skafferi", "Fryst", "Hushåll", "Barn", "Övrigt"],
     tabShop: "Inköp", shopTitle: "Inköpslista", shopAdd: "Lägg till", shopQuick: "Snabbval", shopClear: "Rensa avbockade", shopCopy: "Kopiera listan", shopCopied: "Kopierat!",
     shopEmpty: "Listan är tom. Lägg till det ni behöver köpa.", shopPh: "Lägg till, till exempel mjölk",
     shopItems: ["Mjölk", "Bröd", "Ägg", "Bananer", "Smör", "Ost", "Kaffe", "Pasta", "Ris", "Tvättmedel", "Toalettpapper", "Blöjor"],
@@ -1300,6 +1328,10 @@ function applyStatic() {
   document.getElementById("cal-next").setAttribute("aria-label", lang === "sv" ? "Nästa vecka" : "Next week");
   document.getElementById("del-confirm").placeholder = t.delPh;
   syncFreqFields();
+  const th = document.getElementById("set-theme");
+  th.innerHTML = [["", t.themeAuto], ["light", t.themeLight], ["dark", t.themeDark]].map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("");
+  th.value = lsGet("hb-theme") || "";
+  document.getElementById("set-bigtext").checked = lsGet("hb-big") === "1";
 }
 function renderRotPicker(sel) {
   const box = document.getElementById("k-rot");
@@ -1623,6 +1655,9 @@ function renderProfile() {
   const m = curProfile();
   if (!m) return;
   sel.value = m.id;
+  const bd = document.getElementById("p-bday");
+  if (document.activeElement !== bd) bd.value = m.birthday || "";
+  bd.disabled = isChild() && !settings().childProfile;
   document.getElementById("hobby-list").innerHTML = m.hobbies.length
     ? m.hobbies.map((h, i) => `<li><div class="task-main"><div class="task-title">${esc(h)}</div></div><button class="ghost" data-del-hobby="${i}">${t.remove}</button></li>`).join("")
     : `<li class="empty">${t.noHobbies}</li>`;
@@ -1689,6 +1724,7 @@ function renderAll() {
   renderCalendar();
   renderReport();
   renderGuide();
+  justDone = null;
   renderLoad();
   renderOverview();
   renderLeave();
@@ -1763,10 +1799,20 @@ const onTaskClick = e => {
   if (edit) { setEditMode(edit.dataset.edit); return; }
   if (tog) {
     const k = state.tasks.find(x => x.id === tog.dataset.toggle);
-    if (k && (!isChild() || (settings().childCheck && k.owner === hh.memberId))) toggleDone(k);
+    if (k && (!isChild() || (settings().childCheck && k.owner === hh.memberId))) {
+      toggleDone(k);
+      if (k.done) {
+        justDone = k.id;
+        const pid = todayPerson();
+        if (e.currentTarget && e.currentTarget.id === "today-list" && pid && state.tasks.filter(x => x.owner === pid && dueStatus(x) !== "later").every(x => x.done)) confetti();
+      }
+    }
   } else if (del) {
     if (editId === del.dataset.delete) setEditMode(null);
+    const idx = state.tasks.findIndex(x => x.id === del.dataset.delete);
+    const gone = state.tasks[idx];
     state.tasks = state.tasks.filter(x => x.id !== del.dataset.delete);
+    if (gone) showUndo(taskName(gone), () => { state.tasks.splice(Math.min(idx, state.tasks.length), 0, gone); });
   } else return;
   save(); renderAll();
 };
@@ -1985,8 +2031,10 @@ function renderToday() {
     : "";
   const own = !LOCAL_MODE && hh && pid === hh.memberId;
   document.getElementById("today-hi").textContent = m ? (own ? t.todayHi : t.todayFor).replace("{name}", m.name) : t.tabToday;
+  const bdays = state.members.filter(x => x.birthday && x.birthday.slice(5) === isoDay(new Date()).slice(5));
   const st = document.getElementById("today-stars");
-  if (m && isKid(m)) { const n = starCount(m.id); st.innerHTML = `<span class="stars">★ ${esc(n === 1 ? t.starsOne : t.starsN.replace("{n}", n))}</span>`; } else st.innerHTML = "";
+  st.innerHTML = bdays.map(x => `<div class="bday-line">🎂 ${esc(t.bdayToday.replace("{name}", x.name))}</div>`).join("");
+  if (m && isKid(m)) { const n = starCount(m.id); st.innerHTML += `<span class="stars">★ ${esc(n === 1 ? t.starsOne : t.starsN.replace("{n}", n))}</span>`; }
   const incoming = m ? (state.swaps || []).filter(w => w.to === m.id && state.tasks.some(k => k.id === w.task)) : [];
   document.getElementById("today-swaps").innerHTML = incoming.map(w => {
     const from = memberById(w.from), k = state.tasks.find(x => x.id === w.task);
@@ -2014,8 +2062,8 @@ function renderToday() {
     else if (!k.done && swapAsk === k.id) extra = `<div class="meta" style="color:#cfe3da;margin-top:6px">${esc(t.swapTo)}</div><div class="swap-pick">${state.members.filter(x => x.id !== k.owner).map(x => `<button type="button" data-swap-to="${x.id}" data-swap-task="${k.id}">${esc(x.name)}</button>`).join("")}<button type="button" class="cancel" data-swap-close="1">${esc(t.cancel)}</button></div>`;
     else if (!k.done && state.members.length > 1 && canSwap(k)) extra = `<div style="margin-top:6px"><button type="button" class="swap-ask" data-swap-open="${k.id}">${esc(t.swapAsk)}</button></div>`;
     return `<li>
-      <div class="check big" role="checkbox" tabindex="0" aria-checked="${k.done}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
-      <div class="task-main"><div class="task-title ${k.done ? "done" : ""}">${esc(taskName(k))}</div>
+      <div class="check big${justDone === k.id ? " pop" : ""}" role="checkbox" tabindex="0" aria-checked="${k.done}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
+      <div class="task-main"><div class="task-title ${k.done ? "done" : ""}"><span class="cat-ico" aria-hidden="true">${CAT_ICONS[k.cat] || CAT_ICONS[6]}</span>${esc(taskName(k))}</div>
       <div class="meta">${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}${k.time ? `<span class="pill">${esc(t.atTime.replace("{t}", k.time))}</span>` : ""}<span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span><span class="pill">${k.minutes} ${t.minLabel}</span></div>${extra}</div>
     </li>`;
   }).join("");
@@ -2045,12 +2093,12 @@ function renderShopping() {
   const t = T[lang];
   const list = state.shopping || (state.shopping = []);
   const ul = document.getElementById("shop-list");
-  const open = list.filter(x => !x.done), done = list.filter(x => x.done);
+  const open = list.filter(x => !x.done).map(x => ({ x, d: deptOf(x.text) })).sort((a, b) => a.d - b.d).map(o => o.x), done = list.filter(x => x.done);
   const ordered = open.concat(done);
   ul.innerHTML = ordered.length
     ? ordered.map(x => `<li>
         <div class="check big" role="checkbox" tabindex="0" aria-checked="${!!x.done}" data-shop-toggle="${x.id}">${x.done ? "✓" : ""}</div>
-        <div class="task-main"><div class="task-title ${x.done ? "done" : ""}">${esc(x.text)}</div></div>
+        <div class="task-main"><div class="task-title ${x.done ? "done" : ""}">${esc(x.text)}</div><div class="meta">${(x.qty || 1) > 1 ? `<span class="pill">${x.qty} st</span>` : ""}${x.done ? "" : `<span class="pill dept">${esc(t.depts[deptOf(x.text)])}</span>`}</div></div>
         <button class="ghost" data-shop-del="${x.id}" aria-label="${esc(t.remove)}">✕</button>
       </li>`).join("")
     : `<li class="empty">${esc(t.shopEmpty)}</li>`;
@@ -2062,12 +2110,17 @@ function renderShopping() {
 }
 function addShopItem(text) {
   text = String(text || "").trim().slice(0, 60);
+  let qty = 1;
+  const mq = text.match(/^(\d{1,3})\s*(?:st|x|×|pcs)?\.?\s+(.+)$/i);
+  if (mq) { qty = Math.max(1, Number(mq[1])); text = mq[2].trim(); }
   if (!text) return;
+  text = text.charAt(0).toUpperCase() + text.slice(1);
   state.shopping = state.shopping || [];
   const dup = state.shopping.find(x => !x.done && x.text.toLowerCase() === text.toLowerCase());
-  if (!dup) {
+  if (dup) dup.qty = (dup.qty || 1) + (mq ? qty : 1);
+  else {
     const was = state.shopping.find(x => x.done && x.text.toLowerCase() === text.toLowerCase());
-    if (was) { was.done = false; } else state.shopping.push({ id: uid(), text, done: false });
+    if (was) { was.done = false; was.qty = qty; } else state.shopping.push({ id: uid(), text, qty, done: false });
   }
   save(); renderShopping();
 }
@@ -2084,7 +2137,11 @@ document.getElementById("shop-quick").addEventListener("click", e => {
 const onShopClick = e => {
   const tg = e.target.closest("[data-shop-toggle]"), del = e.target.closest("[data-shop-del]");
   if (tg) { const x = state.shopping.find(i => i.id === tg.dataset.shopToggle); if (x) x.done = !x.done; }
-  else if (del) state.shopping = state.shopping.filter(i => i.id !== del.dataset.shopDel);
+  else if (del) {
+    const idx = state.shopping.findIndex(i => i.id === del.dataset.shopDel), gone = state.shopping[idx];
+    state.shopping = state.shopping.filter(i => i.id !== del.dataset.shopDel);
+    if (gone) showUndo(gone.text, () => { state.shopping.splice(Math.min(idx, state.shopping.length), 0, gone); });
+  }
   else return;
   save(); renderShopping();
 };
@@ -2098,7 +2155,7 @@ document.getElementById("shop-clear").onclick = () => {
 };
 document.getElementById("shop-copy").onclick = async () => {
   const btn = document.getElementById("shop-copy"), t = T[lang];
-  const text = (state.shopping || []).filter(x => !x.done).map(x => "- " + x.text).join("\n");
+  const text = (state.shopping || []).filter(x => !x.done).map(x => "- " + ((x.qty || 1) > 1 ? x.qty + " " : "") + x.text).join("\n");
   if (await copyText(text)) { btn.textContent = t.shopCopied; setTimeout(() => { btn.textContent = T[lang].shopCopy; }, 1800); }
 };
 
@@ -2201,6 +2258,7 @@ function renderCalendar() {
     const iso = isoDay(d);
     const items = [];
     state.members.forEach(m => (m.events || []).forEach(ev => { if (ev.date === iso) items.push({ kind: "ev", m, time: ev.time || "", title: ev.title, id: ev.id, del: canEditEv(m) }); }));
+    state.members.forEach(m => { if (m.birthday && m.birthday.slice(5) === iso.slice(5)) items.push({ kind: "bday", m, time: "", title: "🎂 " + bdayText(m, d) }); });
     state.tasks.forEach(k => { if (choreOnDay(k, iso)) items.push({ kind: "task", m: memberById(k.owner), time: k.time || "", title: taskName(k), done: curWeek && !!k.done }); });
     items.sort((x, y) => (x.time || "99").localeCompare(y.time || "99"));
     const head = d.toLocaleDateString(loc, { weekday: "long", day: "numeric", month: "short" });
@@ -2241,7 +2299,9 @@ document.getElementById("cal-days").addEventListener("click", e => {
   const m = memberById(b.dataset.who);
   if (!m) return;
   if (isChild() && (m.id !== hh.memberId || !settings().childProfile)) return;
+  const gone = (m.events || []).find(x => x.id === b.dataset.delEv);
   m.events = (m.events || []).filter(x => x.id !== b.dataset.delEv);
+  if (gone) showUndo(gone.title, () => { m.events.push(gone); });
   save(); renderCalendar();
 });
 
@@ -2298,6 +2358,71 @@ document.getElementById("del-account").onclick = async () => {
   } catch (ex) { msg.textContent = rpcErrorText(ex); }
   finally { btn.disabled = false; }
 };
+
+/* ---------- Small comforts: undo, confetti, theme, birthdays, shop departments ---------- */
+const CAT_ICONS = ["🎒", "🍽️", "🏠", "🩺", "💰", "👋", "📦"];
+let justDone = null, undoFn = null, undoTimer = null;
+function showUndo(label, restore) {
+  const t = T[lang];
+  undoFn = restore;
+  document.getElementById("toast-text").textContent = t.undone.replace("{x}", label);
+  document.getElementById("toast").hidden = false;
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(() => { document.getElementById("toast").hidden = true; undoFn = null; }, 6000);
+}
+document.getElementById("toast-undo").onclick = () => {
+  if (undoFn && state) { undoFn(); save(); renderAll(); }
+  undoFn = null; clearTimeout(undoTimer);
+  document.getElementById("toast").hidden = true;
+};
+function confetti() {
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const colors = ["#f4c542", "#d8434a", "#2e8a64", "#2f6fb3", "#ffffff"];
+  for (let i = 0; i < 36; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = colors[i % colors.length];
+    c.style.animationDelay = (Math.random() * .35) + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 1900);
+  }
+}
+function applyLook() {
+  const th = lsGet("hb-theme") || "";
+  if (th) document.documentElement.dataset.theme = th; else delete document.documentElement.dataset.theme;
+  document.documentElement.classList.toggle("big-text", lsGet("hb-big") === "1");
+}
+applyLook();
+document.getElementById("set-theme").onchange = e => { lsSet("hb-theme", e.target.value); applyLook(); };
+document.getElementById("set-bigtext").onchange = e => { lsSet("hb-big", e.target.checked ? "1" : ""); applyLook(); };
+function bdayText(m, onDate) {
+  const t = T[lang];
+  const y = Number((m.birthday || "").slice(0, 4));
+  const age = y > 1900 ? onDate.getFullYear() - y : 0;
+  return age > 0 ? t.bdayTurns.replace("{name}", m.name).replace("{n}", age) : t.bdayCal.replace("{name}", m.name);
+}
+document.getElementById("p-bday").onchange = e => {
+  const m = curProfile();
+  if (!m || (isChild() && (m.id !== hh.memberId || !settings().childProfile))) return;
+  m.birthday = e.target.value || "";
+  save(); renderAll();
+};
+const DEPT_WORDS = [
+  ["äpple", "banan", "päron", "apelsin", "citron", "lime", "druv", "melon", "bär", "tomat", "gurka", "sallad", "paprika", "lök", "vitlök", "potatis", "morot", "broccoli", "avokado", "spenat", "frukt", "grönsak", "apple", "banana", "orange", "lemon", "grape", "berr", "tomato", "cucumber", "lettuce", "pepper", "onion", "garlic", "potato", "carrot", "avocado", "fruit", "veg"],
+  ["mjölk", "fil", "yoghurt", "grädde", "smör", "ost", "ägg", "kvarg", "crème", "creme", "milk", "yogurt", "cream", "butter", "cheese", "egg"],
+  ["bröd", "knäcke", "fralla", "limpa", "tortilla", "bulle", "bread", "roll", "bun", "bagel"],
+  ["kött", "färs", "kyckling", "fläsk", "korv", "bacon", "skinka", "lax", "fisk", "räk", "torsk", "beef", "mince", "chicken", "pork", "sausage", "ham", "salmon", "fish", "shrimp", "cod"],
+  ["pasta", "ris", "mjöl", "socker", "salt", "kaffe", "te", "flingor", "müsli", "havregryn", "konserv", "krossade", "buljong", "olja", "kryddor", "sylt", "nötter", "rice", "flour", "sugar", "coffee", "tea", "cereal", "oats", "can", "stock", "oil", "spice", "jam", "nuts", "honung", "honey"],
+  ["fryst", "glass", "frozen", "ice cream", "pizza"],
+  ["toalettpapper", "hushållspapper", "diskmedel", "tvättmedel", "tvål", "schampo", "tandkräm", "påsar", "batteri", "toilet", "paper towel", "dish soap", "detergent", "soap", "shampoo", "toothpaste", "bags", "batter"],
+  ["blöj", "välling", "barnmat", "napp", "nappy", "nappies", "diaper", "baby"]
+];
+function deptOf(text) {
+  const s = String(text || "").toLowerCase();
+  for (let i = 0; i < DEPT_WORDS.length; i++) if (DEPT_WORDS[i].some(w => s.includes(w))) return i;
+  return 8;
+}
 
 /* ---------- Stars, rotation, swaps ---------- */
 function isKid(m) {
