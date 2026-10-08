@@ -1,4 +1,4 @@
-const CACHE = "hb-v13";
+const CACHE = "hb-v14";
 const SHARED = ["cdn.jsdelivr.net"];
 const FONTS = ["./fonts/bricolage.woff", "./fonts/atkinson-regular.woff", "./fonts/atkinson-bold.woff", "./fonts/atkinson-italic.woff"];
 self.addEventListener("install", e => {

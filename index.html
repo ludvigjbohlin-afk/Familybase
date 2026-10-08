@@ -2894,7 +2894,7 @@ const onMineClick = e => {
 });
 
 /* ---------- AI dinner planning (Supabase Edge Function "plan-meals") ---------- */
-const AI_ENABLED = false; // satt till true om AI-hjalpen ska anvandas igen (kraver Edge Function + nyckel)
+const AI_ENABLED = true; // satt till true om AI-hjalpen ska anvandas igen (kraver Edge Function + nyckel)
 let aiPlan = null, aiBusy = false;
 if (!AI_ENABLED) document.querySelector(".ai-box").style.display = "none";
 function aiErrorText(code) {
