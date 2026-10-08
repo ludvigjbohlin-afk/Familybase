@@ -508,6 +508,24 @@ ul.tasks li:first-child { border-top: 0; }
 .swap-wait { color: var(--muted); font-weight: 700; }
 .rewards button { background: var(--surface); color: var(--ink); border: 2px solid var(--edge); border-radius: 999px; font-weight: 700; }
 
+/* Profil: födelsedag med hjul och fasta aktiviteter */
+.lbl { color: var(--muted); font-size: .88rem; font-weight: 700; display: block; margin-bottom: 4px; }
+.bday-wrap { margin-top: 14px; max-width: 560px; }
+.bday-pick { display: flex; gap: 8px; }
+.bday-pick select { flex: 1 1 0; min-width: 0; }
+.bday-pick select[data-bd="m"] { flex: 1.6 1 0; }
+.act-add { background: var(--tint); border-radius: 18px; padding: 14px; margin-top: 10px; max-width: 560px; }
+.act-add .lbl { margin-top: 10px; }
+.act-days { margin: 0 0 6px; gap: 6px; }
+.act-days .chip { padding: 6px 12px; text-transform: capitalize; }
+.act-add .act-err:empty { display: none; }
+.act-add .btn { margin-top: 8px; }
+.acts-list .pill { text-transform: capitalize; }
+.about-card { border-color: var(--coral); border-width: 3px; }
+.about-btns { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+.today-acts { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.ta { border-radius: 999px; padding: 4px 12px; color: var(--navy); font-size: .9rem; }
+
 /* Stjärnkortet */
 .star-card { background: var(--sun); color: var(--navy); border: 2px solid var(--navy); border-radius: 22px; padding: 14px 16px; margin: 0 0 14px; }
 .sc-count { margin: 0; font-family: var(--display); font-weight: 800; font-size: 1.15rem; }
@@ -656,6 +674,16 @@ ul.tasks li:first-child { border-top: 0; }
   </header>
 
   <div class="grid">
+    <section class="card full about-card" id="sec-about" data-view="today" aria-labelledby="h-about" hidden>
+      <h2 id="h-about"><span class="dot"></span><span data-i="aboutTitle"></span></h2>
+      <p class="summary" style="margin-top:-6px" data-i="aboutHint"></p>
+      <div class="bday-wrap"><span class="lbl" id="a-bday-l" data-i="bdayLabel"></span><div class="bday-pick" id="a-bday" role="group" aria-labelledby="a-bday-l"></div></div>
+      <h3 class="clean-h" style="margin-top:18px" data-i="actsTitle"></h3>
+      <p class="summary" style="margin-top:0" data-i="actsHint"></p>
+      <div class="acts" id="a-acts"></div>
+      <div class="about-btns"><button class="btn" type="button" id="about-done" data-i="aboutDone"></button><button class="ghost" type="button" id="about-skip" data-i="aboutSkip"></button></div>
+    </section>
+
     <section class="card full" id="sec-today" data-view="today" aria-labelledby="h-today">
       <p class="kicker" id="today-date"></p>
       <h2 id="h-today"><span class="dot"></span><span id="today-hi"></span></h2>
@@ -816,15 +844,11 @@ ul.tasks li:first-child { border-top: 0; }
 
     <section class="card full" id="sec-profile" data-view="family" aria-labelledby="h-profile">
       <h2 id="h-profile"><span class="dot"></span><span data-i="profileTitle"></span></h2>
-      <div class="row" style="max-width:560px"><div><label for="p-member" data-i="profileFor"></label><select id="p-member"></select></div>
-        <div><label for="p-bday" data-i="bdayLabel"></label><input id="p-bday" type="date"></div></div>
-      <div class="profile-grid" style="margin-top:14px">
-        <div>
-          <h3 class="clean-h" data-i="hobbies"></h3>
-          <form id="hobby-form" class="row"><div><input id="hobby-in" maxlength="40" required></div><div class="narrow"><button class="btn" type="submit" data-i="addHobby"></button></div></form>
-          <ul class="tasks" id="hobby-list" style="margin-top:10px"></ul>
-        </div>
-      </div>
+      <div class="row" style="max-width:560px"><div><label for="p-member" data-i="profileFor"></label><select id="p-member"></select></div></div>
+      <div class="bday-wrap"><span class="lbl" id="p-bday-l" data-i="bdayLabel"></span><div class="bday-pick" id="p-bday" role="group" aria-labelledby="p-bday-l"></div></div>
+      <h3 class="clean-h" style="margin-top:18px" data-i="actsTitle"></h3>
+      <p class="summary" style="margin-top:0" data-i="actsHint"></p>
+      <div class="acts" id="p-acts"></div>
     </section>
 
     <section class="card full" id="sec-meals" data-view="shop" aria-labelledby="h-meals" style="order:2">
@@ -1036,7 +1060,10 @@ const T = {
     rewardsTitle: "Stars and rewards", rewardsHint: "Children earn stars for their chores. You decide how many stars each chore gives (when you add or edit a chore) and how many stars each reward needs.", rewardName: "Reward", rewardCost: "Stars needed", rewardsNone: "No rewards yet. Add one below.",
     starsLabel: "Stars ★", starPill: "{n} ★", msNext: "{left} more to {r}", msAllDone: "Every reward reached! Ask a parent for a new one.", msNoneKid: "Ask a parent to add rewards to collect stars for.", msNoneAdult: "Add rewards under Family to give the stars a goal.",
     msReached: "{m} reached {c} ★: {r}", msGive: "Mark as given", msGivenToast: "{r} marked as given", msHit: "You reached {c} ★! Reward: {r}", msHitOther: "{m} reached {c} ★! Reward: {r}",
-    msReset: "Start {m}'s stars over", msResetDone: "{m}'s stars start again from 0", msGivenTitle: "Recently given", msGivenLog: "{m} got {r} ({c} ★)", msKidsTitle: "The children's stars", msListTitle: "Rewards", msGotIt: "given", msWaiting: "reached, waiting", redeemBtn: "{r} ({c} ★)", redeemed: "Redeemed: {r}", redeemLog: "{m} redeemed {r} ({c} ★)", redeemTitle: "Recently redeemed",
+    msReset: "Start {m}'s stars over", msResetDone: "{m}'s stars start again from 0", msGivenTitle: "Recently given", msGivenLog: "{m} got {r} ({c} ★)", actsTitle: "Weekly activities", actsHint: "For example tennis practice every Tuesday at 15:00. They show up in the family calendar.", actName: "Activity", actPh: "For example Tennis practice", actDays: "Days", actFrom: "From", actTo: "To", actAdd: "Add activity", actErr: "Write what it is and pick at least one day.", actsNone: "No weekly activities yet.", actRemoved: "{x} removed",
+    aboutTitle: "Tell us a little about you", aboutHint: "Add your birthday and your weekly activities so they show up in the family calendar. You can change everything later under Family → Profiles.", aboutDone: "Done", aboutSkip: "Skip for now",
+    bdDay: "Day", bdMonth: "Month", bdYear: "Year (optional)", todayActs: "Today",
+    msKidsTitle: "The children's stars", msListTitle: "Rewards", msGotIt: "given", msWaiting: "reached, waiting", redeemBtn: "{r} ({c} ★)", redeemed: "Redeemed: {r}", redeemLog: "{m} redeemed {r} ({c} ★)", redeemTitle: "Recently redeemed",
     noteLabel: "Note (optional)", stepsLabel: "Steps (optional, one per line)", stepsPill: "{n} steps",
     tplLabel: "Templates:", tplAdded: "Added {n} chores from the template",
     syncOffline: "Offline. Saves when you are back online.", mineTitle: "My own things", mineHint: "Only you can see these. They do not count as chores.", mineWhat: "What do you need to do?", mineEmpty: "Nothing for today.",
@@ -1144,7 +1171,10 @@ const T = {
     rewardsTitle: "Stjärnor och belöningar", rewardsHint: "Barnen får stjärnor när de gör sina sysslor. Ni bestämmer hur många stjärnor varje syssla ger (när ni lägger till eller ändrar en syssla) och hur många stjärnor som behövs för varje belöning.", rewardName: "Belöning", rewardCost: "Stjärnor som behövs", rewardsNone: "Inga belöningar än. Lägg till en nedan.",
     starsLabel: "Stjärnor ★", starPill: "{n} ★", msNext: "{left} kvar till {r}", msAllDone: "Alla belöningar är nådda! Fråga en förälder om en ny.", msNoneKid: "Fråga en förälder om belöningar att samla stjärnor till.", msNoneAdult: "Lägg till belöningar under Familj så får stjärnorna ett mål.",
     msReached: "{m} har nått {c} ★: {r}", msGive: "Markera som given", msGivenToast: "{r} markerad som given", msHit: "Du har nått {c} ★! Belöning: {r}", msHitOther: "{m} har nått {c} ★! Belöning: {r}",
-    msReset: "Börja om {m}s stjärnor", msResetDone: "{m}s stjärnor börjar om från 0", msGivenTitle: "Senast givna", msGivenLog: "{m} fick {r} ({c} ★)", msKidsTitle: "Barnens stjärnor", msListTitle: "Belöningar", msGotIt: "given", msWaiting: "nådd, väntar", redeemBtn: "{r} ({c} ★)", redeemed: "Inlöst: {r}", redeemLog: "{m} löste in {r} ({c} ★)", redeemTitle: "Senast inlöst",
+    msReset: "Börja om {m}s stjärnor", msResetDone: "{m}s stjärnor börjar om från 0", msGivenTitle: "Senast givna", msGivenLog: "{m} fick {r} ({c} ★)", actsTitle: "Fasta aktiviteter varje vecka", actsHint: "Till exempel tennisträning varje tisdag kl 15. De syns i familjens kalender.", actName: "Aktivitet", actPh: "Till exempel Tennisträning", actDays: "Dagar", actFrom: "Från", actTo: "Till", actAdd: "Lägg till aktivitet", actErr: "Skriv vad det är och välj minst en dag.", actsNone: "Inga fasta aktiviteter än.", actRemoved: "{x} borttagen",
+    aboutTitle: "Berätta lite om dig", aboutHint: "Lägg till din födelsedag och dina fasta aktiviteter, så syns de i familjens kalender. Du kan ändra allt senare under Familj → Profiler.", aboutDone: "Klar", aboutSkip: "Hoppa över",
+    bdDay: "Dag", bdMonth: "Månad", bdYear: "År (valfritt)", todayActs: "Idag",
+    msKidsTitle: "Barnens stjärnor", msListTitle: "Belöningar", msGotIt: "given", msWaiting: "nådd, väntar", redeemBtn: "{r} ({c} ★)", redeemed: "Inlöst: {r}", redeemLog: "{m} löste in {r} ({c} ★)", redeemTitle: "Senast inlöst",
     noteLabel: "Anteckning (valfritt)", stepsLabel: "Delmoment (valfritt, ett per rad)", stepsPill: "{n} delmoment",
     tplLabel: "Mallar:", tplAdded: "La till {n} sysslor från mallen",
     syncOffline: "Offline. Sparas när nätet är tillbaka.", mineTitle: "Mina egna saker", mineHint: "Bara du ser dessa. De räknas inte som sysslor.", mineWhat: "Vad behöver du göra?", mineEmpty: "Inget för idag.",
@@ -1588,8 +1618,6 @@ function applyStatic() {
   document.getElementById("clean-q").placeholder = t.cleanPlaceholder;
   document.title = t.title;
   document.getElementById("f-owner").setAttribute("aria-label", t.filterBy);
-  document.getElementById("hobby-in").setAttribute("aria-label", t.hobbies);
-  document.getElementById("hobby-in").placeholder = t.hobbyPh;
   document.getElementById("s-hhname").placeholder = t.hhNamePh;
   document.getElementById("s-code").placeholder = t.codePh;
   const fSel = document.getElementById("k-freq");
@@ -1935,12 +1963,8 @@ function renderProfile() {
   const m = curProfile();
   if (!m) return;
   sel.value = m.id;
-  const bd = document.getElementById("p-bday");
-  if (document.activeElement !== bd) bd.value = m.birthday || "";
-  bd.disabled = isChild() && !settings().childProfile;
-  document.getElementById("hobby-list").innerHTML = m.hobbies.length
-    ? m.hobbies.map((h, i) => `<li><div class="task-main"><div class="task-title">${esc(h)}</div></div><button class="ghost" data-del-hobby="${i}">${t.remove}</button></li>`).join("")
-    : `<li class="empty">${t.noHobbies}</li>`;
+  renderBday(document.getElementById("p-bday"), m);
+  renderActs(document.getElementById("p-acts"), m);
 }
 
 function syncEdit() {
@@ -2025,6 +2049,7 @@ function renderAll() {
   renderCleaning();
   syncEdit();
   renderProfile();
+  renderAbout();
 }
 
 function setLang(l) {
@@ -2266,23 +2291,99 @@ document.getElementById("clean-results").onclick = e => {
 
 document.getElementById("p-member").onchange = e => { profileId = e.target.value; renderProfile(); };
 const childProfileLocked = () => isChild() && !settings().childProfile;
-document.getElementById("hobby-form").onsubmit = e => {
-  e.preventDefault();
-  if (childProfileLocked()) return;
-  const m = curProfile();
-  const input = document.getElementById("hobby-in");
-  const v = input.value.trim();
-  if (!m || !v) return;
-  m.hobbies.push(v); input.value = "";
-  save(); renderProfile();
+/* ---------- Birthday picker (wheels on phones) and weekly activities ---------- */
+const locNow = () => lang === "sv" ? "sv-SE" : "en-GB";
+function canEditMember(m) { return !!m && (!isChild() || (hh && m.id === hh.memberId && settings().childProfile)); }
+function wdOrder() { return settings().weekStart === 0 ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5, 6, 0]; }
+function dayShort(d) { return new Date(2026, 0, 4 + d).toLocaleDateString(locNow(), { weekday: "short" }).replace(".", ""); }
+function actsOf(m) { return (m && Array.isArray(m.hobbies) ? m.hobbies : []).filter(a => a && typeof a === "object" && a.title && Array.isArray(a.days) && a.days.length); }
+function actTime(a) { return a.time ? a.time + (a.end ? "–" + a.end : "") : ""; }
+function actDaysText(a) { return wdOrder().filter(d => a.days.includes(d)).map(dayShort).join(", "); }
+function renderBday(el, m) {
+  if (!el || !m || el.contains(document.activeElement)) return;
+  const t = T[lang], ed = canEditMember(m) ? "" : " disabled";
+  let [y, mo, d] = (m.birthday || "").split("-");
+  const dr = el._draft && el._draft.mid === m.id ? el._draft : null;
+  if (dr) { d = dr.d ? String(dr.d) : ""; mo = dr.m ? String(dr.m) : ""; y = dr.y ? String(dr.y) : ""; }
+  const yNow = new Date().getFullYear();
+  const opt = (v, txt, cur) => `<option value="${v}"${String(cur) === String(v) ? " selected" : ""}>${esc(txt)}</option>`;
+  el.dataset.mid = m.id;
+  el.innerHTML = `<select data-bd="d" aria-label="${esc(t.bdDay)}"${ed}>${opt("", t.bdDay, d ? Number(d) : "")}${[...Array(31)].map((_, i) => opt(i + 1, i + 1, d ? Number(d) : "")).join("")}</select>`
+    + `<select data-bd="m" aria-label="${esc(t.bdMonth)}"${ed}>${opt("", t.bdMonth, mo ? Number(mo) : "")}${[...Array(12)].map((_, i) => opt(i + 1, new Date(2026, i, 1).toLocaleDateString(locNow(), { month: "long" }), mo ? Number(mo) : "")).join("")}</select>`
+    + `<select data-bd="y" aria-label="${esc(t.bdYear)}"${ed}>${opt("", t.bdYear, y && y !== "0000" ? Number(y) : "")}${[...Array(yNow - 1919)].map((_, i) => opt(yNow - i, yNow - i, y && y !== "0000" ? Number(y) : "")).join("")}</select>`;
+}
+function onBdayChange(e) {
+  const el = e.currentTarget, m = memberById(el.dataset.mid);
+  if (!m || !canEditMember(m)) return;
+  const v = k => el.querySelector(`[data-bd="${k}"]`).value;
+  let d = Number(v("d")), mo = Number(v("m")), y = Number(v("y"));
+  el._draft = null;
+  if (!d && !mo && !y) { m.birthday = ""; save(); renderAll(); return; }
+  if (!d || !mo) { el._draft = { mid: m.id, d, m: mo, y }; return; }
+  const maxD = new Date(y || 2000, mo, 0).getDate();
+  if (d > maxD) { d = maxD; el.querySelector('[data-bd="d"]').value = String(d); }
+  m.birthday = (y ? String(y) : "0000") + "-" + String(mo).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+  save(); renderAll();
+}
+["p-bday", "a-bday"].forEach(id => document.getElementById(id).addEventListener("change", onBdayChange));
+function renderActs(el, m, force) {
+  if (!el || !m) return;
+  if (!force && el.contains(document.activeElement) && document.activeElement.tagName === "INPUT") return;
+  const t = T[lang], ed = canEditMember(m), acts = actsOf(m), p = el.id;
+  el.dataset.mid = m.id;
+  el.innerHTML = `<ul class="tasks acts-list">${acts.length ? acts.map(a => `<li><div class="task-main"><div class="task-title">${esc(a.title)}</div><div class="meta"><span class="pill">${esc(actDaysText(a))}</span>${actTime(a) ? `<span class="pill">${esc(actTime(a))}</span>` : ""}</div></div>${ed ? `<button class="ghost" type="button" data-act-del="${a.id}" aria-label="${esc(t.remove + " " + a.title)}">✕</button>` : ""}</li>`).join("") : `<li class="empty">${esc(t.actsNone)}</li>`}</ul>`
+    + (ed ? `<div class="act-add">
+      <label for="${p}-title">${esc(t.actName)}</label><input id="${p}-title" class="act-title" maxlength="40" autocomplete="off" placeholder="${esc(t.actPh)}">
+      <span class="lbl" id="${p}-days-l">${esc(t.actDays)}</span><div class="chips act-days" role="group" aria-labelledby="${p}-days-l">${wdOrder().map(d => `<button type="button" class="chip" data-act-day="${d}" aria-pressed="false">${esc(dayShort(d))}</button>`).join("")}</div>
+      <div class="row"><div class="narrow" style="flex:1 1 110px"><label for="${p}-from">${esc(t.actFrom)}</label><input id="${p}-from" class="act-from" type="time"></div><div class="narrow" style="flex:1 1 110px"><label for="${p}-to">${esc(t.actTo)}</label><input id="${p}-to" class="act-to" type="time"></div></div>
+      <p class="set-msg err act-err" role="status"></p>
+      <button type="button" class="btn" data-act-add>${esc(t.actAdd)}</button></div>` : "");
+}
+function onActsClick(e) {
+  const el = e.currentTarget, m = memberById(el.dataset.mid), t = T[lang];
+  if (!m || !canEditMember(m)) return;
+  const day = e.target.closest("[data-act-day]");
+  if (day) { day.setAttribute("aria-pressed", String(day.getAttribute("aria-pressed") !== "true")); return; }
+  const del = e.target.closest("[data-act-del]");
+  if (del) {
+    const gone = actsOf(m).find(a => a.id === del.dataset.actDel);
+    m.hobbies = actsOf(m).filter(a => a.id !== del.dataset.actDel);
+    if (gone) showUndo(gone.title, () => { m.hobbies = actsOf(m).concat([gone]); }, t.actRemoved.replace("{x}", gone.title));
+    save(); renderAll(); return;
+  }
+  if (e.target.closest("[data-act-add]")) {
+    const title = el.querySelector(".act-title").value.trim().slice(0, 40);
+    const days = [...el.querySelectorAll('[data-act-day][aria-pressed="true"]')].map(b => Number(b.dataset.actDay)).sort((x, y) => x - y);
+    if (!title || !days.length) { el.querySelector(".act-err").textContent = t.actErr; return; }
+    const time = el.querySelector(".act-from").value || "", end = el.querySelector(".act-to").value || "";
+    m.hobbies = actsOf(m).concat([{ id: uid(), title, days, time, end: time && end > time ? end : "" }]);
+    if (document.activeElement) document.activeElement.blur();
+    save(); renderAll();
+    renderActs(el, m, true);
+  }
+}
+["p-acts", "a-acts"].forEach(id => document.getElementById(id).addEventListener("click", onActsClick));
+let aboutOpen = false;
+function aboutKey(me) { return "hb-about-" + (hh && hh.id) + "-" + me.id; }
+function renderAbout() {
+  const sec = document.getElementById("sec-about");
+  const me = !LOCAL_MODE && hh ? memberById(hh.memberId) : null;
+  const guideOn = !document.getElementById("guide").hidden;
+  if (me && canEditMember(me) && !lsGet(aboutKey(me)) && (aboutOpen || (!me.birthday && !actsOf(me).length))) aboutOpen = true;
+  else aboutOpen = false;
+  sec.hidden = !aboutOpen || guideOn;
+  if (sec.hidden) return;
+  renderBday(document.getElementById("a-bday"), me);
+  renderActs(document.getElementById("a-acts"), me);
+}
+const closeAbout = () => {
+  const me = hh && memberById(hh.memberId);
+  if (me) lsSet(aboutKey(me), "1");
+  aboutOpen = false;
+  document.getElementById("sec-about").hidden = true;
 };
-document.getElementById("hobby-list").onclick = e => {
-  const b = e.target.closest("[data-del-hobby]");
-  const m = curProfile();
-  if (!b || !m || childProfileLocked()) return;
-  m.hobbies.splice(Number(b.dataset.delHobby), 1);
-  save(); renderProfile();
-};
+document.getElementById("about-done").onclick = closeAbout;
+document.getElementById("about-skip").onclick = closeAbout;
 
 /* ---------- Views (tabs), Today ---------- */
 const TAB_VIEWS = ["today", "chores", "shop", "family", "week"];
@@ -2337,6 +2438,9 @@ function renderToday() {
   st.innerHTML = bdays.map(x => `<div class="bday-line">🎂 ${esc(t.bdayToday.replace("{name}", x.name))}</div>`).join("");
   const din = (state.meals || {})[isoDay(new Date())];
   if (din && din.dish) st.innerHTML += `<p class="dinner-line">${esc(t.dinnerToday.replace("{d}", din.dish))}</p>`;
+  const dow = new Date().getDay();
+  const tActs = state.members.flatMap(x => actsOf(x).filter(a => a.days.includes(dow)).map(a => ({ x, a }))).sort((p, q) => (p.a.time || "99").localeCompare(q.a.time || "99"));
+  if (tActs.length) st.innerHTML += `<div class="today-acts" aria-label="${esc(t.todayActs)}">${tActs.map(({ x, a }) => `<span class="ta" style="background:${COLORS[x.color % COLORS.length]}"><b>${esc(x.name)}</b> ${esc(a.title)}${a.time ? " " + esc(actTime(a)) : ""}</span>`).join("")}</div>`;
   if (m && isKid(m)) st.innerHTML += starCard(m);
   document.getElementById("today-rewards").innerHTML = "";
   const incoming = m ? (state.swaps || []).filter(w => w.to === m.id && state.tasks.some(k => k.id === w.task)) : [];
@@ -2570,6 +2674,7 @@ function renderCalendar() {
     const iso = isoDay(d);
     const items = [];
     state.members.forEach(m => (m.events || []).forEach(ev => { if (ev.date === iso) items.push({ kind: "ev", m, time: ev.time || "", title: ev.title, id: ev.id, del: canEditEv(m) }); }));
+    state.members.forEach(m => actsOf(m).forEach(a => { if (a.days.includes(d.getDay())) items.push({ kind: "act", m, time: a.time || "", title: a.title + (a.end ? " (–" + a.end + ")" : "") }); }));
     state.members.forEach(m => { if (m.birthday && m.birthday.slice(5) === iso.slice(5)) items.push({ kind: "bday", m, time: "", title: "🎂 " + bdayText(m, d) }); });
     state.tasks.forEach(k => { if (choreOnDay(k, iso)) items.push({ kind: "task", m: memberById(k.owner), time: k.time || "", title: taskName(k), done: curWeek && !!k.done }); });
     items.sort((x, y) => (x.time || "99").localeCompare(y.time || "99"));
@@ -2721,12 +2826,6 @@ function bdayText(m, onDate) {
   const age = y > 1900 ? onDate.getFullYear() - y : 0;
   return age > 0 ? t.bdayTurns.replace("{name}", m.name).replace("{n}", age) : t.bdayCal.replace("{name}", m.name);
 }
-document.getElementById("p-bday").onchange = e => {
-  const m = curProfile();
-  if (!m || (isChild() && (m.id !== hh.memberId || !settings().childProfile))) return;
-  m.birthday = e.target.value || "";
-  save(); renderAll();
-};
 const DEPT_WORDS = [
   ["äpple", "banan", "päron", "apelsin", "citron", "lime", "druv", "melon", "bär", "tomat", "gurka", "sallad", "paprika", "lök", "vitlök", "potatis", "morot", "broccoli", "avokado", "spenat", "frukt", "grönsak", "apple", "banana", "orange", "lemon", "grape", "berr", "tomato", "cucumber", "lettuce", "pepper", "onion", "garlic", "potato", "carrot", "avocado", "fruit", "veg"],
   ["mjölk", "fil", "yoghurt", "grädde", "smör", "ost", "ägg", "kvarg", "crème", "creme", "milk", "yogurt", "cream", "butter", "cheese", "egg"],
