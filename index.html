@@ -526,6 +526,27 @@ ul.tasks li:first-child { border-top: 0; }
 .today-acts { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
 .ta { border-radius: 999px; padding: 4px 12px; color: var(--navy); font-size: .9rem; }
 
+/* Kommentarer och tid */
+.cm-wrap { margin-top: 6px; }
+.cm-last { font-size: .9rem; background: var(--tint); border-radius: 12px; padding: 5px 10px; margin-bottom: 4px; word-break: break-word; }
+.cm-toggle { background: none; border: 0; padding: 4px 0; font: inherit; font-size: .85rem; font-weight: 700; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 32px; }
+.cm-thread { background: var(--tint); border-radius: 14px; padding: 10px; margin-top: 4px; display: grid; gap: 8px; }
+.cm { background: var(--surface); border-radius: 12px; padding: 8px 10px; word-break: break-word; }
+.cm-text { margin-top: 2px; }
+.cm-act { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.cm-act .ghost { padding: 3px 10px; }
+.cm-form { display: flex; gap: 8px; }
+.cm-form input { flex: 1; min-width: 0; }
+.time-ask { margin-top: 8px; background: var(--sun); color: var(--navy); border: 2px solid var(--navy); border-radius: 14px; padding: 8px 10px; }
+.ta-q { font-weight: 700; display: block; margin-bottom: 6px; }
+.time-ask .chips { margin: 0; gap: 6px; }
+.time-ask .chip { padding: 4px 10px; font-size: .88rem; background: #fff4ea; color: var(--navy); border-color: var(--navy); }
+.time-ask .ghost { color: var(--navy); border-color: var(--navy); }
+.time-sug { margin-top: 8px; background: var(--tint); border-radius: 14px; padding: 8px 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: .9rem; font-weight: 700; }
+.time-sug span { flex: 1 1 100%; }
+#tasks li > .row-extra { grid-column: 2 / span 2; }
+#tasks li > .row-extra:empty { display: none; }
+
 /* Stjärnkortet */
 .star-card { background: var(--sun); color: var(--navy); border: 2px solid var(--navy); border-radius: 22px; padding: 14px 16px; margin: 0 0 14px; }
 .sc-count { margin: 0; font-family: var(--display); font-weight: 800; font-size: 1.15rem; }
@@ -1060,7 +1081,9 @@ const T = {
     rewardsTitle: "Stars and rewards", rewardsHint: "Children earn stars for their chores. You decide how many stars each chore gives (when you add or edit a chore) and how many stars each reward needs.", rewardName: "Reward", rewardCost: "Stars needed", rewardsNone: "No rewards yet. Add one below.",
     starsLabel: "Stars ★", starPill: "{n} ★", msNext: "{left} more to {r}", msAllDone: "Every reward reached! Ask a parent for a new one.", msNoneKid: "Ask a parent to add rewards to collect stars for.", msNoneAdult: "Add rewards under Family to give the stars a goal.",
     msReached: "{m} reached {c} ★: {r}", msGive: "Mark as given", msGivenToast: "{r} marked as given", msHit: "You reached {c} ★! Reward: {r}", msHitOther: "{m} reached {c} ★! Reward: {r}",
-    msReset: "Start {m}'s stars over", msResetDone: "{m}'s stars start again from 0", msGivenTitle: "Recently given", msGivenLog: "{m} got {r} ({c} ★)", actsTitle: "Weekly activities", actsHint: "For example tennis practice every Tuesday at 15:00. They show up in the family calendar.", actName: "Activity", actPh: "For example Tennis practice", actDays: "Days", actFrom: "From", actTo: "To", actAdd: "Add activity", actErr: "Write what it is and pick at least one day.", actsNone: "No weekly activities yet.", actRemoved: "{x} removed",
+    msReset: "Start {m}'s stars over", msResetDone: "{m}'s stars start again from 0", msGivenTitle: "Recently given", msGivenLog: "{m} got {r} ({c} ★)", cmAdd: "Comment", cmCount: "Comments ({n})", cmPh: "Write a comment", cmSend: "Send", cmToShop: "Add to shopping list", cmRemoved: "Comment removed", cmHide: "Hide comments",
+    taQ: "How long did it take?", taSkip: "Skip", taThanks: "Thanks! The app learns how long chores take.", tsText: "Usually takes about {n} min (it says {c} min)", tsYes: "Change to {n} min", tsNo: "Keep", tsChanged: "{x} now takes {n} min",
+    actsTitle: "Weekly activities", actsHint: "For example tennis practice every Tuesday at 15:00. They show up in the family calendar.", actName: "Activity", actPh: "For example Tennis practice", actDays: "Days", actFrom: "From", actTo: "To", actAdd: "Add activity", actErr: "Write what it is and pick at least one day.", actsNone: "No weekly activities yet.", actRemoved: "{x} removed",
     aboutTitle: "Tell us a little about you", aboutHint: "Add your birthday and your weekly activities so they show up in the family calendar. You can change everything later under Family → Profiles.", aboutDone: "Done", aboutSkip: "Skip for now",
     bdDay: "Day", bdMonth: "Month", bdYear: "Year (optional)", todayActs: "Today",
     msKidsTitle: "The children's stars", msListTitle: "Rewards", msGotIt: "given", msWaiting: "reached, waiting", redeemBtn: "{r} ({c} ★)", redeemed: "Redeemed: {r}", redeemLog: "{m} redeemed {r} ({c} ★)", redeemTitle: "Recently redeemed",
@@ -1171,7 +1194,9 @@ const T = {
     rewardsTitle: "Stjärnor och belöningar", rewardsHint: "Barnen får stjärnor när de gör sina sysslor. Ni bestämmer hur många stjärnor varje syssla ger (när ni lägger till eller ändrar en syssla) och hur många stjärnor som behövs för varje belöning.", rewardName: "Belöning", rewardCost: "Stjärnor som behövs", rewardsNone: "Inga belöningar än. Lägg till en nedan.",
     starsLabel: "Stjärnor ★", starPill: "{n} ★", msNext: "{left} kvar till {r}", msAllDone: "Alla belöningar är nådda! Fråga en förälder om en ny.", msNoneKid: "Fråga en förälder om belöningar att samla stjärnor till.", msNoneAdult: "Lägg till belöningar under Familj så får stjärnorna ett mål.",
     msReached: "{m} har nått {c} ★: {r}", msGive: "Markera som given", msGivenToast: "{r} markerad som given", msHit: "Du har nått {c} ★! Belöning: {r}", msHitOther: "{m} har nått {c} ★! Belöning: {r}",
-    msReset: "Börja om {m}s stjärnor", msResetDone: "{m}s stjärnor börjar om från 0", msGivenTitle: "Senast givna", msGivenLog: "{m} fick {r} ({c} ★)", actsTitle: "Fasta aktiviteter varje vecka", actsHint: "Till exempel tennisträning varje tisdag kl 15. De syns i familjens kalender.", actName: "Aktivitet", actPh: "Till exempel Tennisträning", actDays: "Dagar", actFrom: "Från", actTo: "Till", actAdd: "Lägg till aktivitet", actErr: "Skriv vad det är och välj minst en dag.", actsNone: "Inga fasta aktiviteter än.", actRemoved: "{x} borttagen",
+    msReset: "Börja om {m}s stjärnor", msResetDone: "{m}s stjärnor börjar om från 0", msGivenTitle: "Senast givna", msGivenLog: "{m} fick {r} ({c} ★)", cmAdd: "Kommentera", cmCount: "Kommentarer ({n})", cmPh: "Skriv en kommentar", cmSend: "Skicka", cmToShop: "Lägg i inköpslistan", cmRemoved: "Kommentaren borttagen", cmHide: "Dölj kommentarer",
+    taQ: "Hur lång tid tog det?", taSkip: "Hoppa över", taThanks: "Tack! Appen lär sig hur lång tid sysslorna tar.", tsText: "Brukar ta ca {n} min (det står {c} min)", tsYes: "Ändra till {n} min", tsNo: "Behåll", tsChanged: "{x} tar nu {n} min",
+    actsTitle: "Fasta aktiviteter varje vecka", actsHint: "Till exempel tennisträning varje tisdag kl 15. De syns i familjens kalender.", actName: "Aktivitet", actPh: "Till exempel Tennisträning", actDays: "Dagar", actFrom: "Från", actTo: "Till", actAdd: "Lägg till aktivitet", actErr: "Skriv vad det är och välj minst en dag.", actsNone: "Inga fasta aktiviteter än.", actRemoved: "{x} borttagen",
     aboutTitle: "Berätta lite om dig", aboutHint: "Lägg till din födelsedag och dina fasta aktiviteter, så syns de i familjens kalender. Du kan ändra allt senare under Familj → Profiler.", aboutDone: "Klar", aboutSkip: "Hoppa över",
     bdDay: "Dag", bdMonth: "Månad", bdYear: "År (valfritt)", todayActs: "Idag",
     msKidsTitle: "Barnens stjärnor", msListTitle: "Belöningar", msGotIt: "given", msWaiting: "nådd, väntar", redeemBtn: "{r} ({c} ★)", redeemed: "Inlöst: {r}", redeemLog: "{m} löste in {r} ({c} ★)", redeemTitle: "Senast inlöst",
@@ -1381,6 +1406,8 @@ function normalizeState(d) {
     rewards: Array.isArray(d.rewards) ? d.rewards : [],
     redeems: Array.isArray(d.redeems) ? d.redeems : [],
     starResets: Array.isArray(d.starResets) ? d.starResets : [],
+    comments: Array.isArray(d.comments) ? d.comments : [],
+    timeLog: Array.isArray(d.timeLog) ? d.timeLog : [],
     rewardsGiven: Array.isArray(d.rewardsGiven) ? d.rewardsGiven : [],
     board: Array.isArray(d.board) ? d.board : [],
     meals: d.meals && typeof d.meals === "object" && !Array.isArray(d.meals) ? d.meals : {},
@@ -1416,6 +1443,8 @@ function mergeStates(base, local, remote) {
   out.rewards = mergeById(bs.rewards, local.rewards, remote.rewards);
   out.redeems = mergeById(bs.redeems, local.redeems, remote.redeems);
   out.starResets = mergeById(bs.starResets, local.starResets, remote.starResets);
+  out.comments = mergeById(bs.comments, local.comments, remote.comments);
+  out.timeLog = mergeById(bs.timeLog, local.timeLog, remote.timeLog);
   out.rewardsGiven = mergeById(bs.rewardsGiven, local.rewardsGiven, remote.rewardsGiven);
   out.board = mergeById(bs.board, local.board, remote.board);
   out.meals = { ...(remote.meals || {}) };
@@ -1710,6 +1739,7 @@ function renderTasks() {
   const fo = isChild() ? (settings().childSeeAll ? "" : hh.memberId) : document.getElementById("f-owner").value;
   const shown = fo ? state.tasks.filter(k => k.owner === fo) : state.tasks;
   if (!shown.length) { ul.innerHTML = `<li class="empty">${t.noFiltered}</li>`; return; }
+  if (typingIn(ul)) return;
   ul.innerHTML = shown.map(k => {
     const m = memberById(k.owner);
     const color = m ? COLORS[m.color % COLORS.length] : "var(--muted)";
@@ -1725,6 +1755,7 @@ function renderTasks() {
         </div>
       </div>
       ${k.note ? `<div class="task-note" style="grid-column:2">${esc(k.note)}</div>` : ""}
+      <div class="row-extra">${timeAskBlock(k)}${timeSugBlock(k)}${commentsBlock(k)}</div>
       <button class="ghost adult-only" data-edit="${k.id}">${t.edit}</button>
       <button class="ghost adult-only" data-delete="${k.id}">${t.remove}</button>
     </li>`;
@@ -2120,6 +2151,7 @@ const onTaskClick = e => {
     const k = state.tasks.find(x => x.id === tog.dataset.toggle);
     if (k && (!isChild() || (settings().childCheck && k.owner === hh.memberId))) {
       toggleDone(k);
+      timeAsk = k.done && timeEntries(k).length < 5 ? k.id : null;
       if (k.done) {
         justDone = k.id;
         const pid = todayPerson();
@@ -2460,6 +2492,7 @@ function renderToday() {
     ul.innerHTML = `<li class="empty" style="display:block"><p class="hint">${esc(t.todayEmpty)}</p>${isChild() ? "" : `<button class="btn big" type="button" data-goto="chores">${esc(t.todayEmptyBtn)}</button>`}</li>`;
     return;
   }
+  if (typingIn(ul)) return;
   const rank = k => k.done ? 3 : dueStatus(k) === "late" ? 0 : (k.time ? 1 : 2);
   const ordered = mine.slice().sort((x, y) => rank(x) - rank(y) || String(x.time || "").localeCompare(String(y.time || "")));
   ul.innerHTML = ordered.map(k => {
@@ -2472,7 +2505,7 @@ function renderToday() {
     return `<li>
       <div class="check big${justDone === k.id ? " pop" : ""}" role="checkbox" tabindex="0" aria-checked="${k.done}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
       <div class="task-main"><div class="task-title ${k.done ? "done" : ""}"><span class="cat-ico" aria-hidden="true">${CAT_ICONS[k.cat] || CAT_ICONS[6]}</span>${esc(taskName(k))}</div>
-      <div class="meta">${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}${k.time ? `<span class="pill">${esc(t.atTime.replace("{t}", k.time))}</span>` : ""}<span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span><span class="pill">${k.minutes} ${t.minLabel}</span>${isKid(m) && starsOf(k) ? `<span class="pill star-pill">${esc(t.starPill.replace("{n}", starsOf(k)))}</span>` : ""}</div>${k.note ? `<div class="task-note">${esc(k.note)}</div>` : ""}${(k.steps || []).length ? `<div class="steps">${k.steps.map(x => `<label class="step${x.done ? " done" : ""}"><input type="checkbox" data-step="${k.id}|${x.id}"${x.done ? " checked" : ""}><span>${esc(x.text)}</span></label>`).join("")}</div>` : ""}${extra}</div>
+      <div class="meta">${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}${k.time ? `<span class="pill">${esc(t.atTime.replace("{t}", k.time))}</span>` : ""}<span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span><span class="pill">${k.minutes} ${t.minLabel}</span>${isKid(m) && starsOf(k) ? `<span class="pill star-pill">${esc(t.starPill.replace("{n}", starsOf(k)))}</span>` : ""}</div>${k.note ? `<div class="task-note">${esc(k.note)}</div>` : ""}${(k.steps || []).length ? `<div class="steps">${k.steps.map(x => `<label class="step${x.done ? " done" : ""}"><input type="checkbox" data-step="${k.id}|${x.id}"${x.done ? " checked" : ""}><span>${esc(x.text)}</span></label>`).join("")}</div>` : ""}${extra}${timeAskBlock(k)}${commentsBlock(k)}</div>
     </li>`;
   }).join("");
 }
@@ -3174,6 +3207,137 @@ document.getElementById("reward-list").addEventListener("click", e => {
   }
 }));
 
+/* ---------- Comments on chores and time that learns ---------- */
+let commentOpen = null, timeAsk = null;
+function typingIn(el) { const a = document.activeElement; return !!(a && el.contains(a) && a.closest && a.closest(".cm-form") && a.value); }
+function memberName(id) { const m = memberById(id); return m ? m.name : "?"; }
+function commentsFor(k) { return (state.comments || []).filter(c => c.k === k.id).sort((a, b) => a.at - b.at); }
+function shopGuess(text) {
+  const s0 = String(text || "").trim().replace(/[.!]+$/, "");
+  const m = s0.match(/^(.{2,40}?)\s+(?:är\s+)?(?:nästan\s+|snart\s+)?slut$/i) || s0.match(/^(?:vi\s+)?(?:måste\s+|behöver\s+)?(?:köpa?|handla)\s+(.{2,40})$/i) || s0.match(/^(?:we(?:'re| are)\s+)?(?:out of|need|buy)\s+(.{2,40})$/i) || s0.match(/^(.{2,40}?)\s+(?:is|are)\s+(?:almost\s+)?(?:out|empty|gone)$/i);
+  if (!m) return "";
+  const x = m[1].replace(/^(?:the|vi har inget|inget|ingen)\s+/i, "").trim();
+  return x ? x.charAt(0).toUpperCase() + x.slice(1) : "";
+}
+function canDelComment(c) { return !isChild() || c.by === boardAuthor(); }
+function commentsBlock(k) {
+  const t = T[lang], cs = commentsFor(k), open = commentOpen === k.id, last = cs[cs.length - 1];
+  let h = "";
+  if (last && !open) h += `<div class="cm-last"><b>${esc(memberName(last.by))}:</b> ${esc(last.text)}</div>`;
+  h += `<button type="button" class="cm-toggle" data-cm-open="${k.id}" aria-expanded="${open}">${esc(open ? t.cmHide : cs.length ? t.cmCount.replace("{n}", cs.length) : t.cmAdd)}</button>`;
+  if (open) {
+    h += `<div class="cm-thread">${cs.map(c => {
+      const g = shopGuess(c.text);
+      return `<div class="cm"><div class="cm-head"><b>${esc(memberName(c.by))}</b> <span class="meta" style="display:inline">${esc(fmtDate(isoDay(new Date(c.at))))}</span></div><div class="cm-text">${esc(c.text)}</div>${g || canDelComment(c) ? `<div class="cm-act">${g ? `<button type="button" class="ghost" data-cm-shop="${c.id}">${esc(t.cmToShop)}: ${esc(g)}</button>` : ""}${canDelComment(c) ? `<button type="button" class="ghost" data-cm-del="${c.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}</div>` : ""}</div>`;
+    }).join("")}<form class="cm-form" data-cm-form="${k.id}"><input maxlength="140" autocomplete="off" aria-label="${esc(t.cmPh)}" placeholder="${esc(t.cmPh)}"><button class="btn" type="submit">${esc(t.cmSend)}</button></form></div>`;
+  }
+  return `<div class="cm-wrap">${h}</div>`;
+}
+function timeEntries(k) { return (state.timeLog || []).filter(e => e.k === k.id).sort((a, b) => b.at - a.at); }
+function learnedMin(k) {
+  const xs = timeEntries(k).slice(0, 5).map(e => Number(e.min)).filter(n => n > 0).sort((a, b) => a - b);
+  if (xs.length < 3) return null;
+  const med = xs[Math.floor(xs.length / 2)];
+  return med >= 10 ? Math.round(med / 5) * 5 : med;
+}
+function timeSuggestion(k) {
+  const L = learnedMin(k), cur = Number(k.minutes) || 0;
+  if (!L || Math.abs(L - cur) < Math.max(5, cur * 0.25) || k.timeNo === L) return null;
+  return L;
+}
+function timeAskBlock(k) {
+  if (timeAsk !== k.id || !k.done) return "";
+  const t = T[lang];
+  return `<div class="time-ask"><span class="ta-q">${esc(t.taQ)}</span><div class="chips">${[5, 10, 15, 20, 30, 45, 60].map(n => `<button type="button" class="chip" data-ta="${k.id}|${n}">${n} min</button>`).join("")}<button type="button" class="ghost" data-ta-skip="1">${esc(t.taSkip)}</button></div></div>`;
+}
+function timeSugBlock(k) {
+  if (isChild()) return "";
+  const L = timeSuggestion(k);
+  if (!L) return "";
+  const t = T[lang];
+  return `<div class="time-sug"><span>${esc(t.tsText.replace("{n}", L).replace("{c}", k.minutes))}</span><button type="button" class="ghost" data-ts-yes="${k.id}">${esc(t.tsYes.replace("{n}", L))}</button><button type="button" class="ghost" data-ts-no="${k.id}">${esc(t.tsNo)}</button></div>`;
+}
+const onExtraClick = e => {
+  const t = T[lang];
+  const op = e.target.closest("[data-cm-open]");
+  if (op) { commentOpen = commentOpen === op.dataset.cmOpen ? null : op.dataset.cmOpen; renderToday(); renderTasks(); const f = commentOpen && document.querySelector(`#${e.currentTarget.id} [data-cm-form="${commentOpen}"] input`); if (f) f.focus(); return; }
+  const del = e.target.closest("[data-cm-del]");
+  if (del) {
+    const c = (state.comments || []).find(x => x.id === del.dataset.cmDel);
+    if (!c || !canDelComment(c)) return;
+    state.comments = state.comments.filter(x => x.id !== c.id);
+    showUndo("", () => { state.comments.push(c); }, t.cmRemoved);
+    save(); renderAll(); return;
+  }
+  const sh = e.target.closest("[data-cm-shop]");
+  if (sh) {
+    const c = (state.comments || []).find(x => x.id === sh.dataset.cmShop);
+    const g = c && shopGuess(c.text);
+    if (!g) return;
+    setView("shop");
+    const inp = document.getElementById("shop-in");
+    inp.value = g; inp.focus();
+    return;
+  }
+  const ta = e.target.closest("[data-ta]");
+  if (ta) {
+    const [kid, n] = ta.dataset.ta.split("|");
+    const k = state.tasks.find(x => x.id === kid);
+    if (!k) return;
+    if (isChild() && k.owner !== hh.memberId) return;
+    const cutoff = Date.now() - 120 * 86400000;
+    state.timeLog = (state.timeLog || []).filter(x => x.at >= cutoff);
+    state.timeLog.push({ id: uid(), k: k.id, m: k.owner, min: Number(n), at: Date.now() });
+    timeAsk = null;
+    showNote(t.taThanks);
+    save(); renderAll(); return;
+  }
+  if (e.target.closest("[data-ta-skip]")) { timeAsk = null; renderAll(); return; }
+  const yes = e.target.closest("[data-ts-yes]"), no = e.target.closest("[data-ts-no]");
+  if ((yes || no) && !isChild()) {
+    const k = state.tasks.find(x => x.id === (yes || no).dataset[yes ? "tsYes" : "tsNo"]);
+    const L = k && learnedMin(k);
+    if (!k || !L) return;
+    if (yes) { const before = k.minutes; k.minutes = L; showUndo("", () => { k.minutes = before; }, t.tsChanged.replace("{x}", taskName(k)).replace("{n}", L)); }
+    else k.timeNo = L;
+    save(); renderAll();
+  }
+};
+const onCommentSubmit = e => {
+  const f = e.target.closest("[data-cm-form]");
+  if (!f) return;
+  e.preventDefault();
+  const k = state.tasks.find(x => x.id === f.dataset.cmForm);
+  const inp = f.querySelector("input");
+  const text = inp.value.trim().slice(0, 140);
+  if (!k || !text) return;
+  const by = boardAuthor();
+  if (!by) return;
+  const cutoff = Date.now() - 60 * 86400000;
+  state.comments = (state.comments || []).filter(c => c.at >= cutoff);
+  state.comments.push({ id: uid(), k: k.id, by, text, at: Date.now() });
+  const mine = state.comments.filter(c => c.k === k.id);
+  if (mine.length > 20) { const drop = new Set(mine.slice(0, mine.length - 20).map(c => c.id)); state.comments = state.comments.filter(c => !drop.has(c.id)); }
+  inp.value = "";
+  inp.blur();
+  save(); renderAll();
+  const again = document.querySelector(`#${e.currentTarget.id} [data-cm-form="${k.id}"] input`);
+  if (again) again.focus();
+};
+["tasks", "today-list"].forEach(id => {
+  document.getElementById(id).addEventListener("click", onExtraClick);
+  document.getElementById(id).addEventListener("submit", onCommentSubmit);
+});
+document.getElementById("k-title").addEventListener("change", () => {
+  if (editId) return;
+  const minIn = document.getElementById("k-min");
+  if (minIn.value !== "15") return;
+  const name = document.getElementById("k-title").value.trim().toLowerCase();
+  const same = state.tasks.filter(k => taskName(k).toLowerCase() === name);
+  const L = same.map(learnedMin).find(Boolean) || (same[0] && same[0].minutes);
+  if (L) minIn.value = String(L);
+});
+
 /* ---------- Steps on chores ---------- */
 document.getElementById("today-list").addEventListener("change", e => {
   const cb = e.target.closest("[data-step]");
@@ -3183,7 +3347,7 @@ document.getElementById("today-list").addEventListener("change", e => {
   const st = k && (k.steps || []).find(x => x.id === sid);
   if (!st || (isChild() && (!settings().childCheck || k.owner !== hh.memberId))) { renderToday(); return; }
   st.done = cb.checked;
-  if (k.steps.every(x => x.done) && !k.done) { toggleDone(k); justDone = k.id; }
+  if (k.steps.every(x => x.done) && !k.done) { toggleDone(k); justDone = k.id; timeAsk = timeEntries(k).length < 5 ? k.id : null; }
   save(); renderAll();
 });
 
