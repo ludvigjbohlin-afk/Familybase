@@ -508,6 +508,26 @@ ul.tasks li:first-child { border-top: 0; }
 .swap-wait { color: var(--muted); font-weight: 700; }
 .rewards button { background: var(--surface); color: var(--ink); border: 2px solid var(--edge); border-radius: 999px; font-weight: 700; }
 
+/* Stjärnkortet */
+.star-card { background: var(--sun); color: var(--navy); border: 2px solid var(--navy); border-radius: 22px; padding: 14px 16px; margin: 0 0 14px; }
+.sc-count { margin: 0; font-family: var(--display); font-weight: 800; font-size: 1.15rem; }
+.sc-count b { font-size: 2.4rem; font-stretch: 75%; line-height: 1; vertical-align: -4px; }
+.sc-star { font-size: 1.6rem; }
+.star-card .bar { background: #fff4ea; border-color: var(--navy); margin: 8px 0 4px; }
+.star-card .bar span { background: var(--navy) !important; border-right: 0; }
+.sc-next { margin: 4px 0 0; font-weight: 700; }
+.sc-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+.sc-list li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: #fff4ea; border-radius: 12px; padding: 6px 10px; }
+.sc-list li.got { background: var(--navy); color: #fff4ea; }
+.sc-c { font-family: var(--display); font-weight: 800; min-width: 3.2em; }
+.sc-t { flex: 1; min-width: 0; font-weight: 700; }
+.sc-s { font-size: .8rem; font-weight: 700; opacity: .85; }
+.sc-list .ghost { color: #fff4ea; border-color: #fff4ea; padding: 3px 10px; }
+.star-pill { background: var(--sun); color: var(--navy); }
+.rk { margin: 10px 0 18px; }
+.rk-head { margin-bottom: 6px; }
+.rk .star-card { margin-bottom: 8px; }
+
 /* Anslagstavlan: färgade lappar */
 #board-list { display: grid; gap: 10px; }
 #board-list li { border: 0; border-radius: 18px; padding: 12px 14px; background: var(--tint); color: var(--navy); }
@@ -639,10 +659,10 @@ ul.tasks li:first-child { border-top: 0; }
     <section class="card full" id="sec-today" data-view="today" aria-labelledby="h-today">
       <p class="kicker" id="today-date"></p>
       <h2 id="h-today"><span class="dot"></span><span id="today-hi"></span></h2>
+      <div id="today-who" class="tiles adult-only"></div>
       <div id="today-stars"></div>
       <div id="today-swaps"></div>
       <div id="today-rewards"></div>
-      <div id="today-who" class="tiles adult-only"></div>
       <div id="today-progress"></div>
       <ul class="tasks big" id="today-list"></ul>
     </section>
@@ -827,10 +847,12 @@ ul.tasks li:first-child { border-top: 0; }
     <section class="card adult-only" id="sec-rewards" data-view="family" aria-labelledby="h-rewards">
       <h2 id="h-rewards"><span class="dot"></span><span data-i="rewardsTitle"></span></h2>
       <p class="summary" style="margin-top:-6px" data-i="rewardsHint"></p>
+      <div id="reward-kids"></div>
+      <h3 class="clean-h" style="margin-top:16px" data-i="msListTitle"></h3>
       <ul class="tasks" id="reward-list"></ul>
       <form id="reward-form" class="row" style="margin-top:10px">
         <div style="flex:2 1 180px"><label for="rw-title" data-i="rewardName"></label><input id="rw-title" maxlength="40" required></div>
-        <div class="narrow" style="flex:0 0 100px"><label for="rw-cost" data-i="rewardCost"></label><input id="rw-cost" type="number" min="1" max="500" value="10" required></div>
+        <div class="narrow" style="flex:0 0 150px"><label for="rw-cost" data-i="rewardCost"></label><input id="rw-cost" type="number" min="1" max="1000" value="10" required></div>
         <div class="narrow"><button class="btn" type="submit" data-i="add"></button></div>
       </form>
       <div id="redeem-log"></div>
@@ -865,6 +887,7 @@ ul.tasks li:first-child { border-top: 0; }
         <div id="k-date-row"><label for="k-date" data-i="kDate"></label><input id="k-date" type="date"></div>
         <div class="narrow" style="flex:0 0 120px"><label for="k-time" data-i="kTime"></label><input id="k-time" type="time"></div>
         <div class="narrow"><label for="k-min" data-i="minutes"></label><input id="k-min" type="number" min="1" max="600" value="15"></div>
+        <div class="narrow"><label for="k-stars" data-i="starsLabel"></label><input id="k-stars" type="number" min="0" max="10" value="1"></div>
         <div style="flex:1 1 100%"><label for="k-note" data-i="noteLabel"></label><input id="k-note" maxlength="200"></div>
         <div style="flex:1 1 100%"><label for="k-steps" data-i="stepsLabel"></label><textarea id="k-steps" rows="3" style="min-height:70px"></textarea></div>
         <div id="k-rot-row" style="flex:1 1 100%"><label data-i="rotLabel"></label><div class="chips" id="k-rot" style="margin:0"></div><p class="meta" style="margin:4px 0 0" data-i="rotHint"></p></div>
@@ -1010,7 +1033,10 @@ const T = {
     boardTitle: "Notice board", boardPost: "Post", boardPh: "Write a short message to everyone", boardEmpty: "No messages yet.",
     shareImg: "Share as image", histTitle: "The last weeks", histNone: "No ticked chores yet", histScore: "fairness {s}", histTable: "Show as table", histWeek: "Week",
     mealsTitle: "This week's dinners", mealsHint: "Write the dish and the ingredients, separated by commas.", mealsDish: "Dish", mealsIng: "Ingredients, e.g. tacos, mince, cheese", mealsToShop: "Add the ingredients to the shopping list", dinnerTile: "Dinner", mealsAdded: "{n} items added to the list", dinnerToday: "Dinner today: {d}",
-    rewardsTitle: "Rewards", rewardsHint: "Children spend their stars on these. You decide what they cost.", rewardName: "Reward", rewardCost: "Stars", rewardsNone: "No rewards yet. Add one below.", redeemBtn: "{r} ({c} ★)", redeemed: "Redeemed: {r}", redeemLog: "{m} redeemed {r} ({c} ★)", redeemTitle: "Recently redeemed",
+    rewardsTitle: "Stars and rewards", rewardsHint: "Children earn stars for their chores. You decide how many stars each chore gives (when you add or edit a chore) and how many stars each reward needs.", rewardName: "Reward", rewardCost: "Stars needed", rewardsNone: "No rewards yet. Add one below.",
+    starsLabel: "Stars ★", starPill: "{n} ★", msNext: "{left} more to {r}", msAllDone: "Every reward reached! Ask a parent for a new one.", msNoneKid: "Ask a parent to add rewards to collect stars for.", msNoneAdult: "Add rewards under Family to give the stars a goal.",
+    msReached: "{m} reached {c} ★: {r}", msGive: "Mark as given", msGivenToast: "{r} marked as given", msHit: "You reached {c} ★! Reward: {r}", msHitOther: "{m} reached {c} ★! Reward: {r}",
+    msReset: "Start {m}'s stars over", msResetDone: "{m}'s stars start again from 0", msGivenTitle: "Recently given", msGivenLog: "{m} got {r} ({c} ★)", msKidsTitle: "The children's stars", msListTitle: "Rewards", msGotIt: "given", msWaiting: "reached, waiting", redeemBtn: "{r} ({c} ★)", redeemed: "Redeemed: {r}", redeemLog: "{m} redeemed {r} ({c} ★)", redeemTitle: "Recently redeemed",
     noteLabel: "Note (optional)", stepsLabel: "Steps (optional, one per line)", stepsPill: "{n} steps",
     tplLabel: "Templates:", tplAdded: "Added {n} chores from the template",
     syncOffline: "Offline. Saves when you are back online.", mineTitle: "My own things", mineHint: "Only you can see these. They do not count as chores.", mineWhat: "What do you need to do?", mineEmpty: "Nothing for today.",
@@ -1115,7 +1141,10 @@ const T = {
     boardTitle: "Anslagstavla", boardPost: "Skicka", boardPh: "Skriv ett kort meddelande till alla", boardEmpty: "Inga meddelanden än.",
     shareImg: "Dela som bild", histTitle: "De senaste veckorna", histNone: "Inga avbockade sysslor än", histScore: "rättvisa {s}", histTable: "Visa som tabell", histWeek: "Vecka",
     mealsTitle: "Veckans middagar", mealsHint: "Skriv rätten och ingredienserna, separerade med komma.", mealsDish: "Rätt", mealsIng: "Ingredienser, t.ex. tacoskal, köttfärs, ost", mealsToShop: "Lägg ingredienserna i inköpslistan", dinnerTile: "Middag", mealsAdded: "{n} varor tillagda i listan", dinnerToday: "Middag idag: {d}",
-    rewardsTitle: "Belöningar", rewardsHint: "Barnen använder sina stjärnor på dessa. Ni bestämmer vad de kostar.", rewardName: "Belöning", rewardCost: "Stjärnor", rewardsNone: "Inga belöningar än. Lägg till en nedan.", redeemBtn: "{r} ({c} ★)", redeemed: "Inlöst: {r}", redeemLog: "{m} löste in {r} ({c} ★)", redeemTitle: "Senast inlöst",
+    rewardsTitle: "Stjärnor och belöningar", rewardsHint: "Barnen får stjärnor när de gör sina sysslor. Ni bestämmer hur många stjärnor varje syssla ger (när ni lägger till eller ändrar en syssla) och hur många stjärnor som behövs för varje belöning.", rewardName: "Belöning", rewardCost: "Stjärnor som behövs", rewardsNone: "Inga belöningar än. Lägg till en nedan.",
+    starsLabel: "Stjärnor ★", starPill: "{n} ★", msNext: "{left} kvar till {r}", msAllDone: "Alla belöningar är nådda! Fråga en förälder om en ny.", msNoneKid: "Fråga en förälder om belöningar att samla stjärnor till.", msNoneAdult: "Lägg till belöningar under Familj så får stjärnorna ett mål.",
+    msReached: "{m} har nått {c} ★: {r}", msGive: "Markera som given", msGivenToast: "{r} markerad som given", msHit: "Du har nått {c} ★! Belöning: {r}", msHitOther: "{m} har nått {c} ★! Belöning: {r}",
+    msReset: "Börja om {m}s stjärnor", msResetDone: "{m}s stjärnor börjar om från 0", msGivenTitle: "Senast givna", msGivenLog: "{m} fick {r} ({c} ★)", msKidsTitle: "Barnens stjärnor", msListTitle: "Belöningar", msGotIt: "given", msWaiting: "nådd, väntar", redeemBtn: "{r} ({c} ★)", redeemed: "Inlöst: {r}", redeemLog: "{m} löste in {r} ({c} ★)", redeemTitle: "Senast inlöst",
     noteLabel: "Anteckning (valfritt)", stepsLabel: "Delmoment (valfritt, ett per rad)", stepsPill: "{n} delmoment",
     tplLabel: "Mallar:", tplAdded: "La till {n} sysslor från mallen",
     syncOffline: "Offline. Sparas när nätet är tillbaka.", mineTitle: "Mina egna saker", mineHint: "Bara du ser dessa. De räknas inte som sysslor.", mineWhat: "Vad behöver du göra?", mineEmpty: "Inget för idag.",
@@ -1321,6 +1350,8 @@ function normalizeState(d) {
     doneLog: Array.isArray(d.doneLog) ? d.doneLog : [],
     rewards: Array.isArray(d.rewards) ? d.rewards : [],
     redeems: Array.isArray(d.redeems) ? d.redeems : [],
+    starResets: Array.isArray(d.starResets) ? d.starResets : [],
+    rewardsGiven: Array.isArray(d.rewardsGiven) ? d.rewardsGiven : [],
     board: Array.isArray(d.board) ? d.board : [],
     meals: d.meals && typeof d.meals === "object" && !Array.isArray(d.meals) ? d.meals : {},
     mealPrefs: typeof d.mealPrefs === "string" ? d.mealPrefs : "",
@@ -1354,6 +1385,8 @@ function mergeStates(base, local, remote) {
   out.doneLog = mergeById(bs.doneLog, local.doneLog, remote.doneLog);
   out.rewards = mergeById(bs.rewards, local.rewards, remote.rewards);
   out.redeems = mergeById(bs.redeems, local.redeems, remote.redeems);
+  out.starResets = mergeById(bs.starResets, local.starResets, remote.starResets);
+  out.rewardsGiven = mergeById(bs.rewardsGiven, local.rewardsGiven, remote.rewardsGiven);
   out.board = mergeById(bs.board, local.board, remote.board);
   out.meals = { ...(remote.meals || {}) };
   Object.keys(local.meals || {}).forEach(d => {
@@ -1659,7 +1692,7 @@ function renderTasks() {
         <div class="meta">
           <span class="owner" style="background:${color}">${m ? esc(m.name) : esc(t.unassigned)}</span>
           <span class="pill">${esc(t.cats[k.cat] || t.cats[6])}</span>
-          <span class="pill">${k.minutes} ${t.minLabel}</span>
+          <span class="pill">${k.minutes} ${t.minLabel}</span>${isKid(m) && starsOf(k) ? `<span class="pill star-pill">${esc(t.starPill.replace("{n}", starsOf(k)))}</span>` : ""}
           <span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span>${whenText(k) ? `<span class="pill">${esc(whenText(k))}</span>` : ""}${rotNames(k) ? `<span class="pill">${esc(t.rotPill.replace("{names}", rotNames(k)))}</span>` : ""}${(k.steps || []).length ? `<span class="pill">${esc(t.stepsPill.replace("{n}", k.steps.length))}</span>` : ""}${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}
         </div>
       </div>
@@ -1942,6 +1975,7 @@ function setEditMode(id) {
     document.getElementById("k-owner").value = k.owner;
     document.getElementById("k-cat").value = k.cat;
     document.getElementById("k-min").value = k.minutes;
+    document.getElementById("k-stars").value = starsOf(k);
     document.getElementById("k-freq").value = k.freq || "weekly";
     syncFreqFields();
     document.getElementById("k-date").value = k.date || "";
@@ -2022,6 +2056,7 @@ document.getElementById("task-form").onsubmit = e => {
     title, owner,
     cat: Number(document.getElementById("k-cat").value),
     minutes: Math.max(1, Number(document.getElementById("k-min").value) || 15),
+    stars: Math.max(0, Math.min(10, Math.round(Number(document.getElementById("k-stars").value)))) || 0,
     freq: document.getElementById("k-freq").value
   };
   const kd = document.getElementById("k-date").value, kt = document.getElementById("k-time").value, kw = document.getElementById("k-wday").value;
@@ -2302,9 +2337,8 @@ function renderToday() {
   st.innerHTML = bdays.map(x => `<div class="bday-line">🎂 ${esc(t.bdayToday.replace("{name}", x.name))}</div>`).join("");
   const din = (state.meals || {})[isoDay(new Date())];
   if (din && din.dish) st.innerHTML += `<p class="dinner-line">${esc(t.dinnerToday.replace("{d}", din.dish))}</p>`;
-  if (m && isKid(m)) { const n = starBalance(m.id); st.innerHTML += `<span class="stars">★ ${esc(n === 1 ? t.starsOne : t.starsN.replace("{n}", n))}</span>`; }
-  const rw = document.getElementById("today-rewards");
-  rw.innerHTML = m && isKid(m) && (state.rewards || []).length ? `<div class="rewards">${state.rewards.map(r => `<button type="button" data-redeem="${r.id}" data-for="${m.id}"${starBalance(m.id) < r.cost ? " disabled" : ""}>${esc(t.redeemBtn.replace("{r}", r.title).replace("{c}", r.cost))}</button>`).join("")}</div>` : "";
+  if (m && isKid(m)) st.innerHTML += starCard(m);
+  document.getElementById("today-rewards").innerHTML = "";
   const incoming = m ? (state.swaps || []).filter(w => w.to === m.id && state.tasks.some(k => k.id === w.task)) : [];
   document.getElementById("today-swaps").innerHTML = incoming.map(w => {
     const from = memberById(w.from), k = state.tasks.find(x => x.id === w.task);
@@ -2334,7 +2368,7 @@ function renderToday() {
     return `<li>
       <div class="check big${justDone === k.id ? " pop" : ""}" role="checkbox" tabindex="0" aria-checked="${k.done}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
       <div class="task-main"><div class="task-title ${k.done ? "done" : ""}"><span class="cat-ico" aria-hidden="true">${CAT_ICONS[k.cat] || CAT_ICONS[6]}</span>${esc(taskName(k))}</div>
-      <div class="meta">${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}${k.time ? `<span class="pill">${esc(t.atTime.replace("{t}", k.time))}</span>` : ""}<span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span><span class="pill">${k.minutes} ${t.minLabel}</span></div>${k.note ? `<div class="task-note">${esc(k.note)}</div>` : ""}${(k.steps || []).length ? `<div class="steps">${k.steps.map(x => `<label class="step${x.done ? " done" : ""}"><input type="checkbox" data-step="${k.id}|${x.id}"${x.done ? " checked" : ""}><span>${esc(x.text)}</span></label>`).join("")}</div>` : ""}${extra}</div>
+      <div class="meta">${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}${k.time ? `<span class="pill">${esc(t.atTime.replace("{t}", k.time))}</span>` : ""}<span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span><span class="pill">${k.minutes} ${t.minLabel}</span>${isKid(m) && starsOf(k) ? `<span class="pill star-pill">${esc(t.starPill.replace("{n}", starsOf(k)))}</span>` : ""}</div>${k.note ? `<div class="task-note">${esc(k.note)}</div>` : ""}${(k.steps || []).length ? `<div class="steps">${k.steps.map(x => `<label class="step${x.done ? " done" : ""}"><input type="checkbox" data-step="${k.id}|${x.id}"${x.done ? " checked" : ""}><span>${esc(x.text)}</span></label>`).join("")}</div>` : ""}${extra}</div>
     </li>`;
   }).join("");
 }
@@ -2642,9 +2676,14 @@ document.getElementById("del-account").onclick = async () => {
 /* ---------- Small comforts: undo, confetti, theme, birthdays, shop departments ---------- */
 const CAT_ICONS = ["🎒", "🍽️", "🏠", "🩺", "💰", "👋", "📦"];
 let justDone = null, undoFn = null, undoTimer = null;
+function showNote(msg) {
+  showUndo("", null, msg);
+  document.getElementById("toast-undo").hidden = true;
+}
 function showUndo(label, restore, msg) {
   const t = T[lang];
   undoFn = restore;
+  document.getElementById("toast-undo").hidden = !restore;
   document.getElementById("toast-text").textContent = msg || t.undone.replace("{x}", label);
   document.getElementById("toast").hidden = false;
   clearTimeout(undoTimer);
@@ -2657,7 +2696,7 @@ document.getElementById("toast-undo").onclick = () => {
 };
 function confetti() {
   if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const colors = ["#f4c542", "#d8434a", "#2e8a64", "#2f6fb3", "#ffffff"];
+  const colors = ["#ffd166", "#ff8a5c", "#7bdcb5", "#b9a6f2", "#8fc9f5", "#1b2340"];
   for (let i = 0; i < 36; i++) {
     const c = document.createElement("div");
     c.className = "confetti";
@@ -2937,24 +2976,76 @@ document.getElementById("ai-result").addEventListener("click", e => {
   if (e.target.id === "ai-again") aiPlanWeek();
 });
 
-/* ---------- Rewards ---------- */
-function starBalance(id) { return starCount(id) - (state.redeems || []).filter(r => r.m === id).reduce((a, r) => a + (Number(r.cost) || 0), 0); }
+/* ---------- Stars and rewards (milestones) ---------- */
+function starsOf(k) { const n = Number(k && k.stars); return k && k.stars !== undefined && k.stars !== null && isFinite(n) ? Math.max(0, Math.min(10, Math.round(n))) : 1; }
+function lastReset(id) { return (state.starResets || []).filter(x => x.m === id).reduce((a, x) => Math.max(a, Number(x.at) || 0), 0); }
+function starsEarned(id) {
+  const since = lastReset(id);
+  return (state.starLog || []).filter(e => e.m === id && (Number(e.at) || 0) > since)
+    .reduce((a, e) => a + (e.n === undefined || e.n === null ? 1 : Math.max(0, Math.min(10, Number(e.n) || 0))), 0);
+}
+function starBalance(id) { return starsEarned(id); }
+function milestones() { return (state.rewards || []).slice().sort((a, b) => (Number(a.cost) || 0) - (Number(b.cost) || 0)); }
+function givenFor(id, r) { const since = lastReset(id); return (state.rewardsGiven || []).some(g => g.m === id && g.r === r.id && (Number(g.at) || 0) > since); }
+function reachedFor(id) { const n = starsEarned(id); return milestones().filter(r => (Number(r.cost) || 0) <= n); }
+function starCard(m) {
+  const t = T[lang], n = starsEarned(m.id), ms = milestones();
+  const next = ms.find(r => (Number(r.cost) || 0) > n);
+  const prev = ms.filter(r => (Number(r.cost) || 0) <= n).pop();
+  const from = prev ? Number(prev.cost) || 0 : 0;
+  const count = esc(n === 1 ? t.starsOne : t.starsN).replace("{n}", `<b>${n}</b>`);
+  let html = `<div class="star-card"><p class="sc-count"><span class="sc-star" aria-hidden="true">★</span> ${count}</p>`;
+  if (!ms.length) html += `<p class="sc-next">${esc(isChild() ? t.msNoneKid : t.msNoneAdult)}</p>`;
+  else if (next) {
+    const pct = Math.round((n - from) / Math.max(1, (Number(next.cost) || 0) - from) * 100);
+    html += `<div class="bar sc-bar" role="img" aria-label="${esc(n + " / " + next.cost)}"><span style="width:${pct}%;background:var(--sun)"></span></div><p class="sc-next">${esc(t.msNext.replace("{left}", (Number(next.cost) || 0) - n + " ★").replace("{r}", next.title))}</p>`;
+  } else html += `<p class="sc-next">${esc(t.msAllDone)}</p>`;
+  if (ms.length) html += `<ul class="sc-list">${ms.map(r => {
+    const got = (Number(r.cost) || 0) <= n, given = got && givenFor(m.id, r);
+    return `<li class="${got ? "got" : ""}"><span class="sc-c">${r.cost} ★</span><span class="sc-t">${esc(r.title)}</span>${got ? `<span class="sc-s">${esc(given ? t.msGotIt : t.msWaiting)}</span>` : ""}${got && !given && !isChild() ? `<button type="button" class="ghost" data-give="${r.id}" data-for="${m.id}">${esc(t.msGive)}</button>` : ""}</li>`;
+  }).join("")}</ul>`;
+  return html + `</div>`;
+}
+function giveReward(mid, rid) {
+  if (isChild()) return;
+  const r = (state.rewards || []).find(x => x.id === rid), m = memberById(mid);
+  if (!r || !m || givenFor(mid, r)) return;
+  state.rewardsGiven = state.rewardsGiven || [];
+  const entry = { id: uid(), m: mid, r: rid, title: r.title, cost: r.cost, at: Date.now() };
+  state.rewardsGiven.push(entry);
+  showUndo(r.title, () => { state.rewardsGiven = state.rewardsGiven.filter(x => x.id !== entry.id); }, T[lang].msGivenToast.replace("{r}", r.title));
+  save(); renderAll();
+}
+function checkMilestone(mid, before) {
+  const after = starsEarned(mid);
+  if (after <= before) return;
+  const hit = milestones().filter(r => (Number(r.cost) || 0) > before && (Number(r.cost) || 0) <= after).pop();
+  if (!hit) return;
+  const t = T[lang], m = memberById(mid);
+  const own = isChild() && hh && hh.memberId === mid;
+  showNote((own ? t.msHit : t.msHitOther).replace("{m}", m ? m.name : "").replace("{c}", hit.cost).replace("{r}", hit.title));
+  confetti();
+}
 function renderRewards() {
   const t = T[lang];
-  const list = state.rewards || [];
+  const list = milestones();
   document.getElementById("reward-list").innerHTML = list.length
-    ? list.map(r => `<li><div class="task-main"><div class="task-title">${esc(r.title)}</div><div class="meta"><span class="pill">${r.cost} ★</span></div></div><button class="ghost" data-del-reward="${r.id}" aria-label="${esc(t.remove)}">✕</button></li>`).join("")
+    ? list.map(r => `<li><div class="task-main"><div class="task-title">${esc(r.title)}</div><div class="meta"><span class="pill star-pill">${r.cost} ★</span></div></div><button class="ghost" data-del-reward="${r.id}" aria-label="${esc(t.remove)}">✕</button></li>`).join("")
     : `<li class="empty">${esc(t.rewardsNone)}</li>`;
-  const log = (state.redeems || []).slice(-5).reverse();
+  const kids = state.members.filter(isKid);
+  document.getElementById("reward-kids").innerHTML = kids.length
+    ? `<h3 class="clean-h">${esc(t.msKidsTitle)}</h3>` + kids.map(m => `<div class="rk"><div class="rk-head"><span class="owner" style="background:${COLORS[m.color % COLORS.length]}">${esc(m.name)}</span></div>${starCard(m)}<button type="button" class="ghost rk-reset" data-star-reset="${m.id}">${esc(t.msReset.replace("{m}", m.name))}</button></div>`).join("")
+    : "";
+  const log = (state.rewardsGiven || []).slice(-5).reverse();
   document.getElementById("redeem-log").innerHTML = log.length
-    ? `<h3 class="clean-h" style="margin-top:16px">${esc(t.redeemTitle)}</h3>` + log.map(r => { const m = memberById(r.m); return `<p class="meta" style="margin:4px 0">${esc(t.redeemLog.replace("{m}", m ? m.name : "?").replace("{r}", r.title).replace("{c}", r.cost))}, ${esc(fmtDate(isoDay(new Date(r.at))))}</p>`; }).join("")
+    ? `<h3 class="clean-h" style="margin-top:16px">${esc(t.msGivenTitle)}</h3>` + log.map(g => { const m = memberById(g.m); return `<p class="meta" style="margin:4px 0">${esc(t.msGivenLog.replace("{m}", m ? m.name : "?").replace("{r}", g.title).replace("{c}", g.cost))}, ${esc(fmtDate(isoDay(new Date(g.at))))}</p>`; }).join("")
     : "";
 }
 document.getElementById("reward-form").onsubmit = e => {
   e.preventDefault();
   if (isChild()) return;
   const title = document.getElementById("rw-title").value.trim().slice(0, 40);
-  const cost = Math.max(1, Math.min(500, Number(document.getElementById("rw-cost").value) || 10));
+  const cost = Math.max(1, Math.min(1000, Math.round(Number(document.getElementById("rw-cost").value)) || 10));
   if (!title) return;
   state.rewards = state.rewards || [];
   state.rewards.push({ id: uid(), title, cost });
@@ -2969,20 +3060,20 @@ document.getElementById("reward-list").addEventListener("click", e => {
   if (gone) showUndo(gone.title, () => { state.rewards.splice(Math.min(idx, state.rewards.length), 0, gone); });
   save(); renderAll();
 });
-document.getElementById("today-rewards").addEventListener("click", e => {
-  const b = e.target.closest("[data-redeem]");
-  if (!b) return;
-  const r = (state.rewards || []).find(x => x.id === b.dataset.redeem), m = memberById(b.dataset.for);
-  if (!r || !m) return;
-  if (isChild() && m.id !== hh.memberId) return;
-  if (starBalance(m.id) < r.cost) return;
-  state.redeems = state.redeems || [];
-  const entry = { id: uid(), m: m.id, r: r.id, title: r.title, cost: r.cost, at: Date.now() };
-  state.redeems.push(entry);
-  showUndo(r.title, () => { state.redeems = state.redeems.filter(x => x.id !== entry.id); }, T[lang].redeemed.replace("{r}", r.title));
-  confetti();
-  save(); renderAll();
-});
+["today-stars", "reward-kids"].forEach(id => document.getElementById(id).addEventListener("click", e => {
+  const g = e.target.closest("[data-give]");
+  if (g) { giveReward(g.dataset.for, g.dataset.give); return; }
+  const rs = e.target.closest("[data-star-reset]");
+  if (rs && !isChild()) {
+    const m = memberById(rs.dataset.starReset);
+    if (!m) return;
+    state.starResets = state.starResets || [];
+    const entry = { id: uid(), m: m.id, at: Date.now() };
+    state.starResets.push(entry);
+    showUndo(m.name, () => { state.starResets = state.starResets.filter(x => x.id !== entry.id); }, T[lang].msResetDone.replace("{m}", m.name));
+    save(); renderAll();
+  }
+}));
 
 /* ---------- Steps on chores ---------- */
 document.getElementById("today-list").addEventListener("change", e => {
@@ -3199,7 +3290,11 @@ function toggleDone(k) {
   state.starLog = state.starLog || [];
   if (k.done) {
     k.doneAt = Date.now();
-    if (isKid(memberById(k.owner))) state.starLog.push({ id: uid(), m: k.owner, k: k.id, at: k.doneAt });
+    if (isKid(memberById(k.owner)) && starsOf(k) > 0) {
+      const before = starsEarned(k.owner);
+      state.starLog.push({ id: uid(), m: k.owner, k: k.id, at: k.doneAt, n: starsOf(k) });
+      checkMilestone(k.owner, before);
+    }
     const cutoff = Date.now() - 120 * 86400000;
     state.doneLog = (state.doneLog || []).filter(e => e.at >= cutoff);
     state.doneLog.push({ id: uid(), m: k.owner, k: k.id, at: k.doneAt, min: Number(k.minutes) || 0 });
