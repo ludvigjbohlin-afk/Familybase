@@ -2784,7 +2784,9 @@ const onMineClick = e => {
 });
 
 /* ---------- AI dinner planning (Supabase Edge Function "plan-meals") ---------- */
+const AI_ENABLED = false; // satt till true om AI-hjalpen ska anvandas igen (kraver Edge Function + nyckel)
 let aiPlan = null, aiBusy = false;
+if (!AI_ENABLED) document.querySelector(".ai-box").style.display = "none";
 function aiErrorText(code) {
   const t = T[lang];
   return { not_setup: t.aiNotSetup, limit: t.aiLimit, not_allowed: t.aiNotAllowed, no_credit: t.aiNoCredit, bad_key: t.aiBadKey, net: t.aiNet }[code] || t.aiError;
@@ -2800,7 +2802,7 @@ function renderAiResult() {
     + `<p class="ai-warn">${esc(t.aiWarn)}</p><div class="ai-actions"><button class="btn" type="button" id="ai-use">${esc(t.aiUse)}</button><button class="ghost" type="button" id="ai-again">${esc(t.aiAgain)}</button></div>`;
 }
 async function aiPlanWeek() {
-  if (aiBusy || isChild() || LOCAL_MODE || !state) return;
+  if (!AI_ENABLED || aiBusy || isChild() || LOCAL_MODE || !state) return;
   const t = T[lang], status = document.getElementById("ai-status");
   const prefs = document.getElementById("ai-prefs").value.trim().slice(0, 600);
   if (prefs !== (state.mealPrefs || "")) { state.mealPrefs = prefs; save(); }
