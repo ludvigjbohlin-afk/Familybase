@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Household Balance</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#1f5a47">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<meta name="theme-color" content="#fff4ea">
+<link rel="preload" href="fonts/bricolage.woff" as="font" type="font/woff" crossorigin>
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,43 +16,51 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root {
-  /* Kakel (tile), gran (spruce), lingon, sol */
-  --bg: #e6eeea;
+  /* Färgglad: grädde, marin, korall, sol, mint */
+  --bg: #fff4ea;
   --surface: #ffffff;
-  --tint: #edf3f0;
-  --field: #f7faf9;
-  --ink: #183a31;
-  --muted: #587168;
-  --line: #d6e2dc;
-  --line-strong: #b9cbc3;
-  --primary: #1f6b52;
-  --spruce: #1f5a47;
-  --lingon: #d8434a;
-  --sun: #f4c542;
-  --accent: #d8434a;
-  --a: #2f6fb3;
-  --b: #d8434a;
-  --c: #2e8a64;
+  --tint: #ffe9d6;
+  --field: #ffffff;
+  --ink: #1b2340;
+  --navy: #1b2340;
+  --muted: #5a6283;
+  --line: #f0dfcf;
+  --line-strong: #7b819b;
+  --edge: #1b2340;
+  --primary: #1b2340;
+  --on-primary: #fff4ea;
+  --spruce: #1b2340;
+  --lingon: #c2410c;
+  --danger: #c2410c;
+  --sun: #ffd166;
+  --mint: #7bdcb5;
+  --coral: #ff8a5c;
+  --accent: #ff8a5c;
+  --a: #8fc9f5;
+  --b: #ff8a5c;
+  --c: #7bdcb5;
   --radius: 22px;
   --shadow: none;
-  --m0: #2f6fb3; --m1: #d8434a; --m2: #2e8a64; --m3: #8a5ba8; --m4: #c47a12; --m5: #1592a8;
-  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
-  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --m0: #ffd166; --m1: #7bdcb5; --m2: #ff8a5c; --m3: #b9a6f2; --m4: #8fc9f5; --m5: #f7a8c8;
+  --display: "Bricolage", "Avenir Next Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Atkinson", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #17302a; --surface: #1f3b33; --tint: #26463d; --field: #1b352e; --ink: #eaf2ee; --muted: #9db5ab;
-    --line: #2e5047; --line-strong: #3f6559; --primary: #6cc3a0; --spruce: #2a5f4d; --lingon: #ff6b5e; --sun: #f4c542;
-    --accent: #ff6b5e; --a: #7fb2e6; --b: #ff7f73; --c: #6cc3a0;
-    --m0: #4f8fd8; --m1: #e85a50; --m2: #35a37a; --m3: #9f72c9; --m4: #c9801a; --m5: #22a2b7;
+    --bg: #141a30; --surface: #1e2645; --tint: #28315a; --field: #1a2140; --ink: #f6efe6; --muted: #a3abc9;
+    --line: #2e3863; --line-strong: #8a93bd; --edge: #3d4878; --primary: #ff8a5c; --on-primary: #1b2340;
+    --lingon: #ff9a73; --danger: #ff9a73;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #17302a; --surface: #1f3b33; --tint: #26463d; --field: #1b352e; --ink: #eaf2ee; --muted: #9db5ab;
-  --line: #2e5047; --line-strong: #3f6559; --primary: #6cc3a0; --spruce: #2a5f4d; --lingon: #ff6b5e; --sun: #f4c542;
-  --accent: #ff6b5e; --a: #7fb2e6; --b: #ff7f73; --c: #6cc3a0;
-  --m0: #4f8fd8; --m1: #e85a50; --m2: #35a37a; --m3: #9f72c9; --m4: #c9801a; --m5: #22a2b7;
+  --bg: #141a30; --surface: #1e2645; --tint: #28315a; --field: #1a2140; --ink: #f6efe6; --muted: #a3abc9;
+  --line: #2e3863; --line-strong: #8a93bd; --edge: #3d4878; --primary: #ff8a5c; --on-primary: #1b2340;
+  --lingon: #ff9a73; --danger: #ff9a73;
 }
+@font-face { font-family: "Bricolage"; src: url("fonts/bricolage.woff") format("woff"); font-weight: 500 800; font-stretch: 75% 100%; font-display: swap; }
+@font-face { font-family: "Atkinson"; src: url("fonts/atkinson-regular.woff") format("woff"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Atkinson"; src: url("fonts/atkinson-bold.woff") format("woff"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Atkinson"; src: url("fonts/atkinson-italic.woff") format("woff"); font-weight: 400; font-style: italic; font-display: swap; }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
@@ -396,74 +402,127 @@ html.big-text { font-size: 118.75%; }
 .hh-row .grow { flex: 1; min-width: 140px; font-weight: 600; }
 .hh-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
-/* ===== Theme: gran, lingon och sol ===== */
+/* ===== Tema: Färgglad ===== */
 body { font-family: var(--body); font-size: 17px; line-height: 1.55; }
-h1, .card h2, .login-card h2, .setup h2 { font-family: var(--display); font-optical-sizing: auto; }
-h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -.025em; }
-.sub { font-size: .92rem; max-width: 34ch; }
-.card { border: 0; box-shadow: none; border-radius: var(--radius); padding: 22px; }
-.card h2 { font-size: 1.35rem; font-weight: 800; letter-spacing: -.015em; margin: 0 0 14px; }
+h1, .card h2, .login-card h2, .setup h2, .kicker-big { font-family: var(--display); }
+h1 { font-size: 1.15rem; font-weight: 800; font-stretch: 90%; letter-spacing: -.01em; }
+header { align-items: center; margin-bottom: 18px; }
+.sub { display: none; }
+.card { background: var(--surface); border: 2px solid var(--edge); box-shadow: none; border-radius: var(--radius); padding: 20px; }
+.card h2 { font-size: 1.7rem; line-height: 1.05; font-weight: 800; font-stretch: 80%; letter-spacing: -.02em; margin: 0 0 14px; }
 .card h2 .dot { display: none; }
-.clean-h, .set-block h3 { font-family: var(--body); font-weight: 700; }
-label { color: var(--muted); font-size: .88rem; }
-input, select, textarea { background: var(--field); border: 1.5px solid var(--line-strong); border-radius: 12px; padding: 11px 13px; }
-input:focus, select:focus, textarea:focus, button:focus-visible, .check:focus-visible, summary:focus-visible { outline: 3px solid color-mix(in srgb, var(--primary) 45%, transparent); outline-offset: 2px; }
-button.btn { background: var(--primary); border-radius: 14px; padding: 12px 18px; font-weight: 700; letter-spacing: .005em; }
-:root:not([data-theme="light"]) button.btn { color: #fff; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) button.btn { color: #0e2a22; } }
-button.ghost { background: var(--tint); border: 0; color: var(--ink); border-radius: 10px; padding: 6px 12px; font-size: .85rem; font-weight: 700; }
-button.ghost:hover { background: var(--line); }
-button.ghost.danger { color: var(--lingon); background: color-mix(in srgb, var(--lingon) 12%, transparent); border: 0; }
-.pill { background: var(--tint); border: 0; border-radius: 6px; padding: 1px 8px; }
-.owner { border-radius: 6px; }
-.check { border-radius: 8px; border: 2px solid var(--line-strong); background: var(--field); }
-.check[aria-checked="true"] { background: var(--primary); border-color: var(--primary); }
-ul.tasks li { border-top: 1px solid var(--line); }
-.bar { background: var(--tint); border: 0; height: 12px; }
-.gear { border: 0; background: var(--surface); }
-.gear:hover { color: var(--primary); }
-.chip { background: var(--surface); border: 1.5px solid var(--line-strong); }
-.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface); }
-.add-panel { background: var(--tint); border: 0; border-radius: 16px; }
-.add-panel input { background: var(--surface); }
-.suggest { background: color-mix(in srgb, var(--sun) 30%, transparent); border-radius: 14px; }
-.banner { background: color-mix(in srgb, var(--c) 18%, transparent); border-radius: 14px; }
-.invite-note { background: color-mix(in srgb, var(--sun) 35%, transparent); border-radius: 12px; }
-.setup .card.invited { border: 3px solid var(--sun); }
-.code { font-family: var(--body); font-weight: 700; letter-spacing: .12em; background: var(--tint); border: 0; }
-.badge-fair { border-radius: 6px; }
+.clean-h, .set-block h3, .hist h3 { font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: 1.15rem; }
+label { color: var(--muted); font-size: .88rem; font-weight: 700; }
+input, select, textarea { background: var(--field); color: var(--ink); border: 2px solid var(--line-strong); border-radius: 14px; padding: 11px 13px; }
+input:focus, select:focus, textarea:focus { border-color: var(--ink); }
+input:focus, select:focus, textarea:focus, button:focus-visible, .check:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+button.btn { background: var(--primary); color: var(--on-primary); border-radius: 14px; padding: 12px 18px; font-family: var(--display); font-weight: 800; font-size: 1rem; letter-spacing: .005em; }
+button.btn:hover { filter: none; transform: translateY(-1px); }
+button.ghost { background: transparent; border: 2px solid var(--edge); color: var(--ink); border-radius: 12px; padding: 5px 12px; font-size: .85rem; font-weight: 700; }
+button.ghost:hover { background: var(--tint); }
+button.ghost.danger { color: var(--danger); border-color: currentColor; background: transparent; }
+.pill { background: var(--tint); color: var(--ink); border: 0; border-radius: 999px; padding: 1px 9px; font-weight: 700; font-size: .78rem; }
+.pill.late { background: var(--coral); color: var(--navy); }
+.pill.dept { background: transparent; border: 1.5px solid var(--line-strong); }
+.owner { border-radius: 999px; color: var(--navy); font-family: var(--display); font-weight: 800; padding: 2px 10px; }
+.meta { color: var(--muted); }
+.check { border-radius: 9px; border: 2.5px solid var(--ink); background: var(--field); color: var(--navy); font-weight: 800; }
+.check[aria-checked="true"] { background: var(--mint); border-color: var(--ink); color: var(--navy); }
+.check.big { border-radius: 10px; width: 30px; height: 30px; flex: 0 0 30px; font-size: 16px; }
+ul.tasks li { border-top: 2px dashed var(--line); }
+ul.tasks li:first-child { border-top: 0; }
+.task-title.done { color: var(--muted); }
+.bar { background: var(--tint); border: 2px solid var(--edge); height: 16px; }
+.bar span { border-right: 2px solid var(--edge); }
+.bar span[style*="width:0%"] { border-right: 0; }
+.score-ring { background: conic-gradient(var(--mint) calc(var(--p) * 1%), var(--tint) 0); border: 2px solid var(--edge); }
+.score-ring span { border: 2px solid var(--edge); font-family: var(--display); font-stretch: 80%; }
+.swatch, .hist-legend i, .cal-item .bar-dot { box-shadow: 0 0 0 1.5px var(--edge); }
+.hist-bar span { box-shadow: inset 0 0 0 1.5px var(--edge); }
+.gear { border: 2px solid var(--edge); background: var(--surface); }
+.gear:hover { background: var(--tint); color: var(--ink); }
+.chip { background: var(--surface); border: 2px solid var(--edge); border-radius: 999px; font-weight: 700; color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.add-panel { background: var(--tint); border: 0; border-radius: 18px; }
+.add-panel input, .add-panel select { background: var(--field); }
+.suggest { background: var(--sun); color: var(--navy); border: 2px solid var(--navy); border-radius: 16px; }
+.suggest .ghost { color: var(--navy); border-color: var(--navy); }
+.banner { background: var(--mint); color: var(--navy); border-radius: 14px; }
+.invite-note { background: var(--sun); color: var(--navy); border-radius: 14px; }
+.setup .card.invited { border: 3px solid var(--coral); }
+.code { font-family: var(--display); font-weight: 800; letter-spacing: .12em; background: var(--tint); border: 0; border-radius: 10px; }
+.badge-fair { border-radius: 999px; font-weight: 700; }
+.set-msg { color: var(--ink); }
+.set-msg.err, #auth-err, #setup-err { color: var(--danger); }
+.cal-day.today h3 { color: var(--ink); }
+.cal-day .tag { background: var(--coral); color: var(--navy); border-radius: 999px; font-weight: 700; }
+.meal-row .day.today { color: var(--ink); text-decoration: underline 3px var(--coral); text-underline-offset: 4px; }
+.rep-task { background: var(--tint); border-radius: 999px; }
+.rep-task.done { background: var(--mint); color: var(--navy); }
+.rep-task.late { background: var(--coral); color: var(--navy); }
+.stars { background: var(--sun); color: var(--navy); border: 2px solid var(--navy); }
+.star-mini { color: var(--ink); }
+.task-note { color: var(--muted); }
+.step input { accent-color: var(--coral); }
+.toast { background: var(--navy); color: #fff4ea; border-radius: 18px; border: 2px solid #fff4ea33; }
+.toast button { background: var(--coral); color: var(--navy); border-radius: 12px; }
 
-/* Välkommen: platt sol-gul lapp */
-.welcome { background: var(--sun); color: #2b2a12; }
-.welcome h2 { color: #2b2a12; }
+/* Välkommen: sol-gul ruta */
+.welcome { background: var(--sun); color: var(--navy); border-color: var(--navy); }
+.welcome h2 { color: var(--navy); }
 .welcome p { opacity: 1; }
-.welcome button { background: #2b2a12; color: var(--sun); border-radius: 12px; }
+.welcome button { background: var(--navy); color: var(--sun); border-radius: 14px; }
 
-/* Idag: den enda mörka ytan, appens hjärta */
-#sec-today { background: var(--spruce); color: #fff; padding: 26px 22px 18px; }
-#sec-today h2 { font-size: clamp(2rem, 8vw, 2.8rem); line-height: 1.02; letter-spacing: -.035em; margin-bottom: 18px; color: #fff; }
-#sec-today .chip { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
-#sec-today .chip[aria-pressed="true"] { background: #fff; color: var(--spruce); border-color: #fff; }
-#sec-today .bar-head { color: #d9ebe3; }
-#sec-today .bar { background: rgba(255,255,255,.16); }
-#sec-today .bar span { background: var(--sun) !important; }
-#sec-today .summary, #sec-today .hint { color: #cfe3da; }
-#sec-today ul.tasks li { border-top-color: rgba(255,255,255,.14); }
-#sec-today .task-title { color: #fff; }
-#sec-today .task-title.done { color: rgba(255,255,255,.55); }
-#sec-today .pill { background: rgba(255,255,255,.12); color: #d9ebe3; }
-#sec-today .check.big { border: 2.5px solid rgba(255,255,255,.6); background: transparent; color: #183a31; }
-#sec-today .check.big[aria-checked="true"] { background: var(--sun); border-color: var(--sun); }
-#sec-today .btn { background: var(--sun); color: #2b2a12; }
-.check.big { border-radius: 50%; }
+/* Idag: stor rubrik direkt på bakgrunden, färgrutor per person, listan i en ram */
+#sec-today { background: none; border: 0; padding: 0; color: var(--ink); }
+#sec-today h2 { font-size: clamp(2.5rem, 12vw, 3.4rem); line-height: .95; font-stretch: 75%; letter-spacing: -.03em; margin: 0 0 16px; }
+.kicker { font-family: var(--display); font-weight: 700; font-size: .95rem; color: var(--muted); margin: 0 0 4px; }
+.kicker::first-letter { text-transform: uppercase; }
+#today-who.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0 0 14px; }
+@media (min-width: 640px) { #today-who.tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.tile { border: 2px solid transparent; border-radius: 20px; padding: 12px 14px; min-height: 92px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; text-align: left; font: inherit; color: var(--navy); cursor: pointer; }
+.tile b { font-family: var(--display); font-weight: 800; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.tile .n { font-family: var(--display); font-weight: 800; font-stretch: 75%; font-size: 2.2rem; line-height: 1; }
+.tile.chip[aria-pressed="true"] { color: var(--navy); border-color: var(--navy); box-shadow: 4px 4px 0 var(--navy); transform: translate(-2px, -2px); }
+:root[data-theme="dark"] .tile.chip[aria-pressed="true"] { border-color: #fff4ea; box-shadow: 4px 4px 0 #fff4ea; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tile.chip[aria-pressed="true"] { border-color: #fff4ea; box-shadow: 4px 4px 0 #fff4ea; } }
+.tile.dinner { background: var(--navy); color: #fff4ea; cursor: default; }
+:root[data-theme="dark"] .tile.dinner { background: var(--surface); border-color: var(--edge); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tile.dinner { background: var(--surface); border-color: var(--edge); } }
+.tile.dinner .n { font-size: 1.35rem; font-stretch: 85%; line-height: 1.1; word-break: break-word; }
+.dinner-line { display: none; color: var(--muted); margin: -6px 0 14px; font-weight: 700; }
+.role-child .dinner-line { display: block; }
+#sec-today .bar-head { color: var(--muted); font-weight: 700; }
+#today-list { background: var(--surface); border: 2px solid var(--edge); border-radius: 22px; padding: 2px 16px; }
+#sec-today .task-title { color: var(--ink); }
+.cat-ico { display: none; }
+.role-child .cat-ico { display: inline; }
+.bday-line { background: var(--m5); color: var(--navy); border-radius: 16px; padding: 10px 14px; margin-bottom: 12px; font-weight: 700; }
+.swap-banner { background: var(--sun); color: var(--navy); border: 2px solid var(--navy); border-radius: 18px; }
+.swap-banner .yes { background: var(--navy); color: var(--sun); }
+.swap-banner .no { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
+#sec-today .swap-ask { background: transparent; color: var(--ink); border: 2px solid var(--edge); border-radius: 10px; font-weight: 700; }
+#sec-today .swap-pick button { background: var(--surface); color: var(--ink); border: 2px solid var(--edge); border-radius: 10px; }
+#sec-today .swap-pick button.cancel { background: transparent; color: var(--muted); border-color: var(--line-strong); }
+#sec-today .meta[style] { color: var(--muted) !important; }
+.swap-wait { color: var(--muted); font-weight: 700; }
+.rewards button { background: var(--surface); color: var(--ink); border: 2px solid var(--edge); border-radius: 999px; font-weight: 700; }
 
-/* Inloggning: granbakgrund med namnet stort */
-#login { background: var(--spruce); }
+/* Anslagstavlan: färgade lappar */
+#board-list { display: grid; gap: 10px; }
+#board-list li { border: 0; border-radius: 18px; padding: 12px 14px; background: var(--tint); color: var(--navy); }
+#board-list li .meta { color: var(--navy); opacity: .75; }
+#board-list li.empty { background: none; padding: 6px 0; color: var(--muted); }
+#board-list li .ghost { border-color: var(--navy); color: var(--navy); }
+
+/* Inloggning */
+#login { background: var(--bg); }
 .login-stack { width: 100%; max-width: 400px; }
-.login-brand { margin: 0 0 18px; color: #fff; }
-.login-brand span { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(2.3rem, 10vw, 3rem); line-height: 1; letter-spacing: -.035em; }
-.login-brand small { display: block; margin-top: 10px; font-size: 1rem; color: #cfe3da; max-width: 30ch; }
+.login-brand { margin: 0 0 18px; color: var(--ink); }
+.login-brand span { display: block; font-family: var(--display); font-weight: 800; font-stretch: 75%; font-size: clamp(2.8rem, 13vw, 3.6rem); line-height: .95; letter-spacing: -.03em; }
+.login-brand small { display: block; margin-top: 10px; font-size: 1rem; color: var(--muted); max-width: 30ch; }
 .login-card { max-width: none; }
+.login-card h2, .setup h2 { font-size: 1.8rem; font-weight: 800; font-stretch: 80%; letter-spacing: -.02em; }
 
 /* Sysslelistan: knapparna staplas i egen kolumn så titeln får plats */
 #tasks li { display: grid; grid-template-columns: auto 1fr auto; column-gap: 12px; row-gap: 6px; align-items: start; }
@@ -472,15 +531,19 @@ ul.tasks li { border-top: 1px solid var(--line); }
 #tasks li > [data-edit] { grid-column: 3; grid-row: 1; }
 #tasks li > [data-delete] { grid-column: 3; grid-row: 2; }
 #tasks li.empty { display: block; }
+#tasks li > [data-delete] { border-color: transparent; color: var(--muted); }
 
-/* Menyn: lingonstreck över aktiv flik */
-.tabbar { border-top: 1px solid var(--line); }
-.tabbar button { position: relative; border-radius: 0; padding-top: 9px; }
-.tabbar button[aria-current="page"] { background: none; color: var(--ink); }
-.tabbar button[aria-current="page"]::before { content: ""; position: absolute; top: -7px; left: 50%; width: 28px; height: 4px; margin-left: -14px; border-radius: 0 0 4px 4px; background: var(--lingon); }
-.tabbar button span { font-size: .74rem; }
-
-.login-card h2, .setup h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.02em; }
+/* Menyn: svävande marinblå list med korallfärgad aktiv flik */
+.wrap { padding-bottom: 130px; }
+.tabbar { left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); background: var(--navy); border: 0; border-radius: 24px; padding: 7px; }
+:root[data-theme="dark"] .tabbar { background: #0c1022; box-shadow: 0 0 0 2px var(--edge); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tabbar { background: #0c1022; box-shadow: 0 0 0 2px var(--edge); } }
+.tabbar-in { gap: 2px; }
+.tabbar button { color: #c5cbe6; border-radius: 17px; padding: 7px 2px 6px; font-weight: 700; }
+.tabbar button[aria-current="page"] { background: var(--coral); color: var(--navy); font-weight: 800; }
+.tabbar button span { font-size: .72rem; }
+.tabbar svg { width: 22px; height: 22px; stroke-width: 2.1; }
+.toast { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 </head>
@@ -574,11 +637,12 @@ ul.tasks li { border-top: 1px solid var(--line); }
 
   <div class="grid">
     <section class="card full" id="sec-today" data-view="today" aria-labelledby="h-today">
+      <p class="kicker" id="today-date"></p>
       <h2 id="h-today"><span class="dot"></span><span id="today-hi"></span></h2>
       <div id="today-stars"></div>
       <div id="today-swaps"></div>
       <div id="today-rewards"></div>
-      <div id="today-who" class="chips adult-only"></div>
+      <div id="today-who" class="tiles adult-only"></div>
       <div id="today-progress"></div>
       <ul class="tasks big" id="today-list"></ul>
     </section>
@@ -945,7 +1009,7 @@ const T = {
     depts: ["Fruit and veg", "Dairy", "Bread", "Meat and fish", "Pantry", "Frozen", "Household", "Baby and kids", "Other"],
     boardTitle: "Notice board", boardPost: "Post", boardPh: "Write a short message to everyone", boardEmpty: "No messages yet.",
     shareImg: "Share as image", histTitle: "The last weeks", histNone: "No ticked chores yet", histScore: "fairness {s}", histTable: "Show as table", histWeek: "Week",
-    mealsTitle: "This week's dinners", mealsHint: "Write the dish and the ingredients, separated by commas.", mealsDish: "Dish", mealsIng: "Ingredients, e.g. tacos, mince, cheese", mealsToShop: "Add the ingredients to the shopping list", mealsAdded: "{n} items added to the list", dinnerToday: "Dinner today: {d}",
+    mealsTitle: "This week's dinners", mealsHint: "Write the dish and the ingredients, separated by commas.", mealsDish: "Dish", mealsIng: "Ingredients, e.g. tacos, mince, cheese", mealsToShop: "Add the ingredients to the shopping list", dinnerTile: "Dinner", mealsAdded: "{n} items added to the list", dinnerToday: "Dinner today: {d}",
     rewardsTitle: "Rewards", rewardsHint: "Children spend their stars on these. You decide what they cost.", rewardName: "Reward", rewardCost: "Stars", rewardsNone: "No rewards yet. Add one below.", redeemBtn: "{r} ({c} ★)", redeemed: "Redeemed: {r}", redeemLog: "{m} redeemed {r} ({c} ★)", redeemTitle: "Recently redeemed",
     noteLabel: "Note (optional)", stepsLabel: "Steps (optional, one per line)", stepsPill: "{n} steps",
     tplLabel: "Templates:", tplAdded: "Added {n} chores from the template",
@@ -1050,7 +1114,7 @@ const T = {
     depts: ["Frukt och grönt", "Mejeri", "Bröd", "Kött och fisk", "Skafferi", "Fryst", "Hushåll", "Barn", "Övrigt"],
     boardTitle: "Anslagstavla", boardPost: "Skicka", boardPh: "Skriv ett kort meddelande till alla", boardEmpty: "Inga meddelanden än.",
     shareImg: "Dela som bild", histTitle: "De senaste veckorna", histNone: "Inga avbockade sysslor än", histScore: "rättvisa {s}", histTable: "Visa som tabell", histWeek: "Vecka",
-    mealsTitle: "Veckans middagar", mealsHint: "Skriv rätten och ingredienserna, separerade med komma.", mealsDish: "Rätt", mealsIng: "Ingredienser, t.ex. tacoskal, köttfärs, ost", mealsToShop: "Lägg ingredienserna i inköpslistan", mealsAdded: "{n} varor tillagda i listan", dinnerToday: "Middag idag: {d}",
+    mealsTitle: "Veckans middagar", mealsHint: "Skriv rätten och ingredienserna, separerade med komma.", mealsDish: "Rätt", mealsIng: "Ingredienser, t.ex. tacoskal, köttfärs, ost", mealsToShop: "Lägg ingredienserna i inköpslistan", dinnerTile: "Middag", mealsAdded: "{n} varor tillagda i listan", dinnerToday: "Middag idag: {d}",
     rewardsTitle: "Belöningar", rewardsHint: "Barnen använder sina stjärnor på dessa. Ni bestämmer vad de kostar.", rewardName: "Belöning", rewardCost: "Stjärnor", rewardsNone: "Inga belöningar än. Lägg till en nedan.", redeemBtn: "{r} ({c} ★)", redeemed: "Inlöst: {r}", redeemLog: "{m} löste in {r} ({c} ★)", redeemTitle: "Senast inlöst",
     noteLabel: "Anteckning (valfritt)", stepsLabel: "Delmoment (valfritt, ett per rad)", stepsPill: "{n} delmoment",
     tplLabel: "Mallar:", tplAdded: "La till {n} sysslor från mallen",
@@ -2221,9 +2285,16 @@ function renderToday() {
   const pid = todayPerson();
   const m = pid ? memberById(pid) : null;
   const who = document.getElementById("today-who");
-  who.innerHTML = state.members.length > 1
-    ? state.members.map(x => `<button type="button" class="chip" data-today-who="${x.id}" aria-pressed="${x.id === pid}">${esc(x.name)}</button>`).join("")
-    : "";
+  const din0 = (state.meals || {})[isoDay(new Date())];
+  const tileFor = x => {
+    const list = state.tasks.filter(k => k.owner === x.id && dueStatus(k) !== "later");
+    const bg = COLORS[x.color % COLORS.length];
+    return `<button type="button" class="chip tile" style="background:${bg}" data-today-who="${x.id}" aria-pressed="${x.id === pid}"><b>${esc(x.name)}</b><span class="n" aria-label="${esc(t.progressText.replace("{done}", list.filter(k => k.done).length).replace("{total}", list.length))}">${list.filter(k => k.done).length}/${list.length}</span></button>`;
+  };
+  who.innerHTML = (state.members.length > 1 ? state.members.map(tileFor).join("") : "")
+    + (din0 && din0.dish ? `<div class="tile dinner"><b>${esc(t.dinnerTile)}</b><span class="n">${esc(din0.dish)}</span></div>` : "");
+  const dd = new Date().toLocaleDateString(lang === "sv" ? "sv-SE" : "en-GB", { weekday: "long", day: "numeric", month: "long" });
+  document.getElementById("today-date").textContent = dd;
   const own = !LOCAL_MODE && hh && pid === hh.memberId;
   document.getElementById("today-hi").textContent = m ? (own ? t.todayHi : t.todayFor).replace("{name}", m.name) : t.tabToday;
   const bdays = state.members.filter(x => x.birthday && x.birthday.slice(5) === isoDay(new Date()).slice(5));
@@ -2977,7 +3048,7 @@ function renderBoard() {
   const items = (state.board || []).slice().sort((a, b) => b.at - a.at);
   const me = boardAuthor();
   document.getElementById("board-list").innerHTML = items.length
-    ? items.map(x => { const m = memberById(x.by); const mine = x.by === me; return `<li><span class="swatch" style="background:${m ? COLORS[m.color % COLORS.length] : "var(--line-strong)"};flex:none"></span><div class="task-main"><div class="task-title" style="font-weight:500">${esc(x.text)}</div><div class="meta">${esc(m ? m.name : "?")}, ${esc(fmtDate(isoDay(new Date(x.at))))}</div></div>${mine || !isChild() ? `<button class="ghost" data-del-note="${x.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}</li>`; }).join("")
+    ? items.map(x => { const m = memberById(x.by); const mine = x.by === me; return `<li style="background:${m ? COLORS[m.color % COLORS.length] : "var(--sun)"}"><div class="task-main"><div class="task-title" style="font-weight:500">${esc(x.text)}</div><div class="meta">${esc(m ? m.name : "?")}, ${esc(fmtDate(isoDay(new Date(x.at))))}</div></div>${mine || !isChild() ? `<button class="ghost" data-del-note="${x.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}</li>`; }).join("")
     : `<li class="empty">${esc(t.boardEmpty)}</li>`;
 }
 document.getElementById("board-form").onsubmit = e => {
@@ -3078,25 +3149,25 @@ function summaryCanvas() {
   c.width = 1080; c.height = 1350;
   const g = c.getContext("2d");
   const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  g.fillStyle = "#1f5a47"; g.fillRect(0, 0, c.width, c.height);
-  const disp = '"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif', body = '"Atkinson Hyperlegible", system-ui, sans-serif';
-  g.fillStyle = "#ffffff"; g.font = `800 84px ${disp}`; g.fillText(t.title, 80, 170);
-  g.fillStyle = "#cfe3da"; g.font = `400 40px ${body}`; g.fillText(t.weekN.replace("{n}", isoWeek(new Date()).week) + (hh && hh.name ? ", " + hh.name : ""), 80, 235);
+  g.fillStyle = "#1b2340"; g.fillRect(0, 0, c.width, c.height);
+  const disp = '"Bricolage", "Avenir Next Condensed", system-ui, sans-serif', body = '"Atkinson", system-ui, sans-serif';
+  g.fillStyle = "#fff4ea"; g.font = `800 84px ${disp}`; g.fillText(t.title, 80, 170);
+  g.fillStyle = "#c5cbe6"; g.font = `400 40px ${body}`; g.fillText(t.weekN.replace("{n}", isoWeek(new Date()).week) + (hh && hh.name ? ", " + hh.name : ""), 80, 235);
   const totals = state.members.map(m => ({ m, mins: state.tasks.filter(k => k.owner === m.id).reduce((s, k) => s + weeklyMins(k), 0) }));
   const total = totals.reduce((s, x) => s + x.mins, 0) || 1;
   let y = 340;
   totals.slice(0, 6).forEach(({ m, mins }) => {
     const pct = Math.round(mins / total * 100);
-    g.fillStyle = "#ffffff"; g.font = `700 44px ${body}`; g.fillText(m.name, 80, y);
-    g.fillStyle = "#d9ebe3"; g.font = `400 36px ${body}`; const txt = pct + "%"; g.fillText(txt, 1000 - g.measureText(txt).width, y);
-    g.fillStyle = "rgba(255,255,255,.16)"; g.fillRect(80, y + 22, 920, 26);
+    g.fillStyle = "#fff4ea"; g.font = `700 44px ${body}`; g.fillText(m.name, 80, y);
+    g.fillStyle = "#c5cbe6"; g.font = `400 36px ${body}`; const txt = pct + "%"; g.fillText(txt, 1000 - g.measureText(txt).width, y);
+    g.fillStyle = "rgba(255,244,234,.14)"; g.fillRect(80, y + 22, 920, 26);
     g.fillStyle = css("--m" + (m.color % 6)) || "#f4c542"; g.fillRect(80, y + 22, Math.max(6, 920 * mins / total), 26);
     y += 130;
   });
   const sc = computeScore();
-  g.fillStyle = "#f4c542"; g.font = `800 120px ${disp}`; g.fillText(sc === null ? "–" : String(sc), 80, 1180);
-  g.fillStyle = "#ffffff"; g.font = `700 40px ${body}`; g.fillText(t.scoreTitle, 80 + g.measureText(sc === null ? "–" : String(sc)).width + 30, 1150);
-  g.fillStyle = "#cfe3da"; g.font = `400 34px ${body}`;
+  g.fillStyle = "#ff8a5c"; g.font = `800 120px ${disp}`; g.fillText(sc === null ? "–" : String(sc), 80, 1180);
+  g.fillStyle = "#fff4ea"; g.font = `700 40px ${body}`; g.fillText(t.scoreTitle, 80 + g.measureText(sc === null ? "–" : String(sc)).width + 30, 1150);
+  g.fillStyle = "#c5cbe6"; g.font = `400 34px ${body}`;
   g.fillText(t.summaryDone.replace("{done}", state.tasks.filter(k => k.done).length).replace("{total}", state.tasks.length), 80, 1260);
   return c;
 }
