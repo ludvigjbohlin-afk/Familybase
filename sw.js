@@ -1,4 +1,4 @@
-const CACHE = "hb-v16";
+const CACHE = "hb-v17";
 const SHARED = ["cdn.jsdelivr.net"];
 const FONTS = ["./fonts/bricolage.woff", "./fonts/atkinson-regular.woff", "./fonts/atkinson-bold.woff", "./fonts/atkinson-italic.woff"];
 self.addEventListener("install", e => {
@@ -33,4 +33,21 @@ self.addEventListener("fetch", e => {
       return res;
     }).catch(() => caches.match(r).then(m => m || caches.match("./")))
   );
+});
+
+// reminders
+self.addEventListener("push", e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data ? e.data.text() : "" }; }
+  e.waitUntil(self.registration.showNotification(d.title || "Hushållsbalans", {
+    body: d.body || "", icon: "icon-192.png", badge: "icon-192.png", tag: d.tag || undefined, data: { url: d.url || "./" }
+  }));
+});
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || "./";
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(list => {
+    for (const c of list) { if ("focus" in c) return c.focus(); }
+    return self.clients.openWindow(url);
+  }));
 });

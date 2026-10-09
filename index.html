@@ -63,6 +63,9 @@
 @font-face { font-family: "Atkinson"; src: url("fonts/atkinson-italic.woff") format("woff"); font-weight: 400; font-style: italic; font-display: swap; }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
+/* inget zoom vid dubbeltryck (nyp-zoom fungerar fortfarande) */
+html { touch-action: manipulation; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+button, a, input, select, textarea, label, [role="checkbox"], [tabindex] { touch-action: manipulation; }
 body {
   background: var(--bg);
   color: var(--ink);
@@ -526,6 +529,32 @@ ul.tasks li:first-child { border-top: 0; }
 .today-acts { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
 .ta { border-radius: 999px; padding: 4px 12px; color: var(--navy); font-size: .9rem; }
 
+/* Fler val i syssleformuläret */
+.more-opts { flex: 1 1 100%; border: 2px dashed var(--line-strong); border-radius: 16px; padding: 4px 12px; }
+.more-opts[open] { padding-bottom: 12px; }
+.more-opts summary { cursor: pointer; font-weight: 700; padding: 8px 0; min-height: 40px; }
+.more-opts > .row { margin-top: 6px; }
+
+/* Juridik, samtycke, tyck till */
+.legal { z-index: 40; }
+.legal-inner { max-width: 640px; }
+.legal-card h2 { margin-top: 14px; }
+.legal-card h3 { font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: 1.1rem; margin: 18px 0 4px; }
+.legal-card p, .legal-card li { line-height: 1.55; }
+.legal-card ul { padding-left: 20px; }
+.legal-card a { color: var(--ink); font-weight: 700; }
+.legal-links { text-align: center; margin: 14px 0 0; font-size: .88rem; color: var(--muted); }
+.linkish { background: none; border: 0; padding: 2px 0; font: inherit; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-weight: 700; }
+.terms-row { margin-top: 12px; font-size: .92rem; }
+.consent-row { background: var(--sun); color: var(--navy); border-radius: 14px; padding: 10px 12px; margin: 8px 0; }
+.consent-row .meta, .consent-row .linkish { color: var(--navy); }
+.set-sub { margin-top: 20px; padding-top: 16px; border-top: 2px dashed var(--line); }
+.set-sub h3 { margin: 0 0 4px; font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: 1.15rem; }
+
+/* Påminnelser */
+.nt-note { background: var(--tint); border-radius: 14px; padding: 10px 12px; font-weight: 700; }
+.nt-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
 /* Kommentarer och tid */
 .cm-wrap { margin-top: 6px; }
 .cm-last { font-size: .9rem; background: var(--tint); border-radius: 12px; padding: 5px 10px; margin-bottom: 4px; word-break: break-word; }
@@ -603,13 +632,14 @@ ul.tasks li:first-child { border-top: 0; }
 .tabbar button span { font-size: .72rem; }
 .tabbar svg { width: 22px; height: 22px; stroke-width: 2.1; }
 .toast { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
+input, select, textarea { font-size: max(16px, 1rem) !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 </head>
 <body>
 <div id="setup" class="login setup" hidden>
   <div class="setup-inner">
-    <div class="card"><h2 data-i="setupTitle"></h2><p class="summary" style="margin:0" data-i="setupIntro"></p><p class="invite-note" id="invite-note-setup" hidden style="margin-top:12px"></p></div>
+    <div class="card"><h2 data-i="setupTitle"></h2><p class="summary" style="margin:0" data-i="setupIntro"></p><p class="invite-note" id="invite-note-setup" hidden style="margin-top:12px"></p><p class="legal-links"><button type="button" class="linkish" data-legal="privacy" data-i="privacyLink"></button><span aria-hidden="true"> · </span><button type="button" class="linkish" data-legal="terms" data-i="termsLink"></button></p></div>
     <div class="card">
       <h2 data-i="createTitle"></h2>
       <form id="create-form">
@@ -633,6 +663,14 @@ ul.tasks li:first-child { border-top: 0; }
         <button type="button" data-lang="sv" aria-pressed="false">Svenska</button>
         <button type="button" data-lang="en" aria-pressed="false">English</button>
       </div>
+    </div>
+  </div>
+</div>
+<div id="legal" class="login setup legal" hidden role="dialog" aria-modal="true" aria-labelledby="legal-h">
+  <div class="setup-inner legal-inner">
+    <div class="card legal-card">
+      <button class="ghost" type="button" id="legal-close" data-i="back"></button>
+      <div id="legal-body"></div>
     </div>
   </div>
 </div>
@@ -667,12 +705,14 @@ ul.tasks li:first-child { border-top: 0; }
       <div id="pw2-row" style="margin-top:10px" hidden><label for="a-pw2" data-i="confirmPassword"></label>
         <div class="pw-wrap"><input id="a-pw2" type="password" autocomplete="new-password" minlength="6"><button class="pw-toggle" type="button" data-target="a-pw2" data-i="show" aria-label="Show password"></button></div>
       </div>
+      <div id="terms-row" class="terms-row" hidden><label class="set-check" style="margin:0"><input type="checkbox" id="a-terms"><span id="a-terms-text"></span></label></div>
       <div style="margin-top:14px"><button class="btn" type="submit" id="auth-submit" style="width:100%"></button></div>
     </form>
     <p class="footnote"><button class="ghost" id="auth-switch" type="button"></button></p>
     <p id="auth-err"></p>
     <p id="auth-info"></p>
     <p class="footnote" data-i="authNote"></p>
+    <p class="legal-links"><button type="button" class="linkish" data-legal="privacy" data-i="privacyLink"></button><span aria-hidden="true"> · </span><button type="button" class="linkish" data-legal="terms" data-i="termsLink"></button></p>
     <div style="display:flex;justify-content:center;margin-top:14px">
       <div class="lang" role="group" aria-label="Language / Språk">
         <button type="button" data-lang="sv" aria-pressed="false">Svenska</button>
@@ -789,6 +829,15 @@ ul.tasks li:first-child { border-top: 0; }
         <div><label for="set-theme" data-i="themeLabel"></label><select id="set-theme"></select></div>
         <label class="set-check" style="align-self:end"><input type="checkbox" id="set-bigtext"><span data-i="bigText"></span></label>
       </div>
+      <div class="set-sub cloud-only" id="set-notify"></div>
+      <div class="set-sub cloud-only" id="set-feedback">
+        <h3 id="fb-h" data-i="fbTitle"></h3>
+        <p class="summary" style="margin-top:0" data-i="fbHint"></p>
+        <textarea id="fb-text" maxlength="1000" rows="3" aria-labelledby="fb-h"></textarea>
+        <div style="margin-top:8px"><button class="btn" type="button" id="fb-send" data-i="fbSend"></button></div>
+        <p class="set-msg" id="fb-msg" role="status"></p>
+      </div>
+      <p class="legal-links"><button type="button" class="linkish" data-legal="privacy" data-i="privacyLink"></button><span aria-hidden="true"> · </span><button type="button" class="linkish" data-legal="terms" data-i="termsLink"></button></p>
       <div style="margin-top:16px"><button class="ghost" id="logout" data-i="logout" hidden></button></div>
     </section>
 
@@ -926,16 +975,20 @@ ul.tasks li:first-child { border-top: 0; }
       <form id="task-form" class="row">
         <div style="flex:2 1 220px"><label for="k-title" data-i="taskName"></label><input id="k-title" maxlength="80" required></div>
         <div><label for="k-owner" data-i="owner"></label><select id="k-owner"></select></div>
-        <div><label for="k-cat" data-i="category"></label><select id="k-cat"></select></div>
         <div><label for="k-freq" data-i="repeats"></label><select id="k-freq"></select></div>
         <div id="k-wday-row"><label for="k-wday" data-i="kWday"></label><select id="k-wday"></select></div>
         <div id="k-date-row"><label for="k-date" data-i="kDate"></label><input id="k-date" type="date"></div>
-        <div class="narrow" style="flex:0 0 120px"><label for="k-time" data-i="kTime"></label><input id="k-time" type="time"></div>
         <div class="narrow"><label for="k-min" data-i="minutes"></label><input id="k-min" type="number" min="1" max="600" value="15"></div>
-        <div class="narrow"><label for="k-stars" data-i="starsLabel"></label><input id="k-stars" type="number" min="0" max="10" value="1"></div>
-        <div style="flex:1 1 100%"><label for="k-note" data-i="noteLabel"></label><input id="k-note" maxlength="200"></div>
-        <div style="flex:1 1 100%"><label for="k-steps" data-i="stepsLabel"></label><textarea id="k-steps" rows="3" style="min-height:70px"></textarea></div>
-        <div id="k-rot-row" style="flex:1 1 100%"><label data-i="rotLabel"></label><div class="chips" id="k-rot" style="margin:0"></div><p class="meta" style="margin:4px 0 0" data-i="rotHint"></p></div>
+        <details class="more-opts" id="k-more"><summary data-i="moreOpts"></summary>
+          <div class="row">
+            <div><label for="k-cat" data-i="category"></label><select id="k-cat"></select></div>
+            <div class="narrow" style="flex:0 0 120px"><label for="k-time" data-i="kTime"></label><input id="k-time" type="time"></div>
+            <div class="narrow"><label for="k-stars" data-i="starsLabel"></label><input id="k-stars" type="number" min="0" max="10" value="1"></div>
+            <div style="flex:1 1 100%"><label for="k-note" data-i="noteLabel"></label><input id="k-note" maxlength="200"></div>
+            <div style="flex:1 1 100%"><label for="k-steps" data-i="stepsLabel"></label><textarea id="k-steps" rows="3" style="min-height:70px"></textarea></div>
+            <div id="k-rot-row" style="flex:1 1 100%"><label data-i="rotLabel"></label><div class="chips" id="k-rot" style="margin:0"></div><p class="meta" style="margin:4px 0 0" data-i="rotHint"></p></div>
+          </div>
+        </details>
         <div class="narrow"><button class="btn" type="submit" data-i="addTask"></button></div>
         <div class="narrow"><button class="ghost" type="button" id="cancel-edit" data-i="cancel" hidden></button></div>
       </form>
@@ -1081,7 +1134,11 @@ const T = {
     rewardsTitle: "Stars and rewards", rewardsHint: "Children earn stars for their chores. You decide how many stars each chore gives (when you add or edit a chore) and how many stars each reward needs.", rewardName: "Reward", rewardCost: "Stars needed", rewardsNone: "No rewards yet. Add one below.",
     starsLabel: "Stars ★", starPill: "{n} ★", msNext: "{left} more to {r}", msAllDone: "Every reward reached! Ask a parent for a new one.", msNoneKid: "Ask a parent to add rewards to collect stars for.", msNoneAdult: "Add rewards under Family to give the stars a goal.",
     msReached: "{m} reached {c} ★: {r}", msGive: "Mark as given", msGivenToast: "{r} marked as given", msHit: "You reached {c} ★! Reward: {r}", msHitOther: "{m} reached {c} ★! Reward: {r}",
-    msReset: "Start {m}'s stars over", msResetDone: "{m}'s stars start again from 0", msGivenTitle: "Recently given", msGivenLog: "{m} got {r} ({c} ★)", cmAdd: "Comment", cmCount: "Comments ({n})", cmPh: "Write a comment", cmSend: "Send", cmToShop: "Add to shopping list", cmRemoved: "Comment removed", cmHide: "Hide comments",
+    msReset: "Start {m}'s stars over", msResetDone: "{m}'s stars start again from 0", msGivenTitle: "Recently given", msGivenLog: "{m} got {r} ({c} ★)", moreOpts: "More options: area, time of day, stars, note, steps, take turns", ntTitle: "Reminders", ntHint: "Get a reminder on your phone about today's chores, and before your activities start. Applies to this phone or computer.", ntOn: "Turn on reminders", ntDaily: "Reminder about today's chores", ntOffOpt: "Off", ntActs: "Remind me an hour before my activities and events, and half an hour before chores with a time", ntTest: "Send a test notification", ntOff: "Turn off reminders", ntOnDone: "Reminders are on.", ntSaved: "Saved.", ntTestSent: "The test notification was sent. It arrives in a few seconds.", ntDenied: "Notifications are blocked for the app. Allow them in your phone's settings for the browser or app, then try again.", ntUnsupported: "This browser cannot receive reminders.", ntIosHome: "On iPhone: first add the app to your home screen (Share → Add to Home Screen), open it from there and turn reminders on there.", ntFail: "That did not work. Try again.", ntNotSetup: "Reminders are not switched on on the server yet.", ntOffDone: "Reminders are off on this device.",
+    privacyLink: "Privacy policy", termsLink: "Terms of use", termsAccept: "I accept the {terms} and have read the {privacy}.", termsWordT: "terms of use", termsWordP: "privacy policy", termsNeeded: "Please accept the terms to create an account.",
+    consentLabel: "I am a parent or guardian and agree that the children in our family use the app.", consentHint: "Needed before the children's invite can be shared.",
+    fbTitle: "Feedback", fbHint: "Something odd, something missing, an idea? Write it here. It goes straight to the person who builds the app.", fbSend: "Send", fbThanks: "Thanks! Your feedback was sent.", fbFail: "It could not be sent right now. Try again later.",
+    cmAdd: "Comment", cmCount: "Comments ({n})", cmPh: "Write a comment", cmSend: "Send", cmToShop: "Add to shopping list", cmRemoved: "Comment removed", cmHide: "Hide comments",
     taQ: "How long did it take?", taSkip: "Skip", taThanks: "Thanks! The app learns how long chores take.", tsText: "Usually takes about {n} min (it says {c} min)", tsYes: "Change to {n} min", tsNo: "Keep", tsChanged: "{x} now takes {n} min",
     actsTitle: "Weekly activities", actsHint: "For example tennis practice every Tuesday at 15:00. They show up in the family calendar.", actName: "Activity", actPh: "For example Tennis practice", actDays: "Days", actFrom: "From", actTo: "To", actAdd: "Add activity", actErr: "Write what it is and pick at least one day.", actsNone: "No weekly activities yet.", actRemoved: "{x} removed",
     aboutTitle: "Tell us a little about you", aboutHint: "Add your birthday and your weekly activities so they show up in the family calendar. You can change everything later under Family → Profiles.", aboutDone: "Done", aboutSkip: "Skip for now",
@@ -1194,7 +1251,11 @@ const T = {
     rewardsTitle: "Stjärnor och belöningar", rewardsHint: "Barnen får stjärnor när de gör sina sysslor. Ni bestämmer hur många stjärnor varje syssla ger (när ni lägger till eller ändrar en syssla) och hur många stjärnor som behövs för varje belöning.", rewardName: "Belöning", rewardCost: "Stjärnor som behövs", rewardsNone: "Inga belöningar än. Lägg till en nedan.",
     starsLabel: "Stjärnor ★", starPill: "{n} ★", msNext: "{left} kvar till {r}", msAllDone: "Alla belöningar är nådda! Fråga en förälder om en ny.", msNoneKid: "Fråga en förälder om belöningar att samla stjärnor till.", msNoneAdult: "Lägg till belöningar under Familj så får stjärnorna ett mål.",
     msReached: "{m} har nått {c} ★: {r}", msGive: "Markera som given", msGivenToast: "{r} markerad som given", msHit: "Du har nått {c} ★! Belöning: {r}", msHitOther: "{m} har nått {c} ★! Belöning: {r}",
-    msReset: "Börja om {m}s stjärnor", msResetDone: "{m}s stjärnor börjar om från 0", msGivenTitle: "Senast givna", msGivenLog: "{m} fick {r} ({c} ★)", cmAdd: "Kommentera", cmCount: "Kommentarer ({n})", cmPh: "Skriv en kommentar", cmSend: "Skicka", cmToShop: "Lägg i inköpslistan", cmRemoved: "Kommentaren borttagen", cmHide: "Dölj kommentarer",
+    msReset: "Börja om {m}s stjärnor", msResetDone: "{m}s stjärnor börjar om från 0", msGivenTitle: "Senast givna", msGivenLog: "{m} fick {r} ({c} ★)", moreOpts: "Fler val: område, klockslag, stjärnor, anteckning, delmoment, turas om", ntTitle: "Påminnelser", ntHint: "Få en påminnelse i telefonen om dagens sysslor, och innan dina aktiviteter börjar. Gäller den här telefonen eller datorn.", ntOn: "Slå på påminnelser", ntDaily: "Påminnelse om dagens sysslor", ntOffOpt: "Av", ntActs: "Påminn mig en timme före mina aktiviteter och händelser, och en halvtimme före sysslor med klockslag", ntTest: "Skicka en testnotis", ntOff: "Stäng av påminnelser", ntOnDone: "Påminnelser är påslagna.", ntSaved: "Sparat.", ntTestSent: "Testnotisen är skickad. Den kommer om några sekunder.", ntDenied: "Notiser är blockerade för appen. Tillåt dem i telefonens inställningar för webbläsaren eller appen och försök igen.", ntUnsupported: "Den här webbläsaren kan inte ta emot påminnelser.", ntIosHome: "På iPhone: lägg först till appen på hemskärmen (Dela → Lägg till på hemskärmen), öppna den därifrån och slå på påminnelser där.", ntFail: "Det gick inte. Försök igen.", ntNotSetup: "Påminnelser är inte aktiverade på servern än.", ntOffDone: "Påminnelser är avstängda på den här enheten.",
+    privacyLink: "Integritetspolicy", termsLink: "Användarvillkor", termsAccept: "Jag godkänner {terms} och har läst {privacy}.", termsWordT: "användarvillkoren", termsWordP: "integritetspolicyn", termsNeeded: "Du behöver godkänna villkoren för att skapa ett konto.",
+    consentLabel: "Jag är förälder eller vårdnadshavare och godkänner att barnen i vår familj använder appen.", consentHint: "Behövs innan barnens inbjudan kan delas.",
+    fbTitle: "Tyck till", fbHint: "Något konstigt, något som saknas, en idé? Skriv här. Det går direkt till den som bygger appen.", fbSend: "Skicka", fbThanks: "Tack! Det är skickat.", fbFail: "Det gick inte att skicka just nu. Försök igen senare.",
+    cmAdd: "Kommentera", cmCount: "Kommentarer ({n})", cmPh: "Skriv en kommentar", cmSend: "Skicka", cmToShop: "Lägg i inköpslistan", cmRemoved: "Kommentaren borttagen", cmHide: "Dölj kommentarer",
     taQ: "Hur lång tid tog det?", taSkip: "Hoppa över", taThanks: "Tack! Appen lär sig hur lång tid sysslorna tar.", tsText: "Brukar ta ca {n} min (det står {c} min)", tsYes: "Ändra till {n} min", tsNo: "Behåll", tsChanged: "{x} tar nu {n} min",
     actsTitle: "Fasta aktiviteter varje vecka", actsHint: "Till exempel tennisträning varje tisdag kl 15. De syns i familjens kalender.", actName: "Aktivitet", actPh: "Till exempel Tennisträning", actDays: "Dagar", actFrom: "Från", actTo: "Till", actAdd: "Lägg till aktivitet", actErr: "Skriv vad det är och välj minst en dag.", actsNone: "Inga fasta aktiviteter än.", actRemoved: "{x} borttagen",
     aboutTitle: "Berätta lite om dig", aboutHint: "Lägg till din födelsedag och dina fasta aktiviteter, så syns de i familjens kalender. Du kan ändra allt senare under Familj → Profiler.", aboutDone: "Klar", aboutSkip: "Hoppa över",
@@ -1389,7 +1450,7 @@ window.addEventListener("pagehide", flushSave);
 document.addEventListener("visibilitychange", () => { if (document.hidden) flushSave(); });
 
 /* ---------- Shared household (cloud) ---------- */
-const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true };
+const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true, parentConsent: "" };
 function settings() { return { ...SETTINGS_DEFAULT, ...((state && state.settings) || {}) }; }
 function normalizeState(d) {
   d = d && typeof d === "object" && !Array.isArray(d) ? d : {};
@@ -1641,8 +1702,8 @@ function applyStatic() {
   gear.setAttribute("aria-label", t.navSettings); gear.title = t.navSettings;
   document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
   const catSel = document.getElementById("k-cat");
-  const prev = catSel.value || "0";
-  catSel.innerHTML = t.cats.map((c, i) => `<option value="${i}">${esc(c)}</option>`).join("");
+  const prev = catSel.value || "2";
+  catSel.innerHTML = t.cats.map((c, i) => `<option value="${i}"${i === 2 ? " selected" : ""}>${esc(c)}</option>`).join("");
   catSel.value = prev;
   document.getElementById("clean-q").placeholder = t.cleanPlaceholder;
   document.title = t.title;
@@ -1877,7 +1938,7 @@ function renderHousehold() {
   html += `</div>`;
   if (owner && hh.invites) {
     html += `<h3 class="clean-h" style="margin-top:18px">${t.inviteTitle}</h3><p class="summary" style="margin-top:0">${t.inviteHint}</p>`;
-    html += [["adult_code", t.codeAdult], ["child_code", t.codeChild]].map(([k, label]) =>
+    html += [["adult_code", t.codeAdult], ["child_code", t.codeChild]].map(([k, label]) => k === "child_code" && !settings().parentConsent ? consentRow() :
       `<div class="hh-row"><span class="grow">${label}</span><code class="code">${esc(hh.invites[k])}</code><button class="ghost" data-hh="copy" data-code="${esc(hh.invites[k])}">${t.copyCode}</button><button class="ghost" data-hh="copylink" data-code="${esc(hh.invites[k])}">${t.inviteLinkBtn}</button>${navigator.share ? `<button class="ghost" data-hh="share" data-code="${esc(hh.invites[k])}">${t.inviteShareBtn}</button>` : ""}</div>`).join("");
     html += `<div style="margin-top:10px">${btn("codes", "-", t.newCodes)}</div>`;
   }
@@ -2021,9 +2082,13 @@ document.getElementById("add-toggle").onclick = () => {
   if (isChild()) return;
   if (document.getElementById("add-panel").hidden) { openAdd(false); document.getElementById("clean-q").focus(); } else closeAdd();
 };
+const kMore = document.getElementById("k-more");
+kMore.open = lsGet("hb-more") === "1";
+kMore.addEventListener("toggle", () => lsSet("hb-more", kMore.open ? "1" : "0"));
 function setEditMode(id) {
   editId = id;
   const k = id && state.tasks.find(x => x.id === id);
+  if (k && (k.note || (k.steps || []).length || (k.rot && k.rot.ids) || k.time || starsOf(k) !== 1)) kMore.open = true;
   if (k) {
     openAdd(true);
     document.getElementById("k-title").value = taskName(k);
@@ -2042,6 +2107,7 @@ function setEditMode(id) {
     document.getElementById("k-title").focus();
   } else {
     document.getElementById("task-form").reset();
+    document.getElementById("k-cat").value = "2";
     editId = null;
     syncFreqFields();
     renderRotPicker([]);
@@ -2081,12 +2147,14 @@ function renderAll() {
   syncEdit();
   renderProfile();
   renderAbout();
+  renderNotify();
 }
 
 function setLang(l) {
   lang = l;
   try { localStorage.setItem("hb-lang", l); } catch (e) {}
   renderAll();
+  if (ntSub && ntPrefs) ntSave(ntPrefs.daily_time, ntPrefs.activities).catch(() => {});
 }
 document.querySelectorAll("[data-lang]").forEach(b => { b.onclick = () => setLang(b.dataset.lang); });
 
@@ -2424,6 +2492,7 @@ let view = "today", lastTab = "today";
 function setView(v, noScroll) {
   if (!TAB_VIEWS.includes(v) && v !== "settings") v = "today";
   if (v !== "settings") { lastTab = v; lsSet("hb-view", v); }
+  else if (typeof ntLoad === "function") setTimeout(ntLoad, 0);
   view = v;
   document.body.dataset.cur = v;
   document.querySelectorAll("[data-tab]").forEach(b => {
@@ -3207,6 +3276,271 @@ document.getElementById("reward-list").addEventListener("click", e => {
   }
 }));
 
+/* ---------- Reminders (Web Push via Edge Function send-reminders) ---------- */
+const VAPID_PUBLIC = "BPO2_38R2HoYxt2sxXltSFqaPT_syRbZ0HfmWY-IzYwdu3637fVdFTHYdxBueTlv7qnBTm_oZicLM4IoSDTW0XA";
+let ntSub = null, ntPrefs = null, ntMsg = "", ntErr = false, ntBusy = false;
+function pushSupported() { return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window && location.protocol === "https:"; }
+function isIOS() { return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
+function isStandalone() { return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
+function keyBytes(b64) { const s = b64.replace(/-/g, "+").replace(/_/g, "/"); const bin = atob(s + "===".slice((s.length + 3) % 4)); return Uint8Array.from(bin, c => c.charCodeAt(0)); }
+function ntSay(msg, err) { ntMsg = msg; ntErr = !!err; renderNotify(); }
+async function ntLoad() {
+  if (LOCAL_MODE || !currentUser || !pushSupported()) { renderNotify(); return; }
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    ntSub = await reg.pushManager.getSubscription();
+    ntPrefs = null;
+    if (ntSub) {
+      const { data } = await sb.from("push_subs").select("daily_time,activities").eq("endpoint", ntSub.endpoint).maybeSingle();
+      ntPrefs = data || null;
+    }
+  } catch (e) {}
+  renderNotify();
+}
+async function ntSave(daily, acts) {
+  const j = ntSub.toJSON();
+  let tz = "Europe/Stockholm";
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || tz; } catch (e) {}
+  const { data, error } = await sb.rpc("save_push_sub", { p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth, p_tz: tz, p_daily: daily, p_activities: acts, p_lang: lang });
+  if (error || data !== "ok") throw error || new Error(String(data));
+  ntPrefs = { daily_time: daily, activities: acts };
+}
+function renderNotify() {
+  const el = document.getElementById("set-notify");
+  if (!el) return;
+  if (LOCAL_MODE || !currentUser) { el.innerHTML = ""; return; }
+  if (el.contains(document.activeElement) && document.activeElement.tagName === "SELECT") return;
+  const t = T[lang];
+  let h = `<h3>${esc(t.ntTitle)}</h3><p class="summary" style="margin-top:0">${esc(t.ntHint)}</p>`;
+  if (!pushSupported()) h += `<p class="nt-note">${esc(isIOS() && !isStandalone() ? t.ntIosHome : t.ntUnsupported)}</p>`;
+  else if (Notification.permission === "denied") h += `<p class="nt-note">${esc(t.ntDenied)}</p>`;
+  else if (!ntSub || !ntPrefs) h += `<button class="btn" type="button" data-nt="on"${ntBusy ? " disabled" : ""}>${esc(t.ntOn)}</button>`;
+  else {
+    const times = ["", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"];
+    if (ntPrefs.daily_time && !times.includes(ntPrefs.daily_time)) times.push(ntPrefs.daily_time);
+    h += `<div style="max-width:320px"><label for="nt-time">${esc(t.ntDaily)}</label><select id="nt-time" data-nt="time">${times.map(x => `<option value="${x}"${x === (ntPrefs.daily_time || "") ? " selected" : ""}>${esc(x || t.ntOffOpt)}</option>`).join("")}</select></div>
+      <label class="set-check"><input type="checkbox" id="nt-acts" data-nt="acts"${ntPrefs.activities !== false ? " checked" : ""}><span>${esc(t.ntActs)}</span></label>
+      <div class="nt-btns"><button class="ghost" type="button" data-nt="test"${ntBusy ? " disabled" : ""}>${esc(t.ntTest)}</button><button class="ghost danger" type="button" data-nt="off"${ntBusy ? " disabled" : ""}>${esc(t.ntOff)}</button></div>`;
+  }
+  h += `<p class="set-msg${ntErr ? " err" : ""}" id="nt-msg" role="status">${esc(ntMsg)}</p>`;
+  el.innerHTML = h;
+}
+async function ntAction(act, el) {
+  const t = T[lang];
+  if (ntBusy) return;
+  const pick = act === "time" || act === "acts" ? { daily: document.getElementById("nt-time").value, acts: document.getElementById("nt-acts").checked } : null;
+  if (pick && ntPrefs) ntPrefs = { daily_time: pick.daily, activities: pick.acts };
+  ntBusy = true; ntMsg = ""; renderNotify();
+  try {
+    if (act === "on") {
+      const perm = await Notification.requestPermission();
+      if (perm !== "granted") { ntBusy = false; ntSay(t.ntDenied, true); return; }
+      const reg = await navigator.serviceWorker.ready;
+      ntSub = await reg.pushManager.getSubscription() || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(VAPID_PUBLIC) });
+      await ntSave("17:00", true);
+      ntBusy = false; ntSay(t.ntOnDone); return;
+    }
+    if (act === "time" || act === "acts") {
+      await ntSave(pick.daily, pick.acts);
+      ntBusy = false; ntSay(t.ntSaved); return;
+    }
+    if (act === "test") {
+      const { error } = await sb.functions.invoke("send-reminders", { body: { test: true } });
+      if (error) {
+        let code = "";
+        try { if (error.context && typeof error.context.json === "function") code = ((await error.context.json()) || {}).error || ""; } catch (e) {}
+        const st = error.context && error.context.status;
+        ntBusy = false; ntSay(code === "not_setup" || st === 404 && !code ? t.ntNotSetup : t.ntFail, true); return;
+      }
+      ntBusy = false; ntSay(t.ntTestSent); return;
+    }
+    if (act === "off") {
+      const ep = ntSub && ntSub.endpoint;
+      try { if (ntSub) await ntSub.unsubscribe(); } catch (e) {}
+      if (ep) await sb.from("push_subs").delete().eq("endpoint", ep);
+      ntSub = null; ntPrefs = null;
+      ntBusy = false; ntSay(t.ntOffDone); return;
+    }
+  } catch (e) {
+    ntBusy = false; ntSay(t.ntFail, true); return;
+  }
+  ntBusy = false; renderNotify();
+}
+document.getElementById("set-notify").addEventListener("click", e => { const b = e.target.closest("button[data-nt]"); if (b) ntAction(b.dataset.nt, b); });
+document.getElementById("set-notify").addEventListener("change", e => { const c = e.target.closest("[data-nt]"); if (c && (c.dataset.nt === "time" || c.dataset.nt === "acts")) ntAction(c.dataset.nt, c); });
+async function ntForget() {
+  try {
+    if (!pushSupported()) return;
+    const reg = await navigator.serviceWorker.getRegistration();
+    const sub = reg && await reg.pushManager.getSubscription();
+    if (sub) { const ep = sub.endpoint; await sb.from("push_subs").delete().eq("endpoint", ep); await sub.unsubscribe(); }
+  } catch (e) {}
+  ntSub = null; ntPrefs = null; ntMsg = "";
+}
+
+/* ---------- Privacy policy, terms, parent consent ---------- */
+const CONTACT = "ludvig.j.bohlin@gmail.com";
+const LEGAL = {
+  sv: {
+    privacy: `<h2 id="legal-h">Integritetspolicy</h2>
+<p class="meta">Gäller från 9 oktober 2026</p>
+<h3>Vem ansvarar?</h3>
+<p>Hushållsbalans drivs privat av Ludvig Bohlin. Har du frågor, vill se dina uppgifter eller vill att något raderas: mejla <a href="mailto:${CONTACT}">${CONTACT}</a>.</p>
+<h3>Vilka uppgifter sparas?</h3>
+<ul>
+<li><b>Konto:</b> e-postadress, lösenord (krypterat, vi kan inte se det) och namnet du visar i appen.</li>
+<li><b>Familjens innehåll:</b> sysslor, vem som gjort vad, kalender, födelsedagar, fasta aktiviteter, kommentarer, anslagstavla, inköpslista, middagar, stjärnor och belöningar. Det syns för alla i ert hushåll.</li>
+<li><b>Mina egna saker:</b> dina privata att-göra. De syns bara för dig.</li>
+<li><b>Påminnelser:</b> om du slår på dem sparas en adress från din webbläsare som behövs för att skicka notiser, samt vilken tid du vill ha dem.</li>
+<li><b>Felrapporter och synpunkter:</b> om något går fel i appen sparas en kort teknisk beskrivning (felmeddelande, webbläsare, appversion). Det du skriver under Tyck till sparas också.</li>
+</ul>
+<h3>Varför?</h3>
+<p>Bara för att appen ska fungera: dela upp sysslor rättvist, visa er kalender, skicka påminnelser du har bett om och rätta fel. Uppgifterna säljs inte, används inte för reklam och delas inte med någon annan än tjänsterna nedan. Den rättsliga grunden är avtalet med dig när du skapar konto, och för barn förälderns samtycke.</p>
+<h3>Var lagras det?</h3>
+<ul>
+<li><b>Supabase</b> (databas och inloggning), servrar i Frankfurt, EU.</li>
+<li><b>GitHub Pages</b> visar själva appen. GitHub kan logga din IP-adress när sidan laddas.</li>
+<li><b>Anthropic</b> (AI-hjälp med middagar), USA. Bara om en vuxen trycker på AI-knappen skickas önskemålen ni skriver, veckans datum och hur många ni är. Inga namn eller konton skickas.</li>
+<li><b>Notistjänster</b> (Apple, Google, Mozilla) levererar påminnelser till telefonen om du slår på dem.</li>
+</ul>
+<h3>Barn</h3>
+<p>Barn under 13 år får bara använda appen om en förälder eller vårdnadshavare har godkänt det. Föräldern som äger hushållet godkänner det innan barnens inbjudan kan delas, och kan när som helst ta bort barnets konto.</p>
+<h3>Hur länge?</h3>
+<p>Så länge kontot finns. Felrapporter raderas efter 90 dagar. När du raderar ditt konto (Inställningar → Ta bort konto och data) försvinner dina uppgifter direkt. Raderar ägaren hushållet försvinner hela hushållets innehåll.</p>
+<h3>Dina rättigheter</h3>
+<p>Du har rätt att få veta vilka uppgifter som finns om dig, få dem rättade, få en kopia (vuxna kan exportera allt under Inställningar) och få dem raderade. Du kan också klaga till Integritetsskyddsmyndigheten (imy.se).</p>
+<h3>Lagring i webbläsaren</h3>
+<p>Appen sparar bara det som behövs för att den ska fungera i din webbläsare: inloggning, språk, utseende och en kopia så att appen fungerar utan nät. Inga spårningscookies.</p>
+<h3>Ändringar</h3>
+<p>Ändras policyn står det nya datumet högst upp.</p>`,
+    terms: `<h2 id="legal-h">Användarvillkor</h2>
+<p class="meta">Gäller från 9 oktober 2026</p>
+<ul>
+<li>Hushållsbalans är gratis och drivs privat av Ludvig Bohlin (<a href="mailto:${CONTACT}">${CONTACT}</a>).</li>
+<li>Appen erbjuds som den är. Vi gör vårt bästa, men kan inte lova att den alltid fungerar eller att inget går förlorat.</li>
+<li>Du ansvarar för ditt konto och ditt lösenord, och för det du skriver i appen. Skriv inget som är olagligt eller kränkande.</li>
+<li>Ägaren av ett hushåll bestämmer vem som är med och kan ta bort konton från hushållet.</li>
+<li>Barn under 13 år får bara använda appen med en förälders eller vårdnadshavares godkännande.</li>
+<li>AI-förslag på middagar är bara förslag. Kontrollera alltid ingredienser vid allergier.</li>
+<li>Du kan sluta använda appen och radera ditt konto när du vill. Konton som missbrukar appen kan stängas av.</li>
+<li>Villkoren kan ändras. Då står det nya datumet högst upp.</li>
+<li>Svensk lag gäller.</li>
+</ul>`
+  },
+  en: {
+    privacy: `<h2 id="legal-h">Privacy policy</h2>
+<p class="meta">Valid from 9 October 2026</p>
+<h3>Who is responsible?</h3>
+<p>Household Balance is run privately by Ludvig Bohlin. Questions, a copy of your data or deletion: email <a href="mailto:${CONTACT}">${CONTACT}</a>.</p>
+<h3>What is stored?</h3>
+<ul>
+<li><b>Account:</b> email address, password (encrypted, we cannot see it) and the name you show in the app.</li>
+<li><b>The family's content:</b> chores, who did what, calendar, birthdays, weekly activities, comments, notice board, shopping list, dinners, stars and rewards. Everyone in your household can see it.</li>
+<li><b>My own things:</b> your private to-dos. Only you can see them.</li>
+<li><b>Reminders:</b> if you turn them on, an address from your browser that is needed to send notifications, and the time you want them.</li>
+<li><b>Error reports and feedback:</b> if something goes wrong, a short technical description (error message, browser, app version). What you write under Feedback is also stored.</li>
+</ul>
+<h3>Why?</h3>
+<p>Only to make the app work: share chores fairly, show your calendar, send reminders you asked for and fix errors. The data is not sold, not used for ads and not shared with anyone except the services below. The legal basis is the agreement with you when you create an account, and for children the consent of a parent.</p>
+<h3>Where is it stored?</h3>
+<ul>
+<li><b>Supabase</b> (database and sign-in), servers in Frankfurt, EU.</li>
+<li><b>GitHub Pages</b> serves the app itself. GitHub may log your IP address when the page loads.</li>
+<li><b>Anthropic</b> (AI help with dinners), USA. Only if an adult taps the AI button: the wishes you write, the week's dates and how many you are. No names or accounts are sent.</li>
+<li><b>Notification services</b> (Apple, Google, Mozilla) deliver reminders to your phone if you turn them on.</li>
+</ul>
+<h3>Children</h3>
+<p>Children under 13 may only use the app if a parent or guardian has agreed. The parent who owns the household agrees before the children's invite can be shared, and can remove a child's account at any time.</p>
+<h3>How long?</h3>
+<p>As long as the account exists. Error reports are deleted after 90 days. When you delete your account (Settings → Delete account and data) your data is removed at once. If the owner deletes the household, all its content is removed.</p>
+<h3>Your rights</h3>
+<p>You can find out what data there is about you, have it corrected, get a copy (adults can export everything under Settings) and have it deleted. You can also complain to the Swedish Authority for Privacy Protection (imy.se).</p>
+<h3>Browser storage</h3>
+<p>The app only stores what it needs to work in your browser: sign-in, language, appearance and a copy so the app works offline. No tracking cookies.</p>
+<h3>Changes</h3>
+<p>If the policy changes, the new date is shown at the top.</p>`,
+    terms: `<h2 id="legal-h">Terms of use</h2>
+<p class="meta">Valid from 9 October 2026</p>
+<ul>
+<li>Household Balance is free and run privately by Ludvig Bohlin (<a href="mailto:${CONTACT}">${CONTACT}</a>).</li>
+<li>The app is provided as is. We do our best but cannot promise it always works or that nothing is ever lost.</li>
+<li>You are responsible for your account, your password and what you write. Do not write anything illegal or offensive.</li>
+<li>The owner of a household decides who is in it and can remove accounts from it.</li>
+<li>Children under 13 may only use the app with the consent of a parent or guardian.</li>
+<li>AI dinner suggestions are only suggestions. Always check ingredients for allergies.</li>
+<li>You can stop using the app and delete your account whenever you like. Accounts that misuse the app may be closed.</li>
+<li>These terms may change. The new date is then shown at the top.</li>
+<li>Swedish law applies.</li>
+</ul>`
+  }
+};
+
+let legalReturn = null;
+function openLegal(kind) {
+  legalReturn = document.activeElement;
+  document.getElementById("legal-body").innerHTML = (LEGAL[lang] || LEGAL.sv)[kind] || "";
+  document.getElementById("legal").hidden = false;
+  document.getElementById("legal-close").focus();
+}
+function closeLegal() {
+  document.getElementById("legal").hidden = true;
+  if (legalReturn && legalReturn.focus) legalReturn.focus();
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-legal]");
+  if (!b) return;
+  e.preventDefault();
+  openLegal(b.dataset.legal);
+});
+document.getElementById("legal-close").onclick = closeLegal;
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !document.getElementById("legal").hidden) closeLegal(); });
+function consentRow() {
+  const t = T[lang];
+  return `<div class="consent-row"><label class="set-check" style="margin:0"><input type="checkbox" data-consent="1"><span>${esc(t.consentLabel)}</span></label><p class="meta" style="margin:4px 0 0">${esc(t.consentHint)} <button type="button" class="linkish" data-legal="privacy">${esc(t.privacyLink)}</button></p></div>`;
+}
+document.addEventListener("change", e => {
+  const c = e.target.closest("[data-consent]");
+  if (!c || !c.checked || !isOwner() || !state) return;
+  state.settings = { ...settings(), parentConsent: isoDay(new Date()) };
+  save(); renderAll();
+});
+
+/* ---------- Error reports and feedback (table app_events, only readable by the developer) ---------- */
+const APP_VERSION = "2026-10-09";
+let evCount = 0;
+const evSeen = new Set();
+async function logEvent(kind, message, detail) {
+  if (LOCAL_MODE || !currentUser) return false;
+  message = String(message || "").slice(0, 2000);
+  if (kind === "error") {
+    if (evCount >= 10 || evSeen.has(message) || /failed to fetch|networkerror|load failed|network request failed/i.test(message)) return false;
+    evSeen.add(message); evCount++;
+  }
+  try {
+    const { error } = await sb.from("app_events").insert({ kind, message, detail: detail || {}, household_id: hh ? hh.id : null, app_version: APP_VERSION, user_agent: String(navigator.userAgent || "").slice(0, 300) });
+    return !error;
+  } catch (e) { return false; }
+}
+window.addEventListener("error", e => {
+  if (e.filename && !String(e.filename).startsWith(location.origin) && !String(e.filename).startsWith("file:")) return;
+  logEvent("error", e.message || "error", { src: String(e.filename || "").slice(0, 200), line: e.lineno || 0, col: e.colno || 0, view, stack: e.error && e.error.stack ? String(e.error.stack).slice(0, 1500) : "" });
+});
+window.addEventListener("unhandledrejection", e => {
+  const r = e.reason;
+  logEvent("error", "unhandled: " + String((r && r.message) || r || "").slice(0, 500), { view, stack: r && r.stack ? String(r.stack).slice(0, 1500) : "" });
+});
+document.getElementById("fb-send").onclick = async () => {
+  const t = T[lang], ta = document.getElementById("fb-text"), msg = document.getElementById("fb-msg");
+  const text = ta.value.trim();
+  if (!text) { ta.focus(); return; }
+  const btn = document.getElementById("fb-send");
+  btn.disabled = true; msg.classList.remove("err"); msg.textContent = "";
+  const ok = await logEvent("feedback", text.slice(0, 1000), { view: lastTab, lang });
+  btn.disabled = false;
+  if (ok) { ta.value = ""; msg.textContent = t.fbThanks; }
+  else { msg.classList.add("err"); msg.textContent = t.fbFail; }
+};
+
 /* ---------- Comments on chores and time that learns ---------- */
 let commentOpen = null, timeAsk = null;
 function typingIn(el) { const a = document.activeElement; return !!(a && el.contains(a) && a.closest && a.closest(".cm-form") && a.value); }
@@ -3659,7 +3993,7 @@ function renderGuide() {
       <form class="g-add" id="g-add-form"><input id="g-name" maxlength="24" placeholder="${esc(t.name)}" aria-label="${esc(t.name)}" required><button class="btn" type="submit"${state.members.length >= 6 ? " disabled" : ""}>${esc(t.add)}</button></form>`;
   } else if (guideStep === 2) {
     const inv = hh && hh.invites;
-    body.innerHTML = inv ? [["adult_code", t.gLinkAdult], ["child_code", t.gLinkChild]].map(([k, label]) => `<div class="g-row"><span class="grow">${esc(label)}</span><button type="button" class="ghost" data-g-copy="${esc(inv[k])}">${esc(t.inviteLinkBtn)}</button>${navigator.share ? `<button type="button" class="ghost" data-g-share="${esc(inv[k])}">${esc(t.inviteShareBtn)}</button>` : ""}</div>`).join("") : "";
+    body.innerHTML = inv ? [["adult_code", t.gLinkAdult], ["child_code", t.gLinkChild]].map(([k, label]) => k === "child_code" && !settings().parentConsent ? consentRow() : `<div class="g-row"><span class="grow">${esc(label)}</span><button type="button" class="ghost" data-g-copy="${esc(inv[k])}">${esc(t.inviteLinkBtn)}</button>${navigator.share ? `<button type="button" class="ghost" data-g-share="${esc(inv[k])}">${esc(t.inviteShareBtn)}</button>` : ""}</div>`).join("") : "";
   } else if (guideStep === 3) {
     const have = new Set(state.tasks.map(k => k.ref || taskName(k)));
     const picks = GUIDE_PICKS.map(sv => HOUSEHOLD.find(h => h.sv === sv)).filter(Boolean);
@@ -3902,6 +4236,8 @@ function renderAuth() {
   hint.textContent = t.pwHint;
   hint.hidden = !reg;
   document.getElementById("pw2-row").hidden = !reg;
+  document.getElementById("terms-row").hidden = !reg;
+  document.getElementById("a-terms-text").innerHTML = esc(t.termsAccept).replace("{terms}", `<button type="button" class="linkish" data-legal="terms">${esc(t.termsWordT)}</button>`).replace("{privacy}", `<button type="button" class="linkish" data-legal="privacy">${esc(t.termsWordP)}</button>`);
   document.getElementById("a-pw2").required = reg;
   if (!reg) document.getElementById("a-pw2").value = "";
 }
@@ -3938,7 +4274,8 @@ document.getElementById("auth-form").onsubmit = async e => {
       const pw2 = document.getElementById("a-pw2").value;
       if (pw.length < 6) { err.textContent = t.weakPw; return; }
       if (pw !== pw2) { err.textContent = t.pwMismatch; return; }
-      const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { name } } });
+      if (!document.getElementById("a-terms").checked) { err.textContent = t.termsNeeded; return; }
+      const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { name, terms_at: new Date().toISOString() } } });
       if (error) { err.textContent = authErrorText(error); return; }
       if (!data.session) {
         info.textContent = t.checkEmail;
@@ -4055,6 +4392,7 @@ async function doLogout() {
   if (state && currentUser) { try { await saveNow(); } catch (e) {} }
   if (cacheKey()) { try { localStorage.removeItem(cacheKey()); } catch (e) {} }
   if (!LOCAL_MODE) { try { await mineSync(); } catch (e) {} try { localStorage.removeItem(mineKey()); } catch (e) {} mine = []; }
+  if (!LOCAL_MODE) await ntForget();
   await sb.auth.signOut();
   currentUser = null; state = null; hh = null; baseState = null;
   applyRole();
