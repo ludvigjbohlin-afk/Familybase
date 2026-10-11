@@ -1,6 +1,6 @@
-const CACHE = "hb-v17";
+const CACHE = "hb-v18";
 const SHARED = ["cdn.jsdelivr.net"];
-const FONTS = ["./fonts/bricolage.woff", "./fonts/atkinson-regular.woff", "./fonts/atkinson-bold.woff", "./fonts/atkinson-italic.woff"];
+const FONTS = [];
 self.addEventListener("install", e => {
   self.skipWaiting();
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(["./", "./manifest.webmanifest", "./icon-192.png"].concat(FONTS))).catch(() => {}));
