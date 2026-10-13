@@ -112,7 +112,7 @@ ul.tasks li:first-child { border-top: 0; }
   width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--line); display: grid;
   place-items: center; cursor: pointer; flex: 0 0 22px; background: var(--bg);
 }
-.check[aria-checked="true"] { background: var(--c); border-color: var(--c); color: #fff; font-size: 13px; }
+.check[aria-checked="true"] { background: var(--c); border-color: var(--c); color: #fff; font-size: 0.8125rem; }
 .task-main { flex: 1; min-width: 0; }
 .task-title { font-weight: 600; word-break: break-word; }
 .task-title.done { text-decoration: line-through; color: var(--muted); }
@@ -220,7 +220,7 @@ button.btn.big { width: 100%; padding: 14px 16px; font-size: 1.05rem; }
 .chip[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
 ul.tasks.big li { padding: 16px 0; }
 ul.tasks.big .task-title { font-size: 1.08rem; }
-.check.big { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; font-size: 18px; }
+.check.big { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; font-size: 1.125rem; }
 .add-panel { margin-top: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
 .add-panel[hidden] { display: none; }
 .own-wrap { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
@@ -393,37 +393,37 @@ html.big-text { font-size: 118.75%; }
 .hh-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
 /* ===== Tema: Apple (iOS-stil) ===== */
-body { font-family: var(--body); font-size: 17px; line-height: 1.35; letter-spacing: -.01em; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--body); font-size: 1.0625rem; line-height: 1.35; letter-spacing: -.01em; -webkit-font-smoothing: antialiased; }
 h1, h2, h3, .card h2, .login-card h2, .setup h2 { font-family: var(--display); }
-h1 { font-size: 17px; font-weight: 600; letter-spacing: -.02em; }
+h1 { font-size: 1.0625rem; font-weight: 600; letter-spacing: -.02em; }
 header { align-items: center; margin-bottom: 10px; min-height: 44px; }
 .sub { display: none; }
-.sync { color: var(--muted); font-size: 13px; }
+.sync { color: var(--muted); font-size: 0.8125rem; }
 .grid { gap: 20px; }
 .card { background: var(--surface); border: 0; box-shadow: none; border-radius: 12px; padding: 16px; }
-.card h2 { font-size: 22px; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; margin: 0 0 12px; }
+.card h2 { font-size: 1.375rem; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; margin: 0 0 12px; }
 .card h2 .dot { display: none; }
-.clean-h, .set-block h3, .hist h3, .set-sub h3 { font-family: var(--display); font-weight: 600; font-size: 17px; letter-spacing: -.02em; }
-.summary, .hint { color: var(--muted); font-size: 15px; }
-label, .lbl { color: var(--muted); font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: .02em; }
+.clean-h, .set-block h3, .hist h3, .set-sub h3 { font-family: var(--display); font-weight: 600; font-size: 1.0625rem; letter-spacing: -.02em; }
+.summary, .hint { color: var(--muted); font-size: 0.9375rem; }
+label, .lbl { color: var(--muted); font-size: 0.8125rem; font-weight: 400; text-transform: uppercase; letter-spacing: .02em; }
 input, select, textarea { background: var(--field); color: var(--ink); border: 0; border-radius: 10px; padding: 11px 12px; }
 select { -webkit-appearance: none; appearance: none; padding-right: 32px; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 17px) 52%, calc(100% - 12px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
 input:focus, select:focus, textarea:focus, button:focus-visible, .check:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-button.btn { background: var(--primary); color: var(--on-primary); border-radius: 12px; padding: 13px 18px; font-family: var(--body); font-weight: 600; font-size: 17px; letter-spacing: -.01em; }
+button.btn { background: var(--primary); color: var(--on-primary); border-radius: 12px; padding: 13px 18px; font-family: var(--body); font-weight: 600; font-size: 1.0625rem; letter-spacing: -.01em; }
 button.btn:hover { filter: brightness(1.06); }
 button.btn:active { opacity: .7; }
-button.ghost { background: var(--tint-fill); border: 0; color: var(--primary); border-radius: 999px; padding: 6px 14px; font-size: 15px; font-weight: 600; min-height: 32px; }
+button.ghost { background: var(--tint-fill); border: 0; color: var(--primary); border-radius: 999px; padding: 6px 14px; font-size: 0.9375rem; font-weight: 600; min-height: 32px; }
 button.ghost:hover { filter: brightness(.97); }
 button.ghost:active { opacity: .6; }
 button.ghost.danger { color: var(--danger); background: var(--danger-fill); }
-.pill { background: var(--fill); color: var(--muted); border: 0; border-radius: 6px; padding: 1px 7px; font-weight: 500; font-size: 13px; }
+.pill { background: var(--fill); color: var(--muted); border: 0; border-radius: 6px; padding: 1px 7px; font-weight: 500; font-size: 0.8125rem; }
 .pill.late { background: var(--danger-fill); color: var(--danger); font-weight: 600; }
 .pill.dept { background: transparent; border: 1px solid var(--line); }
-.owner { --mc: var(--muted); background: color-mix(in srgb, var(--mc) 16%, transparent); color: color-mix(in srgb, var(--mc) 62%, var(--ink)); border-radius: 6px; font-weight: 600; font-size: 13px; padding: 1px 8px; }
+.owner { --mc: var(--muted); background: color-mix(in srgb, var(--mc) 16%, transparent); color: color-mix(in srgb, var(--mc) 62%, var(--ink)); border-radius: 6px; font-weight: 600; font-size: 0.8125rem; padding: 1px 8px; }
 .meta { color: var(--muted); }
-.check { border-radius: 50%; border: 1.5px solid var(--line-strong); background: transparent; color: #fff; font-weight: 700; width: 24px; height: 24px; flex: 0 0 24px; font-size: 13px; }
+.check { border-radius: 50%; border: 1.5px solid var(--line-strong); background: transparent; color: #fff; font-weight: 700; width: 24px; height: 24px; flex: 0 0 24px; font-size: 0.8125rem; }
 .check[aria-checked="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
-.check.big { border-radius: 50%; width: 26px; height: 26px; flex: 0 0 26px; font-size: 14px; }
+.check.big { border-radius: 50%; width: 26px; height: 26px; flex: 0 0 26px; font-size: 0.875rem; }
 ul.tasks li { border-top: .5px solid var(--line); }
 ul.tasks li:first-child { border-top: 0; }
 .task-title { font-weight: 400; }
@@ -435,7 +435,7 @@ ul.tasks li:first-child { border-top: 0; }
 .gear { border: 0; background: transparent; color: var(--primary); width: 44px; height: 44px; }
 .gear:hover { background: var(--tint-fill); }
 .gear svg { width: 26px; height: 26px; }
-.chip { background: var(--fill); border: 0; border-radius: 999px; font-weight: 500; font-size: 15px; color: var(--ink); padding: 7px 14px; }
+.chip { background: var(--fill); border: 0; border-radius: 999px; font-weight: 500; font-size: 0.9375rem; color: var(--ink); padding: 7px 14px; }
 .chip[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
 .add-panel { background: var(--inset); border: 0; border-radius: 12px; }
 .add-panel input, .add-panel select, .add-panel textarea { background: var(--surface); }
@@ -456,14 +456,14 @@ ul.tasks li:first-child { border-top: 0; }
 .rep-task.late { background: var(--danger-fill); color: var(--danger); }
 .stars { background: color-mix(in srgb, var(--sun) 25%, transparent); color: var(--ink); border: 0; }
 .star-mini { color: var(--muted); }
-.task-note { color: var(--muted); font-style: normal; font-size: 15px; }
+.task-note { color: var(--muted); font-style: normal; font-size: 0.9375rem; }
 .step input { accent-color: var(--primary); width: 20px; height: 20px; }
 .toast { background: var(--toast); color: #fff; border-radius: 14px; border: 0; -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
 .toast button { background: transparent; color: #64b5ff; border-radius: 8px; font-weight: 600; }
 .hh-row, .leave-item, .clean-results li, .g-row, .rep-person { border-top-width: .5px; border-top-color: var(--line); }
 
 /* iOS-reglage i stället för kryssrutor */
-.set-check { display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center; gap: 14px; text-transform: none; letter-spacing: 0; color: var(--ink); font-size: 17px; }
+.set-check { display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center; gap: 14px; text-transform: none; letter-spacing: 0; color: var(--ink); font-size: 1.0625rem; }
 .set-check input[type="checkbox"] { -webkit-appearance: none; appearance: none; width: 51px; height: 31px; flex: 0 0 51px; border-radius: 16px; background: var(--switch-off); position: relative; cursor: pointer; margin: 0; padding: 0; transition: background .2s; }
 .set-check input[type="checkbox"]::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,.15), 0 1px 1px rgba(0,0,0,.16); transition: transform .2s; }
 .set-check input[type="checkbox"]:checked { background: var(--green); }
@@ -478,26 +478,26 @@ ul.tasks li:first-child { border-top: 0; }
 
 /* Idag: stor rubrik, rutor som i Påminnelser, listan som en grupperad lista */
 #sec-today { background: none; border: 0; padding: 0; color: var(--ink); }
-#sec-today h2 { font-size: 34px; line-height: 1.12; font-weight: 700; letter-spacing: -.025em; margin: 0 0 14px; }
-.kicker { font-family: var(--body); font-weight: 600; font-size: 13px; color: var(--muted); margin: 0 0 2px; text-transform: uppercase; letter-spacing: .03em; }
+#sec-today h2 { font-size: 2.125rem; line-height: 1.12; font-weight: 700; letter-spacing: -.025em; margin: 0 0 14px; }
+.kicker { font-family: var(--body); font-weight: 600; font-size: 0.8125rem; color: var(--muted); margin: 0 0 2px; text-transform: uppercase; letter-spacing: .03em; }
 #today-who.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; }
 @media (min-width: 640px) { #today-who.tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .tile { --mc: var(--primary); background: var(--surface); border: 0; border-radius: 12px; padding: 10px 12px 10px; min-height: 82px; display: grid; grid-template-columns: auto 1fr; grid-template-areas: "av n" "nm nm"; align-items: start; row-gap: 8px; text-align: left; font: inherit; color: var(--ink); cursor: pointer; }
-.tile .av { grid-area: av; width: 32px; height: 32px; border-radius: 50%; background: var(--mc); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 16px; }
+.tile .av { grid-area: av; width: 32px; height: 32px; border-radius: 50%; background: var(--mc); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 1rem; }
 .tile .av svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.tile .n { grid-area: n; justify-self: end; font-family: var(--display); font-weight: 700; font-size: 26px; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.tile b { grid-area: nm; font-weight: 600; font-size: 15px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.tile .n { grid-area: n; justify-self: end; font-family: var(--display); font-weight: 700; font-size: 1.625rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile b { grid-area: nm; font-weight: 600; font-size: 0.9375rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 .tile.chip[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 2.5px var(--mc); }
 .tile.chip[aria-pressed="true"] b { color: var(--ink); }
 .tile.dinner { --mc: var(--orange); cursor: default; grid-template-areas: "av nm" "dish dish"; }
 .tile.dinner b { align-self: center; }
-.tile.dinner .dish { grid-area: dish; font-weight: 700; font-size: 17px; line-height: 1.2; word-break: break-word; }
+.tile.dinner .dish { grid-area: dish; font-weight: 700; font-size: 1.0625rem; line-height: 1.2; word-break: break-word; }
 .dinner-line { display: none; color: var(--muted); margin: -6px 0 14px; font-weight: 600; }
 .role-child .dinner-line { display: block; }
-#sec-today .bar-head { color: var(--muted); font-size: 13px; font-weight: 500; }
+#sec-today .bar-head { color: var(--muted); font-size: 0.8125rem; font-weight: 500; }
 #today-list { background: var(--surface); border: 0; border-radius: 12px; padding: 0 16px; }
 #sec-today .task-title { color: var(--ink); }
-ul.tasks.big .task-title { font-size: 17px; }
+ul.tasks.big .task-title { font-size: 1.0625rem; }
 .cat-ico { display: none; }
 .role-child .cat-ico { display: inline; }
 .bday-line { background: color-mix(in srgb, var(--pink) 14%, var(--surface)); color: var(--ink); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-weight: 600; }
@@ -529,7 +529,7 @@ ul.tasks.big .task-title { font-size: 17px; }
 .about-card { box-shadow: 0 0 0 2px var(--primary); }
 .about-btns { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
 .today-acts { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
-.ta { --mc: var(--primary); background: color-mix(in srgb, var(--mc) 16%, var(--surface)); color: color-mix(in srgb, var(--mc) 55%, var(--ink)); border-radius: 999px; padding: 5px 12px; font-size: 15px; }
+.ta { --mc: var(--primary); background: color-mix(in srgb, var(--mc) 16%, var(--surface)); color: color-mix(in srgb, var(--mc) 55%, var(--ink)); border-radius: 999px; padding: 5px 12px; font-size: 0.9375rem; }
 
 /* Fler val i syssleformuläret */
 .more-opts { flex: 1 1 100%; border: 0; background: var(--surface); border-radius: 12px; padding: 2px 14px; }
@@ -541,17 +541,17 @@ ul.tasks.big .task-title { font-size: 17px; }
 /* Juridik, samtycke, tyck till */
 .legal { z-index: 40; }
 .legal-inner { max-width: 640px; }
-.legal-card h2 { margin-top: 14px; font-size: 28px; }
-.legal-card h3 { font-weight: 600; font-size: 17px; margin: 18px 0 4px; }
+.legal-card h2 { margin-top: 14px; font-size: 1.75rem; }
+.legal-card h3 { font-weight: 600; font-size: 1.0625rem; margin: 18px 0 4px; }
 .legal-card p, .legal-card li { line-height: 1.45; color: var(--ink); }
 .legal-card ul { padding-left: 20px; }
 .legal-card a { color: var(--primary); font-weight: 500; text-decoration: none; }
-.legal-links { text-align: center; margin: 14px 0 0; font-size: 13px; color: var(--muted); }
+.legal-links { text-align: center; margin: 14px 0 0; font-size: 0.8125rem; color: var(--muted); }
 .linkish { background: none; border: 0; padding: 2px 0; font: inherit; color: var(--primary); text-decoration: none; cursor: pointer; font-weight: 500; }
-.terms-row { margin-top: 12px; font-size: 15px; }
-.terms-row .set-check { font-size: 15px; }
+.terms-row { margin-top: 12px; font-size: 0.9375rem; }
+.terms-row .set-check { font-size: 0.9375rem; }
 .consent-row { background: var(--tint-fill); color: var(--ink); border-radius: 12px; padding: 12px 14px; margin: 8px 0; }
-.consent-row .set-check { font-size: 15px; }
+.consent-row .set-check { font-size: 0.9375rem; }
 .consent-row .meta { color: var(--muted); }
 .set-sub { margin-top: 22px; padding-top: 18px; border-top: .5px solid var(--line); }
 .set-sub h3 { margin: 0 0 4px; }
@@ -562,8 +562,8 @@ ul.tasks.big .task-title { font-size: 17px; }
 
 /* Kommentarer och tid */
 .cm-wrap { margin-top: 6px; }
-.cm-last { font-size: 15px; background: var(--fill); border-radius: 14px 14px 14px 4px; padding: 6px 11px; margin-bottom: 4px; word-break: break-word; display: inline-block; max-width: 100%; }
-.cm-toggle { background: none; border: 0; padding: 4px 0; font: inherit; font-size: 15px; font-weight: 400; color: var(--primary); cursor: pointer; min-height: 32px; display: block; }
+.cm-last { font-size: 0.9375rem; background: var(--fill); border-radius: 14px 14px 14px 4px; padding: 6px 11px; margin-bottom: 4px; word-break: break-word; display: inline-block; max-width: 100%; }
+.cm-toggle { background: none; border: 0; padding: 4px 0; font: inherit; font-size: 0.9375rem; font-weight: 400; color: var(--primary); cursor: pointer; min-height: 32px; display: block; }
 .cm-thread { background: var(--inset); border-radius: 12px; padding: 10px; margin-top: 4px; display: grid; gap: 8px; }
 .cm { background: var(--surface); border-radius: 14px 14px 14px 4px; padding: 8px 11px; word-break: break-word; }
 .cm-text { margin-top: 2px; }
@@ -573,11 +573,11 @@ ul.tasks.big .task-title { font-size: 17px; }
 .cm-form input { flex: 1; min-width: 0; background: var(--surface); border-radius: 18px; }
 .cm-form .btn { border-radius: 18px; padding: 8px 16px; }
 .time-ask { margin-top: 8px; background: var(--inset); color: var(--ink); border: 0; border-radius: 12px; padding: 10px 12px; }
-.ta-q { font-weight: 600; display: block; margin-bottom: 8px; font-size: 15px; }
+.ta-q { font-weight: 600; display: block; margin-bottom: 8px; font-size: 0.9375rem; }
 .time-ask .chips { margin: 0; gap: 6px; }
-.time-ask .chip { padding: 5px 11px; font-size: 15px; background: var(--surface); color: var(--ink); }
+.time-ask .chip { padding: 5px 11px; font-size: 0.9375rem; background: var(--surface); color: var(--ink); }
 .time-ask .ghost { background: transparent; }
-.time-sug { margin-top: 8px; background: var(--tint-fill); border-radius: 12px; padding: 10px 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 15px; font-weight: 500; }
+.time-sug { margin-top: 8px; background: var(--tint-fill); border-radius: 12px; padding: 10px 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 0.9375rem; font-weight: 500; }
 .time-sug span { flex: 1 1 100%; }
 .time-sug .ghost { background: var(--surface); }
 #tasks li > .row-extra { grid-column: 2 / span 2; }
@@ -585,18 +585,18 @@ ul.tasks.big .task-title { font-size: 17px; }
 
 /* Stjärnkortet */
 .star-card { background: var(--surface); color: var(--ink); border: 0; border-radius: 12px; padding: 14px 16px; margin: 0 0 14px; }
-.sc-count { margin: 0; font-family: var(--display); font-weight: 600; font-size: 17px; display: flex; align-items: center; gap: 8px; }
-.sc-count b { font-size: 34px; font-weight: 700; line-height: 1; }
-.sc-star { width: 32px; height: 32px; border-radius: 50%; background: var(--sun); color: #fff; display: inline-grid; place-items: center; font-size: 18px; }
+.sc-count { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.0625rem; display: flex; align-items: center; gap: 8px; }
+.sc-count b { font-size: 2.125rem; font-weight: 700; line-height: 1; }
+.sc-star { width: 32px; height: 32px; border-radius: 50%; background: var(--sun); color: #fff; display: inline-grid; place-items: center; font-size: 1.125rem; }
 .star-card .bar { background: var(--fill); margin: 12px 0 6px; }
 .star-card .bar span { background: var(--sun) !important; }
-.sc-next { margin: 4px 0 0; font-weight: 500; color: var(--muted); font-size: 15px; }
+.sc-next { margin: 4px 0 0; font-weight: 500; color: var(--muted); font-size: 0.9375rem; }
 .sc-list { list-style: none; margin: 10px 0 0; padding: 0; }
 .sc-list li { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 0; border-top: .5px solid var(--line); }
 .sc-list li.got .sc-c { color: var(--green); }
 .sc-c { font-weight: 600; min-width: 3.4em; color: var(--muted); font-variant-numeric: tabular-nums; }
 .sc-t { flex: 1; min-width: 0; font-weight: 400; }
-.sc-s { font-size: 13px; font-weight: 600; color: var(--muted); }
+.sc-s { font-size: 0.8125rem; font-weight: 600; color: var(--muted); }
 .sc-list li.got .sc-s { color: var(--green-text); }
 .star-pill { background: color-mix(in srgb, var(--sun) 28%, transparent); color: var(--ink); }
 .rk { margin: 10px 0 18px; }
@@ -615,10 +615,10 @@ ul.tasks.big .task-title { font-size: 17px; }
 #login { background: var(--bg); }
 .login-stack { width: 100%; max-width: 400px; }
 .login-brand { margin: 0 0 20px; color: var(--ink); text-align: center; }
-.login-brand span { display: block; font-family: var(--display); font-weight: 700; font-size: 34px; line-height: 1.1; letter-spacing: -.025em; }
-.login-brand small { display: block; margin: 8px auto 0; font-size: 17px; color: var(--muted); max-width: 30ch; }
+.login-brand span { display: block; font-family: var(--display); font-weight: 700; font-size: 2.125rem; line-height: 1.1; letter-spacing: -.025em; }
+.login-brand small { display: block; margin: 8px auto 0; font-size: 1.0625rem; color: var(--muted); max-width: 30ch; }
 .login-card { max-width: none; }
-.login-card h2, .setup h2 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+.login-card h2, .setup h2 { font-size: 1.75rem; font-weight: 700; letter-spacing: -.02em; }
 
 /* Sysslelistan: knapparna staplas i egen kolumn så titeln får plats */
 #tasks li { display: grid; grid-template-columns: auto 1fr auto; column-gap: 12px; row-gap: 6px; align-items: start; }
@@ -634,15 +634,76 @@ ul.tasks.big .task-title { font-size: 17px; }
 .tabbar-in { gap: 0; }
 .tabbar button { color: var(--tab-off); border-radius: 0; padding: 3px 2px 2px; font-weight: 500; background: none; }
 .tabbar button[aria-current="page"] { background: none; color: var(--primary); font-weight: 600; }
-.tabbar button span { font-size: 10px; letter-spacing: .01em; }
+.tabbar button span { font-size: 0.625rem; letter-spacing: .01em; }
 .tabbar svg { width: 26px; height: 26px; stroke-width: 1.8; }
 .toast { bottom: calc(74px + env(safe-area-inset-bottom, 0px)); }
-label.step { text-transform: none; letter-spacing: 0; font-size: 15px; color: inherit; }
+label.step { text-transform: none; letter-spacing: 0; font-size: 0.9375rem; color: inherit; }
 input, select, textarea { font-size: max(16px, 1rem) !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+
+/* ===== Reach: start, invite, accessibility, login ===== */
+.login { overflow-y: auto; }
+@media (max-height: 760px) { .login { place-items: start center; } }
+.login-why { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
+.login-why li { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border-radius: 14px; padding: 12px 14px; font-size: .9375rem; line-height: 1.35; }
+.login-why .ico { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-size: 1rem; }
+.login-why b { display: block; font-weight: 600; }
+.login-why span.t { color: var(--muted); }
+.demo-row { text-align: center; margin: 14px 0 0; }
+.demo-row[hidden] { display: none; }
+.demo-row .ghost { font-weight: 600; }
+.oauth { display: grid; gap: 10px; margin: 0 0 6px; }
+.oauth[hidden], .oauth-btn[hidden] { display: none; }
+.oauth-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 48px; border-radius: 12px; font: inherit; font-weight: 600; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.oauth-btn[data-oauth="apple"] { background: #000; color: #fff; border-color: #000; }
+:root[data-theme="dark"] .oauth-btn[data-oauth="apple"] { background: #fff; color: #000; border-color: #fff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .oauth-btn[data-oauth="apple"] { background: #fff; color: #000; border-color: #fff; } }
+.oauth-btn svg { width: 18px; height: 18px; flex: 0 0 auto; }
+.or-line { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .875rem; margin: 8px 0 2px; }
+.or-line::before, .or-line::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.auth-alt { text-align: center; margin: 10px 0 0; }
+.auth-alt[hidden] { display: none; }
+.consent-note { font-size: .8125rem; color: var(--muted); text-align: center; margin: 2px 0 0; }
+#demo-bar { position: sticky; top: 0; z-index: 9; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: center; padding: 10px 16px; background: var(--primary); color: var(--on-primary); font-size: .9375rem; text-align: center; }
+#demo-bar[hidden] { display: none; }
+#demo-bar button { background: var(--on-primary); color: var(--primary); border: 0; border-radius: 999px; padding: 8px 14px; font: inherit; font-weight: 600; cursor: pointer; min-height: 36px; }
+#demo-bar button.plain { background: transparent; color: var(--on-primary); text-decoration: underline; padding: 8px 4px; }
+.start-steps { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.start-steps li { display: flex; align-items: center; gap: 12px; min-height: 48px; }
+.start-steps .num { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .875rem; background: var(--tint-fill); color: var(--primary); }
+.start-steps li.ok .num { background: var(--green); color: #fff; }
+.start-steps li.ok .st-lbl { color: var(--muted); text-decoration: line-through; }
+.start-steps .st-lbl { flex: 1 1 auto; }
+.start-steps .btn, .start-steps .ghost { flex: 0 0 auto; }
+.start-bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; margin-top: 10px; }
+.start-bar span { display: block; height: 100%; background: var(--green); border-radius: 3px; }
+.card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.card-top h2 { margin: 0; }
+.inv-sheet .setup-inner { max-width: 460px; }
+.inv-qr { background: #fff; border-radius: 16px; padding: 10px; width: min(260px, 70vw); margin: 6px auto 4px; }
+.inv-qr svg { display: block; width: 100%; height: auto; }
+.inv-roles { display: flex; justify-content: center; margin: 4px 0 12px; }
+.inv-can { margin: 0 0 12px; padding-left: 1.2em; }
+.inv-can li { margin: 4px 0; }
+.inv-how { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 6px; counter-reset: s; }
+.inv-how li { counter-increment: s; display: flex; gap: 10px; align-items: baseline; color: var(--muted); font-size: .9375rem; }
+.inv-how li::before { content: counter(s); flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%; background: var(--tint-fill); color: var(--primary); font-weight: 700; font-size: .8125rem; display: grid; place-items: center; }
+.inv-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
+.inv-code { text-align: center; color: var(--muted); font-size: .875rem; margin: 6px 0 0; }
+.pulse-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.pulse-btns button { flex: 1 1 90px; min-height: 52px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+.pulse-btns button span { font-size: 1.5rem; line-height: 1; }
+.skip-link { position: absolute; left: 8px; top: -80px; z-index: 50; background: var(--surface); color: var(--ink); padding: 10px 14px; border-radius: 10px; font-weight: 600; }
+.skip-link:focus { top: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+#main:focus { outline: none; }
+a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-visible, [data-tab]:focus-visible, .gear:focus-visible, input[type=checkbox]:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+@media (prefers-contrast: more) { :root { --muted: var(--ink); } }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main" id="skip-link" data-i="skipLink"></a>
+<div id="demo-bar" hidden><span id="demo-text"></span><button type="button" id="demo-signup"></button><button type="button" class="plain" id="demo-reset"></button></div>
 <div id="setup" class="login setup" hidden>
   <div class="setup-inner">
     <div class="card"><h2 data-i="setupTitle"></h2><p class="summary" style="margin:0" data-i="setupIntro"></p><p class="invite-note" id="invite-note-setup" hidden style="margin-top:12px"></p><p class="legal-links"><button type="button" class="linkish" data-legal="privacy" data-i="privacyLink"></button><span aria-hidden="true"> · </span><button type="button" class="linkish" data-legal="terms" data-i="termsLink"></button></p></div>
@@ -695,12 +756,32 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
     <p style="text-align:center;margin:0"><button class="ghost" type="button" id="guide-skip" data-i="guideSkip"></button></p>
   </div>
 </div>
+<div id="inv-sheet" class="login setup inv-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="inv-h">
+  <div class="setup-inner">
+    <div class="card">
+      <h2 id="inv-h" data-i="invTitle"></h2>
+      <div class="inv-roles"><div class="lang" role="group" aria-labelledby="inv-h">
+        <button type="button" data-inv-role="adult" aria-pressed="true" data-i="invAdult"></button>
+        <button type="button" data-inv-role="child" aria-pressed="false" data-i="invChild"></button>
+      </div></div>
+      <div id="inv-body"></div>
+      <p style="text-align:center;margin:14px 0 0"><button class="ghost" type="button" id="inv-close" data-i="close"></button></p>
+    </div>
+  </div>
+</div>
 <div id="login" class="login">
   <div class="login-stack">
   <p class="login-brand"><span data-i="title"></span><small data-i="sub"></small></p>
+  <ul class="login-why" id="login-why"></ul>
   <div class="card login-card">
     <p class="invite-note" id="invite-note-login" hidden></p>
     <h2 id="auth-title"></h2>
+    <div class="oauth" id="oauth-row" hidden>
+      <button type="button" class="oauth-btn" data-oauth="apple" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M16.4 12.6c0-2.5 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.8-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.3.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.8-1.1-2.8-4.3zM13.9 5.1c.7-.9 1.2-2 1-3.2-1 .1-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg><span data-i="withApple"></span></button>
+      <button type="button" class="oauth-btn" data-oauth="google" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h5.9c-.3 1.4-1 2.5-2.2 3.3v2.7h3.6c2.1-1.9 3.2-4.7 3.2-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.7c-1 .7-2.2 1.1-3.7 1.1-2.9 0-5.3-1.9-6.2-4.5H2.1v2.8C3.9 20.6 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.8 14.2c-.2-.7-.4-1.4-.4-2.2s.1-1.5.4-2.2V7H2.1C1.4 8.5 1 10.2 1 12s.4 3.5 1.1 5l3.7-2.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.2-3.2C17.5 2.1 15 1 12 1 7.7 1 3.9 3.4 2.1 7l3.7 2.8C6.7 7.3 9.1 5.4 12 5.4z"/></svg><span data-i="withGoogle"></span></button>
+      <p class="consent-note" id="oauth-consent"></p>
+      <p class="or-line" data-i="orEmail"></p>
+    </div>
     <form id="auth-form">
       <div id="reg-only" hidden><label for="a-name" data-i="yourName"></label><input id="a-name" maxlength="24" autocomplete="name"></div>
       <div style="margin-top:10px"><label for="a-email" data-i="email"></label><input id="a-email" type="email" inputmode="email" autocomplete="email" required></div>
@@ -714,9 +795,10 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
       <div id="terms-row" class="terms-row" hidden><label class="set-check" style="margin:0"><input type="checkbox" id="a-terms"><span id="a-terms-text"></span></label></div>
       <div style="margin-top:14px"><button class="btn" type="submit" id="auth-submit" style="width:100%"></button></div>
     </form>
+    <p class="auth-alt" id="magic-row" hidden><button class="linkish" id="magic-toggle" type="button"></button></p>
     <p class="footnote"><button class="ghost" id="auth-switch" type="button"></button></p>
-    <p id="auth-err"></p>
-    <p id="auth-info"></p>
+    <p id="auth-err" role="alert"></p>
+    <p id="auth-info" role="status"></p>
     <p class="footnote" data-i="authNote"></p>
     <p class="legal-links"><button type="button" class="linkish" data-legal="privacy" data-i="privacyLink"></button><span aria-hidden="true"> · </span><button type="button" class="linkish" data-legal="terms" data-i="termsLink"></button></p>
     <div style="display:flex;justify-content:center;margin-top:14px">
@@ -726,9 +808,10 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
       </div>
     </div>
   </div>
+  <p class="demo-row" id="demo-row"><button class="ghost" type="button" id="demo-start" data-i="demoStart"></button></p>
 </div>
 </div>
-<div class="wrap">
+<div class="wrap" id="main" tabindex="-1">
   <header>
     <div>
       <h1 id="t-title"></h1>
@@ -750,6 +833,9 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
       <div class="acts" id="a-acts"></div>
       <div class="about-btns"><button class="btn" type="button" id="about-done" data-i="aboutDone"></button><button class="ghost" type="button" id="about-skip" data-i="aboutSkip"></button></div>
     </section>
+
+    <section class="card full adult-only" id="welcome" data-view="today" aria-labelledby="start-h" hidden></section>
+    <section class="card full adult-only" id="pulse" data-view="today" aria-labelledby="pulse-h" hidden></section>
 
     <section class="card full" id="sec-today" data-view="today" aria-labelledby="h-today">
       <p class="kicker" id="today-date"></p>
@@ -776,8 +862,6 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
       <p style="margin:10px 0 0"><button class="ghost" type="button" id="mine-more" hidden></button></p>
       <ul class="tasks" id="mine-later" hidden></ul>
     </section>
-
-    <section class="card full welcome adult-only" id="welcome" data-view="today" hidden></section>
 
     <section class="card full" id="sec-board" data-view="today" aria-labelledby="h-board">
       <h2 id="h-board"><span class="dot"></span><span data-i="boardTitle"></span></h2>
@@ -833,7 +917,7 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
       </div>
       <div class="set-grid" style="margin-top:16px">
         <div><label for="set-theme" data-i="themeLabel"></label><select id="set-theme"></select></div>
-        <label class="set-check" style="align-self:end"><input type="checkbox" id="set-bigtext"><span data-i="bigText"></span></label>
+        <div><label for="set-textsize" data-i="textSize"></label><select id="set-textsize"></select></div>
       </div>
       <div class="set-sub cloud-only" id="set-notify"></div>
       <div class="set-sub cloud-only" id="set-feedback">
@@ -1062,8 +1146,18 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
 /* ---------- Supabase ---------- */
 const SUPABASE_URL = "https://gkqbqrtmpftjsgguxiff.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_6NBnPWJE2b9bWenLr3wXVA_XQeord9e";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const LOCAL_MODE = false;
+const DEMO = (() => { try { return localStorage.getItem("hb-demo") === "1"; } catch (e) { return false; } })();
+const DEMO_USER = { id: "demo", user_metadata: {} };
+const DEMO_NO = async () => ({ data: null, error: { message: "demo" } });
+const sb = DEMO ? {
+  auth: { getSession: async () => ({ data: { session: { user: DEMO_USER } } }), signOut: async () => ({}), updateUser: DEMO_NO },
+  from: () => ({
+    select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: { data: demoState() }, error: null }) }) }),
+    upsert: async () => ({ error: null }), insert: async () => ({ error: null })
+  }),
+  rpc: DEMO_NO, functions: { invoke: DEMO_NO }
+} : window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const LOCAL_MODE = DEMO;
 
 /* ---------- Text ---------- */
 const T = {
@@ -1123,6 +1217,22 @@ const T = {
     delOwnerFirst: "Hand over ownership to another adult under Household accounts first.", delDone: "Your account has been deleted.",
     memHint: "Everyone who joins with an invite shows up here by themselves.", memHintAdult: "Everyone who joins with an invite shows up here by themselves. Ask the owner for an invite link.",
     memInvite: "Invite the family", memNoAcc: "+ Add someone without an account", noAccLabel: "No account",
+    skipLink: "Skip to content", close: "Close", stepDone: "done",
+    why: [["⚖️", "rgba(0,104,217,.14)", "Fair at home", "See who does what, and share it out evenly with one tap."], ["⭐", "rgba(255,204,0,.25)", "Children join in", "Their own list, stars and rewards that motivate."], ["🛒", "rgba(52,199,89,.18)", "Shopping and dinners", "A shared list and the week's dinners in one place."]],
+    demoStart: "Try with an example family", demoText: "You are trying an example family. Nothing is saved.", demoSignup: "Create my own", demoReset: "Start over",
+    withApple: "Continue with Apple", withGoogle: "Continue with Google", orEmail: "or with email", oauthConsent: "By continuing you accept the {terms} and the {privacy}.",
+    magicUse: "Email me a sign-in link instead", magicBack: "Use a password instead", magicSend: "Send link", magicSent: "Check your email and tap the link to sign in.", magicNotReady: "Sign-in links are not available yet. Use a password.",
+    startTitle: "Get started", startProgress: "{n} of {total} done", startHide: "Hide",
+    startFamily: "Add your family", startInvite: "Invite someone to the app", startShare: "Share out the chores", startFirst: "Tick off your first chore",
+    startGoFamily: "Add", startGoInvite: "Invite", startGoShare: "Share out", startGoFirst: "Show",
+    invTitle: "Invite the family", invAdult: "Adult", invChild: "Child", invQr: "QR code for the invite link",
+    invCanAdult: ["Sees and changes everything: chores, family, shopping and dinners.", "Can give stars and rewards to the children.", "Suits a partner, grandparents or another adult who helps out."],
+    invCanChild: ["Sees their own chores and ticks them off.", "Collects stars and sees their rewards.", "Cannot change other people's chores or the settings.", "You choose what children may see under Settings."],
+    invHow: ["Scan the code with the phone camera, or open the link.", "Create an account or sign in.", "Write their name, the same one as in the app."],
+    invCodeLine: "Code: {code}", invOwnerOnly: "Only the person who created the household can invite. Ask them to show the code.", qrBtn: "QR code",
+    textSize: "Text size", textAuto: "Same as the phone", textNormal: "Normal", textLarge: "Large", textXL: "Extra large",
+    pulseTitle: "How is the app working for you?", pulseHint: "One tap helps make it better.", pulseGood: "Good", pulseOk: "OK", pulseBad: "Not great",
+    pulseMore: "What could be better? (optional)", pulseSend: "Send", pulseThanks: "Thank you! It goes straight to the person who builds the app.", pulseLater: "Not now",
     guideSkip: "Skip the guide", guideStep: "Step {n} of {total}", guideNext: "Next", guideDone: "Done, start using the app",
     g1Title: "Who lives at home?", g1Hint: "Add everyone who should share the chores. People with their own phone join with an invite in the next step. Ask them to use the same name.", gYou: "you",
     g2Title: "Invite the family", g2Hint: "Send the link to each person. Adults and children get different links.", gLinkAdult: "Link for adults", gLinkChild: "Link for children",
@@ -1240,6 +1350,22 @@ const T = {
     delOwnerFirst: "Lämna först över ägarskapet till en annan vuxen under Hushållets konton.", delDone: "Ditt konto är raderat.",
     memHint: "Alla som går med via en inbjudan dyker upp här av sig själva.", memHintAdult: "Alla som går med via en inbjudan dyker upp här av sig själva. Be ägaren om en inbjudningslänk.",
     memInvite: "Bjud in familjen", memNoAcc: "+ Lägg till någon utan konto, t.ex. ett litet barn", noAccLabel: "Utan konto",
+    skipLink: "Hoppa till innehållet", close: "Stäng", stepDone: "klart",
+    why: [["⚖️", "rgba(0,104,217,.14)", "Rättvist hemma", "Se vem som gör vad, och fördela jämnt med ett tryck."], ["⭐", "rgba(255,204,0,.25)", "Barnen är med", "Egen lista, stjärnor och belöningar som peppar."], ["🛒", "rgba(52,199,89,.18)", "Inköp och middagar", "Gemensam inköpslista och veckans middagar på ett ställe."]],
+    demoStart: "Prova med en exempelfamilj", demoText: "Du provar med en exempelfamilj. Inget sparas.", demoSignup: "Skapa egen", demoReset: "Börja om",
+    withApple: "Fortsätt med Apple", withGoogle: "Fortsätt med Google", orEmail: "eller med e-post", oauthConsent: "Genom att fortsätta godkänner du {terms} och {privacy}.",
+    magicUse: "Skicka en inloggningslänk till min e-post i stället", magicBack: "Använd lösenord i stället", magicSend: "Skicka länk", magicSent: "Titta i din e-post och tryck på länken för att logga in.", magicNotReady: "Inloggningslänkar fungerar inte än. Använd lösenord.",
+    startTitle: "Kom igång", startProgress: "{n} av {total} klara", startHide: "Dölj",
+    startFamily: "Lägg till familjen", startInvite: "Bjud in någon till appen", startShare: "Fördela sysslorna", startFirst: "Bocka av första sysslan",
+    startGoFamily: "Lägg till", startGoInvite: "Bjud in", startGoShare: "Fördela", startGoFirst: "Visa",
+    invTitle: "Bjud in familjen", invAdult: "Vuxen", invChild: "Barn", invQr: "QR-kod för inbjudningslänken",
+    invCanAdult: ["Ser och ändrar allt: sysslor, familj, inköp och middagar.", "Kan ge stjärnor och belöningar till barnen.", "Passar partner, mor- och farföräldrar eller annan vuxen som hjälper till."],
+    invCanChild: ["Ser sina egna sysslor och bockar av dem.", "Samlar stjärnor och ser sina belöningar.", "Kan inte ändra andras sysslor eller inställningarna.", "Du väljer under Inställningar vad barn får se."],
+    invHow: ["Skanna koden med mobilkameran, eller öppna länken.", "Skapa ett konto eller logga in.", "Skriv sitt namn, samma som i appen."],
+    invCodeLine: "Kod: {code}", invOwnerOnly: "Bara den som skapade hushållet kan bjuda in. Be hen visa koden.", qrBtn: "QR-kod",
+    textSize: "Textstorlek", textAuto: "Samma som telefonen", textNormal: "Normal", textLarge: "Stor", textXL: "Extra stor",
+    pulseTitle: "Hur fungerar appen för er?", pulseHint: "Ett tryck hjälper till att göra den bättre.", pulseGood: "Bra", pulseOk: "Okej", pulseBad: "Inte bra",
+    pulseMore: "Vad kan bli bättre? (frivilligt)", pulseSend: "Skicka", pulseThanks: "Tack! Det går direkt till den som bygger appen.", pulseLater: "Inte nu",
     guideSkip: "Hoppa över guiden", guideStep: "Steg {n} av {total}", guideNext: "Nästa", guideDone: "Klart, börja använda appen",
     g1Title: "Vilka bor hemma?", g1Hint: "Lägg till alla som ska dela på sysslorna. Den som har egen telefon går med via en inbjudan i nästa steg. Be dem skriva samma namn.", gYou: "du",
     g2Title: "Bjud in familjen", g2Hint: "Skicka länken till var och en. Vuxna och barn får olika länkar.", gLinkAdult: "Länk för vuxna", gLinkChild: "Länk för barn",
@@ -1526,6 +1652,7 @@ function mergeStates(base, local, remote) {
   });
   Object.keys(out.leave).forEach(id => { if (!out.members.some(m => m.id === id)) delete out.leave[id]; });
   out.welcomeDismissed = !!(local.welcomeDismissed || remote.welcomeDismissed);
+  if (local.startHidden || remote.startHidden) out.startHidden = true;
   out.settings = { ...SETTINGS_DEFAULT, ...(remote.settings || {}) };
   Object.keys(SETTINGS_DEFAULT).forEach(key => {
     const lv = (local.settings || {})[key], bv = (bs.settings || {})[key];
@@ -1732,7 +1859,9 @@ function applyStatic() {
   const th = document.getElementById("set-theme");
   th.innerHTML = [["", t.themeAuto], ["light", t.themeLight], ["dark", t.themeDark]].map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("");
   th.value = lsGet("hb-theme") || "";
-  document.getElementById("set-bigtext").checked = lsGet("hb-big") === "1";
+  const ts = document.getElementById("set-textsize");
+  ts.innerHTML = [["", t.textAuto], ["n", t.textNormal], ["l", t.textLarge], ["xl", t.textXL]].map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("");
+  ts.value = textSizeKey();
 }
 function renderRotPicker(sel) {
   const box = document.getElementById("k-rot");
@@ -1900,11 +2029,44 @@ function renderOverview() {
        <div class="bar"><span style="width:${pct}%;background:var(--c)"></span></div>
        ${done === total ? `<div class="banner">${t.allDone}</div>` : ""}`
     : "";
-  const w = document.getElementById("welcome");
-  w.hidden = !!state.welcomeDismissed;
-  if (!state.welcomeDismissed) {
-    w.innerHTML = `<h2>${t.welcomeTitle}</h2><p>${t.welcomeIntro}</p><ol>${t.welcomeSteps.map(x => `<li>${x}</li>`).join("")}</ol><button type="button" id="welcome-dismiss">${t.welcomeBtn}</button>`;
+  renderStart();
+  renderPulse();
+}
+function startSteps() {
+  if (!state || DEMO || isChild() || state.startHidden || guideOn()) return null;
+  const steps = [
+    { key: "family", ok: state.members.length >= 2 },
+    !LOCAL_MODE && hh && isOwner() ? { key: "invite", ok: hh.members.length >= 2 } : null,
+    { key: "share", ok: new Set(state.tasks.map(k => k.owner)).size >= 2 },
+    { key: "first", ok: (state.doneLog || []).length > 0 || state.tasks.some(k => k.done) }
+  ].filter(Boolean);
+  return steps.every(x => x.ok) ? null : steps;
+}
+function renderStart() {
+  const w = document.getElementById("welcome"), t = T[lang], steps = startSteps();
+  w.hidden = !steps;
+  if (!steps) { w.innerHTML = ""; return; }
+  const n = steps.filter(x => x.ok).length, cap = x => x[0].toUpperCase() + x.slice(1), next = steps.findIndex(y => !y.ok);
+  w.innerHTML = `<div class="card-top"><h2 id="start-h">${esc(t.startTitle)}</h2><button type="button" class="ghost" data-start="hide">${esc(t.startHide)}</button></div>
+    <p class="summary" style="margin:4px 0 0">${esc(t.startProgress.replace("{n}", n).replace("{total}", steps.length))}</p>
+    <div class="start-bar" aria-hidden="true"><span style="width:${Math.round(n / steps.length * 100)}%"></span></div>
+    <ol class="start-steps">${steps.map((x, i) => `<li class="${x.ok ? "ok" : ""}"><span class="num" aria-hidden="true">${x.ok ? "✓" : i + 1}</span><span class="st-lbl">${esc(t["start" + cap(x.key)])}${x.ok ? `<span class="sr-only"> (${esc(t.stepDone)})</span>` : ""}</span>${x.ok ? "" : `<button type="button" class="${next === i ? "btn" : "ghost"}" data-start="${x.key}">${esc(t["startGo" + cap(x.key)])}</button>`}</li>`).join("")}</ol>`;
+}
+let pulseStage = "", pulseVal = "";
+function renderPulse() {
+  const box = document.getElementById("pulse"), t = T[lang];
+  const first = Number(lsGet("hb-first") || 0);
+  const due = !LOCAL_MODE && !!currentUser && !isChild() && first > 0 && Date.now() - first > 7 * 864e5 && Date.now() - Number(lsGet("hb-pulse") || 0) > 45 * 864e5;
+  if (!due && !pulseStage) { box.hidden = true; box.innerHTML = ""; return; }
+  box.hidden = false;
+  if (pulseStage === "thanks") { box.innerHTML = `<p class="summary" style="margin:0" role="status">${esc(t.pulseThanks)}</p>`; return; }
+  if (pulseStage === "more") {
+    if (document.getElementById("pulse-text")) return;
+    box.innerHTML = `<h2 id="pulse-h">${esc(t.pulseMore)}</h2><textarea id="pulse-text" maxlength="1000" rows="3" aria-labelledby="pulse-h"></textarea><div class="pulse-btns"><button type="button" data-pulse="send">${esc(t.pulseSend)}</button><button type="button" data-pulse="skip">${esc(t.pulseLater)}</button></div>`;
+    return;
   }
+  box.innerHTML = `<div class="card-top"><h2 id="pulse-h">${esc(t.pulseTitle)}</h2><button type="button" class="ghost" data-pulse="later">${esc(t.pulseLater)}</button></div><p class="summary" style="margin:4px 0 0">${esc(t.pulseHint)}</p>
+    <div class="pulse-btns" role="group" aria-labelledby="pulse-h"><button type="button" data-pulse="good"><span aria-hidden="true">😀</span>${esc(t.pulseGood)}</button><button type="button" data-pulse="ok"><span aria-hidden="true">😐</span>${esc(t.pulseOk)}</button><button type="button" data-pulse="bad"><span aria-hidden="true">🙁</span>${esc(t.pulseBad)}</button></div>`;
 }
 
 let hhConfirm = null;
@@ -1945,7 +2107,7 @@ function renderHousehold() {
   if (owner && hh.invites) {
     html += `<h3 class="clean-h" style="margin-top:18px">${t.inviteTitle}</h3><p class="summary" style="margin-top:0">${t.inviteHint}</p>`;
     html += [["adult_code", t.codeAdult], ["child_code", t.codeChild]].map(([k, label]) => k === "child_code" && !settings().parentConsent ? consentRow() :
-      `<div class="hh-row"><span class="grow">${label}</span><code class="code">${esc(hh.invites[k])}</code><button class="ghost" data-hh="copy" data-code="${esc(hh.invites[k])}">${t.copyCode}</button><button class="ghost" data-hh="copylink" data-code="${esc(hh.invites[k])}">${t.inviteLinkBtn}</button>${navigator.share ? `<button class="ghost" data-hh="share" data-code="${esc(hh.invites[k])}">${t.inviteShareBtn}</button>` : ""}</div>`).join("");
+      `<div class="hh-row"><span class="grow">${label}</span><code class="code">${esc(hh.invites[k])}</code><button class="ghost" data-hh="copy" data-code="${esc(hh.invites[k])}">${t.copyCode}</button><button class="ghost" data-hh="qr" data-role="${k === "child_code" ? "child" : "adult"}">${t.qrBtn}</button><button class="ghost" data-hh="copylink" data-code="${esc(hh.invites[k])}">${t.inviteLinkBtn}</button>${navigator.share ? `<button class="ghost" data-hh="share" data-code="${esc(hh.invites[k])}">${t.inviteShareBtn}</button>` : ""}</div>`).join("");
     html += `<div style="margin-top:10px">${btn("codes", "-", t.newCodes)}</div>`;
   }
   html += `<div class="hh-row" style="margin-top:14px;border-top:1px solid var(--line)">`;
@@ -1962,6 +2124,7 @@ document.getElementById("hh-body").addEventListener("click", async e => {
     if (await copyText(b.dataset.code)) { b.textContent = T[lang].copied; setTimeout(renderHousehold, 1500); }
     return;
   }
+  if (act === "qr") { openInvite(b.dataset.role, b); return; }
   if (act === "copylink") {
     if (await copyText(inviteUrl(b.dataset.code))) { b.textContent = T[lang].linkCopied; setTimeout(renderHousehold, 1500); }
     return;
@@ -2146,6 +2309,7 @@ function renderAll() {
   renderLeave();
   renderCheckins();
   renderHousehold();
+  renderInvite();
   renderSettings();
   renderInstall();
   document.getElementById("checkin").value = draft;
@@ -2256,10 +2420,7 @@ document.getElementById("mem-noacc").onclick = () => {
   renderMembers();
   if (memberFormOpen) document.getElementById("m-name").focus();
 };
-document.getElementById("mem-invite").onclick = () => {
-  setView("settings");
-  setTimeout(() => { const el = document.getElementById("sec-household"); if (el) el.scrollIntoView({ block: "start" }); }, 30);
-};
+document.getElementById("mem-invite").onclick = e => openInvite("adult", e.currentTarget);
 document.getElementById("members").onclick = e => {
   const rm = e.target.closest("[data-remove-member]");
   if (!rm || isChild()) return;
@@ -2302,7 +2463,39 @@ document.getElementById("fair").addEventListener("click", e => {
 });
 
 document.getElementById("welcome").addEventListener("click", e => {
-  if (e.target.id === "welcome-dismiss") { state.welcomeDismissed = true; save(); renderOverview(); }
+  const b = e.target.closest("[data-start]");
+  if (!b || !state || isChild()) return;
+  const k = b.dataset.start;
+  if (k === "hide") { state.startHidden = true; save(); renderStart(); return; }
+  if (k === "family") {
+    setView("family");
+    if (!LOCAL_MODE && !memberFormOpen) document.getElementById("mem-noacc").click();
+    setTimeout(() => { const el = document.getElementById("m-name"); if (el) { el.scrollIntoView({ block: "center" }); el.focus(); } }, 60);
+    return;
+  }
+  if (k === "invite") { openInvite("adult", b); return; }
+  if (k === "share") { setView("chores"); setTimeout(() => { const el = document.getElementById("sec-chores"); if (el) el.scrollIntoView({ block: "start" }); }, 30); return; }
+  if (k === "first") { const el = document.getElementById("today-list"); if (el) { el.scrollIntoView({ block: "center" }); const c = el.querySelector("button, input"); if (c) c.focus(); } }
+});
+document.getElementById("pulse").addEventListener("click", e => {
+  const b = e.target.closest("[data-pulse]");
+  if (!b) return;
+  const v = b.dataset.pulse;
+  if (v === "later") { lsSet("hb-pulse", String(Date.now() - 38 * 864e5)); pulseStage = ""; renderPulse(); return; }
+  if (v === "good" || v === "ok" || v === "bad") {
+    lsSet("hb-pulse", String(Date.now()));
+    pulseVal = v; pulseStage = "more";
+    logEvent("feedback", "pulse: " + v, { pulse: v, view: lastTab, lang });
+    renderPulse();
+    const ta = document.getElementById("pulse-text"); if (ta) ta.focus();
+    return;
+  }
+  if (v === "send") {
+    const ta = document.getElementById("pulse-text"), text = ta ? ta.value.trim() : "";
+    if (text) logEvent("feedback", text.slice(0, 1000), { pulse: pulseVal, view: lastTab, lang });
+  }
+  pulseStage = "thanks"; renderPulse();
+  setTimeout(() => { pulseStage = ""; renderPulse(); }, 4000);
 });
 
 document.getElementById("save-checkin").onclick = () => {
@@ -2923,11 +3116,32 @@ function confetti() {
 function applyLook() {
   const th = lsGet("hb-theme") || "";
   if (th) document.documentElement.dataset.theme = th; else delete document.documentElement.dataset.theme;
-  document.documentElement.classList.toggle("big-text", lsGet("hb-big") === "1");
+  document.documentElement.classList.remove("big-text");
+  document.documentElement.style.fontSize = textScale() + "%";
 }
+function textSizeKey() {
+  const v = lsGet("hb-text");
+  if (v === null) return lsGet("hb-big") === "1" ? "l" : "";
+  return ["", "n", "l", "xl"].includes(v) ? v : "";
+}
+function systemTextScale() {
+  // iPhone and iPad: follow Settings > Display > Text Size (Dynamic Type), where 17px is the normal size.
+  try {
+    if (!(window.CSS && CSS.supports && CSS.supports("font", "-apple-system-body"))) return 100;
+    const p = document.createElement("span");
+    p.style.cssText = "font: -apple-system-body; position: absolute; visibility: hidden";
+    p.textContent = "x";
+    document.body.appendChild(p);
+    const px = parseFloat(getComputedStyle(p).fontSize) || 17;
+    p.remove();
+    return Math.max(85, Math.min(200, Math.round(px / 17 * 1000) / 10));
+  } catch (e) { return 100; }
+}
+function textScale() { return { n: 100, l: 118.75, xl: 137.5 }[textSizeKey()] || systemTextScale(); }
 applyLook();
 document.getElementById("set-theme").onchange = e => { lsSet("hb-theme", e.target.value); applyLook(); };
-document.getElementById("set-bigtext").onchange = e => { lsSet("hb-big", e.target.checked ? "1" : ""); applyLook(); };
+document.getElementById("set-textsize").onchange = e => { lsSet("hb-text", e.target.value); lsSet("hb-big", ""); applyLook(); };
+window.addEventListener("pageshow", applyLook);
 function bdayText(m, onDate) {
   const t = T[lang];
   const y = Number((m.birthday || "").slice(0, 4));
@@ -3100,6 +3314,59 @@ const onMineClick = e => {
   document.getElementById(id).addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.dataset.mineToggle) { e.preventDefault(); e.target.click(); } });
 });
 
+/* Swedish food spelling: fixes words where the AI put dots/rings in the wrong place (köttbullär -> köttbullar). */
+const SV_FOOD = ("köttbullar köttbulle köttfärs nötfärs fläskfärs blandfärs kycklingfärs färsbiffar biffar pannbiff pannbiffar wallenbergare " +
+  "kyckling kycklingfilé kycklingfiléer kycklinglår kycklingbröst lax laxfilé laxfiléer torsk torskfilé sej sejfilé fiskpinnar fiskbullar fiskgratäng " +
+  "räkor räksallad tonfisk sill strömming makrill fläskfilé fläskkarré karré fläsksida bacon skinka korv falukorv prinskorv chorizo salami köttgryta " +
+  "gryta grytan grytor kalops lövbiff entrecote ryggbiff högrev oxfilé lammfärs lammkotletter kotletter fläskkotletter schnitzel " +
+  "pasta spagetti spaghetti makaroner penne tagliatelle lasagne lasagnette ravioli tortellini gnocchi nudlar ris jasminris basmatiris fullkornsris " +
+  "risotto bulgur couscous quinoa potatis potatisar potatismos mos klyftpotatis ugnspotatis pressad gräddsås gräddstuvad stuvad stuvade " +
+  "pommes rotfrukter rotmos morötter morot palsternacka palsternackor rödbetor kålrot vitkål rödkål grönkål blomkål broccoli spenat sallad " +
+  "isbergssallad ruccola gurka gurkor tomat tomater körsbärstomater paprika paprikor lök rödlök gullök purjolök vitlök vitlöksklyftor " +
+  "salladslök champinjoner svamp kantareller zucchini aubergine majs ärtor ärter gröna bönor kidneybönor vita kikärtor linser röda " +
+  "avokado citron citroner lime äpple äpplen päron banan bananer apelsin lingon lingonsylt blåbär jordgubbar hallon russin " +
+  "mjölk filmjölk yoghurt grädde vispgrädde matlagningsgrädde crème fraîche gräddfil kvarg ost riven riven ost mozzarella parmesan fetaost " +
+  "halloumi cheddar keso smör margarin ägg äggula äggulor vetemjöl mjöl ströbröd panko socker salt peppar svartpeppar kryddpeppar " +
+  "paprikapulver curry kanel ingefära oregano basilika timjan rosmarin persilja dill gräslök koriander spiskummin chili chiliflakes " +
+  "buljong buljongtärning buljongtärningar kycklingbuljong grönsaksbuljong köttbuljong soja sojasås fisksås ostronsås sötsur sås såsen " +
+  "ketchup senap majonnäs ajvar pesto tomatpuré krossade krossad passerade kokosmjölk jordnötssmör jordnötter cashewnötter sesamfrön " +
+  "olivolja rapsolja olja vinäger balsamvinäger honung sirap bröd tunnbröd tortillabröd tortillas tacoskal tacokrydda tacos " +
+  "hamburgare hamburgerbröd korvbröd pizzadeg pizza pizzor paj pajer quiche omelett pannkakor plättar våfflor gröt havregryn " +
+  "soppa soppor ärtsoppa tomatsoppa potatissoppa linssoppa minestrone gulasch chili con carne bolognese köttfärssås carbonara " +
+  "lasagnen pytt pyttipanna kåldolmar kålpudding janssons frestelse fiskgratäng laxpudding stroganoff korvstroganoff " +
+  "biff fläsk stekt stekta kokt kokta ugnsbakad ugnsbakade grillad grillade gratäng gratinerad gratinerade wok wokade " +
+  "sallader tzatziki raita hummus falafel halloumiburgare grönsaker grönsaksbiffar vegetarisk vegetariska vegansk veganska " +
+  "middag middagar lunch frukost mellanmål matlåda matlådor recept portioner portion skivor skivad skivade tärnad tärnade hackad hackade " +
+  "klyftor klyfta bitar strimlad strimlade färsk färska fryst frysta burk burkar påse förpackning paket").split(/\s+/).filter(Boolean);
+function svFold(w) { return w.toLowerCase().replace(/[åä]/g, "a").replace(/ö/g, "o").replace(/[éè]/g, "e").replace(/î/g, "i"); }
+const SV_EXACT = new Set(SV_FOOD.map(w => w.toLowerCase()));
+const SV_BY_FOLD = new Map();
+SV_FOOD.forEach(w => { const f = svFold(w); if (!SV_BY_FOLD.has(f)) SV_BY_FOLD.set(f, w.toLowerCase()); });
+const SV_SUFFIX = [...SV_EXACT].filter(w => w.length >= 5).sort((a, b) => b.length - a.length);
+function svKeepCase(src, fixed) {
+  if (src === src.toUpperCase() && src.length > 1) return fixed.toUpperCase();
+  return src[0] === src[0].toUpperCase() ? fixed[0].toUpperCase() + fixed.slice(1) : fixed;
+}
+function svFixWord(w) {
+  const low = w.toLowerCase();
+  if (low.length < 5 || SV_EXACT.has(low)) return w;
+  const f = svFold(low);
+  const whole = SV_BY_FOLD.get(f);
+  if (whole) return svKeepCase(w, whole);
+  for (const e of SV_SUFFIX) {
+    if (low.length - e.length < 2) continue;
+    const tail = low.slice(low.length - e.length);
+    if (tail !== e && svFold(tail) === svFold(e)) return svKeepCase(w, low.slice(0, low.length - e.length) + e);
+  }
+  return w;
+}
+function svFix(text) { return String(text == null ? "" : text).replace(/[A-Za-zÅÄÖåäöÉéÈèÎî]+/g, svFixWord); }
+function aiSpell(plan) {
+  if (lang !== "sv" || !plan) return plan;
+  (plan.days || []).forEach(d => { d.dish = svFix(d.dish); d.note = svFix(d.note); (d.ingredients || []).forEach(x => { x.name = svFix(x.name); }); });
+  plan.tip = svFix(plan.tip);
+  return plan;
+}
 /* ---------- AI dinner planning (Supabase Edge Function "plan-meals") ---------- */
 const AI_ENABLED = true; // satt till true om AI-hjalpen ska anvandas igen (kraver Edge Function + nyckel)
 let aiPlan = null, aiBusy = false;
@@ -3142,7 +3409,7 @@ async function aiPlanWeek() {
       return;
     }
     if (!data || !data.plan || !Array.isArray(data.plan.days) || !data.plan.days.length) { status.classList.add("err"); status.textContent = t.aiError; return; }
-    aiPlan = data.plan;
+    aiPlan = aiSpell(data.plan);
     status.textContent = "";
     renderAiResult();
   } catch (e) {
@@ -3512,7 +3779,7 @@ document.addEventListener("change", e => {
 });
 
 /* ---------- Error reports and feedback (table app_events, only readable by the developer) ---------- */
-const APP_VERSION = "2026-10-09";
+const APP_VERSION = "2026-10-13";
 let evCount = 0;
 const evSeen = new Set();
 async function logEvent(kind, message, detail) {
@@ -3975,6 +4242,1346 @@ document.getElementById("k-rot").addEventListener("click", e => {
   b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"));
 });
 
+/* QR code encoder. Copyright (c) 2009 Kazuhiko Arase, MIT license (via qrcode-terminal). */
+const HBQR = (() => {
+const M = {};
+(function(){
+M.QRMode = {
+    MODE_NUMBER :       1 << 0,
+    MODE_ALPHA_NUM :    1 << 1,
+    MODE_8BIT_BYTE :    1 << 2,
+    MODE_KANJI :        1 << 3
+};
+
+})();
+(function(){
+M.QRErrorCorrectLevel = {
+	L : 1,
+	M : 0,
+	Q : 3,
+	H : 2
+};
+
+
+})();
+(function(){
+M.QRMaskPattern = {
+	PATTERN000 : 0,
+	PATTERN001 : 1,
+	PATTERN010 : 2,
+	PATTERN011 : 3,
+	PATTERN100 : 4,
+	PATTERN101 : 5,
+	PATTERN110 : 6,
+	PATTERN111 : 7
+};
+
+})();
+(function(){
+var QRMath = {
+
+	glog : function(n) {
+	
+		if (n < 1) {
+			throw new Error("glog(" + n + ")");
+		}
+		
+		return QRMath.LOG_TABLE[n];
+	},
+	
+	gexp : function(n) {
+	
+		while (n < 0) {
+			n += 255;
+		}
+	
+		while (n >= 256) {
+			n -= 255;
+		}
+	
+		return QRMath.EXP_TABLE[n];
+	},
+	
+	EXP_TABLE : new Array(256),
+	
+	LOG_TABLE : new Array(256)
+
+};
+	
+for (var i = 0; i < 8; i++) {
+	QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+	QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+		^ QRMath.EXP_TABLE[i - 5]
+		^ QRMath.EXP_TABLE[i - 6]
+		^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+	QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+
+M.QRMath = QRMath;
+
+})();
+(function(){
+var QRMath = M.QRMath;
+
+function QRPolynomial(num, shift) {
+	if (num.length === undefined) {
+		throw new Error(num.length + "/" + shift);
+	}
+
+	var offset = 0;
+
+	while (offset < num.length && num[offset] === 0) {
+		offset++;
+	}
+
+	this.num = new Array(num.length - offset + shift);
+	for (var i = 0; i < num.length - offset; i++) {
+		this.num[i] = num[i + offset];
+	}
+}
+
+QRPolynomial.prototype = {
+
+	get : function(index) {
+		return this.num[index];
+	},
+	
+	getLength : function() {
+		return this.num.length;
+	},
+	
+	multiply : function(e) {
+	
+		var num = new Array(this.getLength() + e.getLength() - 1);
+	
+		for (var i = 0; i < this.getLength(); i++) {
+			for (var j = 0; j < e.getLength(); j++) {
+				num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+			}
+		}
+	
+		return new QRPolynomial(num, 0);
+	},
+	
+	mod : function(e) {
+	
+		if (this.getLength() - e.getLength() < 0) {
+			return this;
+		}
+	
+		var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+	
+		var num = new Array(this.getLength() );
+		
+		for (var i = 0; i < this.getLength(); i++) {
+			num[i] = this.get(i);
+		}
+		
+		for (var x = 0; x < e.getLength(); x++) {
+			num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+		}
+	
+		// recursive call
+		return new QRPolynomial(num, 0).mod(e);
+	}
+};
+
+M.QRPolynomial = QRPolynomial;
+
+})();
+(function(){
+var QRMode = M.QRMode;
+
+function QR8bitByte(data) {
+	this.mode = QRMode.MODE_8BIT_BYTE;
+	this.data = data;
+}
+
+QR8bitByte.prototype = {
+
+	getLength : function() {
+		return this.data.length;
+	},
+	
+	write : function(buffer) {
+		for (var i = 0; i < this.data.length; i++) {
+			// not JIS ...
+			buffer.put(this.data.charCodeAt(i), 8);
+		}
+	}
+};
+
+M.QR8bitByte = QR8bitByte;
+
+})();
+(function(){
+function QRBitBuffer() {
+	this.buffer = [];
+	this.length = 0;
+}
+
+QRBitBuffer.prototype = {
+
+	get : function(index) {
+		var bufIndex = Math.floor(index / 8);
+		return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+	},
+	
+	put : function(num, length) {
+		for (var i = 0; i < length; i++) {
+			this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+		}
+	},
+	
+	getLengthInBits : function() {
+		return this.length;
+	},
+	
+	putBit : function(bit) {
+	
+		var bufIndex = Math.floor(this.length / 8);
+		if (this.buffer.length <= bufIndex) {
+			this.buffer.push(0);
+		}
+	
+		if (bit) {
+			this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+		}
+	
+		this.length++;
+	}
+};
+
+M.QRBitBuffer = QRBitBuffer;
+
+})();
+(function(){
+var QRErrorCorrectLevel = M.QRErrorCorrectLevel;
+
+function QRRSBlock(totalCount, dataCount) {
+	this.totalCount = totalCount;
+	this.dataCount  = dataCount;
+}
+
+QRRSBlock.RS_BLOCK_TABLE = [
+
+	// L
+	// M
+	// Q
+	// H
+
+	// 1
+	[1, 26, 19],
+	[1, 26, 16],
+	[1, 26, 13],
+	[1, 26, 9],
+	
+	// 2
+	[1, 44, 34],
+	[1, 44, 28],
+	[1, 44, 22],
+	[1, 44, 16],
+
+	// 3
+	[1, 70, 55],
+	[1, 70, 44],
+	[2, 35, 17],
+	[2, 35, 13],
+
+	// 4		
+	[1, 100, 80],
+	[2, 50, 32],
+	[2, 50, 24],
+	[4, 25, 9],
+	
+	// 5
+	[1, 134, 108],
+	[2, 67, 43],
+	[2, 33, 15, 2, 34, 16],
+	[2, 33, 11, 2, 34, 12],
+	
+	// 6
+	[2, 86, 68],
+	[4, 43, 27],
+	[4, 43, 19],
+	[4, 43, 15],
+	
+	// 7		
+	[2, 98, 78],
+	[4, 49, 31],
+	[2, 32, 14, 4, 33, 15],
+	[4, 39, 13, 1, 40, 14],
+	
+	// 8
+	[2, 121, 97],
+	[2, 60, 38, 2, 61, 39],
+	[4, 40, 18, 2, 41, 19],
+	[4, 40, 14, 2, 41, 15],
+	
+	// 9
+	[2, 146, 116],
+	[3, 58, 36, 2, 59, 37],
+	[4, 36, 16, 4, 37, 17],
+	[4, 36, 12, 4, 37, 13],
+	
+	// 10		
+	[2, 86, 68, 2, 87, 69],
+	[4, 69, 43, 1, 70, 44],
+	[6, 43, 19, 2, 44, 20],
+	[6, 43, 15, 2, 44, 16],
+
+	// 11
+	[4, 101, 81],
+	[1, 80, 50, 4, 81, 51],
+	[4, 50, 22, 4, 51, 23],
+	[3, 36, 12, 8, 37, 13],
+
+	// 12
+	[2, 116, 92, 2, 117, 93],
+	[6, 58, 36, 2, 59, 37],
+	[4, 46, 20, 6, 47, 21],
+	[7, 42, 14, 4, 43, 15],
+
+	// 13
+	[4, 133, 107],
+	[8, 59, 37, 1, 60, 38],
+	[8, 44, 20, 4, 45, 21],
+	[12, 33, 11, 4, 34, 12],
+
+	// 14
+	[3, 145, 115, 1, 146, 116],
+	[4, 64, 40, 5, 65, 41],
+	[11, 36, 16, 5, 37, 17],
+	[11, 36, 12, 5, 37, 13],
+
+	// 15
+	[5, 109, 87, 1, 110, 88],
+	[5, 65, 41, 5, 66, 42],
+	[5, 54, 24, 7, 55, 25],
+	[11, 36, 12],
+
+	// 16
+	[5, 122, 98, 1, 123, 99],
+	[7, 73, 45, 3, 74, 46],
+	[15, 43, 19, 2, 44, 20],
+	[3, 45, 15, 13, 46, 16],
+
+	// 17
+	[1, 135, 107, 5, 136, 108],
+	[10, 74, 46, 1, 75, 47],
+	[1, 50, 22, 15, 51, 23],
+	[2, 42, 14, 17, 43, 15],
+
+	// 18
+	[5, 150, 120, 1, 151, 121],
+	[9, 69, 43, 4, 70, 44],
+	[17, 50, 22, 1, 51, 23],
+	[2, 42, 14, 19, 43, 15],
+
+	// 19
+	[3, 141, 113, 4, 142, 114],
+	[3, 70, 44, 11, 71, 45],
+	[17, 47, 21, 4, 48, 22],
+	[9, 39, 13, 16, 40, 14],
+
+	// 20
+	[3, 135, 107, 5, 136, 108],
+	[3, 67, 41, 13, 68, 42],
+	[15, 54, 24, 5, 55, 25],
+	[15, 43, 15, 10, 44, 16],
+
+	// 21
+	[4, 144, 116, 4, 145, 117],
+	[17, 68, 42],
+	[17, 50, 22, 6, 51, 23],
+	[19, 46, 16, 6, 47, 17],
+
+	// 22
+	[2, 139, 111, 7, 140, 112],
+	[17, 74, 46],
+	[7, 54, 24, 16, 55, 25],
+	[34, 37, 13],
+
+	// 23
+	[4, 151, 121, 5, 152, 122],
+	[4, 75, 47, 14, 76, 48],
+	[11, 54, 24, 14, 55, 25],
+	[16, 45, 15, 14, 46, 16],
+
+	// 24
+	[6, 147, 117, 4, 148, 118],
+	[6, 73, 45, 14, 74, 46],
+	[11, 54, 24, 16, 55, 25],
+	[30, 46, 16, 2, 47, 17],
+
+	// 25
+	[8, 132, 106, 4, 133, 107],
+	[8, 75, 47, 13, 76, 48],
+	[7, 54, 24, 22, 55, 25],
+	[22, 45, 15, 13, 46, 16],
+
+	// 26
+	[10, 142, 114, 2, 143, 115],
+	[19, 74, 46, 4, 75, 47],
+	[28, 50, 22, 6, 51, 23],
+	[33, 46, 16, 4, 47, 17],
+
+	// 27
+	[8, 152, 122, 4, 153, 123],
+	[22, 73, 45, 3, 74, 46],
+	[8, 53, 23, 26, 54, 24],
+	[12, 45, 15, 28, 46, 16],
+
+	// 28
+	[3, 147, 117, 10, 148, 118],
+	[3, 73, 45, 23, 74, 46],
+	[4, 54, 24, 31, 55, 25],
+	[11, 45, 15, 31, 46, 16],
+
+	// 29
+	[7, 146, 116, 7, 147, 117],
+	[21, 73, 45, 7, 74, 46],
+	[1, 53, 23, 37, 54, 24],
+	[19, 45, 15, 26, 46, 16],
+
+	// 30
+	[5, 145, 115, 10, 146, 116],
+	[19, 75, 47, 10, 76, 48],
+	[15, 54, 24, 25, 55, 25],
+	[23, 45, 15, 25, 46, 16],
+
+	// 31
+	[13, 145, 115, 3, 146, 116],
+	[2, 74, 46, 29, 75, 47],
+	[42, 54, 24, 1, 55, 25],
+	[23, 45, 15, 28, 46, 16],
+
+	// 32
+	[17, 145, 115],
+	[10, 74, 46, 23, 75, 47],
+	[10, 54, 24, 35, 55, 25],
+	[19, 45, 15, 35, 46, 16],
+
+	// 33
+	[17, 145, 115, 1, 146, 116],
+	[14, 74, 46, 21, 75, 47],
+	[29, 54, 24, 19, 55, 25],
+	[11, 45, 15, 46, 46, 16],
+
+	// 34
+	[13, 145, 115, 6, 146, 116],
+	[14, 74, 46, 23, 75, 47],
+	[44, 54, 24, 7, 55, 25],
+	[59, 46, 16, 1, 47, 17],
+
+	// 35
+	[12, 151, 121, 7, 152, 122],
+	[12, 75, 47, 26, 76, 48],
+	[39, 54, 24, 14, 55, 25],
+	[22, 45, 15, 41, 46, 16],
+
+	// 36
+	[6, 151, 121, 14, 152, 122],
+	[6, 75, 47, 34, 76, 48],
+	[46, 54, 24, 10, 55, 25],
+	[2, 45, 15, 64, 46, 16],
+
+	// 37
+	[17, 152, 122, 4, 153, 123],
+	[29, 74, 46, 14, 75, 47],
+	[49, 54, 24, 10, 55, 25],
+	[24, 45, 15, 46, 46, 16],
+
+	// 38
+	[4, 152, 122, 18, 153, 123],
+	[13, 74, 46, 32, 75, 47],
+	[48, 54, 24, 14, 55, 25],
+	[42, 45, 15, 32, 46, 16],
+
+	// 39
+	[20, 147, 117, 4, 148, 118],
+	[40, 75, 47, 7, 76, 48],
+	[43, 54, 24, 22, 55, 25],
+	[10, 45, 15, 67, 46, 16],
+
+	// 40
+	[19, 148, 118, 6, 149, 119],
+	[18, 75, 47, 31, 76, 48],
+	[34, 54, 24, 34, 55, 25],
+	[20, 45, 15, 61, 46, 16]
+];
+
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+	
+	var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+	
+	if (rsBlock === undefined) {
+		throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+	}
+
+	var length = rsBlock.length / 3;
+	
+	var list = [];
+	
+	for (var i = 0; i < length; i++) {
+
+		var count = rsBlock[i * 3 + 0];
+		var totalCount = rsBlock[i * 3 + 1];
+		var dataCount  = rsBlock[i * 3 + 2];
+
+		for (var j = 0; j < count; j++) {
+			list.push(new QRRSBlock(totalCount, dataCount) );	
+		}
+	}
+	
+	return list;
+};
+
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+
+	switch(errorCorrectLevel) {
+	case QRErrorCorrectLevel.L :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+	case QRErrorCorrectLevel.M :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+	case QRErrorCorrectLevel.Q :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+	case QRErrorCorrectLevel.H :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+	default :
+		return undefined;
+	}
+};
+
+M.QRRSBlock = QRRSBlock;
+
+})();
+(function(){
+var QRMode = M.QRMode;
+var QRPolynomial = M.QRPolynomial;
+var QRMath = M.QRMath;
+var QRMaskPattern = M.QRMaskPattern;
+
+var QRUtil = {
+
+    PATTERN_POSITION_TABLE : [
+        [],
+        [6, 18],
+        [6, 22],
+        [6, 26],
+        [6, 30],
+        [6, 34],
+        [6, 22, 38],
+        [6, 24, 42],
+        [6, 26, 46],
+        [6, 28, 50],
+        [6, 30, 54],        
+        [6, 32, 58],
+        [6, 34, 62],
+        [6, 26, 46, 66],
+        [6, 26, 48, 70],
+        [6, 26, 50, 74],
+        [6, 30, 54, 78],
+        [6, 30, 56, 82],
+        [6, 30, 58, 86],
+        [6, 34, 62, 90],
+        [6, 28, 50, 72, 94],
+        [6, 26, 50, 74, 98],
+        [6, 30, 54, 78, 102],
+        [6, 28, 54, 80, 106],
+        [6, 32, 58, 84, 110],
+        [6, 30, 58, 86, 114],
+        [6, 34, 62, 90, 118],
+        [6, 26, 50, 74, 98, 122],
+        [6, 30, 54, 78, 102, 126],
+        [6, 26, 52, 78, 104, 130],
+        [6, 30, 56, 82, 108, 134],
+        [6, 34, 60, 86, 112, 138],
+        [6, 30, 58, 86, 114, 142],
+        [6, 34, 62, 90, 118, 146],
+        [6, 30, 54, 78, 102, 126, 150],
+        [6, 24, 50, 76, 102, 128, 154],
+        [6, 28, 54, 80, 106, 132, 158],
+        [6, 32, 58, 84, 110, 136, 162],
+        [6, 26, 54, 82, 110, 138, 166],
+        [6, 30, 58, 86, 114, 142, 170]
+    ],
+
+    G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+    G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+    G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+
+    getBCHTypeInfo : function(data) {
+        var d = data << 10;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+            d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );    
+        }
+        return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+    },
+
+    getBCHTypeNumber : function(data) {
+        var d = data << 12;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+            d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );    
+        }
+        return (data << 12) | d;
+    },
+
+    getBCHDigit : function(data) {
+
+        var digit = 0;
+
+        while (data !== 0) {
+            digit++;
+            data >>>= 1;
+        }
+
+        return digit;
+    },
+
+    getPatternPosition : function(typeNumber) {
+        return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+    },
+
+    getMask : function(maskPattern, i, j) {
+        
+        switch (maskPattern) {
+            
+        case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+        case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+        case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+        case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+        case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+        case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+        case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+        case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+
+        default :
+            throw new Error("bad maskPattern:" + maskPattern);
+        }
+    },
+
+    getErrorCorrectPolynomial : function(errorCorrectLength) {
+
+        var a = new QRPolynomial([1], 0);
+
+        for (var i = 0; i < errorCorrectLength; i++) {
+            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+        }
+
+        return a;
+    },
+
+    getLengthInBits : function(mode, type) {
+
+        if (1 <= type && type < 10) {
+
+            // 1 - 9
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 10;
+            case QRMode.MODE_ALPHA_NUM  : return 9;
+            case QRMode.MODE_8BIT_BYTE  : return 8;
+            case QRMode.MODE_KANJI      : return 8;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 27) {
+
+            // 10 - 26
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 12;
+            case QRMode.MODE_ALPHA_NUM  : return 11;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 10;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 41) {
+
+            // 27 - 40
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 14;
+            case QRMode.MODE_ALPHA_NUM  : return 13;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 12;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else {
+            throw new Error("type:" + type);
+        }
+    },
+
+    getLostPoint : function(qrCode) {
+        
+        var moduleCount = qrCode.getModuleCount();
+        var lostPoint = 0;
+        var row = 0; 
+        var col = 0;
+
+        
+        // LEVEL1
+        
+        for (row = 0; row < moduleCount; row++) {
+
+            for (col = 0; col < moduleCount; col++) {
+
+                var sameCount = 0;
+                var dark = qrCode.isDark(row, col);
+
+                for (var r = -1; r <= 1; r++) {
+
+                    if (row + r < 0 || moduleCount <= row + r) {
+                        continue;
+                    }
+
+                    for (var c = -1; c <= 1; c++) {
+
+                        if (col + c < 0 || moduleCount <= col + c) {
+                            continue;
+                        }
+
+                        if (r === 0 && c === 0) {
+                            continue;
+                        }
+
+                        if (dark === qrCode.isDark(row + r, col + c) ) {
+                            sameCount++;
+                        }
+                    }
+                }
+
+                if (sameCount > 5) {
+                    lostPoint += (3 + sameCount - 5);
+                }
+            }
+        }
+
+        // LEVEL2
+
+        for (row = 0; row < moduleCount - 1; row++) {
+            for (col = 0; col < moduleCount - 1; col++) {
+                var count = 0;
+                if (qrCode.isDark(row,     col    ) ) count++;
+                if (qrCode.isDark(row + 1, col    ) ) count++;
+                if (qrCode.isDark(row,     col + 1) ) count++;
+                if (qrCode.isDark(row + 1, col + 1) ) count++;
+                if (count === 0 || count === 4) {
+                    lostPoint += 3;
+                }
+            }
+        }
+
+        // LEVEL3
+
+        for (row = 0; row < moduleCount; row++) {
+            for (col = 0; col < moduleCount - 6; col++) {
+                if (qrCode.isDark(row, col) && 
+                        !qrCode.isDark(row, col + 1) && 
+                         qrCode.isDark(row, col + 2) && 
+                         qrCode.isDark(row, col + 3) && 
+                         qrCode.isDark(row, col + 4) && 
+                        !qrCode.isDark(row, col + 5) && 
+                         qrCode.isDark(row, col + 6) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount - 6; row++) {
+                if (qrCode.isDark(row, col) &&
+                        !qrCode.isDark(row + 1, col) &&
+                         qrCode.isDark(row + 2, col) &&
+                         qrCode.isDark(row + 3, col) &&
+                         qrCode.isDark(row + 4, col) &&
+                        !qrCode.isDark(row + 5, col) &&
+                         qrCode.isDark(row + 6, col) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        // LEVEL4
+        
+        var darkCount = 0;
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount; row++) {
+                if (qrCode.isDark(row, col) ) {
+                    darkCount++;
+                }
+            }
+        }
+        
+        var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+        lostPoint += ratio * 10;
+
+        return lostPoint;       
+    }
+
+};
+
+M.QRUtil = QRUtil;
+
+})();
+(function(){
+//---------------------------------------------------------------------
+// QRCode for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//   http://www.opensource.org/licenses/mit-license.php
+//
+// The word "QR Code" is registered trademark of 
+// DENSO WAVE INCORPORATED
+//   http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+// Modified to work in node for this project (and some refactoring)
+//---------------------------------------------------------------------
+
+var QR8bitByte = M.QR8bitByte;
+var QRUtil = M.QRUtil;
+var QRPolynomial = M.QRPolynomial;
+var QRRSBlock = M.QRRSBlock;
+var QRBitBuffer = M.QRBitBuffer;
+
+function QRCode(typeNumber, errorCorrectLevel) {
+	this.typeNumber = typeNumber;
+	this.errorCorrectLevel = errorCorrectLevel;
+	this.modules = null;
+	this.moduleCount = 0;
+	this.dataCache = null;
+	this.dataList = [];
+}
+
+QRCode.prototype = {
+	
+	addData : function(data) {
+		var newData = new QR8bitByte(data);
+		this.dataList.push(newData);
+		this.dataCache = null;
+	},
+	
+	isDark : function(row, col) {
+		if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+			throw new Error(row + "," + col);
+		}
+		return this.modules[row][col];
+	},
+
+	getModuleCount : function() {
+		return this.moduleCount;
+	},
+	
+	make : function() {
+		// Calculate automatically typeNumber if provided is < 1
+		if (this.typeNumber < 1 ){
+			var typeNumber = 1;
+			for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+				var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+
+				var buffer = new QRBitBuffer();
+				var totalDataCount = 0;
+				for (var i = 0; i < rsBlocks.length; i++) {
+					totalDataCount += rsBlocks[i].dataCount;
+				}
+
+				for (var x = 0; x < this.dataList.length; x++) {
+					var data = this.dataList[x];
+					buffer.put(data.mode, 4);
+					buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+					data.write(buffer);
+				}
+				if (buffer.getLengthInBits() <= totalDataCount * 8)
+					break;
+			}
+			this.typeNumber = typeNumber;
+		}
+		this.makeImpl(false, this.getBestMaskPattern() );
+	},
+	
+	makeImpl : function(test, maskPattern) {
+		
+		this.moduleCount = this.typeNumber * 4 + 17;
+		this.modules = new Array(this.moduleCount);
+		
+		for (var row = 0; row < this.moduleCount; row++) {
+			
+			this.modules[row] = new Array(this.moduleCount);
+			
+			for (var col = 0; col < this.moduleCount; col++) {
+				this.modules[row][col] = null;//(col + row) % 3;
+			}
+		}
+	
+		this.setupPositionProbePattern(0, 0);
+		this.setupPositionProbePattern(this.moduleCount - 7, 0);
+		this.setupPositionProbePattern(0, this.moduleCount - 7);
+		this.setupPositionAdjustPattern();
+		this.setupTimingPattern();
+		this.setupTypeInfo(test, maskPattern);
+		
+		if (this.typeNumber >= 7) {
+			this.setupTypeNumber(test);
+		}
+	
+		if (this.dataCache === null) {
+			this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+		}
+	
+		this.mapData(this.dataCache, maskPattern);
+	},
+
+	setupPositionProbePattern : function(row, col)  {
+		
+		for (var r = -1; r <= 7; r++) {
+			
+			if (row + r <= -1 || this.moduleCount <= row + r) continue;
+			
+			for (var c = -1; c <= 7; c++) {
+				
+				if (col + c <= -1 || this.moduleCount <= col + c) continue;
+				
+				if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) || 
+                     (0 <= c && c <= 6 && (r === 0 || r === 6) ) || 
+                     (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+					this.modules[row + r][col + c] = true;
+				} else {
+					this.modules[row + r][col + c] = false;
+				}
+			}		
+		}		
+	},
+	
+	getBestMaskPattern : function() {
+	
+		var minLostPoint = 0;
+		var pattern = 0;
+	
+		for (var i = 0; i < 8; i++) {
+			
+			this.makeImpl(true, i);
+	
+			var lostPoint = QRUtil.getLostPoint(this);
+	
+			if (i === 0 || minLostPoint >  lostPoint) {
+				minLostPoint = lostPoint;
+				pattern = i;
+			}
+		}
+	
+		return pattern;
+	},
+	
+	createMovieClip : function(target_mc, instance_name, depth) {
+	
+		var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+		var cs = 1;
+	
+		this.make();
+
+		for (var row = 0; row < this.modules.length; row++) {
+			
+			var y = row * cs;
+			
+			for (var col = 0; col < this.modules[row].length; col++) {
+	
+				var x = col * cs;
+				var dark = this.modules[row][col];
+			
+				if (dark) {
+					qr_mc.beginFill(0, 100);
+					qr_mc.moveTo(x, y);
+					qr_mc.lineTo(x + cs, y);
+					qr_mc.lineTo(x + cs, y + cs);
+					qr_mc.lineTo(x, y + cs);
+					qr_mc.endFill();
+				}
+			}
+		}
+		
+		return qr_mc;
+	},
+
+	setupTimingPattern : function() {
+		
+		for (var r = 8; r < this.moduleCount - 8; r++) {
+			if (this.modules[r][6] !== null) {
+				continue;
+			}
+			this.modules[r][6] = (r % 2 === 0);
+		}
+	
+		for (var c = 8; c < this.moduleCount - 8; c++) {
+			if (this.modules[6][c] !== null) {
+				continue;
+			}
+			this.modules[6][c] = (c % 2 === 0);
+		}
+	},
+	
+	setupPositionAdjustPattern : function() {
+	
+		var pos = QRUtil.getPatternPosition(this.typeNumber);
+		
+		for (var i = 0; i < pos.length; i++) {
+		
+			for (var j = 0; j < pos.length; j++) {
+			
+				var row = pos[i];
+				var col = pos[j];
+				
+				if (this.modules[row][col] !== null) {
+					continue;
+				}
+				
+				for (var r = -2; r <= 2; r++) {
+				
+					for (var c = -2; c <= 2; c++) {
+					
+						if (Math.abs(r) === 2 || 
+                            Math.abs(c) === 2 ||
+                            (r === 0 && c === 0) ) {
+							this.modules[row + r][col + c] = true;
+						} else {
+							this.modules[row + r][col + c] = false;
+						}
+					}
+				}
+			}
+		}
+	},
+	
+	setupTypeNumber : function(test) {
+	
+		var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+        var mod;
+	
+		for (var i = 0; i < 18; i++) {
+			mod = (!test && ( (bits >> i) & 1) === 1);
+			this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+		}
+	
+		for (var x = 0; x < 18; x++) {
+			mod = (!test && ( (bits >> x) & 1) === 1);
+			this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+		}
+	},
+	
+	setupTypeInfo : function(test, maskPattern) {
+	
+		var data = (this.errorCorrectLevel << 3) | maskPattern;
+		var bits = QRUtil.getBCHTypeInfo(data);
+        var mod;
+	
+		// vertical		
+		for (var v = 0; v < 15; v++) {
+	
+			mod = (!test && ( (bits >> v) & 1) === 1);
+	
+			if (v < 6) {
+				this.modules[v][8] = mod;
+			} else if (v < 8) {
+				this.modules[v + 1][8] = mod;
+			} else {
+				this.modules[this.moduleCount - 15 + v][8] = mod;
+			}
+		}
+	
+		// horizontal
+		for (var h = 0; h < 15; h++) {
+	
+			mod = (!test && ( (bits >> h) & 1) === 1);
+			
+			if (h < 8) {
+				this.modules[8][this.moduleCount - h - 1] = mod;
+			} else if (h < 9) {
+				this.modules[8][15 - h - 1 + 1] = mod;
+			} else {
+				this.modules[8][15 - h - 1] = mod;
+			}
+		}
+	
+		// fixed module
+		this.modules[this.moduleCount - 8][8] = (!test);
+	
+	},
+	
+	mapData : function(data, maskPattern) {
+		
+		var inc = -1;
+		var row = this.moduleCount - 1;
+		var bitIndex = 7;
+		var byteIndex = 0;
+		
+		for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+	
+			if (col === 6) col--;
+	
+			while (true) {
+	
+				for (var c = 0; c < 2; c++) {
+					
+					if (this.modules[row][col - c] === null) {
+						
+						var dark = false;
+	
+						if (byteIndex < data.length) {
+							dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+						}
+	
+						var mask = QRUtil.getMask(maskPattern, row, col - c);
+	
+						if (mask) {
+							dark = !dark;
+						}
+						
+						this.modules[row][col - c] = dark;
+						bitIndex--;
+	
+						if (bitIndex === -1) {
+							byteIndex++;
+							bitIndex = 7;
+						}
+					}
+				}
+								
+				row += inc;
+	
+				if (row < 0 || this.moduleCount <= row) {
+					row -= inc;
+					inc = -inc;
+					break;
+				}
+			}
+		}
+		
+	}
+
+};
+
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+	
+	var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+	
+	var buffer = new QRBitBuffer();
+	
+	for (var i = 0; i < dataList.length; i++) {
+		var data = dataList[i];
+		buffer.put(data.mode, 4);
+		buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+		data.write(buffer);
+	}
+
+	// calc num max data.
+	var totalDataCount = 0;
+	for (var x = 0; x < rsBlocks.length; x++) {
+		totalDataCount += rsBlocks[x].dataCount;
+	}
+
+	if (buffer.getLengthInBits() > totalDataCount * 8) {
+		throw new Error("code length overflow. (" + 
+            buffer.getLengthInBits() + 
+            ">" +  
+            totalDataCount * 8 + 
+            ")");
+	}
+
+	// end code
+	if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+		buffer.put(0, 4);
+	}
+
+	// padding
+	while (buffer.getLengthInBits() % 8 !== 0) {
+		buffer.putBit(false);
+	}
+
+	// padding
+	while (true) {
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD0, 8);
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD1, 8);
+	}
+
+	return QRCode.createBytes(buffer, rsBlocks);
+};
+
+QRCode.createBytes = function(buffer, rsBlocks) {
+
+	var offset = 0;
+	
+	var maxDcCount = 0;
+	var maxEcCount = 0;
+	
+	var dcdata = new Array(rsBlocks.length);
+	var ecdata = new Array(rsBlocks.length);
+	
+	for (var r = 0; r < rsBlocks.length; r++) {
+
+		var dcCount = rsBlocks[r].dataCount;
+		var ecCount = rsBlocks[r].totalCount - dcCount;
+
+		maxDcCount = Math.max(maxDcCount, dcCount);
+		maxEcCount = Math.max(maxEcCount, ecCount);
+		
+		dcdata[r] = new Array(dcCount);
+		
+		for (var i = 0; i < dcdata[r].length; i++) {
+			dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+		}
+		offset += dcCount;
+		
+		var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+		var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+		var modPoly = rawPoly.mod(rsPoly);
+		ecdata[r] = new Array(rsPoly.getLength() - 1);
+		for (var x = 0; x < ecdata[r].length; x++) {
+            var modIndex = x + modPoly.getLength() - ecdata[r].length;
+			ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+		}
+
+	}
+	
+	var totalCodeCount = 0;
+	for (var y = 0; y < rsBlocks.length; y++) {
+		totalCodeCount += rsBlocks[y].totalCount;
+	}
+
+	var data = new Array(totalCodeCount);
+	var index = 0;
+
+	for (var z = 0; z < maxDcCount; z++) {
+		for (var s = 0; s < rsBlocks.length; s++) {
+			if (z < dcdata[s].length) {
+				data[index++] = dcdata[s][z];
+			}
+		}
+	}
+
+	for (var xx = 0; xx < maxEcCount; xx++) {
+		for (var t = 0; t < rsBlocks.length; t++) {
+			if (xx < ecdata[t].length) {
+				data[index++] = ecdata[t][xx];
+			}
+		}
+	}
+
+	return data;
+
+};
+
+M.index = QRCode;
+
+})();
+function matrix(text) {
+  const q = new M.index(-1, M.QRErrorCorrectLevel.M);
+  q.addData(String(text)); q.make();
+  const n = q.getModuleCount(), rows = [];
+  for (let r = 0; r < n; r++) { const row = []; for (let c = 0; c < n; c++) row.push(q.isDark(r, c)); rows.push(row); }
+  return rows;
+}
+function svg(text, label) {
+  const m = matrix(text), n = m.length, pad = 4, size = n + pad * 2;
+  let d = "";
+  m.forEach((row, r) => row.forEach((on, c) => { if (on) d += "M" + (c + pad) + " " + (r + pad) + "h1v1h-1z"; }));
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + size + ' ' + size + '" shape-rendering="crispEdges" role="img" aria-label="' + String(label || "").replace(/[<>&"]/g, "") + '"><rect width="' + size + '" height="' + size + '" fill="#fff"/><path fill="#000" d="' + d + '"/></svg>';
+}
+return { matrix, svg };
+})();
+
+/* ---------- Invite sheet with QR code ---------- */
+let invRole = "adult", invReturn = null, invReturnSel = "";
+function openInvite(role, from) {
+  if (LOCAL_MODE || !hh) return;
+  invRole = role === "child" ? "child" : "adult";
+  invReturn = from || document.activeElement;
+  invReturnSel = "";
+  if (invReturn && invReturn.id) invReturnSel = "#" + invReturn.id;
+  else if (invReturn && invReturn.attributes) { const d = [...invReturn.attributes].filter(x => x.name.startsWith("data-")).map(x => `[${x.name}="${x.value}"]`).join(""); invReturnSel = d; }
+  document.getElementById("inv-sheet").hidden = false;
+  renderInvite();
+  setTimeout(() => { const b = document.querySelector('[data-inv-role="' + invRole + '"]'); if (b) b.focus(); }, 30);
+}
+function closeInvite() {
+  document.getElementById("inv-sheet").hidden = true;
+  let el = invReturn && document.contains(invReturn) ? invReturn : null;
+  if (!el && invReturnSel) { try { el = document.querySelector(invReturnSel); } catch (e) {} }
+  if (el && el.focus) el.focus();
+}
+function renderInvite() {
+  const box = document.getElementById("inv-sheet");
+  if (box.hidden) return;
+  if (!hh || !state) { box.hidden = true; return; }
+  const t = T[lang], body = document.getElementById("inv-body");
+  if (body.contains(document.activeElement) && document.activeElement.matches("[data-inv]")) return;
+  document.querySelectorAll("[data-inv-role]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.invRole === invRole)));
+  const can = (invRole === "child" ? t.invCanChild : t.invCanAdult).map(x => `<li>${esc(x)}</li>`).join("");
+  const inv = hh.invites;
+  let html = `<ul class="inv-can">${can}</ul>`;
+  if (!isOwner() || !inv) html += `<p class="summary">${esc(t.invOwnerOnly)}</p>`;
+  else if (invRole === "child" && !settings().parentConsent) html += consentRow();
+  else {
+    const code = inv[invRole === "child" ? "child_code" : "adult_code"], url = inviteUrl(code);
+    html += `<div class="inv-qr">${HBQR.svg(url, t.invQr)}</div><p class="inv-code">${esc(t.invCodeLine.replace("{code}", code))}</p>
+      <div class="inv-actions"><button type="button" class="btn" data-inv="copy" data-code="${esc(code)}">${esc(t.inviteLinkBtn)}</button>${navigator.share ? `<button type="button" class="ghost" data-inv="share" data-code="${esc(code)}">${esc(t.inviteShareBtn)}</button>` : ""}</div>
+      <ol class="inv-how">${t.invHow.map(x => `<li>${esc(x)}</li>`).join("")}</ol>`;
+  }
+  body.innerHTML = html;
+}
+document.getElementById("inv-sheet").addEventListener("click", async e => {
+  if (e.target.id === "inv-sheet") { closeInvite(); return; }
+  const r = e.target.closest("[data-inv-role]");
+  if (r) { invRole = r.dataset.invRole; renderInvite(); return; }
+  const b = e.target.closest("[data-inv]");
+  if (!b) return;
+  const t = T[lang], url = inviteUrl(b.dataset.code);
+  if (b.dataset.inv === "copy") { if (await copyText(url)) { b.textContent = t.linkCopied; setTimeout(() => { b.blur(); renderInvite(); }, 1500); } }
+  else { try { await navigator.share({ title: t.title, text: t.inviteShareText, url }); } catch (ex) {} }
+});
+document.getElementById("inv-close").onclick = closeInvite;
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !document.getElementById("inv-sheet").hidden) closeInvite();
+});
+/* keep Tab inside an open dialog */
+document.addEventListener("keydown", e => {
+  if (e.key !== "Tab") return;
+  const dlg = ["legal", "inv-sheet", "guide"].map(id => document.getElementById(id)).find(d => d && !d.hidden);
+  if (!dlg) return;
+  const f = [...dlg.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (!dlg.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+  else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+
 /* ---------- Start guide ---------- */
 let guideStep = 1;
 const GUIDE_PICKS = ["Dammsuga", "Diska", "Laga middag", "Tvätta", "Handla mat", "Tömma papperskorgar", "Städa badrummet", "Byta sängkläder", "Planera veckans middagar",
@@ -4000,7 +5607,7 @@ function renderGuide() {
       <form class="g-add" id="g-add-form"><input id="g-name" maxlength="24" placeholder="${esc(t.name)}" aria-label="${esc(t.name)}" required><button class="btn" type="submit"${state.members.length >= 6 ? " disabled" : ""}>${esc(t.add)}</button></form>`;
   } else if (guideStep === 2) {
     const inv = hh && hh.invites;
-    body.innerHTML = inv ? [["adult_code", t.gLinkAdult], ["child_code", t.gLinkChild]].map(([k, label]) => k === "child_code" && !settings().parentConsent ? consentRow() : `<div class="g-row"><span class="grow">${esc(label)}</span><button type="button" class="ghost" data-g-copy="${esc(inv[k])}">${esc(t.inviteLinkBtn)}</button>${navigator.share ? `<button type="button" class="ghost" data-g-share="${esc(inv[k])}">${esc(t.inviteShareBtn)}</button>` : ""}</div>`).join("") : "";
+    body.innerHTML = inv ? [["adult_code", t.gLinkAdult], ["child_code", t.gLinkChild]].map(([k, label]) => k === "child_code" && !settings().parentConsent ? consentRow() : `<div class="g-row"><span class="grow">${esc(label)}</span><button type="button" class="ghost" data-g-qr="${k === "child_code" ? "child" : "adult"}">${esc(t.qrBtn)}</button><button type="button" class="ghost" data-g-copy="${esc(inv[k])}">${esc(t.inviteLinkBtn)}</button>${navigator.share ? `<button type="button" class="ghost" data-g-share="${esc(inv[k])}">${esc(t.inviteShareBtn)}</button>` : ""}</div>`).join("") : "";
   } else if (guideStep === 3) {
     const have = new Set(state.tasks.map(k => k.ref || taskName(k)));
     const picks = GUIDE_PICKS.map(sv => HOUSEHOLD.find(h => h.sv === sv)).filter(Boolean);
@@ -4032,6 +5639,8 @@ document.getElementById("guide").addEventListener("click", async e => {
   const kid = e.target.closest("[data-g-kid]"), del = e.target.closest("[data-g-del]");
   const pick = e.target.closest("[data-g-pick]"), tk = e.target.closest("[data-g-task]");
   const copy = e.target.closest("[data-g-copy]"), share = e.target.closest("[data-g-share]");
+  const qr = e.target.closest("[data-g-qr]");
+  if (qr) { openInvite(qr.dataset.gQr, qr); return; }
   if (kid) { const m = memberById(kid.dataset.gKid); if (m) { m.kid = !m.kid; save(); renderGuide(); } return; }
   if (del) { const id = del.dataset.gDel; state.members = state.members.filter(m => m.id !== id); state.tasks.forEach(k => { if (k.owner === id) k.owner = state.members[0].id; }); save(); renderAll(); return; }
   if (pick) {
@@ -4208,8 +5817,89 @@ document.getElementById("set-export-btn").onclick = () => {
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 };
 
+
+/* ---------- Demo: an example family to try without an account ---------- */
+function demoState() {
+  const sv = lang === "sv";
+  const ids = ["d1", "d2", "d3", "d4"];
+  const members = [{ id: ids[0], name: "Anna", color: 0 }, { id: ids[1], name: "Erik", color: 1 }, { id: ids[2], name: "Maja", color: 2, kid: true }, { id: ids[3], name: "Leo", color: 3, kid: true }];
+  const pick = [["Laga middag", 0], ["Diska", 1], ["Handla mat", 1], ["Tvätta", 0], ["Dammsuga", 1], ["Tömma papperskorgar", 2], ["Lägga undan kläder", 3], ["Plocka i och ur diskmaskinen", 2], ["Byta sängkläder", 0], ["Betala räkningar", 1], ["Vattna växter", 3], ["Städa badrummet", 0]];
+  const now = Date.now(), tasks = [], doneLog = [], starLog = [];
+  pick.forEach(([ref, o], i) => {
+    const h = HOUSEHOLD.find(x => x.sv === ref);
+    if (!h) return;
+    const k = { id: "t" + i, title: h[lang], ref: h.sv, cat: h.c, minutes: h.m, freq: freqFor(h), owner: ids[o], done: i % 3 === 1 };
+    if (k.done) {
+      k.doneAt = now - (i + 1) * 3600e3;
+      doneLog.push({ id: "dl" + i, m: k.owner, k: k.id, at: k.doneAt, min: k.minutes });
+      if (members[o].kid) starLog.push({ id: "sl" + i, m: k.owner, k: k.id, at: k.doneAt, n: 1 });
+    }
+    tasks.push(k);
+  });
+  const days = weekDays().map(isoDay);
+  const dishes = sv ? [["Köttbullar med potatismos", "Köttbullar, potatis, lingonsylt, mjölk"], ["Laxpasta med spenat", "Laxfilé, pasta, spenat, grädde"], ["Tacos", "Köttfärs, tortillabröd, tomat, gurka, ost"], ["Ärtsoppa och pannkakor", "Ärtsoppa, mjölk, ägg, vetemjöl"], ["Kycklinggryta med ris", "Kyckling, ris, paprika, kokosmjölk"]]
+    : [["Meatballs with mash", "Meatballs, potatoes, lingonberries, milk"], ["Salmon pasta with spinach", "Salmon, pasta, spinach, cream"], ["Tacos", "Mince, tortillas, tomato, cucumber, cheese"], ["Pea soup and pancakes", "Pea soup, milk, eggs, flour"], ["Chicken stew with rice", "Chicken, rice, pepper, coconut milk"]];
+  const meals = {};
+  dishes.forEach((d, i) => { if (days[i]) meals[days[i]] = { dish: d[0], ing: d[1], staples: "", note: "" }; });
+  const shopping = (sv ? ["Mjölk", "Bananer", "Toalettpapper", "Pasta", "Ost"] : ["Milk", "Bananas", "Toilet paper", "Pasta", "Cheese"]).map((text, i) => ({ id: "s" + i, text, qty: 1, done: i === 4 }));
+  return { members, tasks, leave: {}, checkin: "", guide: false, welcomeDismissed: true, startHidden: true, doneLog, starLog, meals, shopping, board: [] };
+}
+function demoExit(toSignup) {
+  lsSet("hb-demo", "");
+  if (toSignup) lsSet("hb-auth-mode", "register");
+  location.reload();
+}
+function renderDemoBar() {
+  const bar = document.getElementById("demo-bar"), t = T[lang];
+  bar.hidden = !DEMO;
+  document.getElementById("demo-row").hidden = LOCAL_MODE;
+  if (!DEMO) return;
+  document.getElementById("demo-text").textContent = t.demoText;
+  document.getElementById("demo-signup").textContent = t.demoSignup;
+  document.getElementById("demo-reset").textContent = t.demoReset;
+}
+document.getElementById("demo-start").onclick = () => { lsSet("hb-demo", "1"); location.reload(); };
+document.getElementById("demo-signup").onclick = () => demoExit(true);
+document.getElementById("demo-reset").onclick = () => location.reload();
+
 /* ---------- Auth ---------- */
-let authMode = "login";
+let authMode = lsGet("hb-auth-mode") === "register" ? "register" : "login", magicMode = false, oauthOn = { google: false, apple: false };
+lsSet("hb-auth-mode", "");
+const MAGIC_LINK = false; // turn on when Supabase can send email to everyone (custom SMTP)
+function appUrl() { return location.href.split("#")[0].split("?")[0]; }
+async function loadAuthProviders() {
+  if (LOCAL_MODE) return;
+  try {
+    const r = await fetch(SUPABASE_URL + "/auth/v1/settings", { headers: { apikey: SUPABASE_ANON_KEY } });
+    if (!r.ok) return;
+    const j = await r.json();
+    const ext = (j && j.external) || {};
+    oauthOn = { google: !!ext.google, apple: !!ext.apple };
+    renderAuth();
+  } catch (e) {}
+}
+function authUrlError() {
+  try {
+    const q = new URLSearchParams(location.search), h = new URLSearchParams(location.hash.replace(/^#/, ""));
+    const msg = q.get("error_description") || h.get("error_description");
+    if (!msg) return;
+    document.getElementById("auth-err").textContent = authErrorText({ message: msg.replace(/\+/g, " ") });
+    history.replaceState(null, "", appUrl());
+  } catch (e) {}
+}
+document.getElementById("oauth-row").addEventListener("click", async e => {
+  const b = e.target.closest("[data-oauth]");
+  if (!b || LOCAL_MODE) return;
+  lsSet("hb-terms-ok", new Date().toISOString());
+  b.disabled = true;
+  const { error } = await sb.auth.signInWithOAuth({ provider: b.dataset.oauth, options: { redirectTo: appUrl() } });
+  if (error) { b.disabled = false; document.getElementById("auth-err").textContent = authErrorText(error); }
+});
+document.getElementById("magic-toggle").onclick = () => {
+  magicMode = !magicMode;
+  document.getElementById("auth-err").textContent = ""; document.getElementById("auth-info").textContent = "";
+  renderAuth();
+};
 function authErrorText(error) {
   const t = T[lang];
   const msg = String((error && error.message) || "");
@@ -4222,6 +5912,7 @@ function authErrorText(error) {
 }
 function renderAuth() {
   const t = T[lang];
+  document.getElementById("login-why").innerHTML = t.why.map(([ic, bg, h, p]) => `<li><span class="ico" style="background:${bg}" aria-hidden="true">${ic}</span><span><b>${esc(h)}</b><span class="t">${esc(p)}</span></span></li>`).join("");
   const invNote = document.getElementById("invite-note-login");
   invNote.hidden = !getInvite();
   invNote.textContent = t.invitedLogin;
@@ -4245,8 +5936,20 @@ function renderAuth() {
   document.getElementById("pw2-row").hidden = !reg;
   document.getElementById("terms-row").hidden = !reg;
   document.getElementById("a-terms-text").innerHTML = esc(t.termsAccept).replace("{terms}", `<button type="button" class="linkish" data-legal="terms">${esc(t.termsWordT)}</button>`).replace("{privacy}", `<button type="button" class="linkish" data-legal="privacy">${esc(t.termsWordP)}</button>`);
-  document.getElementById("a-pw2").required = reg;
+  const magic = MAGIC_LINK && !LOCAL_MODE && magicMode;
+  document.getElementById("a-pw2").required = reg && !magic;
   if (!reg) document.getElementById("a-pw2").value = "";
+  const anyOauth = !LOCAL_MODE && (oauthOn.google || oauthOn.apple);
+  document.getElementById("oauth-row").hidden = !anyOauth;
+  document.querySelectorAll("[data-oauth]").forEach(b => { b.hidden = !oauthOn[b.dataset.oauth]; });
+  document.getElementById("oauth-consent").innerHTML = esc(t.oauthConsent).replace("{terms}", `<button type="button" class="linkish" data-legal="terms">${esc(t.termsWordT)}</button>`).replace("{privacy}", `<button type="button" class="linkish" data-legal="privacy">${esc(t.termsWordP)}</button>`);
+  document.getElementById("magic-row").hidden = !MAGIC_LINK || LOCAL_MODE;
+  document.getElementById("magic-toggle").textContent = magic ? t.magicBack : t.magicUse;
+  const pwBlock = document.getElementById("a-pw").closest("div[style]");
+  if (pwBlock && !LOCAL_MODE) pwBlock.hidden = magic;
+  if (!LOCAL_MODE) document.getElementById("a-pw").required = !magic;
+  if (magic) { document.getElementById("pw-hint").hidden = true; document.getElementById("pw2-row").hidden = true; document.getElementById("auth-submit").textContent = t.magicSend; }
+  renderDemoBar();
 }
 document.querySelectorAll(".pw-toggle").forEach(btn => {
   btn.onclick = () => {
@@ -4276,6 +5979,16 @@ document.getElementById("auth-form").onsubmit = async e => {
   const pw = document.getElementById("a-pw").value;
   btn.disabled = true;
   try {
+    if (MAGIC_LINK && magicMode && !LOCAL_MODE) {
+      if (authMode === "register" && !document.getElementById("a-terms").checked) { err.textContent = t.termsNeeded; return; }
+      const name = document.getElementById("a-name").value.trim();
+      const data = { terms_at: new Date().toISOString() };
+      if (name) data.name = name;
+      const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: appUrl(), data } });
+      if (error) { err.textContent = /not authorized|smtp|sending/i.test(error.message || "") ? t.magicNotReady : authErrorText(error); return; }
+      info.textContent = t.magicSent;
+      return;
+    }
     if (authMode === "register") {
       const name = document.getElementById("a-name").value.trim();
       const pw2 = document.getElementById("a-pw2").value;
@@ -4304,6 +6017,12 @@ document.getElementById("auth-form").onsubmit = async e => {
 
 async function onSignedIn(user) {
   currentUser = user;
+  if (!lsGet("hb-first")) lsSet("hb-first", String(Date.now()));
+  if (!LOCAL_MODE && user && user.user_metadata && !user.user_metadata.terms_at && lsGet("hb-terms-ok")) {
+    const md = { terms_at: lsGet("hb-terms-ok") };
+    if (!user.user_metadata.name && (user.user_metadata.given_name || user.user_metadata.full_name)) md.name = String(user.user_metadata.given_name || user.user_metadata.full_name).slice(0, 24);
+    sb.auth.updateUser({ data: md }).then(() => lsSet("hb-terms-ok", "")).catch(() => {});
+  }
   document.getElementById("a-pw").value = "";
   document.getElementById("a-pw2").value = "";
   let opened = true;
@@ -4329,7 +6048,8 @@ function showSetup() {
   document.getElementById("login").hidden = true;
   document.getElementById("logout").hidden = true;
   document.getElementById("setup").hidden = false;
-  const nm = (currentUser && currentUser.user_metadata && currentUser.user_metadata.name) || "";
+  const um = (currentUser && currentUser.user_metadata) || {};
+  const nm = String(um.name || um.given_name || um.full_name || "").slice(0, 40);
   ["s-name1", "s-name2"].forEach(id => { const el = document.getElementById(id); if (!el.value) el.value = nm; });
   document.getElementById("setup-err").textContent = "";
   const inv = getInvite();
@@ -4395,6 +6115,7 @@ document.getElementById("join-form").onsubmit = async e => {
 };
 
 async function doLogout() {
+  if (DEMO) { demoExit(false); return; }
   stopPolling();
   if (state && currentUser) { try { await saveNow(); } catch (e) {} }
   if (cacheKey()) { try { localStorage.removeItem(cacheKey()); } catch (e) {} }
@@ -4413,6 +6134,8 @@ document.getElementById("logout").onclick = doLogout;
 document.getElementById("setup-logout").onclick = doLogout;
 
 async function initAuth() {
+  authUrlError();
+  loadAuthProviders();
   renderAll();
   try {
     const { data } = await sb.auth.getSession();
