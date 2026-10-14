@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-sIakdwxVg1a0nih/Ki5r8WrlZ9VEPdEdrDOiDDo3+uk='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-slQDXoYcFmP0JbYiEM3iYQKAxNSqVK7ENK5yEgObkfc='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Household Balance</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -643,6 +643,18 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 
 
+/* ===== Calendar link, trend, streaks ===== */
+.cal-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.cal-btns a { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 600; min-height: 44px; padding: 10px 18px; }
+.cal-btns a.btn { background: var(--primary); color: var(--on-primary); }
+.cal-btns a.ghost { background: var(--tint-fill); color: var(--primary); }
+.cal-btns a:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.streak { display: inline-flex; align-items: center; gap: 6px; margin: 8px 0 0; padding: 6px 12px; border-radius: 999px; background: rgba(255,149,0,.16); color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.trend { background: var(--tint-fill); border-radius: 14px; padding: 14px 16px; margin: 0 0 14px; }
+.trend h3 { margin: 0 0 4px; }
+.trend .big { font-size: 2rem; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin: 2px 0 6px; }
+.trend ul { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 2px; font-variant-numeric: tabular-nums; }
+.trend.worse { background: rgba(255,149,0,.14); }
 /* ===== Polish, focus mode, tips ===== */
 h1, h2, h3, .task-title, .login-brand span { text-wrap: balance; }
 .summary, .hint, .meta, .task-note, .login-why span.t { text-wrap: pretty; }
@@ -963,6 +975,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <div><label for="set-textsize" data-i="textSize"></label><select id="set-textsize"></select></div>
       </div>
       <div class="set-sub cloud-only" id="set-notify"></div>
+      <div class="set-sub cloud-only adult-only" id="set-cal"></div>
       <div class="set-sub cloud-only" id="set-feedback">
         <h3 id="fb-h" data-i="fbTitle"></h3>
         <p class="summary" style="margin-top:0" data-i="fbHint"></p>
@@ -1260,6 +1273,8 @@ const T = {
     delOwnerFirst: "Hand over ownership to another adult under Household accounts first.", delDone: "Your account has been deleted.",
     memHint: "Everyone who joins with an invite shows up here by themselves.", memHintAdult: "Everyone who joins with an invite shows up here by themselves. Ask the owner for an invite link.",
     memInvite: "Invite the family", memNoAcc: "+ Add someone without an account", noAccLabel: "No account",
+    calTitle: "Calendar on your phone", calHint: "Chores with a day or time, activities, events and birthdays show up in your normal calendar and update by themselves.", calMake: "Turn on the calendar link", calWho: "Show", calAll: "The whole family", calApple: "Add to Apple Calendar", calGoogle: "Add to Google Calendar", calCopy: "Copy link", calCopied: "Link copied!", calNew: "Change link", calNewSure: "Old link stops working. Tap again", calNote: "Anyone with the link can see the family calendar. Change the link if it ends up in the wrong place.", calAskOwner: "Ask the person who created the household to turn on the calendar link.",
+    streakDays: "{n} days in a row", trendTitle: "Fairness over time", trendUp: "From {a} to {b} since week {w}", trendDown: "From {a} to {b} since week {w}. Talk about it under Week.", trendSame: "Steady at {b} since week {w}", trendShare: "{name}: {a} % → {b} %",
     focusOpen: "One thing at a time", focusOf: "{done} of {total} done", focusNow: "Now", focusAbout: "About {n} min", focusDone: "Done ✓", focusLater: "Later", focusAllDone: "All done for today!", focusAllHint: "{n} chores ticked off. Nice work.", focusStars: "You got {n} ★ today.", focusBack: "Back to Today",
     startCreate: "Create the household", startDoneTitle: "You're up and running!", startDoneHint: "Everything is set. Know another family who argues about the dishes?",
     tipBtn: "Tell another family", tipText: "We use Household Balance to share the chores at home fairly. Free to try:", tipCopied: "Link copied!", tipTitle: "Know another family?", tipHint: "Glad it works for you! Tips from one family to another is how the app grows.",
@@ -1396,6 +1411,8 @@ const T = {
     delOwnerFirst: "Lämna först över ägarskapet till en annan vuxen under Hushållets konton.", delDone: "Ditt konto är raderat.",
     memHint: "Alla som går med via en inbjudan dyker upp här av sig själva.", memHintAdult: "Alla som går med via en inbjudan dyker upp här av sig själva. Be ägaren om en inbjudningslänk.",
     memInvite: "Bjud in familjen", memNoAcc: "+ Lägg till någon utan konto, t.ex. ett litet barn", noAccLabel: "Utan konto",
+    calTitle: "Kalendern i telefonen", calHint: "Sysslor med dag eller tid, aktiviteter, händelser och födelsedagar syns i din vanliga kalender och uppdateras av sig själva.", calMake: "Slå på kalenderlänken", calWho: "Visa", calAll: "Hela familjen", calApple: "Lägg till i Apple-kalendern", calGoogle: "Lägg till i Google Kalender", calCopy: "Kopiera länk", calCopied: "Länk kopierad!", calNew: "Byt länk", calNewSure: "Gamla länken slutar fungera. Tryck igen", calNote: "Alla som har länken kan se familjens kalender. Byt länk om den hamnat fel.", calAskOwner: "Be den som skapade hushållet slå på kalenderlänken.",
+    streakDays: "{n} dagar i rad", trendTitle: "Rättvisan över tid", trendUp: "Från {a} till {b} sedan vecka {w}", trendDown: "Från {a} till {b} sedan vecka {w}. Prata om det under Vecka.", trendSame: "Stabilt på {b} sedan vecka {w}", trendShare: "{name}: {a} % → {b} %",
     focusOpen: "En sak i taget", focusOf: "{done} av {total} klara", focusNow: "Nu", focusAbout: "Cirka {n} min", focusDone: "Klar ✓", focusLater: "Senare", focusAllDone: "Allt klart för idag!", focusAllHint: "{n} sysslor avbockade. Snyggt jobbat.", focusStars: "Du fick {n} ★ idag.", focusBack: "Tillbaka till Idag",
     startCreate: "Skapa hushållet", startDoneTitle: "Nu är ni igång!", startDoneHint: "Allt är klart. Känner du en familj som också bråkar om disken?",
     tipBtn: "Tipsa en annan familj", tipText: "Vi använder Hushållsbalans för att dela på sysslorna hemma rättvist. Gratis att prova:", tipCopied: "Länk kopierad!", tipTitle: "Känner du en annan familj?", tipHint: "Kul att den fungerar för er! Tips från familj till familj är hur appen växer.",
@@ -1631,7 +1648,7 @@ window.addEventListener("pagehide", flushSave);
 document.addEventListener("visibilitychange", () => { if (document.hidden) flushSave(); });
 
 /* ---------- Shared household (cloud) ---------- */
-const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true, parentConsent: "" };
+const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true, parentConsent: "", calToken: "" };
 function settings() { return { ...SETTINGS_DEFAULT, ...((state && state.settings) || {}) }; }
 const SAFE_ID = /^[A-Za-z0-9_-]{1,64}$/;
 function safeList(a) { return (Array.isArray(a) ? a : []).filter(x => x && typeof x === "object" && SAFE_ID.test(String(x.id))); }
@@ -2395,6 +2412,7 @@ function renderAll() {
   renderLeave();
   renderCheckins();
   renderHousehold();
+  renderCalSet();
   renderInvite();
   renderFocusButton();
   if (focusOn) renderFocus();
@@ -2829,6 +2847,7 @@ function renderToday() {
   const dow = new Date().getDay();
   const tActs = state.members.flatMap(x => actsOf(x).filter(a => a.days.includes(dow)).map(a => ({ x, a }))).sort((p, q) => (p.a.time || "99").localeCompare(q.a.time || "99"));
   if (tActs.length) st.innerHTML += `<div class="today-acts" aria-label="${esc(t.todayActs)}">${tActs.map(({ x, a }) => `<span class="ta" style="--mc:${COLORS[x.color % COLORS.length]}"><b>${esc(x.name)}</b> ${esc(a.title)}${a.time ? " " + esc(actTime(a)) : ""}</span>`).join("")}</div>`;
+  if (m) st.innerHTML += streakBadge(m.id);
   if (m && isKid(m)) st.innerHTML += starCard(m);
   document.getElementById("today-rewards").innerHTML = "";
   const incoming = m ? (state.swaps || []).filter(w => w.to === m.id && state.tasks.some(k => k.id === w.task)) : [];
@@ -4189,7 +4208,7 @@ function renderHistory() {
     return `<div class="hist-row"><span class="meta" style="margin:0">v${r.wk}</span>${r.total ? `<div class="hist-bar">${segs}</div>` : `<div class="hist-empty"></div>`}<span class="hist-score">${r.score === null ? "" : esc(t.histScore.replace("{s}", r.score))}</span></div>`;
   }).join("");
   const table = `<details><summary class="meta" style="cursor:pointer">${esc(t.histTable)}</summary><table><tr><th>${esc(t.histWeek)}</th>${state.members.map(m => `<th>${esc(m.name)}</th>`).join("")}</tr>${rows.map(r => `<tr><td>${r.wk}</td>${state.members.map(m => `<td>${r.mins.get(m.id)} ${t.minLabel}</td>`).join("")}</tr>`).join("")}</table></details>`;
-  box.innerHTML = `<div class="hist"><h3>${esc(t.histTitle)}</h3><div class="hist-legend">${legend}</div>${bars}${table}</div>`;
+  box.innerHTML = `${trendBlock()}<div class="hist"><h3>${esc(t.histTitle)}</h3><div class="hist-legend">${legend}</div>${bars}${table}</div>`;
 }
 
 /* ---------- Weekly summary as image ---------- */
@@ -5606,6 +5625,101 @@ return { matrix, svg };
 })();
 
 
+
+/* ---------- Calendar link for Google/Apple (Edge Function calendar-feed) ---------- */
+var calWho = "", calConfirm = false;
+function calUrl(proto) {
+  const tok = settings().calToken;
+  if (!tok) return "";
+  const u = SUPABASE_URL.replace(/^https:/, proto || "https:") + "/functions/v1/calendar-feed?t=" + encodeURIComponent(tok) + "&lang=" + lang + (calWho ? "&m=" + encodeURIComponent(calWho) : "");
+  return u;
+}
+function newCalToken() {
+  const b = new Uint8Array(24);
+  crypto.getRandomValues(b);
+  return btoa(String.fromCharCode(...b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function renderCalSet() {
+  const box = document.getElementById("set-cal");
+  if (!box) return;
+  if (LOCAL_MODE || !state || !hh || isChild()) { box.innerHTML = ""; return; }
+  if (box.contains(document.activeElement) && document.activeElement.tagName === "SELECT") return;
+  const t = T[lang], tok = settings().calToken;
+  let html = `<h3 id="cal-h">${esc(t.calTitle)}</h3><p class="summary" style="margin-top:0">${esc(t.calHint)}</p>`;
+  if (!tok) {
+    html += isOwner() ? `<button type="button" class="btn" data-cal="make">${esc(t.calMake)}</button>` : `<p class="meta">${esc(t.calAskOwner)}</p>`;
+  } else {
+    if (calWho && !memberById(calWho)) calWho = "";
+    const web = calUrl("webcal:"), https = calUrl();
+    html += `<label for="cal-who">${esc(t.calWho)}</label><select id="cal-who"><option value="">${esc(t.calAll)}</option>${state.members.map(m => `<option value="${m.id}"${m.id === calWho ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select>
+      <div class="cal-btns"><a class="btn" href="${esc(web)}" data-cal="apple">${esc(t.calApple)}</a><a class="ghost" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(web)}" target="_blank" rel="noopener" data-cal="google">${esc(t.calGoogle)}</a><button type="button" class="ghost" data-cal="copy" data-url="${esc(https)}">${esc(t.calCopy)}</button>${isOwner() ? `<button type="button" class="ghost${calConfirm ? " danger" : ""}" data-cal="new">${esc(calConfirm ? t.calNewSure : t.calNew)}</button>` : ""}</div>
+      <p class="footnote" style="text-align:left">${esc(t.calNote)}</p>`;
+  }
+  box.innerHTML = html;
+}
+document.getElementById("set-cal").addEventListener("click", async e => {
+  const b = e.target.closest("[data-cal]");
+  if (!b || !state || isChild()) return;
+  const act = b.dataset.cal, t = T[lang];
+  if ((act === "make" || act === "new") && !isOwner()) return;
+  if (act === "make") { state.settings = { ...settings(), calToken: newCalToken() }; save(); renderCalSet(); return; }
+  if (act === "new") {
+    if (!calConfirm) { calConfirm = true; renderCalSet(); setTimeout(() => { if (calConfirm) { calConfirm = false; renderCalSet(); } }, 4000); return; }
+    calConfirm = false; state.settings = { ...settings(), calToken: newCalToken() }; save(); renderCalSet(); return;
+  }
+  if (act === "copy") { if (await copyText(b.dataset.url)) { b.textContent = t.calCopied; setTimeout(renderCalSet, 1500); } }
+});
+document.getElementById("set-cal").addEventListener("change", e => {
+  if (e.target.id !== "cal-who") return;
+  calWho = e.target.value; e.target.blur(); renderCalSet();
+});
+
+/* ---------- Streaks: days in a row with at least one chore done ---------- */
+function streakOf(mid) {
+  const days = new Set((state.doneLog || []).filter(e => e.m === mid).map(e => isoDay(new Date(e.at))));
+  const d = new Date();
+  if (!days.has(isoDay(d))) d.setDate(d.getDate() - 1);
+  let n = 0;
+  while (days.has(isoDay(d)) && n < 400) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function streakBadge(mid) {
+  const n = streakOf(mid);
+  return n >= 2 ? `<p class="streak"><span aria-hidden="true">\u{1F525}</span>${esc(T[lang].streakDays.replace("{n}", n))}</p>` : "";
+}
+
+/* ---------- Fairness trend: first weeks compared with the latest ---------- */
+function fairTrend() {
+  const log = state.doneLog || [];
+  if (!log.length || state.members.length < 2) return null;
+  const adults = state.members.filter(m => !isKid(m));
+  const who = adults.length >= 2 ? adults : state.members;
+  const ids = new Set(who.map(m => m.id));
+  const weeks = new Map();
+  log.forEach(e => {
+    if (!ids.has(e.m)) return;
+    const st = weekStartOf(new Date(e.at)), key = isoDay(st);
+    if (!weeks.has(key)) weeks.set(key, { st, mins: new Map(who.map(m => [m.id, 0])) });
+    const w = weeks.get(key); w.mins.set(e.m, w.mins.get(e.m) + (Number(e.min) || 0));
+  });
+  const list = [...weeks.values()].filter(w => [...w.mins.values()].some(v => v > 0)).sort((a, b) => a.st - b.st);
+  if (list.length < 3) return null;
+  const k = list.length >= 4 ? 2 : 1;
+  const sum = arr => { const m = new Map(who.map(x => [x.id, 0])); arr.forEach(w => w.mins.forEach((v, id) => m.set(id, m.get(id) + v))); return m; };
+  const score = m => { const tot = [...m.values()].reduce((a, b) => a + b, 0); if (!tot) return null; const e = 100 / m.size, mx = Math.max(...m.values()) / tot * 100; return Math.max(0, Math.round(100 * (1 - (mx - e) / (100 - e)))); };
+  const pct = m => { const tot = [...m.values()].reduce((a, b) => a + b, 0) || 1; return new Map([...m].map(([id, v]) => [id, Math.round(v / tot * 100)])); };
+  const a = sum(list.slice(0, k)), b = sum(list.slice(-k));
+  return { from: score(a), to: score(b), week: isoWeek(list[0].st).week, pa: pct(a), pb: pct(b), who };
+}
+function trendBlock() {
+  const tr = fairTrend();
+  if (!tr || tr.from === null || tr.to === null) return "";
+  const t = T[lang], diff = tr.to - tr.from;
+  const line = (diff >= 5 ? t.trendUp : diff <= -5 ? t.trendDown : t.trendSame).replace("{a}", tr.from).replace("{b}", tr.to).replace("{w}", tr.week);
+  return `<div class="trend${diff <= -5 ? " worse" : ""}"><h3>${esc(t.trendTitle)}</h3><p class="big">${tr.from} → ${tr.to}</p><p class="summary" style="margin:0">${esc(line)}</p>
+    <ul>${tr.who.map(m => `<li>${esc(t.trendShare.replace("{name}", m.name).replace("{a}", tr.pa.get(m.id)).replace("{b}", tr.pb.get(m.id)))}</li>`).join("")}</ul></div>`;
+}
+
 /* ---------- Tell another family (referral at a high point) ---------- */
 async function shareApp(btn) {
   const t = T[lang], url = appUrl();
@@ -5664,7 +5778,7 @@ function renderFocus() {
   if (!cur) {
     const n = done - focusStart;
     const stars = m && isKid(m) ? (state.starLog || []).filter(e => e.m === m.id && isoDay(new Date(e.at)) === isoDay(new Date())).reduce((a, e) => a + (Number(e.n) || 1), 0) : 0;
-    card.innerHTML = `<div class="fx-win" role="status"><p class="big" aria-hidden="true">🎉</p><h2 class="fx-title" id="fx-title">${esc(t.focusAllDone)}</h2><p class="summary">${esc(t.focusAllHint.replace("{n}", Math.max(n, done)))}${stars ? " " + esc(t.focusStars.replace("{n}", stars)) : ""}</p></div>`;
+    card.innerHTML = `<div class="fx-win" role="status"><p class="big" aria-hidden="true">🎉</p><h2 class="fx-title" id="fx-title">${esc(t.focusAllDone)}</h2><p class="summary">${esc(t.focusAllHint.replace("{n}", Math.max(n, done)))}${stars ? " " + esc(t.focusStars.replace("{n}", stars)) : ""}</p>${m ? streakBadge(m.id) : ""}</div>`;
     btns.innerHTML = `<button type="button" class="fx-done" data-fx="close">${esc(t.focusBack)}</button>`;
     return;
   }
