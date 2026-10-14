@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-sIakdwxVg1a0nih/Ki5r8WrlZ9VEPdEdrDOiDDo3+uk='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Household Balance</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -641,6 +642,41 @@ label.step { text-transform: none; letter-spacing: 0; font-size: 0.9375rem; colo
 input, select, textarea { font-size: max(16px, 1rem) !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 
+
+/* ===== Polish, focus mode, tips ===== */
+h1, h2, h3, .task-title, .login-brand span { text-wrap: balance; }
+.summary, .hint, .meta, .task-note, .login-why span.t { text-wrap: pretty; }
+.n, .bar-head, .start-steps .num, .sc-c, .fx-count, .pill { font-variant-numeric: tabular-nums; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.btn, .ghost, .chip, .oauth-btn, .pulse-btns button, .fx-done, .fx-skip { transition-property: transform, background-color, box-shadow, opacity; transition-duration: .15s; }
+.btn:active, .chip:active, .oauth-btn:active, .pulse-btns button:active, .fx-done:active { transform: scale(.97); }
+@media (prefers-reduced-motion: reduce) { .btn:active, .chip:active, .oauth-btn:active, .pulse-btns button:active, .fx-done:active { transform: none; } }
+.focus-open { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 48px; margin: 4px 0 12px; border-radius: 12px; border: 0; background: var(--tint-fill); color: var(--primary); font: inherit; font-weight: 600; cursor: pointer; }
+.focus-open svg { width: 20px; height: 20px; }
+.focus-open[hidden], .tip-row[hidden] { display: none; }
+#focus { position: fixed; inset: 0; z-index: 30; background: var(--bg); display: flex; flex-direction: column; overflow-y: auto; padding: max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)); }
+#focus[hidden] { display: none; }
+.fx-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; max-width: 560px; width: 100%; margin: 0 auto; }
+.fx-count { font-weight: 600; color: var(--muted); }
+.fx-dots { display: flex; gap: 6px; flex-wrap: wrap; max-width: 560px; width: 100%; margin: 12px auto 0; }
+.fx-dots span { flex: 1 1 0; min-width: 10px; height: 8px; border-radius: 4px; background: var(--line); }
+.fx-dots span.ok { background: var(--green); }
+.fx-dots span.cur { background: var(--primary); }
+.fx-card { flex: 1 0 auto; display: flex; flex-direction: column; justify-content: center; gap: 14px; max-width: 560px; width: 100%; margin: 0 auto; padding: 24px 0; }
+.fx-label { font-size: .8125rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.fx-title { font-size: 2.25rem; line-height: 1.12; font-weight: 800; letter-spacing: -.02em; margin: 0; }
+.fx-time { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; background: var(--surface); border-radius: 999px; padding: 8px 14px; font-weight: 600; }
+.fx-card .steps { margin: 0; }
+.fx-card .task-note { font-size: 1.0625rem; }
+.fx-btns { display: grid; gap: 10px; max-width: 560px; width: 100%; margin: 0 auto; }
+.fx-done { min-height: 64px; border-radius: 16px; border: 0; background: var(--green); color: #fff; font: inherit; font-size: 1.25rem; font-weight: 700; cursor: pointer; }
+.fx-skip { min-height: 48px; border-radius: 12px; border: 0; background: transparent; color: var(--primary); font: inherit; font-weight: 600; cursor: pointer; }
+.fx-win { text-align: center; }
+.fx-win .big { font-size: 4rem; line-height: 1; margin: 0 0 8px; }
+.tip-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.start-done { text-align: center; }
+.start-done .big { font-size: 2.5rem; margin: 0; }
+
 /* ===== Reach: start, invite, accessibility, login ===== */
 .login { overflow-y: auto; }
 @media (max-height: 760px) { .login { place-items: start center; } }
@@ -756,6 +792,12 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
     <p style="text-align:center;margin:0"><button class="ghost" type="button" id="guide-skip" data-i="guideSkip"></button></p>
   </div>
 </div>
+<div id="focus" hidden role="dialog" aria-modal="true" aria-labelledby="fx-title">
+  <div class="fx-top"><span class="fx-count" id="fx-count"></span><button class="ghost" type="button" id="fx-close" data-i="close"></button></div>
+  <div class="fx-dots" id="fx-dots" aria-hidden="true"></div>
+  <div class="fx-card" id="fx-card"></div>
+  <div class="fx-btns" id="fx-btns"></div>
+</div>
 <div id="inv-sheet" class="login setup inv-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="inv-h">
   <div class="setup-inner">
     <div class="card">
@@ -818,7 +860,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
       <p class="sub" id="t-sub"></p>
     </div>
     <div style="display:flex;gap:10px;align-items:center">
-      <span class="sync" id="sync-status"></span>
+      <span class="sync" id="sync-status" role="status" aria-live="polite"></span>
       <button class="gear" id="open-settings" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </div>
   </header>
@@ -845,6 +887,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
       <div id="today-swaps"></div>
       <div id="today-rewards"></div>
       <div id="today-progress"></div>
+      <button type="button" class="focus-open" id="focus-open" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg><span data-i="focusOpen"></span></button>
       <ul class="tasks big" id="today-list"></ul>
     </section>
 
@@ -924,7 +967,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <h3 id="fb-h" data-i="fbTitle"></h3>
         <p class="summary" style="margin-top:0" data-i="fbHint"></p>
         <textarea id="fb-text" maxlength="1000" rows="3" aria-labelledby="fb-h"></textarea>
-        <div style="margin-top:8px"><button class="btn" type="button" id="fb-send" data-i="fbSend"></button></div>
+        <div class="tip-row"><button class="btn" type="button" id="fb-send" data-i="fbSend"></button><button class="ghost" type="button" data-tip="1" data-i="tipBtn"></button></div>
         <p class="set-msg" id="fb-msg" role="status"></p>
       </div>
       <p class="legal-links"><button type="button" class="linkish" data-legal="privacy" data-i="privacyLink"></button><span aria-hidden="true"> · </span><button type="button" class="linkish" data-legal="terms" data-i="termsLink"></button></p>
@@ -1217,6 +1260,9 @@ const T = {
     delOwnerFirst: "Hand over ownership to another adult under Household accounts first.", delDone: "Your account has been deleted.",
     memHint: "Everyone who joins with an invite shows up here by themselves.", memHintAdult: "Everyone who joins with an invite shows up here by themselves. Ask the owner for an invite link.",
     memInvite: "Invite the family", memNoAcc: "+ Add someone without an account", noAccLabel: "No account",
+    focusOpen: "One thing at a time", focusOf: "{done} of {total} done", focusNow: "Now", focusAbout: "About {n} min", focusDone: "Done ✓", focusLater: "Later", focusAllDone: "All done for today!", focusAllHint: "{n} chores ticked off. Nice work.", focusStars: "You got {n} ★ today.", focusBack: "Back to Today",
+    startCreate: "Create the household", startDoneTitle: "You're up and running!", startDoneHint: "Everything is set. Know another family who argues about the dishes?",
+    tipBtn: "Tell another family", tipText: "We use Household Balance to share the chores at home fairly. Free to try:", tipCopied: "Link copied!", tipTitle: "Know another family?", tipHint: "Glad it works for you! Tips from one family to another is how the app grows.",
     skipLink: "Skip to content", close: "Close", stepDone: "done",
     why: [["⚖️", "rgba(0,104,217,.14)", "Fair at home", "See who does what, and share it out evenly with one tap."], ["⭐", "rgba(255,204,0,.25)", "Children join in", "Their own list, stars and rewards that motivate."], ["🛒", "rgba(52,199,89,.18)", "Shopping and dinners", "A shared list and the week's dinners in one place."]],
     demoStart: "Try with an example family", demoText: "You are trying an example family. Nothing is saved.", demoSignup: "Create my own", demoReset: "Start over",
@@ -1350,6 +1396,9 @@ const T = {
     delOwnerFirst: "Lämna först över ägarskapet till en annan vuxen under Hushållets konton.", delDone: "Ditt konto är raderat.",
     memHint: "Alla som går med via en inbjudan dyker upp här av sig själva.", memHintAdult: "Alla som går med via en inbjudan dyker upp här av sig själva. Be ägaren om en inbjudningslänk.",
     memInvite: "Bjud in familjen", memNoAcc: "+ Lägg till någon utan konto, t.ex. ett litet barn", noAccLabel: "Utan konto",
+    focusOpen: "En sak i taget", focusOf: "{done} av {total} klara", focusNow: "Nu", focusAbout: "Cirka {n} min", focusDone: "Klar ✓", focusLater: "Senare", focusAllDone: "Allt klart för idag!", focusAllHint: "{n} sysslor avbockade. Snyggt jobbat.", focusStars: "Du fick {n} ★ idag.", focusBack: "Tillbaka till Idag",
+    startCreate: "Skapa hushållet", startDoneTitle: "Nu är ni igång!", startDoneHint: "Allt är klart. Känner du en familj som också bråkar om disken?",
+    tipBtn: "Tipsa en annan familj", tipText: "Vi använder Hushållsbalans för att dela på sysslorna hemma rättvist. Gratis att prova:", tipCopied: "Länk kopierad!", tipTitle: "Känner du en annan familj?", tipHint: "Kul att den fungerar för er! Tips från familj till familj är hur appen växer.",
     skipLink: "Hoppa till innehållet", close: "Stäng", stepDone: "klart",
     why: [["⚖️", "rgba(0,104,217,.14)", "Rättvist hemma", "Se vem som gör vad, och fördela jämnt med ett tryck."], ["⭐", "rgba(255,204,0,.25)", "Barnen är med", "Egen lista, stjärnor och belöningar som peppar."], ["🛒", "rgba(52,199,89,.18)", "Inköp och middagar", "Gemensam inköpslista och veckans middagar på ett ställe."]],
     demoStart: "Prova med en exempelfamilj", demoText: "Du provar med en exempelfamilj. Inget sparas.", demoSignup: "Skapa egen", demoReset: "Börja om",
@@ -1584,7 +1633,29 @@ document.addEventListener("visibilitychange", () => { if (document.hidden) flush
 /* ---------- Shared household (cloud) ---------- */
 const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true, parentConsent: "" };
 function settings() { return { ...SETTINGS_DEFAULT, ...((state && state.settings) || {}) }; }
+const SAFE_ID = /^[A-Za-z0-9_-]{1,64}$/;
+function safeList(a) { return (Array.isArray(a) ? a : []).filter(x => x && typeof x === "object" && SAFE_ID.test(String(x.id))); }
+function cleanData(o) {
+  // data is shared between family members: ids end up inside HTML attributes, so only plain ids and real numbers get through
+  ["members", "tasks", "checkins", "shopping", "swaps", "starLog", "doneLog", "rewards", "redeems", "starResets", "comments", "timeLog", "rewardsGiven", "board"].forEach(key => { o[key] = safeList(o[key]); });
+  o.members = o.members.map(m => {
+    const x = { ...m, color: Math.abs(Math.floor(Number(m.color))) || 0 };
+    if (Array.isArray(m.hobbies)) x.hobbies = m.hobbies.filter(h => typeof h === "string" || (h && typeof h === "object" && (!("id" in h) || SAFE_ID.test(String(h.id)))));
+    return x;
+  });
+  o.tasks = o.tasks.map(k => {
+    const x = { ...k, minutes: Math.max(0, Math.round(Number(k.minutes) || 0)) };
+    if ("steps" in k) x.steps = safeList(k.steps);
+    return x;
+  });
+  o.shopping = o.shopping.map(x => ("qty" in x ? { ...x, qty: Math.max(1, Math.round(Number(x.qty) || 1)) } : x));
+  o.rewards = o.rewards.map(r => ({ ...r, cost: Math.max(0, Math.round(Number(r.cost) || 0)) }));
+  return o;
+}
 function normalizeState(d) {
+  return cleanData(normalizeState0(d));
+}
+function normalizeState0(d) {
   d = d && typeof d === "object" && !Array.isArray(d) ? d : {};
   return {
     ...d,
@@ -2035,22 +2106,32 @@ function renderOverview() {
 function startSteps() {
   if (!state || DEMO || isChild() || state.startHidden || guideOn()) return null;
   const steps = [
+    { key: "create", ok: true },
     { key: "family", ok: state.members.length >= 2 },
     !LOCAL_MODE && hh && isOwner() ? { key: "invite", ok: hh.members.length >= 2 } : null,
     { key: "share", ok: new Set(state.tasks.map(k => k.owner)).size >= 2 },
     { key: "first", ok: (state.doneLog || []).length > 0 || state.tasks.some(k => k.done) }
   ].filter(Boolean);
-  return steps.every(x => x.ok) ? null : steps;
+  return steps;
 }
+var startWasOpen = false, startCheered = false;
 function renderStart() {
   const w = document.getElementById("welcome"), t = T[lang], steps = startSteps();
   w.hidden = !steps;
   if (!steps) { w.innerHTML = ""; return; }
   const n = steps.filter(x => x.ok).length, cap = x => x[0].toUpperCase() + x.slice(1), next = steps.findIndex(y => !y.ok);
+  if (next < 0) {
+    if (!startWasOpen) { w.hidden = true; w.innerHTML = ""; return; }
+    w.innerHTML = `<div class="start-done"><p class="big" aria-hidden="true">🎉</p><h2 id="start-h">${esc(t.startDoneTitle)}</h2><p class="summary">${esc(t.startDoneHint)}</p>
+      <div class="tip-row" style="justify-content:center"><button type="button" class="btn" data-tip="1">${esc(t.tipBtn)}</button><button type="button" class="ghost" data-start="hide">${esc(t.close)}</button></div></div>`;
+    if (!startCheered) { startCheered = true; confetti(); }
+    return;
+  }
+  startWasOpen = true;
   w.innerHTML = `<div class="card-top"><h2 id="start-h">${esc(t.startTitle)}</h2><button type="button" class="ghost" data-start="hide">${esc(t.startHide)}</button></div>
     <p class="summary" style="margin:4px 0 0">${esc(t.startProgress.replace("{n}", n).replace("{total}", steps.length))}</p>
     <div class="start-bar" aria-hidden="true"><span style="width:${Math.round(n / steps.length * 100)}%"></span></div>
-    <ol class="start-steps">${steps.map((x, i) => `<li class="${x.ok ? "ok" : ""}"><span class="num" aria-hidden="true">${x.ok ? "✓" : i + 1}</span><span class="st-lbl">${esc(t["start" + cap(x.key)])}${x.ok ? `<span class="sr-only"> (${esc(t.stepDone)})</span>` : ""}</span>${x.ok ? "" : `<button type="button" class="${next === i ? "btn" : "ghost"}" data-start="${x.key}">${esc(t["startGo" + cap(x.key)])}</button>`}</li>`).join("")}</ol>`;
+    <ol class="start-steps">${steps.map((x, i) => `<li class="${x.ok ? "ok" : ""}"><span class="num" aria-hidden="true">${x.ok ? "✓" : i + 1}</span><span class="st-lbl">${esc(t["start" + cap(x.key)])}${x.ok ? `<span class="sr-only"> (${esc(t.stepDone)})</span>` : ""}</span>${x.ok || x.key === "create" ? "" : `<button type="button" class="${next === i ? "btn" : "ghost"}" data-start="${x.key}">${esc(t["startGo" + cap(x.key)])}</button>`}</li>`).join("")}</ol>`;
 }
 let pulseStage = "", pulseVal = "";
 function renderPulse() {
@@ -2060,6 +2141,11 @@ function renderPulse() {
   if (!due && !pulseStage) { box.hidden = true; box.innerHTML = ""; return; }
   box.hidden = false;
   if (pulseStage === "thanks") { box.innerHTML = `<p class="summary" style="margin:0" role="status">${esc(t.pulseThanks)}</p>`; return; }
+  if (pulseStage === "more" && pulseVal === "good") {
+    if (box.querySelector("[data-tip]")) return;
+    box.innerHTML = `<h2 id="pulse-h">${esc(t.tipTitle)}</h2><p class="summary" style="margin:4px 0 0">${esc(t.tipHint)}</p><div class="tip-row"><button type="button" class="btn" data-tip="1">${esc(t.tipBtn)}</button><button type="button" class="ghost" data-pulse="skip">${esc(t.close)}</button></div>`;
+    return;
+  }
   if (pulseStage === "more") {
     if (document.getElementById("pulse-text")) return;
     box.innerHTML = `<h2 id="pulse-h">${esc(t.pulseMore)}</h2><textarea id="pulse-text" maxlength="1000" rows="3" aria-labelledby="pulse-h"></textarea><div class="pulse-btns"><button type="button" data-pulse="send">${esc(t.pulseSend)}</button><button type="button" data-pulse="skip">${esc(t.pulseLater)}</button></div>`;
@@ -2310,6 +2396,8 @@ function renderAll() {
   renderCheckins();
   renderHousehold();
   renderInvite();
+  renderFocusButton();
+  if (focusOn) renderFocus();
   renderSettings();
   renderInstall();
   document.getElementById("checkin").value = draft;
@@ -2756,6 +2844,7 @@ function renderToday() {
     prog.innerHTML = `<div class="bar-wrap"><div class="bar-head"><span>${esc(t.progressText.replace("{done}", done).replace("{total}", mine.length))}</span><span>${pct}%</span></div><div class="bar"><span style="width:${pct}%;background:var(--c)"></span></div>${done === mine.length ? `<p class="summary">${esc(t.allDone)}</p>` : ""}</div>`;
   } else prog.innerHTML = "";
   const ul = document.getElementById("today-list");
+  renderFocusButton();
   if (!mine.length) {
     ul.innerHTML = `<li class="empty" style="display:block"><p class="hint">${esc(t.todayEmpty)}</p>${isChild() ? "" : `<button class="btn big" type="button" data-goto="chores">${esc(t.todayEmptyBtn)}</button>`}</li>`;
     return;
@@ -5516,6 +5605,103 @@ function svg(text, label) {
 return { matrix, svg };
 })();
 
+
+/* ---------- Tell another family (referral at a high point) ---------- */
+async function shareApp(btn) {
+  const t = T[lang], url = appUrl();
+  if (navigator.share) { try { await navigator.share({ title: t.title, text: t.tipText, url }); logEvent("feedback", "tip: shared", { tip: 1 }); } catch (e) {} return; }
+  if (await copyText(t.tipText + " " + url)) {
+    logEvent("feedback", "tip: copied", { tip: 1 });
+    if (btn) { const old = btn.textContent; btn.textContent = t.tipCopied; setTimeout(() => { btn.textContent = old; }, 1600); }
+  }
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-tip]");
+  if (b) shareApp(b);
+});
+
+/* ---------- One thing at a time (focus mode) ---------- */
+var focusOn = false, focusSkip = [], focusReturn = null, focusStart = 0;
+function focusList() {
+  const pid = todayPerson();
+  if (!pid) return [];
+  const rank = k => k.done ? 3 : dueStatus(k) === "late" ? 0 : (k.time ? 1 : 2);
+  return state.tasks.filter(k => k.owner === pid && dueStatus(k) !== "later").sort((x, y) => rank(x) - rank(y) || String(x.time || "").localeCompare(String(y.time || "")));
+}
+function canTick(k) { return !isChild() || (settings().childCheck && k.owner === hh.memberId); }
+function openFocus(from) {
+  focusOn = true; focusSkip = []; focusReturn = from || document.activeElement;
+  focusStart = focusList().filter(k => k.done).length;
+  document.getElementById("focus").hidden = false;
+  document.body.style.overflow = "hidden";
+  renderFocus();
+  setTimeout(() => { const b = document.querySelector("#fx-btns button"); if (b) b.focus(); }, 30);
+}
+function closeFocus() {
+  focusOn = false;
+  document.getElementById("focus").hidden = true;
+  document.body.style.overflow = "";
+  renderAll();
+  const el = document.getElementById("focus-open");
+  if (el && !el.hidden) el.focus();
+}
+function renderFocusButton() {
+  const b = document.getElementById("focus-open");
+  if (!b || !state) return;
+  b.hidden = !focusList().some(k => !k.done);
+}
+function renderFocus() {
+  const box = document.getElementById("focus");
+  if (!focusOn || !state) { box.hidden = true; return; }
+  const t = T[lang], list = focusList(), m = memberById(todayPerson());
+  const open = list.filter(k => !k.done);
+  const queue = open.filter(k => !focusSkip.includes(k.id)).concat(open.filter(k => focusSkip.includes(k.id)));
+  const cur = queue[0];
+  const done = list.length - open.length;
+  document.getElementById("fx-count").textContent = (m ? m.name + " · " : "") + t.focusOf.replace("{done}", done).replace("{total}", list.length);
+  document.getElementById("fx-dots").innerHTML = list.map(k => `<span class="${k.done ? "ok" : cur && k.id === cur.id ? "cur" : ""}"></span>`).join("");
+  const card = document.getElementById("fx-card"), btns = document.getElementById("fx-btns");
+  if (!cur) {
+    const n = done - focusStart;
+    const stars = m && isKid(m) ? (state.starLog || []).filter(e => e.m === m.id && isoDay(new Date(e.at)) === isoDay(new Date())).reduce((a, e) => a + (Number(e.n) || 1), 0) : 0;
+    card.innerHTML = `<div class="fx-win" role="status"><p class="big" aria-hidden="true">🎉</p><h2 class="fx-title" id="fx-title">${esc(t.focusAllDone)}</h2><p class="summary">${esc(t.focusAllHint.replace("{n}", Math.max(n, done)))}${stars ? " " + esc(t.focusStars.replace("{n}", stars)) : ""}</p></div>`;
+    btns.innerHTML = `<button type="button" class="fx-done" data-fx="close">${esc(t.focusBack)}</button>`;
+    return;
+  }
+  const steps = (cur.steps || []).length ? `<div class="steps">${cur.steps.map(x => `<label class="step${x.done ? " done" : ""}"><input type="checkbox" data-fx-step="${x.id}"${x.done ? " checked" : ""}><span>${esc(x.text)}</span></label>`).join("")}</div>` : "";
+  card.innerHTML = `<p class="fx-label">${esc(t.focusNow)}${cur.time ? " · " + esc(t.atTime.replace("{t}", cur.time)) : ""}</p>
+    <h2 class="fx-title" id="fx-title">${esc(taskName(cur))}</h2>
+    ${cur.minutes ? `<span class="fx-time"><span aria-hidden="true">⏱</span>${esc(t.focusAbout.replace("{n}", cur.minutes))}</span>` : ""}
+    ${cur.note ? `<div class="task-note">${esc(cur.note)}</div>` : ""}${steps}`;
+  btns.innerHTML = (canTick(cur) ? `<button type="button" class="fx-done" data-fx="done" data-id="${cur.id}">${esc(t.focusDone)}</button>` : "")
+    + (queue.length > 1 ? `<button type="button" class="fx-skip" data-fx="later" data-id="${cur.id}">${esc(t.focusLater)}</button>` : "");
+}
+document.getElementById("focus-open").onclick = e => openFocus(e.currentTarget);
+document.getElementById("fx-close").onclick = closeFocus;
+document.getElementById("focus").addEventListener("click", e => {
+  const b = e.target.closest("[data-fx]");
+  if (!b) return;
+  const act = b.dataset.fx;
+  if (act === "close") { closeFocus(); return; }
+  const k = state.tasks.find(x => x.id === b.dataset.id);
+  if (!k) return;
+  if (act === "later") { focusSkip = focusSkip.filter(id => id !== k.id).concat(k.id); renderFocus(); }
+  if (act === "done" && !k.done && canTick(k)) {
+    toggleDone(k); justDone = k.id; save();
+    if (!focusList().some(x => !x.done)) confetti();
+    renderAll(); renderFocus();
+  }
+  const nb = document.querySelector("#fx-btns button"); if (nb) nb.focus();
+});
+document.getElementById("focus").addEventListener("change", e => {
+  const c = e.target.closest("[data-fx-step]");
+  if (!c) return;
+  const cur = state.tasks.find(k => (k.steps || []).some(x => x.id === c.dataset.fxStep) && k.owner === todayPerson());
+  if (!cur || !canTick(cur)) { c.checked = !c.checked; return; }
+  const st = cur.steps.find(x => x.id === c.dataset.fxStep);
+  st.done = c.checked; save(); renderAll();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && focusOn) closeFocus(); });
 /* ---------- Invite sheet with QR code ---------- */
 let invRole = "adult", invReturn = null, invReturnSel = "";
 function openInvite(role, from) {
@@ -5572,7 +5758,7 @@ document.addEventListener("keydown", e => {
 /* keep Tab inside an open dialog */
 document.addEventListener("keydown", e => {
   if (e.key !== "Tab") return;
-  const dlg = ["legal", "inv-sheet", "guide"].map(id => document.getElementById(id)).find(d => d && !d.hidden);
+  const dlg = ["legal", "focus", "inv-sheet", "guide"].map(id => document.getElementById(id)).find(d => d && !d.hidden);
   if (!dlg) return;
   const f = [...dlg.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
   if (!f.length) return;
