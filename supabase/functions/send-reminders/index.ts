@@ -2,7 +2,7 @@
 // Supabase Edge Function: send-reminders
 // Runs every 5 minutes (pg_cron) and sends Web Push reminders:
 //  - once a day at the time each person chose: the chores they have left today
-//  - one hour before their own weekly activities and calendar events with a time
+//  - one hour before their own weekly activities and calendar events with a time (and ones they were invited to and said yes to)
 //  - 30 minutes before their own chores that have a time of day
 // Also answers {test:true} from a signed-in user with a test notification.
 // Keys: VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT, CRON_SECRET, from function secrets
@@ -165,6 +165,13 @@ export function upcoming(data, memberId, nowMs, tz) {
   if (m) {
     (Array.isArray(m.hobbies) ? m.hobbies : []).forEach(a => { if (a && typeof a === "object" && Array.isArray(a.days) && a.days.includes(L.dow)) add("a:" + a.id, a.title, a.time, 60, "act"); });
     (Array.isArray(m.events) ? m.events : []).forEach(e => { if (e && e.date === L.iso) add("e:" + e.id, e.title, e.time, 60, "act"); });
+    // activities and events someone else invited them to, and they said yes
+    const said = key => (Array.isArray(m.hobbies) ? m.hobbies : []).some(r => r && r.re === key && r.ans === "yes");
+    (Array.isArray(d.members) ? d.members : []).forEach(o => {
+      if (!o || o.id === memberId) return;
+      (Array.isArray(o.hobbies) ? o.hobbies : []).forEach(a => { if (a && Array.isArray(a.with) && a.with.includes(memberId) && Array.isArray(a.days) && a.days.includes(L.dow) && said("act|" + o.id + "|" + a.id)) add("a:" + a.id, a.title, a.time, 60, "act"); });
+      (Array.isArray(o.events) ? o.events : []).forEach(e => { if (e && Array.isArray(e.with) && e.with.includes(memberId) && e.date === L.iso && said("ev|" + o.id + "|" + e.id)) add("e:" + e.id, e.title, e.time, 60, "act"); });
+    });
   }
   todaysChores(d, memberId, nowMs, tz).forEach(k => { if (k.time) add("c:" + k.id, taskName(k), k.time, 30, "chore"); });
   return out;

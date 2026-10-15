@@ -84,6 +84,14 @@ export function buildIcs(household, opts) {
   const out = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Hushallsbalans//Kalender//SV", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
     "X-WR-CALNAME:" + esc(title), "X-WR-TIMEZONE:" + TZ, "REFRESH-INTERVAL;VALUE=DURATION:PT1H", "X-PUBLISHED-TTL:PT1H", ...VTIMEZONE];
   const who = id => (only ? "" : nameOf(id) ? " (" + nameOf(id) + ")" : "");
+  // invitations: a.with lists invited members; their answer is stored in their own hobbies as { re: "act|org|id", ans: "yes" }
+  const saidYes = (mid, key) => { const p = members.find(x => x.id === mid); return !!(p && Array.isArray(p.hobbies) && p.hobbies.some(r => r && r.re === key && r.ans === "yes")); };
+  const going = (kind, org, item) => (Array.isArray(item.with) ? item.with : []).filter(id => id !== org.id && saidYes(id, kind + "|" + org.id + "|" + item.id));
+  const show = (kind, org, item) => !only || org.id === only.id || going(kind, org, item).includes(only.id);
+  const whoAll = (kind, org, item) => {
+    const names = [org.id, ...going(kind, org, item)].filter(id => !only || id !== only.id).map(nameOf).filter(Boolean);
+    return names.length ? " (" + names.join(", ") + ")" : "";
+  };
 
   // chores
   (Array.isArray(data.tasks) ? data.tasks : []).forEach(k => {
@@ -107,17 +115,17 @@ export function buildIcs(household, opts) {
 
   members.forEach(m => {
     // one-off events in the family calendar
-    if (mine(m.id)) (Array.isArray(m.events) ? m.events : []).forEach(ev => {
-      if (!ev || !isDate(ev.date) || !ev.title) return;
-      out.push(...vevent("ev-" + safeId(ev.id), String(ev.title) + who(m.id), ev.date, isTime(ev.time) ? ev.time : "", isTime(ev.end) ? ev.end : "", "", stamp, ""));
+    (Array.isArray(m.events) ? m.events : []).forEach(ev => {
+      if (!ev || !isDate(ev.date) || !ev.title || !show("ev", m, ev)) return;
+      out.push(...vevent("ev-" + safeId(ev.id), String(ev.title) + whoAll("ev", m, ev), ev.date, isTime(ev.time) ? ev.time : "", isTime(ev.end) ? ev.end : "", "", stamp, ""));
     });
     // weekly activities (football on Tuesdays...)
-    if (mine(m.id)) (Array.isArray(m.hobbies) ? m.hobbies : []).forEach((a, i) => {
-      if (!a || typeof a !== "object" || !a.title || !Array.isArray(a.days) || !a.days.length) return;
+    (Array.isArray(m.hobbies) ? m.hobbies : []).forEach((a, i) => {
+      if (!a || typeof a !== "object" || !a.title || !Array.isArray(a.days) || !a.days.length || !show("act", m, a)) return;
       const days = a.days.map(Number).filter(d => d >= 0 && d <= 6);
       if (!days.length) return;
       const first = days.map(d => lastWeekday(today, d)).sort()[0];
-      out.push(...vevent("act-" + safeId(m.id) + "-" + safeId(a.id || i), String(a.title) + who(m.id), first, isTime(a.time) ? a.time : "", isTime(a.end) ? a.end : "", "FREQ=WEEKLY;BYDAY=" + days.map(d => DAYS[d]).join(","), stamp, ""));
+      out.push(...vevent("act-" + safeId(m.id) + "-" + safeId(a.id || i), String(a.title) + whoAll("act", m, a), first, isTime(a.time) ? a.time : "", isTime(a.end) ? a.end : "", "FREQ=WEEKLY;BYDAY=" + days.map(d => DAYS[d]).join(","), stamp, ""));
     });
     // birthdays for everyone
     const b = String(m.birthday || "");

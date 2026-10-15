@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-fss/K3DDponGEzMu83w+IaPk9y+feI3YpH80XzFjcqg='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-T/xg1tGy763KA6zZZEK3LO6qPqQMp489iZ9wSgNqdog='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Household Balance</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -643,6 +643,15 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 
 
+/* ===== Invitations to activities ===== */
+.inv-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+.inv-row .lbl { font-size: .8125rem; color: var(--muted); margin-right: 2px; }
+.inv-row .chip { min-height: 32px; padding: 4px 12px; font-size: .875rem; }
+.inv-st { font-weight: 700; margin-left: 4px; }
+.inv-st.yes { color: var(--green); }
+.inv-st.no { color: var(--danger); }
+.inv-st.wait { color: var(--muted); }
+.joined-pill { background: var(--tint-fill) !important; color: var(--primary) !important; }
 /* ===== Calendar link, trend, streaks ===== */
 .cal-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .cal-btns a { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 600; min-height: 44px; padding: 10px 18px; }
@@ -1166,6 +1175,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <div><label for="e-date" data-i="date"></label><input id="e-date" type="date" required></div>
         <div class="narrow" style="flex:0 0 120px"><label for="e-time" data-i="time"></label><input id="e-time" type="time"></div>
         <div><label for="e-who" data-i="calWho"></label><select id="e-who"></select></div>
+        <div style="flex:1 1 100%" id="e-with"></div>
         <div class="narrow"><button class="btn" type="submit" data-i="calAdd"></button></div>
       </form>
     </section>
@@ -1255,12 +1265,12 @@ const T = {
     joinTitle: "Join with a code", codeLabel: "Invite code", codePh: "10 characters", joinBtn: "Join household",
     badCode: "That code is not valid. Check it and try again.", alreadyIn: "This account already belongs to a household.",
     dbNotReady: "The database is not set up yet. Run the SQL file in Supabase first.", hhError: "Something went wrong:",
-    errNotOwner: "Only the owner can do that.", errNeedAdult: "Ownership can only be given to an adult.", errOwnerLeave: "The owner cannot leave. Hand over ownership first.",
-    hhTitle: "Household accounts", roleOwner: "Owner", roleAdult: "Adult", roleChild: "Child", youLabel: "you",
+    errNotOwner: "Only the guardian who manages the household can do that.", errNeedAdult: "Only an adult can manage the household.", errOwnerLeave: "You manage the household and cannot leave. First let another adult manage it.",
+    hhTitle: "Household accounts", roleOwner: "Guardian", roleAdult: "Adult", roleChild: "Child", youLabel: "you",
     inviteTitle: "Invite codes", inviteHint: "Give a code to someone so they can create their own account and join. Adults can edit everything. Children only see their own chores and profile.",
     codeAdult: "Code for adults", codeChild: "Code for children", copyCode: "Copy", newCodes: "Create new codes",
-    makeChild: "Make child", makeAdult: "Make adult", makeOwner: "Make owner", removeAccess: "Remove access", leaveHh: "Leave household", deleteHh: "Delete household",
-    deleteWarn: "Deleting removes all data for everyone in the household.", ownerNote: "Only the owner can manage accounts.",
+    makeChild: "Make child", makeAdult: "Make adult", makeOwner: "Make guardian", removeAccess: "Remove access", leaveHh: "Leave household", deleteHh: "Delete household",
+    deleteWarn: "Deleting removes all data for everyone in the household.", ownerNote: "Only the guardian who manages the household can manage accounts.",
     tabToday: "Today", tabChores: "Chores", tabFamily: "Family", tabWeek: "Week",
     todayHi: "Hi {name}!", todayFor: "Today: {name}", todayEmpty: "No chores here yet.", todayEmptyBtn: "Add the first chore",
     addToggle: "+ Add a chore", ownTask: "✎ Write your own chore", back: "← Back", generalTitle: "General", langLabel: "Language",
@@ -1268,13 +1278,14 @@ const T = {
     wdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], late: "Late", atTime: "at {t}", monthDay: "day {d} each month",
     calTitle: "The family's week", calWho: "Who?", calAdd: "Add to calendar", calEmpty: "Nothing planned", calToday: "Today",
     reportTitle: "This week, live", reportStamp: "Updates by itself. Last checked {t}.", reportDone: "{done} of {total} done", reportNone: "No chores",
-    delTitle: "Delete my account", delHint: "Your account and login are removed for good. If you own the household and others are in it, hand over ownership first.",
+    delTitle: "Delete my account", delHint: "Your account and login are removed for good. If you manage the household and others are in it, first make another adult guardian.",
     delWord: "DELETE", delPh: "Type DELETE to confirm", delBtn: "Delete account", delWrong: "Type DELETE in the box first.",
-    delOwnerFirst: "Hand over ownership to another adult under Household accounts first.", delDone: "Your account has been deleted.",
-    memHint: "Everyone who joins with an invite shows up here by themselves.", memHintAdult: "Everyone who joins with an invite shows up here by themselves. Ask the owner for an invite link.",
+    delOwnerFirst: "First make another adult guardian under Household accounts.", delDone: "Your account has been deleted.",
+    memHint: "Everyone who joins with an invite shows up here by themselves.", memHintAdult: "Everyone who joins with an invite shows up here by themselves. Ask the guardian for an invite link.",
     memInvite: "Invite the family", memNoAcc: "+ Add someone without an account", noAccLabel: "No account",
-    calTitle: "Calendar on your phone", calHint: "Chores with a day or time, activities, events and birthdays show up in your normal calendar and update by themselves.", calMake: "Turn on the calendar link", calWho: "Show", calAll: "The whole family", calApple: "Add to Apple Calendar", calGoogle: "Add to Google Calendar", calCopy: "Copy link", calCopied: "Link copied!", calNew: "Change link", calNewSure: "Old link stops working. Tap again", calNote: "Anyone with the link can see the family calendar. Change the link if it ends up in the wrong place.", calAskOwner: "Ask the person who created the household to turn on the calendar link.",
+    calLinkTitle: "Calendar on your phone", calHint: "Chores with a day or time, activities, events and birthdays show up in your normal calendar and update by themselves.", calMake: "Turn on the calendar link", calLinkWho: "Show", calAll: "The whole family", calApple: "Add to Apple Calendar", calGoogle: "Add to Google Calendar", calCopy: "Copy link", calCopied: "Link copied!", calNew: "Change link", calNewSure: "Old link stops working. Tap again", calNote: "Anyone with the link can see the family calendar. Change the link if it ends up in the wrong place.", calAskOwner: "Ask the guardian to turn on the calendar link.",
     streakDays: "{n} days in a row", trendTitle: "Fairness over time", trendUp: "From {a} to {b} since week {w}", trendDown: "From {a} to {b} since week {w}. Talk about it under Week.", trendSame: "Steady at {b} since week {w}", trendShare: "{name}: {a} % → {b} %",
+    invTo: "Invite", invWith: "with {names}", invBanner: "{name} invites you: {what}", invYes: "Yes please", invNo: "No thanks", invSaidYes: "{name}, coming", invSaidNo: "{name}, can't come", invWait: "{name}, no answer yet", invJoined: "You're joining {name}", invEvWhen: "{date} {time}", invOrganizer: "Organised by {name}",
     focusOpen: "One thing at a time", focusOf: "{done} of {total} done", focusNow: "Now", focusAbout: "About {n} min", focusDone: "Done ✓", focusLater: "Later", focusAllDone: "All done for today!", focusAllHint: "{n} chores ticked off. Nice work.", focusStars: "You got {n} ★ today.", focusBack: "Back to Today",
     startCreate: "Create the household", startDoneTitle: "You're up and running!", startDoneHint: "Everything is set. Know another family who argues about the dishes?",
     tipBtn: "Tell another family", tipText: "We use Household Balance to share the chores at home fairly. Free to try:", tipCopied: "Link copied!", tipTitle: "Know another family?", tipHint: "Glad it works for you! Tips from one family to another is how the app grows.",
@@ -1290,7 +1301,7 @@ const T = {
     invCanAdult: ["Sees and changes everything: chores, family, shopping and dinners.", "Can give stars and rewards to the children.", "Suits a partner, grandparents or another adult who helps out."],
     invCanChild: ["Sees their own chores and ticks them off.", "Collects stars and sees their rewards.", "Cannot change other people's chores or the settings.", "You choose what children may see under Settings."],
     invHow: ["Scan the code with the phone camera, or open the link.", "Create an account or sign in.", "Write their name, the same one as in the app."],
-    invCodeLine: "Code: {code}", invOwnerOnly: "Only the person who created the household can invite. Ask them to show the code.", qrBtn: "QR code",
+    invCodeLine: "Code: {code}", invOwnerOnly: "Only the guardian who manages the household can invite. Ask them to show the code.", qrBtn: "QR code",
     textSize: "Text size", textAuto: "Same as the phone", textNormal: "Normal", textLarge: "Large", textXL: "Extra large",
     pulseTitle: "How is the app working for you?", pulseHint: "One tap helps make it better.", pulseGood: "Good", pulseOk: "OK", pulseBad: "Not great",
     pulseMore: "What could be better? (optional)", pulseSend: "Send", pulseThanks: "Thank you! It goes straight to the person who builds the app.", pulseLater: "Not now",
@@ -1342,12 +1353,12 @@ const T = {
     installReady: "Put the app on your home screen so it opens like any other app.",
     syncSaved: "Saved", syncSaving: "Saving…", syncError: "Could not save",
     navSettings: "Settings", setTitle: "Settings",
-    setAdminTitle: "Admin settings", setAdminHint: "Only the owner sees and can change these.",
+    setAdminTitle: "Admin settings", setAdminHint: "Only the guardian who manages the household sees and can change these.",
     setWeekStart: "Week starts on", setDefLang: "Default language for new members", setMon: "Monday", setSun: "Sunday", setLangNone: "Each person's own choice",
     setChildTitle: "What children may do", setChildSeeAll: "Children can see everyone's chores (read only)",
     setChildCheck: "Children can tick off their own chores", setChildProfile: "Children can edit their own activities and calendar",
     setChildNote: "These limits apply in the app's interface. They are not a security lock.",
-    setNotOwner: "The owner manages household name, week start and what children may do.",
+    setNotOwner: "The guardian manages the household name, week start and what children may do.",
     setPeopleTitle: "People", setPeopleHint: "Change names and colours. This is the list used for assigning chores.",
     setAccountTitle: "My account", setChangeEmail: "Change email", setNewPw: "New password", setChangePw: "Change password",
     setExportTitle: "Export data", setExportHint: "Download all household data as a backup file.", setExportBtn: "Download backup",
@@ -1393,12 +1404,12 @@ const T = {
     joinTitle: "Gå med med en kod", codeLabel: "Inbjudningskod", codePh: "10 tecken", joinBtn: "Gå med i hushållet",
     badCode: "Koden stämmer inte. Kontrollera den och försök igen.", alreadyIn: "Det här kontot tillhör redan ett hushåll.",
     dbNotReady: "Databasen är inte konfigurerad än. Kör SQL-filen i Supabase först.", hhError: "Något gick fel:",
-    errNotOwner: "Bara ägaren kan göra det.", errNeedAdult: "Ägarskapet kan bara lämnas till en vuxen.", errOwnerLeave: "Ägaren kan inte lämna. Lämna först över ägarskapet.",
-    hhTitle: "Hushållets konton", roleOwner: "Ägare", roleAdult: "Vuxen", roleChild: "Barn", youLabel: "du",
+    errNotOwner: "Bara vårdnadshavaren som sköter hushållet kan göra det.", errNeedAdult: "Bara en vuxen kan sköta hushållet.", errOwnerLeave: "Du sköter hushållet och kan inte lämna. Låt först en annan vuxen sköta det.",
+    hhTitle: "Hushållets konton", roleOwner: "Vårdnadshavare", roleAdult: "Vuxen", roleChild: "Barn", youLabel: "du",
     inviteTitle: "Inbjudningskoder", inviteHint: "Ge en kod till den som ska gå med, så kan hen skapa ett eget konto. Vuxna kan ändra allt. Barn ser bara sina egna sysslor och sin profil.",
     codeAdult: "Kod för vuxna", codeChild: "Kod för barn", copyCode: "Kopiera", newCodes: "Skapa nya koder",
-    makeChild: "Gör till barn", makeAdult: "Gör till vuxen", makeOwner: "Gör till ägare", removeAccess: "Ta bort åtkomst", leaveHh: "Lämna hushållet", deleteHh: "Radera hushållet",
-    deleteWarn: "Raderingen tar bort all data för alla i hushållet.", ownerNote: "Bara ägaren kan hantera konton.",
+    makeChild: "Gör till barn", makeAdult: "Gör till vuxen", makeOwner: "Gör till vårdnadshavare", removeAccess: "Ta bort åtkomst", leaveHh: "Lämna hushållet", deleteHh: "Radera hushållet",
+    deleteWarn: "Raderingen tar bort all data för alla i hushållet.", ownerNote: "Bara vårdnadshavaren som sköter hushållet kan hantera konton.",
     tabToday: "Idag", tabChores: "Sysslor", tabFamily: "Familj", tabWeek: "Vecka",
     todayHi: "Hej {name}!", todayFor: "Idag: {name}", todayEmpty: "Inga sysslor här än.", todayEmptyBtn: "Lägg till första sysslan",
     addToggle: "+ Lägg till syssla", ownTask: "✎ Skriv en egen syssla", back: "← Tillbaka", generalTitle: "Allmänt", langLabel: "Språk",
@@ -1406,13 +1417,14 @@ const T = {
     wdays: ["söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag"], late: "Sen", atTime: "kl {t}", monthDay: "den {d}:e varje månad",
     calTitle: "Familjens vecka", calWho: "Vem?", calAdd: "Lägg till i kalendern", calEmpty: "Inget planerat", calToday: "Idag",
     reportTitle: "Veckan just nu", reportStamp: "Uppdateras av sig själv. Senast kollad {t}.", reportDone: "{done} av {total} klara", reportNone: "Inga sysslor",
-    delTitle: "Radera mitt konto", delHint: "Kontot och inloggningen tas bort för alltid. Är du ägare och det finns fler i hushållet behöver du först lämna över ägarskapet.",
+    delTitle: "Radera mitt konto", delHint: "Kontot och inloggningen tas bort för alltid. Sköter du hushållet och det finns fler i det behöver du först göra en annan vuxen till vårdnadshavare.",
     delWord: "RADERA", delPh: "Skriv RADERA för att bekräfta", delBtn: "Radera kontot", delWrong: "Skriv RADERA i rutan först.",
-    delOwnerFirst: "Lämna först över ägarskapet till en annan vuxen under Hushållets konton.", delDone: "Ditt konto är raderat.",
-    memHint: "Alla som går med via en inbjudan dyker upp här av sig själva.", memHintAdult: "Alla som går med via en inbjudan dyker upp här av sig själva. Be ägaren om en inbjudningslänk.",
+    delOwnerFirst: "Gör först en annan vuxen till vårdnadshavare under Hushållets konton.", delDone: "Ditt konto är raderat.",
+    memHint: "Alla som går med via en inbjudan dyker upp här av sig själva.", memHintAdult: "Alla som går med via en inbjudan dyker upp här av sig själva. Be vårdnadshavaren om en inbjudningslänk.",
     memInvite: "Bjud in familjen", memNoAcc: "+ Lägg till någon utan konto, t.ex. ett litet barn", noAccLabel: "Utan konto",
-    calTitle: "Kalendern i telefonen", calHint: "Sysslor med dag eller tid, aktiviteter, händelser och födelsedagar syns i din vanliga kalender och uppdateras av sig själva.", calMake: "Slå på kalenderlänken", calWho: "Visa", calAll: "Hela familjen", calApple: "Lägg till i Apple-kalendern", calGoogle: "Lägg till i Google Kalender", calCopy: "Kopiera länk", calCopied: "Länk kopierad!", calNew: "Byt länk", calNewSure: "Gamla länken slutar fungera. Tryck igen", calNote: "Alla som har länken kan se familjens kalender. Byt länk om den hamnat fel.", calAskOwner: "Be den som skapade hushållet slå på kalenderlänken.",
+    calLinkTitle: "Kalendern i telefonen", calHint: "Sysslor med dag eller tid, aktiviteter, händelser och födelsedagar syns i din vanliga kalender och uppdateras av sig själva.", calMake: "Slå på kalenderlänken", calLinkWho: "Visa", calAll: "Hela familjen", calApple: "Lägg till i Apple-kalendern", calGoogle: "Lägg till i Google Kalender", calCopy: "Kopiera länk", calCopied: "Länk kopierad!", calNew: "Byt länk", calNewSure: "Gamla länken slutar fungera. Tryck igen", calNote: "Alla som har länken kan se familjens kalender. Byt länk om den hamnat fel.", calAskOwner: "Be vårdnadshavaren slå på kalenderlänken.",
     streakDays: "{n} dagar i rad", trendTitle: "Rättvisan över tid", trendUp: "Från {a} till {b} sedan vecka {w}", trendDown: "Från {a} till {b} sedan vecka {w}. Prata om det under Vecka.", trendSame: "Stabilt på {b} sedan vecka {w}", trendShare: "{name}: {a} % → {b} %",
+    invTo: "Bjud in", invWith: "med {names}", invBanner: "{name} bjuder in dig: {what}", invYes: "Gärna", invNo: "Nej tack", invSaidYes: "{name}, kommer", invSaidNo: "{name}, kan inte", invWait: "{name}, har inte svarat", invJoined: "Du följer med {name}", invEvWhen: "{date} {time}", invOrganizer: "Ordnas av {name}",
     focusOpen: "En sak i taget", focusOf: "{done} av {total} klara", focusNow: "Nu", focusAbout: "Cirka {n} min", focusDone: "Klar ✓", focusLater: "Senare", focusAllDone: "Allt klart för idag!", focusAllHint: "{n} sysslor avbockade. Snyggt jobbat.", focusStars: "Du fick {n} ★ idag.", focusBack: "Tillbaka till Idag",
     startCreate: "Skapa hushållet", startDoneTitle: "Nu är ni igång!", startDoneHint: "Allt är klart. Känner du en familj som också bråkar om disken?",
     tipBtn: "Tipsa en annan familj", tipText: "Vi använder Hushållsbalans för att dela på sysslorna hemma rättvist. Gratis att prova:", tipCopied: "Länk kopierad!", tipTitle: "Känner du en annan familj?", tipHint: "Kul att den fungerar för er! Tips från familj till familj är hur appen växer.",
@@ -1428,7 +1440,7 @@ const T = {
     invCanAdult: ["Ser och ändrar allt: sysslor, familj, inköp och middagar.", "Kan ge stjärnor och belöningar till barnen.", "Passar partner, mor- och farföräldrar eller annan vuxen som hjälper till."],
     invCanChild: ["Ser sina egna sysslor och bockar av dem.", "Samlar stjärnor och ser sina belöningar.", "Kan inte ändra andras sysslor eller inställningarna.", "Du väljer under Inställningar vad barn får se."],
     invHow: ["Skanna koden med mobilkameran, eller öppna länken.", "Skapa ett konto eller logga in.", "Skriv sitt namn, samma som i appen."],
-    invCodeLine: "Kod: {code}", invOwnerOnly: "Bara den som skapade hushållet kan bjuda in. Be hen visa koden.", qrBtn: "QR-kod",
+    invCodeLine: "Kod: {code}", invOwnerOnly: "Bara vårdnadshavaren som sköter hushållet kan bjuda in. Be hen visa koden.", qrBtn: "QR-kod",
     textSize: "Textstorlek", textAuto: "Samma som telefonen", textNormal: "Normal", textLarge: "Stor", textXL: "Extra stor",
     pulseTitle: "Hur fungerar appen för er?", pulseHint: "Ett tryck hjälper till att göra den bättre.", pulseGood: "Bra", pulseOk: "Okej", pulseBad: "Inte bra",
     pulseMore: "Vad kan bli bättre? (frivilligt)", pulseSend: "Skicka", pulseThanks: "Tack! Det går direkt till den som bygger appen.", pulseLater: "Inte nu",
@@ -1480,12 +1492,12 @@ const T = {
     installReady: "Lägg appen på hemskärmen så öppnas den som vilken app som helst.",
     syncSaved: "Sparat", syncSaving: "Sparar …", syncError: "Det gick inte att spara",
     navSettings: "Inställningar", setTitle: "Inställningar",
-    setAdminTitle: "Admininställningar", setAdminHint: "Bara ägaren ser och kan ändra dessa.",
+    setAdminTitle: "Admininställningar", setAdminHint: "Bara vårdnadshavaren som sköter hushållet ser och kan ändra dessa.",
     setWeekStart: "Veckan börjar på", setDefLang: "Standardspråk för nya medlemmar", setMon: "Måndag", setSun: "Söndag", setLangNone: "Var och ens eget val",
     setChildTitle: "Vad barn får göra", setChildSeeAll: "Barn kan se allas sysslor (bara läsa)",
     setChildCheck: "Barn kan bocka av sina egna sysslor", setChildProfile: "Barn kan ändra sina egna aktiviteter och sin kalender",
     setChildNote: "Gränserna gäller i appens gränssnitt. De är inget säkerhetslås.",
-    setNotOwner: "Ägaren styr hushållets namn, veckostart och vad barn får göra.",
+    setNotOwner: "Vårdnadshavaren styr hushållets namn, veckostart och vad barn får göra.",
     setPeopleTitle: "Personer", setPeopleHint: "Ändra namn och färger. Listan används när sysslor delas ut.",
     setAccountTitle: "Mitt konto", setChangeEmail: "Byt e-post", setNewPw: "Nytt lösenord", setChangePw: "Byt lösenord",
     setExportTitle: "Exportera data", setExportHint: "Ladda ned hushållets alla uppgifter som en säkerhetskopia.", setExportBtn: "Ladda ned säkerhetskopia",
@@ -2702,6 +2714,70 @@ function canEditMember(m) { return !!m && (!isChild() || (hh && m.id === hh.memb
 function wdOrder() { return settings().weekStart === 0 ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5, 6, 0]; }
 function dayShort(d) { return new Date(2026, 0, 4 + d).toLocaleDateString(locNow(), { weekday: "short" }).replace(".", ""); }
 function actsOf(m) { return (m && Array.isArray(m.hobbies) ? m.hobbies : []).filter(a => a && typeof a === "object" && a.title && Array.isArray(a.days) && a.days.length); }
+/* invitations: an activity/event lists invited members in .with; each answer is stored in the invited person's own
+   hobbies as { id, re: "act|organizer|id" or "ev|organizer|id", ans: "yes"|"no" } (so children can answer for themselves) */
+function otherHobbies(m) { return (m && Array.isArray(m.hobbies) ? m.hobbies : []).filter(h => !(h && typeof h === "object" && h.title && Array.isArray(h.days) && h.days.length)); }
+function invKey(kind, org, id) { return kind + "|" + org + "|" + id; }
+function replyOf(mid, key) { const m = memberById(mid); const r = m && Array.isArray(m.hobbies) ? m.hobbies.find(h => h && typeof h === "object" && h.re === key) : null; return r && (r.ans === "yes" || r.ans === "no") ? r.ans : ""; }
+function invitedTo(item, org) { return (Array.isArray(item.with) ? item.with : []).filter(id => id !== org.id && memberById(id)); }
+function goingTo(kind, org, item) { return invitedTo(item, org).filter(id => replyOf(id, invKey(kind, org.id, item.id)) === "yes"); }
+function namesOf(ids) { return ids.map(id => (memberById(id) || {}).name).filter(Boolean).join(", "); }
+function joinedActs(m) {
+  const out = [];
+  state.members.forEach(o => { if (o.id !== m.id) actsOf(o).forEach(a => { if (goingTo("act", o, a).includes(m.id)) out.push({ a, o }); }); });
+  return out;
+}
+function pendingInvites(mid) {
+  const out = [], today = isoDay(new Date());
+  state.members.forEach(o => {
+    if (o.id === mid) return;
+    actsOf(o).forEach(a => { if (invitedTo(a, o).includes(mid) && !replyOf(mid, invKey("act", o.id, a.id))) out.push({ kind: "act", o, item: a }); });
+    (Array.isArray(o.events) ? o.events : []).forEach(ev => { if (ev && ev.date >= today && invitedTo(ev, o).includes(mid) && !replyOf(mid, invKey("ev", o.id, ev.id))) out.push({ kind: "ev", o, item: ev }); });
+  });
+  return out;
+}
+function canAnswerFor(mid) {
+  const m = memberById(mid);
+  if (!m) return false;
+  if (LOCAL_MODE) return true;
+  if (hh && mid === hh.memberId) return !isChild() || settings().childProfile;
+  return !isChild() && !accountOf(m);
+}
+function answerInvite(mid, key, ans) {
+  const m = memberById(mid);
+  if (!m || !canAnswerFor(mid)) return;
+  m.hobbies = (Array.isArray(m.hobbies) ? m.hobbies : []).filter(h => !(h && typeof h === "object" && h.re === key)).concat([{ id: uid(), re: key, ans }]);
+  save(); renderAll();
+}
+function invStatusChips(kind, org, item, editable) {
+  const t = T[lang], others = state.members.filter(x => x.id !== org.id);
+  if (!others.length) return "";
+  const inv = invitedTo(item, org);
+  if (!editable) {
+    const going = goingTo(kind, org, item);
+    return going.length ? `<div class="inv-row"><span class="pill joined-pill">${esc(t.invWith.replace("{names}", namesOf(going)))}</span></div>` : "";
+  }
+  return `<div class="inv-row" role="group" aria-label="${esc(t.invTo)}"><span class="lbl">${esc(t.invTo)}</span>${others.map(x => {
+    const on = inv.includes(x.id), r = on ? replyOf(x.id, invKey(kind, org.id, item.id)) : "";
+    const st = on ? (r === "yes" ? ["yes", "✓", t.invSaidYes] : r === "no" ? ["no", "✕", t.invSaidNo] : ["wait", "?", t.invWait]) : null;
+    return `<button type="button" class="chip" data-inv-toggle="${kind}|${org.id}|${item.id}" data-to="${x.id}" aria-pressed="${on}"${st ? ` aria-label="${esc(st[2].replace("{name}", x.name))}"` : ""}>${esc(x.name)}${st ? `<span class="inv-st ${st[0]}" aria-hidden="true">${st[1]}</span>` : ""}</button>`;
+  }).join("")}</div>`;
+}
+function toggleInvite(key, to) {
+  const [kind, orgId, id] = key.split("|"), org = memberById(orgId);
+  if (!org || !canEditMember(org) || to === orgId || !memberById(to)) return;
+  const item = kind === "act" ? actsOf(org).find(a => a.id === id) : (org.events || []).find(e => e.id === id);
+  if (!item) return;
+  const cur = invitedTo(item, org);
+  item.with = cur.includes(to) ? cur.filter(x => x !== to) : cur.concat(to);
+  save(); renderAll();
+}
+document.addEventListener("click", e => {
+  const tg = e.target.closest("[data-inv-toggle]");
+  if (tg) { e.stopPropagation(); toggleInvite(tg.dataset.invToggle, tg.dataset.to); return; }
+  const an = e.target.closest("[data-inv-ans]");
+  if (an) answerInvite(an.dataset.mid, an.dataset.key, an.dataset.invAns);
+}, true);
 function actTime(a) { return a.time ? a.time + (a.end ? "–" + a.end : "") : ""; }
 function actDaysText(a) { return wdOrder().filter(d => a.days.includes(d)).map(dayShort).join(", "); }
 function renderBday(el, m) {
@@ -2736,24 +2812,27 @@ function renderActs(el, m, force) {
   if (!force && el.contains(document.activeElement) && document.activeElement.tagName === "INPUT") return;
   const t = T[lang], ed = canEditMember(m), acts = actsOf(m), p = el.id;
   el.dataset.mid = m.id;
-  el.innerHTML = `<ul class="tasks acts-list">${acts.length ? acts.map(a => `<li><div class="task-main"><div class="task-title">${esc(a.title)}</div><div class="meta"><span class="pill">${esc(actDaysText(a))}</span>${actTime(a) ? `<span class="pill">${esc(actTime(a))}</span>` : ""}</div></div>${ed ? `<button class="ghost" type="button" data-act-del="${a.id}" aria-label="${esc(t.remove + " " + a.title)}">✕</button>` : ""}</li>`).join("") : `<li class="empty">${esc(t.actsNone)}</li>`}</ul>`
+  const joined = joinedActs(m);
+  el.innerHTML = `<ul class="tasks acts-list">${acts.length || joined.length ? acts.map(a => `<li><div class="task-main"><div class="task-title">${esc(a.title)}</div><div class="meta"><span class="pill">${esc(actDaysText(a))}</span>${actTime(a) ? `<span class="pill">${esc(actTime(a))}</span>` : ""}</div>${invStatusChips("act", m, a, ed)}</div>${ed ? `<button class="ghost" type="button" data-act-del="${a.id}" aria-label="${esc(t.remove + " " + a.title)}">✕</button>` : ""}</li>`).join("")
+      + joined.map(({ a, o }) => `<li><div class="task-main"><div class="task-title">${esc(a.title)}</div><div class="meta"><span class="pill">${esc(actDaysText(a))}</span>${actTime(a) ? `<span class="pill">${esc(actTime(a))}</span>` : ""}<span class="pill joined-pill">${esc(t.invJoined.replace("{name}", o.name))}</span></div></div>${canAnswerFor(m.id) ? `<button class="ghost" type="button" data-inv-ans="no" data-mid="${m.id}" data-key="${esc(invKey("act", o.id, a.id))}">${esc(t.invNo)}</button>` : ""}</li>`).join("") : `<li class="empty">${esc(t.actsNone)}</li>`}</ul>`
     + (ed ? `<div class="act-add">
       <label for="${p}-title">${esc(t.actName)}</label><input id="${p}-title" class="act-title" maxlength="40" autocomplete="off" placeholder="${esc(t.actPh)}">
       <span class="lbl" id="${p}-days-l">${esc(t.actDays)}</span><div class="chips act-days" role="group" aria-labelledby="${p}-days-l">${wdOrder().map(d => `<button type="button" class="chip" data-act-day="${d}" aria-pressed="false">${esc(dayShort(d))}</button>`).join("")}</div>
       <div class="row"><div class="narrow" style="flex:1 1 110px"><label for="${p}-from">${esc(t.actFrom)}</label><input id="${p}-from" class="act-from" type="time"></div><div class="narrow" style="flex:1 1 110px"><label for="${p}-to">${esc(t.actTo)}</label><input id="${p}-to" class="act-to" type="time"></div></div>
+      ${state.members.length > 1 ? `<div class="inv-row" role="group" aria-label="${esc(t.invTo)}"><span class="lbl">${esc(t.invTo)}</span>${state.members.filter(x => x.id !== m.id).map(x => `<button type="button" class="chip" data-act-new-inv="${x.id}" aria-pressed="false">${esc(x.name)}</button>`).join("")}</div>` : ""}
       <p class="set-msg err act-err" role="status"></p>
       <button type="button" class="btn" data-act-add>${esc(t.actAdd)}</button></div>` : "");
 }
 function onActsClick(e) {
   const el = e.currentTarget, m = memberById(el.dataset.mid), t = T[lang];
   if (!m || !canEditMember(m)) return;
-  const day = e.target.closest("[data-act-day]");
+  const day = e.target.closest("[data-act-day], [data-act-new-inv]");
   if (day) { day.setAttribute("aria-pressed", String(day.getAttribute("aria-pressed") !== "true")); return; }
   const del = e.target.closest("[data-act-del]");
   if (del) {
     const gone = actsOf(m).find(a => a.id === del.dataset.actDel);
-    m.hobbies = actsOf(m).filter(a => a.id !== del.dataset.actDel);
-    if (gone) showUndo(gone.title, () => { m.hobbies = actsOf(m).concat([gone]); }, t.actRemoved.replace("{x}", gone.title));
+    m.hobbies = otherHobbies(m).concat(actsOf(m).filter(a => a.id !== del.dataset.actDel));
+    if (gone) showUndo(gone.title, () => { m.hobbies = otherHobbies(m).concat(actsOf(m), [gone]); }, t.actRemoved.replace("{x}", gone.title));
     save(); renderAll(); return;
   }
   if (e.target.closest("[data-act-add]")) {
@@ -2761,7 +2840,10 @@ function onActsClick(e) {
     const days = [...el.querySelectorAll('[data-act-day][aria-pressed="true"]')].map(b => Number(b.dataset.actDay)).sort((x, y) => x - y);
     if (!title || !days.length) { el.querySelector(".act-err").textContent = t.actErr; return; }
     const time = el.querySelector(".act-from").value || "", end = el.querySelector(".act-to").value || "";
-    m.hobbies = actsOf(m).concat([{ id: uid(), title, days, time, end: time && end > time ? end : "" }]);
+    const withIds = [...el.querySelectorAll('[data-act-new-inv][aria-pressed="true"]')].map(b => b.dataset.actNewInv).filter(id => id !== m.id && memberById(id));
+    const act = { id: uid(), title, days, time, end: time && end > time ? end : "" };
+    if (withIds.length) act.with = withIds;
+    m.hobbies = otherHobbies(m).concat(actsOf(m), [act]);
     if (document.activeElement) document.activeElement.blur();
     save(); renderAll();
     renderActs(el, m, true);
@@ -2846,14 +2928,19 @@ function renderToday() {
   if (din && din.dish) st.innerHTML += `<p class="dinner-line">${esc(t.dinnerToday.replace("{d}", din.dish))}</p>`;
   const dow = new Date().getDay();
   const tActs = state.members.flatMap(x => actsOf(x).filter(a => a.days.includes(dow)).map(a => ({ x, a }))).sort((p, q) => (p.a.time || "99").localeCompare(q.a.time || "99"));
-  if (tActs.length) st.innerHTML += `<div class="today-acts" aria-label="${esc(t.todayActs)}">${tActs.map(({ x, a }) => `<span class="ta" style="--mc:${COLORS[x.color % COLORS.length]}"><b>${esc(x.name)}</b> ${esc(a.title)}${a.time ? " " + esc(actTime(a)) : ""}</span>`).join("")}</div>`;
+  if (tActs.length) st.innerHTML += `<div class="today-acts" aria-label="${esc(t.todayActs)}">${tActs.map(({ x, a }) => `<span class="ta" style="--mc:${COLORS[x.color % COLORS.length]}"><b>${esc([x.id, ...goingTo("act", x, a)].map(id => memberById(id).name).join(", "))}</b> ${esc(a.title)}${a.time ? " " + esc(actTime(a)) : ""}</span>`).join("")}</div>`;
   if (m) st.innerHTML += streakBadge(m.id);
   if (m && isKid(m)) st.innerHTML += starCard(m);
   document.getElementById("today-rewards").innerHTML = "";
   const incoming = m ? (state.swaps || []).filter(w => w.to === m.id && state.tasks.some(k => k.id === w.task)) : [];
+  const invs = m && canAnswerFor(m.id) ? pendingInvites(m.id) : [];
   document.getElementById("today-swaps").innerHTML = incoming.map(w => {
     const from = memberById(w.from), k = state.tasks.find(x => x.id === w.task);
     return `<div class="swap-banner"><div>${esc(t.swapIncoming.replace("{from}", from ? from.name : "?").replace("{task}", taskName(k)))}</div><div class="row-btns"><button type="button" class="yes" data-swap-accept="${w.id}">${esc(t.swapYes)}</button><button type="button" class="no" data-swap-decline="${w.id}">${esc(t.swapNo)}</button></div></div>`;
+  }).join("") + invs.map(({ kind, o, item }) => {
+    const when = kind === "act" ? actDaysText(item) + (actTime(item) ? " " + actTime(item) : "") : t.invEvWhen.replace("{date}", new Date(item.date + "T00:00:00").toLocaleDateString(locNow(), { weekday: "short", day: "numeric", month: "short" })).replace("{time}", item.time || "").trim();
+    const key = invKey(kind, o.id, item.id);
+    return `<div class="swap-banner inv-banner"><div>${esc(t.invBanner.replace("{name}", o.name).replace("{what}", item.title + ", " + when))}</div><div class="row-btns"><button type="button" class="yes" data-inv-ans="yes" data-mid="${m.id}" data-key="${esc(key)}">${esc(t.invYes)}</button><button type="button" class="no" data-inv-ans="no" data-mid="${m.id}" data-key="${esc(key)}">${esc(t.invNo)}</button></div></div>`;
   }).join("");
   const mine = m ? state.tasks.filter(k => k.owner === pid && dueStatus(k) !== "later") : [];
   const done = mine.filter(k => k.done).length;
@@ -3082,8 +3169,8 @@ function renderCalendar() {
   document.getElementById("cal-days").innerHTML = days.map(d => {
     const iso = isoDay(d);
     const items = [];
-    state.members.forEach(m => (m.events || []).forEach(ev => { if (ev.date === iso) items.push({ kind: "ev", m, time: ev.time || "", title: ev.title, id: ev.id, del: canEditEv(m) }); }));
-    state.members.forEach(m => actsOf(m).forEach(a => { if (a.days.includes(d.getDay())) items.push({ kind: "act", m, time: a.time || "", title: a.title + (a.end ? " (–" + a.end + ")" : "") }); }));
+    state.members.forEach(m => (m.events || []).forEach(ev => { if (ev.date === iso) items.push({ kind: "ev", m, time: ev.time || "", title: ev.title, id: ev.id, del: canEditEv(m), going: goingTo("ev", m, ev), inv: iso >= today && canEditEv(m) && state.members.length > 1 ? invStatusChips("ev", m, ev, true) : "" }); }));
+    state.members.forEach(m => actsOf(m).forEach(a => { if (a.days.includes(d.getDay())) items.push({ kind: "act", m, time: a.time || "", title: a.title + (a.end ? " (–" + a.end + ")" : ""), going: goingTo("act", m, a) }); }));
     state.members.forEach(m => { if (m.birthday && m.birthday.slice(5) === iso.slice(5)) items.push({ kind: "bday", m, time: "", title: "🎂 " + bdayText(m, d) }); });
     state.tasks.forEach(k => { if (choreOnDay(k, iso)) items.push({ kind: "task", m: memberById(k.owner), time: k.time || "", title: taskName(k), done: curWeek && !!k.done }); });
     items.sort((x, y) => (x.time || "99").localeCompare(y.time || "99"));
@@ -3091,7 +3178,7 @@ function renderCalendar() {
     return `<div class="cal-day${iso === today ? " today" : ""}"><h3>${esc(head.charAt(0).toUpperCase() + head.slice(1))}${iso === today ? `<span class="tag">${esc(t.calToday)}</span>` : ""}</h3>${items.length ? items.map(it => `<div class="cal-item${it.done ? " done" : ""}">
         <span class="bar-dot" style="background:${it.m ? COLORS[it.m.color % COLORS.length] : "var(--line-strong)"}"></span>
         <span class="ci-time">${esc(it.time)}</span>
-        <div class="ci-main"><div class="ci-title">${it.kind === "task" ? (it.done ? "✓ " : "") : ""}${esc(it.title)}</div><div class="ci-who">${it.m ? esc(it.m.name) : esc(t.unassigned)}${it.kind === "task" ? ", " + esc(t.tabChores.toLowerCase()) : ""}</div></div>
+        <div class="ci-main"><div class="ci-title">${it.kind === "task" ? (it.done ? "✓ " : "") : ""}${esc(it.title)}</div><div class="ci-who">${it.m ? esc([it.m.id, ...(it.going || [])].map(id => memberById(id).name).join(", ")) : esc(t.unassigned)}${it.kind === "task" ? ", " + esc(t.tabChores.toLowerCase()) : ""}</div>${it.inv || ""}</div>
         ${it.kind === "ev" && it.del ? `<button class="ghost" data-del-ev="${it.id}" data-who="${it.m.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}
       </div>`).join("") : `<div class="cal-empty">${esc(t.calEmpty)}</div>`}</div>`;
   }).join("");
@@ -3101,9 +3188,21 @@ function renderCalendar() {
   who.innerHTML = list.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
   if (prev && list.some(x => x.id === prev)) who.value = prev;
   else if (!LOCAL_MODE && hh && list.some(x => x.id === hh.memberId)) who.value = hh.memberId;
+  renderEventInvite();
   const dIn = document.getElementById("e-date");
   if (!dIn.value) dIn.value = today;
 }
+function renderEventInvite() {
+  const box = document.getElementById("e-with"), t = T[lang], org = document.getElementById("e-who").value;
+  const keep = new Set([...box.querySelectorAll('[aria-pressed="true"]')].map(b => b.dataset.evInv));
+  const others = state.members.filter(x => x.id !== org);
+  box.innerHTML = others.length ? `<div class="inv-row" role="group" aria-label="${esc(t.invTo)}"><span class="lbl">${esc(t.invTo)}</span>${others.map(x => `<button type="button" class="chip" data-ev-inv="${x.id}" aria-pressed="${keep.has(x.id)}">${esc(x.name)}</button>`).join("")}</div>` : "";
+}
+document.getElementById("e-with").addEventListener("click", e => {
+  const b = e.target.closest("[data-ev-inv]");
+  if (b) b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"));
+});
+document.getElementById("e-who").addEventListener("change", renderEventInvite);
 document.getElementById("cal-prev").onclick = () => { calOffset--; renderCalendar(); };
 document.getElementById("cal-next").onclick = () => { calOffset++; renderCalendar(); };
 document.getElementById("cal-form").onsubmit = e => {
@@ -3114,7 +3213,11 @@ document.getElementById("cal-form").onsubmit = e => {
   if (!m || !date || !title) return;
   if (isChild() && (m.id !== hh.memberId || !settings().childProfile)) return;
   m.events = m.events || [];
-  m.events.push({ id: uid(), date, time: document.getElementById("e-time").value, title });
+  const ev = { id: uid(), date, time: document.getElementById("e-time").value, title };
+  const withIds = [...document.querySelectorAll('#e-with [data-ev-inv][aria-pressed="true"]')].map(b => b.dataset.evInv).filter(id => id !== m.id && memberById(id));
+  if (withIds.length) ev.with = withIds;
+  m.events.push(ev);
+  document.querySelectorAll("#e-with [data-ev-inv]").forEach(b => b.setAttribute("aria-pressed", "false"));
   document.getElementById("e-title").value = "";
   document.getElementById("e-time").value = "";
   save(); renderCalendar();
@@ -3774,7 +3877,7 @@ const LEGAL = {
 <li><b>Mina egna saker:</b> dina privata att-göra. De syns bara för dig.</li>
 <li><b>Påminnelser:</b> om du slår på dem sparas en adress från din webbläsare som behövs för att skicka notiser, samt vilken tid du vill ha dem.</li>
 <li><b>Felrapporter och synpunkter:</b> om något går fel i appen sparas en kort teknisk beskrivning (felmeddelande, webbläsare, appversion). Det du skriver under Tyck till sparas också.</li>
-<li><b>Kalenderlänk:</b> om ägaren slår på kalenderlänken skapas en hemlig adress. Den som har adressen kan se hushållets sysslor, aktiviteter, händelser och födelsedagar i sin kalenderapp. Ägaren kan byta adress när som helst, då slutar den gamla att fungera. Kalenderappen (till exempel Google eller Apple) hämtar uppgifterna enligt sina egna villkor.</li>
+<li><b>Kalenderlänk:</b> om vårdnadshavaren slår på kalenderlänken skapas en hemlig adress. Den som har adressen kan se hushållets sysslor, aktiviteter, händelser och födelsedagar i sin kalenderapp. Vårdnadshavaren kan byta adress när som helst, då slutar den gamla att fungera. Kalenderappen (till exempel Google eller Apple) hämtar uppgifterna enligt sina egna villkor.</li>
 </ul>
 <h3>Varför?</h3>
 <p>Bara för att appen ska fungera: dela upp sysslor rättvist, visa er kalender, skicka påminnelser du har bett om och rätta fel. Uppgifterna säljs inte, används inte för reklam och delas inte med någon annan än tjänsterna nedan. Den rättsliga grunden är avtalet med dig när du skapar konto, och för barn förälderns samtycke.</p>
@@ -3788,7 +3891,7 @@ const LEGAL = {
 <h3>Barn</h3>
 <p>Barn under 13 år får bara använda appen om en förälder eller vårdnadshavare har godkänt det. Föräldern som äger hushållet godkänner det innan barnens inbjudan kan delas, och kan när som helst ta bort barnets konto.</p>
 <h3>Hur länge?</h3>
-<p>Så länge kontot finns. Felrapporter raderas efter 90 dagar. När du raderar ditt konto (Inställningar → Ta bort konto och data) försvinner dina uppgifter direkt. Raderar ägaren hushållet försvinner hela hushållets innehåll.</p>
+<p>Så länge kontot finns. Felrapporter raderas efter 90 dagar. När du raderar ditt konto (Inställningar → Ta bort konto och data) försvinner dina uppgifter direkt. Raderar vårdnadshavaren hushållet försvinner hela hushållets innehåll.</p>
 <h3>Dina rättigheter</h3>
 <p>Du har rätt att få veta vilka uppgifter som finns om dig, få dem rättade, få en kopia (vuxna kan exportera allt under Inställningar) och få dem raderade. Du kan också klaga till Integritetsskyddsmyndigheten (imy.se).</p>
 <h3>Lagring i webbläsaren</h3>
@@ -3801,7 +3904,7 @@ const LEGAL = {
 <li>Hushållsbalans är gratis och drivs privat av Ludvig Bohlin (<a href="mailto:${CONTACT}">${CONTACT}</a>).</li>
 <li>Appen erbjuds som den är. Vi gör vårt bästa, men kan inte lova att den alltid fungerar eller att inget går förlorat.</li>
 <li>Du ansvarar för ditt konto och ditt lösenord, och för det du skriver i appen. Skriv inget som är olagligt eller kränkande.</li>
-<li>Ägaren av ett hushåll bestämmer vem som är med och kan ta bort konton från hushållet.</li>
+<li>Vårdnadshavaren som sköter ett hushåll bestämmer vem som är med och kan ta bort konton från hushållet.</li>
 <li>Barn under 13 år får bara använda appen med en förälders eller vårdnadshavares godkännande.</li>
 <li>AI-förslag på middagar är bara förslag. Kontrollera alltid ingredienser vid allergier.</li>
 <li>Du kan sluta använda appen och radera ditt konto när du vill. Konton som missbrukar appen kan stängas av.</li>
@@ -3821,7 +3924,7 @@ const LEGAL = {
 <li><b>My own things:</b> your private to-dos. Only you can see them.</li>
 <li><b>Reminders:</b> if you turn them on, an address from your browser that is needed to send notifications, and the time you want them.</li>
 <li><b>Error reports and feedback:</b> if something goes wrong, a short technical description (error message, browser, app version). What you write under Feedback is also stored.</li>
-<li><b>Calendar link:</b> if the owner turns on the calendar link, a secret address is created. Anyone with the address can see the household's chores, activities, events and birthdays in their calendar app. The owner can change the address at any time, which stops the old one working. The calendar app (for example Google or Apple) fetches the data under its own terms.</li>
+<li><b>Calendar link:</b> if the guardian turns on the calendar link, a secret address is created. Anyone with the address can see the household's chores, activities, events and birthdays in their calendar app. The guardian can change the address at any time, which stops the old one working. The calendar app (for example Google or Apple) fetches the data under its own terms.</li>
 </ul>
 <h3>Why?</h3>
 <p>Only to make the app work: share chores fairly, show your calendar, send reminders you asked for and fix errors. The data is not sold, not used for ads and not shared with anyone except the services below. The legal basis is the agreement with you when you create an account, and for children the consent of a parent.</p>
@@ -3833,9 +3936,9 @@ const LEGAL = {
 <li><b>Notification services</b> (Apple, Google, Mozilla) deliver reminders to your phone if you turn them on.</li>
 </ul>
 <h3>Children</h3>
-<p>Children under 13 may only use the app if a parent or guardian has agreed. The parent who owns the household agrees before the children's invite can be shared, and can remove a child's account at any time.</p>
+<p>Children under 13 may only use the app if a parent or guardian has agreed. The guardian who manages the household agrees before the children's invite can be shared, and can remove a child's account at any time.</p>
 <h3>How long?</h3>
-<p>As long as the account exists. Error reports are deleted after 90 days. When you delete your account (Settings → Delete account and data) your data is removed at once. If the owner deletes the household, all its content is removed.</p>
+<p>As long as the account exists. Error reports are deleted after 90 days. When you delete your account (Settings → Delete account and data) your data is removed at once. If the guardian deletes the household, all its content is removed.</p>
 <h3>Your rights</h3>
 <p>You can find out what data there is about you, have it corrected, get a copy (adults can export everything under Settings) and have it deleted. You can also complain to the Swedish Authority for Privacy Protection (imy.se).</p>
 <h3>Browser storage</h3>
@@ -3848,7 +3951,7 @@ const LEGAL = {
 <li>Household Balance is free and run privately by Ludvig Bohlin (<a href="mailto:${CONTACT}">${CONTACT}</a>).</li>
 <li>The app is provided as is. We do our best but cannot promise it always works or that nothing is ever lost.</li>
 <li>You are responsible for your account, your password and what you write. Do not write anything illegal or offensive.</li>
-<li>The owner of a household decides who is in it and can remove accounts from it.</li>
+<li>The guardian who manages a household decides who is in it and can remove accounts from it.</li>
 <li>Children under 13 may only use the app with the consent of a parent or guardian.</li>
 <li>AI dinner suggestions are only suggestions. Always check ingredients for allergies.</li>
 <li>You can stop using the app and delete your account whenever you like. Accounts that misuse the app may be closed.</li>
@@ -5647,13 +5750,13 @@ function renderCalSet() {
   if (LOCAL_MODE || !state || !hh || isChild()) { box.innerHTML = ""; return; }
   if (box.contains(document.activeElement) && document.activeElement.tagName === "SELECT") return;
   const t = T[lang], tok = settings().calToken;
-  let html = `<h3 id="cal-h">${esc(t.calTitle)}</h3><p class="summary" style="margin-top:0">${esc(t.calHint)}</p>`;
+  let html = `<h3 id="cal-h">${esc(t.calLinkTitle)}</h3><p class="summary" style="margin-top:0">${esc(t.calHint)}</p>`;
   if (!tok) {
     html += isOwner() ? `<button type="button" class="btn" data-cal="make">${esc(t.calMake)}</button>` : `<p class="meta">${esc(t.calAskOwner)}</p>`;
   } else {
     if (calWho && !memberById(calWho)) calWho = "";
     const web = calUrl("webcal:"), https = calUrl();
-    html += `<label for="cal-who">${esc(t.calWho)}</label><select id="cal-who"><option value="">${esc(t.calAll)}</option>${state.members.map(m => `<option value="${m.id}"${m.id === calWho ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select>
+    html += `<label for="cal-who">${esc(t.calLinkWho)}</label><select id="cal-who"><option value="">${esc(t.calAll)}</option>${state.members.map(m => `<option value="${m.id}"${m.id === calWho ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select>
       <div class="cal-btns"><a class="btn" href="${esc(web)}" data-cal="apple">${esc(t.calApple)}</a><a class="ghost" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(web)}" target="_blank" rel="noopener" data-cal="google">${esc(t.calGoogle)}</a><button type="button" class="ghost" data-cal="copy" data-url="${esc(https)}">${esc(t.calCopy)}</button>${isOwner() ? `<button type="button" class="ghost${calConfirm ? " danger" : ""}" data-cal="new">${esc(calConfirm ? t.calNewSure : t.calNew)}</button>` : ""}</div>
       <p class="footnote" style="text-align:left">${esc(t.calNote)}</p>`;
   }
