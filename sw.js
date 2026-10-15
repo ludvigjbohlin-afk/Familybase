@@ -1,4 +1,4 @@
-const CACHE = "hb-v22";
+const CACHE = "hb-v23";
 const SHARED = ["cdn.jsdelivr.net"];
 const FONTS = [];
 self.addEventListener("install", e => {

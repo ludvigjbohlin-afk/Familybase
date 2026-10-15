@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-T/xg1tGy763KA6zZZEK3LO6qPqQMp489iZ9wSgNqdog='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-Vg7a56APb0gLGDag+DD+ZbynVmCkVPJK+7+OiyPx8YE='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Household Balance</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -643,6 +643,24 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 
 
+/* ===== Weekly meeting, pocket money ===== */
+#meet { position: fixed; inset: 0; z-index: 30; background: var(--bg); display: flex; flex-direction: column; overflow-y: auto; padding: max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)); }
+#meet[hidden] { display: none; }
+.mt-card { flex: 1 0 auto; max-width: 560px; width: 100%; margin: 0 auto; padding: 20px 0; display: grid; gap: 14px; align-content: start; }
+.mt-card h2 { font-size: 1.75rem; line-height: 1.15; margin: 0; letter-spacing: -.02em; }
+.mt-card .mt-sub { color: var(--muted); margin: 0; }
+.mt-box { background: var(--surface); border-radius: 14px; padding: 14px 16px; }
+.mt-box .bar-wrap { margin: 8px 0; }
+.mt-big { font-size: 2.25rem; font-weight: 800; letter-spacing: -.02em; margin: 0; font-variant-numeric: tabular-nums; }
+.mt-hero { display: flex; gap: 12px; align-items: center; }
+.mt-hero .av { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; flex: 0 0 auto; }
+.mt-card textarea { min-height: 96px; }
+.meet-card .card-top h2 { margin: 0; }
+.meet-card[hidden], .pocket-set[hidden] { display: none; }
+.pocket-set { background: var(--tint-fill); border-radius: 14px; padding: 12px 14px; margin: 0 0 14px; }
+.pocket-set .row { align-items: end; }
+.pocket-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; font-weight: 600; }
+.pocket-line .kr { font-variant-numeric: tabular-nums; }
 /* ===== Invitations to activities ===== */
 .inv-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
 .inv-row .lbl { font-size: .8125rem; color: var(--muted); margin-right: 2px; }
@@ -813,6 +831,12 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
     <p style="text-align:center;margin:0"><button class="ghost" type="button" id="guide-skip" data-i="guideSkip"></button></p>
   </div>
 </div>
+<div id="meet" hidden role="dialog" aria-modal="true" aria-labelledby="mt-title">
+  <div class="fx-top"><span class="fx-count" id="mt-step"></span><button class="ghost" type="button" id="mt-close" data-i="close"></button></div>
+  <div class="fx-dots" id="mt-dots" aria-hidden="true"></div>
+  <div class="mt-card" id="mt-card"></div>
+  <div class="fx-btns" id="mt-btns"></div>
+</div>
 <div id="focus" hidden role="dialog" aria-modal="true" aria-labelledby="fx-title">
   <div class="fx-top"><span class="fx-count" id="fx-count"></span><button class="ghost" type="button" id="fx-close" data-i="close"></button></div>
   <div class="fx-dots" id="fx-dots" aria-hidden="true"></div>
@@ -898,6 +922,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
     </section>
 
     <section class="card full adult-only" id="welcome" data-view="today" aria-labelledby="start-h" hidden></section>
+    <section class="card full adult-only meet-card" id="meet-card" data-view="today" aria-labelledby="meet-h" hidden></section>
     <section class="card full adult-only" id="pulse" data-view="today" aria-labelledby="pulse-h" hidden></section>
 
     <section class="card full" id="sec-today" data-view="today" aria-labelledby="h-today">
@@ -1096,6 +1121,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
     <section class="card adult-only" id="sec-rewards" data-view="family" aria-labelledby="h-rewards">
       <h2 id="h-rewards"><span class="dot"></span><span data-i="rewardsTitle"></span></h2>
       <p class="summary" style="margin-top:-6px" data-i="rewardsHint"></p>
+      <div class="pocket-set" id="pocket-set"></div>
       <div id="reward-kids"></div>
       <h3 class="clean-h" style="margin-top:16px" data-i="msListTitle"></h3>
       <ul class="tasks" id="reward-list"></ul>
@@ -1188,6 +1214,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
 
     <section class="card adult-only" id="sec-week" data-view="week" aria-labelledby="h-check">
       <h2 id="h-check"><span class="dot"></span><span data-i="checkTitle"></span></h2>
+      <p style="margin:0 0 14px"><button type="button" class="btn" data-meet-open="1" data-i="meetStart"></button></p>
       <label for="checkin" data-i="checkPrompt"></label>
       <textarea id="checkin"></textarea>
       <div style="margin-top:10px"><button class="btn" type="button" id="save-checkin" data-i="saveCheckin"></button></div>
@@ -1285,6 +1312,15 @@ const T = {
     memInvite: "Invite the family", memNoAcc: "+ Add someone without an account", noAccLabel: "No account",
     calLinkTitle: "Calendar on your phone", calHint: "Chores with a day or time, activities, events and birthdays show up in your normal calendar and update by themselves.", calMake: "Turn on the calendar link", calLinkWho: "Show", calAll: "The whole family", calApple: "Add to Apple Calendar", calGoogle: "Add to Google Calendar", calCopy: "Copy link", calCopied: "Link copied!", calNew: "Change link", calNewSure: "Old link stops working. Tap again", calNote: "Anyone with the link can see the family calendar. Change the link if it ends up in the wrong place.", calAskOwner: "Ask the guardian to turn on the calendar link.",
     streakDays: "{n} days in a row", trendTitle: "Fairness over time", trendUp: "From {a} to {b} since week {w}", trendDown: "From {a} to {b} since week {w}. Talk about it under Week.", trendSame: "Steady at {b} since week {w}", trendShare: "{name}: {a} % → {b} %",
+    meetStart: "Start the weekly meeting", meetCardTitle: "Time for the weekly meeting", meetCardHint: "Five minutes together: how did the week go, and who does what next week?", meetLater: "Not now",
+    meetStep: "Step {n} of {total}", meetNext: "Next", meetBack: "Back", meetDone: "Done",
+    meet1Title: "How did the week go?", meet1Done: "{n} chores done", meet1Best: "Most ticked off: {name} ({n})", meet1None: "Nothing ticked off this week yet. A new week is a new chance.", meet1Fair: "Fairness this week: {s} of 100",
+    meet2Title: "Next week", meet2Hint: "Planned time per person, from the chores you have now.", meet2Move: "Move", meet2Moved: "Moved {task} to {to}.", meet2Ok: "Looks evenly shared. Nice.",
+    meet3Title: "Dinners and plans", meet3Meals: "{n} of 7 dinners planned", meet3PlanMeals: "Plan dinners", meet3Events: "{n} activities and events next week",
+    meet4Title: "Anything to remember?", meet4Hint: "One thing that went well, or something to try next week. Saved under Week.", meet4Ph: "E.g. Erik takes the dishes on weekdays",
+    meetThanks: "Saved. Have a good week!",
+    pocketTitle: "Pocket money", pocketHint: "Turn stars into money. Leave at 0 to switch it off.", pocketRate: "Kronor per star", pocketSave: "Save",
+    pocketOwed: "{kr} kr to pay out", pocketNone: "Nothing to pay out", pocketPay: "Paid {kr} kr", pocketPaidToast: "Paid {kr} kr to {name}", pocketKid: "You have earned {kr} kr",
     invTo: "Invite", invWith: "with {names}", invBanner: "{name} invites you: {what}", invYes: "Yes please", invNo: "No thanks", invSaidYes: "{name}, coming", invSaidNo: "{name}, can't come", invWait: "{name}, no answer yet", invJoined: "You're joining {name}", invEvWhen: "{date} {time}", invOrganizer: "Organised by {name}",
     focusOpen: "One thing at a time", focusOf: "{done} of {total} done", focusNow: "Now", focusAbout: "About {n} min", focusDone: "Done ✓", focusLater: "Later", focusAllDone: "All done for today!", focusAllHint: "{n} chores ticked off. Nice work.", focusStars: "You got {n} ★ today.", focusBack: "Back to Today",
     startCreate: "Create the household", startDoneTitle: "You're up and running!", startDoneHint: "Everything is set. Know another family who argues about the dishes?",
@@ -1424,6 +1460,15 @@ const T = {
     memInvite: "Bjud in familjen", memNoAcc: "+ Lägg till någon utan konto, t.ex. ett litet barn", noAccLabel: "Utan konto",
     calLinkTitle: "Kalendern i telefonen", calHint: "Sysslor med dag eller tid, aktiviteter, händelser och födelsedagar syns i din vanliga kalender och uppdateras av sig själva.", calMake: "Slå på kalenderlänken", calLinkWho: "Visa", calAll: "Hela familjen", calApple: "Lägg till i Apple-kalendern", calGoogle: "Lägg till i Google Kalender", calCopy: "Kopiera länk", calCopied: "Länk kopierad!", calNew: "Byt länk", calNewSure: "Gamla länken slutar fungera. Tryck igen", calNote: "Alla som har länken kan se familjens kalender. Byt länk om den hamnat fel.", calAskOwner: "Be vårdnadshavaren slå på kalenderlänken.",
     streakDays: "{n} dagar i rad", trendTitle: "Rättvisan över tid", trendUp: "Från {a} till {b} sedan vecka {w}", trendDown: "Från {a} till {b} sedan vecka {w}. Prata om det under Vecka.", trendSame: "Stabilt på {b} sedan vecka {w}", trendShare: "{name}: {a} % → {b} %",
+    meetStart: "Starta veckomötet", meetCardTitle: "Dags för veckomöte", meetCardHint: "Fem minuter tillsammans: hur gick veckan, och vem gör vad nästa vecka?", meetLater: "Inte nu",
+    meetStep: "Steg {n} av {total}", meetNext: "Nästa", meetBack: "Tillbaka", meetDone: "Klart",
+    meet1Title: "Hur gick veckan?", meet1Done: "{n} sysslor gjorda", meet1Best: "Flest avbockade: {name} ({n})", meet1None: "Inget avbockat den här veckan än. Ny vecka, ny chans.", meet1Fair: "Rättvisa den här veckan: {s} av 100",
+    meet2Title: "Nästa vecka", meet2Hint: "Planerad tid per person, utifrån sysslorna ni har nu.", meet2Move: "Flytta", meet2Moved: "Flyttade {task} till {to}.", meet2Ok: "Ser jämnt fördelat ut. Snyggt.",
+    meet3Title: "Middagar och planer", meet3Meals: "{n} av 7 middagar planerade", meet3PlanMeals: "Planera middagar", meet3Events: "{n} aktiviteter och händelser nästa vecka",
+    meet4Title: "Något att komma ihåg?", meet4Hint: "En sak som gick bra, eller något att testa nästa vecka. Sparas under Vecka.", meet4Ph: "T.ex. Erik tar disken på vardagar",
+    meetThanks: "Sparat. Ha en bra vecka!",
+    pocketTitle: "Fickpengar", pocketHint: "Gör stjärnor till pengar. Låt stå på 0 för att stänga av.", pocketRate: "Kronor per stjärna", pocketSave: "Spara",
+    pocketOwed: "{kr} kr att betala ut", pocketNone: "Inget att betala ut", pocketPay: "Betalat {kr} kr", pocketPaidToast: "Betalade {kr} kr till {name}", pocketKid: "Du har tjänat {kr} kr",
     invTo: "Bjud in", invWith: "med {names}", invBanner: "{name} bjuder in dig: {what}", invYes: "Gärna", invNo: "Nej tack", invSaidYes: "{name}, kommer", invSaidNo: "{name}, kan inte", invWait: "{name}, har inte svarat", invJoined: "Du följer med {name}", invEvWhen: "{date} {time}", invOrganizer: "Ordnas av {name}",
     focusOpen: "En sak i taget", focusOf: "{done} av {total} klara", focusNow: "Nu", focusAbout: "Cirka {n} min", focusDone: "Klar ✓", focusLater: "Senare", focusAllDone: "Allt klart för idag!", focusAllHint: "{n} sysslor avbockade. Snyggt jobbat.", focusStars: "Du fick {n} ★ idag.", focusBack: "Tillbaka till Idag",
     startCreate: "Skapa hushållet", startDoneTitle: "Nu är ni igång!", startDoneHint: "Allt är klart. Känner du en familj som också bråkar om disken?",
@@ -1666,7 +1711,7 @@ const SAFE_ID = /^[A-Za-z0-9_-]{1,64}$/;
 function safeList(a) { return (Array.isArray(a) ? a : []).filter(x => x && typeof x === "object" && SAFE_ID.test(String(x.id))); }
 function cleanData(o) {
   // data is shared between family members: ids end up inside HTML attributes, so only plain ids and real numbers get through
-  ["members", "tasks", "checkins", "shopping", "swaps", "starLog", "doneLog", "rewards", "redeems", "starResets", "comments", "timeLog", "rewardsGiven", "board"].forEach(key => { o[key] = safeList(o[key]); });
+  ["members", "tasks", "checkins", "shopping", "swaps", "starLog", "doneLog", "rewards", "redeems", "starResets", "comments", "timeLog", "rewardsGiven", "board", "payouts"].forEach(key => { o[key] = safeList(o[key]); });
   o.members = o.members.map(m => {
     const x = { ...m, color: Math.abs(Math.floor(Number(m.color))) || 0 };
     if (Array.isArray(m.hobbies)) x.hobbies = m.hobbies.filter(h => typeof h === "string" || (h && typeof h === "object" && (!("id" in h) || SAFE_ID.test(String(h.id)))));
@@ -1679,6 +1724,9 @@ function cleanData(o) {
   });
   o.shopping = o.shopping.map(x => ("qty" in x ? { ...x, qty: Math.max(1, Math.round(Number(x.qty) || 1)) } : x));
   o.rewards = o.rewards.map(r => ({ ...r, cost: Math.max(0, Math.round(Number(r.cost) || 0)) }));
+  o.payouts = o.payouts.map(x => ({ ...x, kr: Math.max(0, Math.round(Number(x.kr) || 0)) }));
+  if (o.pocket && typeof o.pocket === "object") o.pocket = { rate: Math.max(0, Math.min(100, Number(o.pocket.rate) || 0)), since: Math.max(0, Number(o.pocket.since) || 0) };
+  else delete o.pocket;
   return o;
 }
 function normalizeState(d) {
@@ -1699,6 +1747,7 @@ function normalizeState0(d) {
     rewards: Array.isArray(d.rewards) ? d.rewards : [],
     redeems: Array.isArray(d.redeems) ? d.redeems : [],
     starResets: Array.isArray(d.starResets) ? d.starResets : [],
+    payouts: Array.isArray(d.payouts) ? d.payouts : [],
     comments: Array.isArray(d.comments) ? d.comments : [],
     timeLog: Array.isArray(d.timeLog) ? d.timeLog : [],
     rewardsGiven: Array.isArray(d.rewardsGiven) ? d.rewardsGiven : [],
@@ -1736,6 +1785,8 @@ function mergeStates(base, local, remote) {
   out.rewards = mergeById(bs.rewards, local.rewards, remote.rewards);
   out.redeems = mergeById(bs.redeems, local.redeems, remote.redeems);
   out.starResets = mergeById(bs.starResets, local.starResets, remote.starResets);
+  out.payouts = mergeById(bs.payouts, local.payouts, remote.payouts);
+  if (JSON.stringify(local.pocket) !== JSON.stringify(bs.pocket)) out.pocket = local.pocket;
   out.comments = mergeById(bs.comments, local.comments, remote.comments);
   out.timeLog = mergeById(bs.timeLog, local.timeLog, remote.timeLog);
   out.rewardsGiven = mergeById(bs.rewardsGiven, local.rewardsGiven, remote.rewardsGiven);
@@ -2428,6 +2479,9 @@ function renderAll() {
   renderInvite();
   renderFocusButton();
   if (focusOn) renderFocus();
+  renderMeetCard();
+  renderPocketSet();
+  if (meetOn) renderMeet();
   renderSettings();
   renderInstall();
   document.getElementById("checkin").value = draft;
@@ -3689,7 +3743,7 @@ function starCard(m) {
     const got = (Number(r.cost) || 0) <= n, given = got && givenFor(m.id, r);
     return `<li class="${got ? "got" : ""}"><span class="sc-c">${r.cost} ★</span><span class="sc-t">${esc(r.title)}</span>${got ? `<span class="sc-s">${esc(given ? t.msGotIt : t.msWaiting)}</span>` : ""}${got && !given && !isChild() ? `<button type="button" class="ghost" data-give="${r.id}" data-for="${m.id}">${esc(t.msGive)}</button>` : ""}</li>`;
   }).join("")}</ul>`;
-  return html + `</div>`;
+  return html + pocketLine(m) + `</div>`;
 }
 function giveReward(mid, rid) {
   if (isChild()) return;
@@ -5839,6 +5893,159 @@ document.addEventListener("click", e => {
   if (b) shareApp(b);
 });
 
+
+/* ---------- Pocket money: stars become kronor (state.pocket = { rate, since }, state.payouts) ---------- */
+function pocketRate() { return state && state.pocket ? Number(state.pocket.rate) || 0 : 0; }
+function pocketOwed(mid) {
+  const rate = pocketRate();
+  if (!rate) return 0;
+  const since = Number(state.pocket.since) || 0;
+  const stars = (state.starLog || []).filter(e => e.m === mid && (Number(e.at) || 0) >= since).reduce((a, e) => a + (e.n === undefined || e.n === null ? 1 : Math.max(0, Math.min(10, Number(e.n) || 0))), 0);
+  const paid = (state.payouts || []).filter(x => x.m === mid && (Number(x.at) || 0) >= since).reduce((a, x) => a + (Number(x.kr) || 0), 0);
+  return Math.max(0, Math.round(stars * rate - paid));
+}
+function pocketLine(m) {
+  if (!pocketRate()) return "";
+  const t = T[lang], kr = pocketOwed(m.id);
+  if (isChild()) return `<p class="pocket-line"><span aria-hidden="true">\u{1F4B0}</span><span class="kr">${esc(t.pocketKid.replace("{kr}", kr))}</span></p>`;
+  return `<p class="pocket-line"><span aria-hidden="true">\u{1F4B0}</span><span class="kr">${esc(kr ? t.pocketOwed.replace("{kr}", kr) : t.pocketNone)}</span>${kr ? `<button type="button" class="ghost" data-pay="${m.id}" data-kr="${kr}">${esc(t.pocketPay.replace("{kr}", kr))}</button>` : ""}</p>`;
+}
+function renderPocketSet() {
+  const box = document.getElementById("pocket-set");
+  if (!box || !state) return;
+  if (isChild() || !state.members.some(isKid)) { box.hidden = true; return; }
+  box.hidden = false;
+  if (box.contains(document.activeElement)) return;
+  const t = T[lang];
+  box.innerHTML = `<h3 class="clean-h" style="margin:0 0 2px">${esc(t.pocketTitle)}</h3><p class="summary" style="margin:0 0 8px">${esc(t.pocketHint)}</p>
+    <form class="row" id="pocket-form"><div class="narrow" style="flex:0 0 160px"><label for="pocket-rate">${esc(t.pocketRate)}</label><input id="pocket-rate" type="number" min="0" max="100" step="0.5" inputmode="decimal" value="${pocketRate() || 0}"></div><div class="narrow"><button class="btn" type="submit">${esc(t.pocketSave)}</button></div></form>`;
+}
+document.getElementById("pocket-set").addEventListener("submit", e => {
+  if (e.target.id !== "pocket-form") return;
+  e.preventDefault();
+  if (isChild()) return;
+  const rate = Math.max(0, Math.min(100, Number(String(document.getElementById("pocket-rate").value).replace(",", ".")) || 0));
+  const was = pocketRate();
+  state.pocket = rate ? { rate, since: was && state.pocket.since ? state.pocket.since : Date.now() } : null;
+  if (!rate) delete state.pocket;
+  document.activeElement && document.activeElement.blur();
+  save(); renderAll();
+});
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-pay]");
+  if (!b || isChild() || !state) return;
+  const m = memberById(b.dataset.pay), kr = Math.round(Number(b.dataset.kr) || 0);
+  if (!m || !kr || kr !== pocketOwed(m.id)) return;
+  const entry = { id: uid(), m: m.id, kr, at: Date.now() };
+  state.payouts = (state.payouts || []).concat(entry);
+  showUndo(m.name, () => { state.payouts = state.payouts.filter(x => x.id !== entry.id); }, T[lang].pocketPaidToast.replace("{kr}", kr).replace("{name}", m.name));
+  save(); renderAll();
+});
+
+/* ---------- Weekly meeting: four short steps, once a week ---------- */
+var meetOn = false, meetStepN = 1, meetMsg = "";
+function meetWeekKey() { return isoDay(weekStartOf(new Date())); }
+function meetDoneThisWeek() { const wk = isoWeek(new Date()).week; return (state.checkins || []).some(c => Number(c.week) === wk && c.date && Date.now() - (Number(c.at) || Date.now()) < 8 * 864e5); }
+function meetCardDue() {
+  if (!state || LOCAL_MODE && DEMO || isChild() || state.members.length < 2 || guideOn()) return false;
+  const dow = new Date().getDay(), end = (settings().weekStart === 0 ? 6 : 0); // last day of the week
+  const prev = (end + 6) % 7, hr = new Date().getHours();
+  const inWin = dow === end || (dow === prev && hr >= 16);
+  return inWin && !meetDoneThisWeek() && lsGet("hb-meet-skip") !== meetWeekKey();
+}
+function renderMeetCard() {
+  const box = document.getElementById("meet-card");
+  if (!box) return;
+  if (!meetCardDue()) { box.hidden = true; box.innerHTML = ""; return; }
+  const t = T[lang];
+  box.hidden = false;
+  box.innerHTML = `<div class="card-top"><h2 id="meet-h">${esc(t.meetCardTitle)}</h2><button type="button" class="ghost" data-meet-skip="1">${esc(t.meetLater)}</button></div><p class="summary" style="margin:4px 0 12px">${esc(t.meetCardHint)}</p><button type="button" class="btn" data-meet-open="1">${esc(t.meetStart)}</button>`;
+}
+function weekDone(fromMs, toMs) {
+  const per = new Map(state.members.map(m => [m.id, { n: 0, min: 0 }]));
+  (state.doneLog || []).forEach(e => { const at = Number(e.at) || 0; if (at >= fromMs && at < toMs && per.has(e.m)) { const p = per.get(e.m); p.n++; p.min += Number(e.min) || 0; } });
+  return per;
+}
+function openMeet(from) {
+  meetOn = true; meetStepN = 1; meetMsg = "";
+  document.getElementById("meet").hidden = false;
+  document.body.style.overflow = "hidden";
+  renderMeet();
+  setTimeout(() => { const b = document.querySelector("#mt-btns .fx-done"); if (b) b.focus(); }, 30);
+}
+function closeMeet() {
+  meetOn = false;
+  document.getElementById("meet").hidden = true;
+  document.body.style.overflow = "";
+  renderAll();
+}
+function renderMeet() {
+  const box = document.getElementById("meet");
+  if (!meetOn || !state) { box.hidden = true; return; }
+  const t = T[lang], total = 4, card = document.getElementById("mt-card"), btns = document.getElementById("mt-btns");
+  if (card.contains(document.activeElement) && document.activeElement.tagName === "TEXTAREA") return;
+  document.getElementById("mt-step").textContent = t.meetStep.replace("{n}", meetStepN).replace("{total}", total);
+  document.getElementById("mt-dots").innerHTML = [1, 2, 3, 4].map(i => `<span class="${i < meetStepN ? "ok" : i === meetStepN ? "cur" : ""}"></span>`).join("");
+  const st = weekStartOf(new Date()), next = new Date(st); next.setDate(st.getDate() + 7);
+  let html = "";
+  if (meetStepN === 1) {
+    const per = weekDone(st.getTime(), next.getTime());
+    const n = [...per.values()].reduce((a, p) => a + p.n, 0);
+    const best = state.members.map(m => ({ m, n: per.get(m.id).n })).sort((a, b) => b.n - a.n)[0];
+    const mins = [...per.values()].map(p => p.min), tot = mins.reduce((a, b) => a + b, 0);
+    const adults = state.members.filter(m => !isKid(m)), who = adults.length >= 2 ? adults : state.members;
+    const wm = who.map(m => per.get(m.id).min), wt = wm.reduce((a, b) => a + b, 0);
+    const score = wt && who.length >= 2 ? Math.max(0, Math.round(100 * (1 - (Math.max(...wm) / wt * 100 - 100 / who.length) / (100 - 100 / who.length)))) : null;
+    html = `<h2 id="mt-title">${esc(t.meet1Title)}</h2>` + (n ? `<div class="mt-box"><p class="mt-big">${esc(t.meet1Done.replace("{n}", n))}</p>${score !== null ? `<p class="mt-sub">${esc(t.meet1Fair.replace("{s}", score))}</p>` : ""}</div>
+      ${best && best.n ? `<div class="mt-box mt-hero"><span class="av" style="background:${COLORS[best.m.color % COLORS.length]}" aria-hidden="true">${esc(best.m.name.charAt(0).toUpperCase())}</span><span>\u{1F3C6} ${esc(t.meet1Best.replace("{name}", best.m.name).replace("{n}", best.n))}</span></div>` : ""}
+      ${tot ? `<div class="mt-box">${state.members.filter(m => per.get(m.id).min).map(m => { const p = Math.round(per.get(m.id).min / tot * 100); return `<div class="bar-wrap"><div class="bar-head"><span>${esc(m.name)}</span><span>${p}%</span></div><div class="bar"><span style="width:${p}%;background:${COLORS[m.color % COLORS.length]}"></span></div></div>`; }).join("")}</div>` : ""}`
+      : `<div class="mt-box"><p style="margin:0">${esc(t.meet1None)}</p></div>`);
+  } else if (meetStepN === 2) {
+    const totals = state.members.map(m => ({ m, mins: state.tasks.filter(k => k.owner === m.id).reduce((a, k) => a + weeklyMins(k), 0) }));
+    const tot = totals.reduce((a, x) => a + x.mins, 0) || 1;
+    const sg = computeSuggestion();
+    html = `<h2 id="mt-title">${esc(t.meet2Title)}</h2><p class="mt-sub">${esc(t.meet2Hint)}</p><div class="mt-box">${totals.map(({ m, mins }) => { const p = Math.round(mins / tot * 100); return `<div class="bar-wrap"><div class="bar-head"><span>${esc(m.name)}</span><span>${Math.round(mins)} ${esc(t.minWeek)}</span></div><div class="bar"><span style="width:${p}%;background:${COLORS[m.color % COLORS.length]}"></span></div></div>`; }).join("")}</div>
+      ${sg ? `<div class="suggest"><span>${t.suggest.replace("{task}", esc(taskName(sg.k))).replace("{from}", esc(sg.from.name)).replace("{to}", esc(sg.to.name))}</span><button type="button" class="ghost" data-mt-move="${sg.k.id}" data-to="${sg.to.id}">${esc(t.meet2Move)}</button></div>` : `<div class="mt-box"><p style="margin:0">${esc(t.meet2Ok)}</p></div>`}
+      ${meetMsg ? `<p class="mt-sub" role="status">${esc(meetMsg)}</p>` : ""}`;
+  } else if (meetStepN === 3) {
+    const days = [...Array(7)].map((_, i) => { const d = new Date(next); d.setDate(next.getDate() + i); return d; });
+    const planned = days.filter(d => ((state.meals || {})[isoDay(d)] || {}).dish).length;
+    const isos = days.map(isoDay);
+    const evs = state.members.reduce((a, m) => a + (m.events || []).filter(e => e && isos.includes(e.date)).length + actsOf(m).reduce((b, x) => b + days.filter(d => x.days.includes(d.getDay())).length, 0), 0);
+    html = `<h2 id="mt-title">${esc(t.meet3Title)}</h2><div class="mt-box"><p class="mt-big">${esc(t.meet3Meals.replace("{n}", planned))}</p>${planned < 7 ? `<p style="margin:8px 0 0"><button type="button" class="ghost" data-mt-meals="1">${esc(t.meet3PlanMeals)}</button></p>` : ""}</div><div class="mt-box"><p style="margin:0">\u{1F4C5} ${esc(t.meet3Events.replace("{n}", evs))}</p></div>`;
+  } else {
+    html = `<h2 id="mt-title">${esc(t.meet4Title)}</h2><p class="mt-sub">${esc(t.meet4Hint)}</p><textarea id="mt-note" maxlength="500" aria-labelledby="mt-title" placeholder="${esc(t.meet4Ph)}"></textarea>`;
+  }
+  card.innerHTML = html;
+  btns.innerHTML = `<button type="button" class="fx-done" data-mt="${meetStepN < total ? "next" : "done"}">${esc(meetStepN < total ? t.meetNext : t.meetDone)}</button>${meetStepN > 1 ? `<button type="button" class="fx-skip" data-mt="back">${esc(t.meetBack)}</button>` : ""}`;
+}
+document.addEventListener("click", e => {
+  const o = e.target.closest("[data-meet-open]");
+  if (o && !isChild()) { openMeet(o); return; }
+  const sk = e.target.closest("[data-meet-skip]");
+  if (sk) { lsSet("hb-meet-skip", meetWeekKey()); renderMeetCard(); }
+});
+document.getElementById("mt-close").onclick = closeMeet;
+document.getElementById("meet").addEventListener("click", e => {
+  const t = T[lang];
+  const mv = e.target.closest("[data-mt-move]");
+  if (mv) {
+    const k = state.tasks.find(x => x.id === mv.dataset.mtMove), to = memberById(mv.dataset.to);
+    if (k && to) { k.owner = to.id; k.rot = null; meetMsg = t.meet2Moved.replace("{task}", taskName(k)).replace("{to}", to.name); save(); renderMeet(); }
+    return;
+  }
+  if (e.target.closest("[data-mt-meals]")) { closeMeet(); setView("shop"); setTimeout(() => { const el = document.getElementById("meal-days"); if (el) el.scrollIntoView({ block: "center" }); }, 50); return; }
+  const b = e.target.closest("[data-mt]");
+  if (!b) return;
+  if (b.dataset.mt === "back") { meetStepN = Math.max(1, meetStepN - 1); meetMsg = ""; renderMeet(); return; }
+  if (b.dataset.mt === "next") { meetStepN++; meetMsg = ""; renderMeet(); const nb = document.querySelector("#mt-btns .fx-done"); if (nb) nb.focus(); return; }
+  const note = (document.getElementById("mt-note") || {}).value || "";
+  state.checkins = state.checkins || [];
+  state.checkins.push({ id: uid(), text: note.trim() || t.meetThanks, week: isoWeek(new Date()).week, date: new Date().toLocaleDateString(lang === "sv" ? "sv-SE" : "en-GB"), at: Date.now(), meet: true });
+  save(); confetti(); showNote(t.meetThanks); closeMeet();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && meetOn) closeMeet(); });
+
 /* ---------- One thing at a time (focus mode) ---------- */
 var focusOn = false, focusSkip = [], focusReturn = null, focusStart = 0;
 function focusList() {
@@ -5977,7 +6184,7 @@ document.addEventListener("keydown", e => {
 /* keep Tab inside an open dialog */
 document.addEventListener("keydown", e => {
   if (e.key !== "Tab") return;
-  const dlg = ["legal", "focus", "inv-sheet", "guide"].map(id => document.getElementById(id)).find(d => d && !d.hidden);
+  const dlg = ["legal", "meet", "focus", "inv-sheet", "guide"].map(id => document.getElementById(id)).find(d => d && !d.hidden);
   if (!dlg) return;
   const f = [...dlg.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
   if (!f.length) return;
