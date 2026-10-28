@@ -2,6 +2,8 @@
 
 Senast uppdaterad: 28 oktober 2026. Personuppgiftsansvarig: Ludvig Bohlin (kontakt: ludvig.j.bohlin@gmail.com).
 
+**Vårt löfte:** Ingen reklam. Ingen försäljning av personuppgifter. Inga offentliga profiler. Barnens data stannar inom hushållet.
+
 Det här dokumentet är det interna underlaget bakom integritetspolicyn och användarvillkoren i appen. Det ska ses över när en ny funktion samlar in nya uppgifter, när en ny leverantör används och minst en gång om året. Det ersätter inte en juridisk granskning.
 
 ---
@@ -11,14 +13,19 @@ Det här dokumentet är det interna underlaget bakom integritetspolicyn och anv�
 | Behandling | Uppgifter | Vilka | Rättslig grund | Var | Hur länge |
 |---|---|---|---|---|---|
 | Konto och inloggning | E-post, lösenord (hashat), namn, tid för godkända villkor, ev. tvåstegsfaktor | Vuxna och barn med eget konto | Avtal (6.1 b) | Supabase, Frankfurt (EU) | Tills kontot raderas |
-| Hushållets planering | Sysslor, vem som gör vad, tider, klart-markeringar, kommentarer, anslagstavla, inköpslista, matsedel, aktiviteter, händelser, födelsedag (valfritt), stjärnor och fickpengar | Alla i hushållet | Avtal (6.1 b); för barn under 13 vårdnadshavarens samtycke (6.1 a, LKD 2 kap. 4 §) | Supabase, Frankfurt | Tills hushållet eller personen tas bort |
+| Hushållets planering | Sysslor (med ansträngning, mental belastning och vem som håller koll), vem som gör vad, tider, klart-markeringar, kommentarer, anslagstavla, inköpslista, matsedel, aktiviteter, händelser, födelsedag (valfritt), stjärnor och fickpengar | Alla i hushållet | Avtal (6.1 b); för barn under 13 vårdnadshavarens samtycke (6.1 a, LKD 2 kap. 4 §) | Supabase, Frankfurt | Tills hushållet eller personen tas bort |
 | Privata saker | Egna anteckningar som bara personen ser | Den som skrev dem | Avtal | Supabase, Frankfurt | Tills de raderas |
 | Påminnelser | Pushadress (endpoint) och nycklar från webbläsaren | Den som slagit på påminnelser | Samtycke (6.1 a) | Supabase; utskick via Apple/Google/Mozilla pushtjänst | Tills påminnelser stängs av |
-| Kalenderlänk | Hemlig nyckel; sysslor, aktiviteter och födelsedagar som vårdnadshavaren valt | Hushållet | Berättigat intresse / avtal | Supabase Edge Function | Tills länken byts eller hushållet tas bort |
-| AI-förslag på middagar | Önskemål (namn bortplockade), datum, antal personer och barn | Vuxna som trycker på knappen | Samtycke genom handlingen (6.1 a) | Anthropic, USA (SCC) | Enligt Anthropics villkor för API (inte för träning) |
+| Kalenderlänk | Hemlig nyckel; sysslor, aktiviteter och födelsedagar som vårdnadshavaren valt (barnens saker bara om vårdnadshavaren slår på det) | Hushållet | Berättigat intresse / avtal | Supabase Edge Function | Tills länken byts eller hushållet tas bort |
+| Rapporter | Kopia av rapporterat inlägg, vem som rapporterade, skäl | Den som rapporterar, den som skrev, vårdnadshavaren | Berättigat intresse (trygghet i hushållet, 6.1 f) | Supabase, i hushållets data | Hanterade rapporter 90 dagar |
+| AI-förslag på middagar | Önskemål, allergier och budget (namn bortplockade), datum, antal personer och barn | Vuxna som trycker på knappen | Samtycke genom handlingen (6.1 a) | Anthropic, USA (SCC) | Enligt Anthropics villkor för API (inte för träning) |
 | Felsökning och missbruksskydd | Antal AI-anrop per person och dag, felrapporter, tekniska loggar | Alla | Berättigat intresse (6.1 f) | Supabase | Felrapporter 90 dagar, AI-räknare 30 dagar (rensas varje natt), Supabase-loggar enligt plan |
 | Synpunkter | Text som användaren själv skriver | Den som skickar | Berättigat intresse | Supabase | 90 dagar (rensas varje natt) |
 | Backup | Kopia av hushåll, medlemmar och privata saker | Alla | Berättigat intresse (säkerhet, art. 32) | Supabase, separat schema utan åtkomst för appen | 14 dagar |
+
+Röststyrning: talet blir text i användarens egen webbläsare eller telefon (Apple eller Google). Appen får bara texten, tolkar den lokalt och sparar inget ljud. Ingen behandling hos oss utöver det användaren väljer att spara (till exempel en ny syssla).
+
+Lokalt på telefonen (inte på servern): enkel visning och vilka personer användaren valt att dölja.
 
 Appen samlar **inte** in: personnummer, adress, GPS, kontakter, bilder, hälsouppgifter, betalkort eller reklam-id. Inga spårare, ingen reklam, inga analysverktyg från tredje part.
 
@@ -51,7 +58,11 @@ En fullständig konsekvensbedömning krävs troligen inte (ingen storskalig beha
 | Uppgifter till AI i USA | Medel | Låg | Bara önskemål, datum och antal; namn i hushållet byts ut innan sändning; barn kan inte använda AI; nyckeln finns bara på servern | Låg |
 | Skadlig kod i sidan (XSS) | Låg | Hög | Allt användarinnehåll escapas; strikt Content Security Policy med hash; inga externa skript utom Supabase-biblioteket | Låg |
 | Dataförlust | Låg | Medel | Nattlig backup i 14 dagar, export för varje användare, Supabase driftsäkerhet | Låg |
-| Belöningar skapar press eller konflikt | Medel | Låg | Stjärnor, belöningar och fickpengar kan stängas av för hela hushållet | Låg |
+| Belöningar skapar press eller konflikt | Medel | Låg | Stjärnor, belöningar och fickpengar kan stängas av för hela hushållet; av som standard i hushåll utan barn | Låg |
+| Elaka eller hotfulla inlägg inom hushållet | Medel | Medel | Rapportera till vårdnadshavare, dölja person på egen telefon, vårdnadshavare tar bort med ångra och logg; hjälptext med 112 och Bris | Låg |
+| Ungdom ändrar mer än tänkt | Låg | Låg | Ungdomsläge sätts av en vuxen; databasen tillåter bara egna sysslor, stjärnor kan inte höjas | Låg |
+| Röst skickas till Apple/Google | Medel | Låg | Frivilligt, tydlig text i appen och policyn, appen sparar inget ljud | Låg |
+| Fel allergiinformation från AI | Medel | Hög | Fält för allergier, AI markerar allergener, appen varnar själv om en rätt kan innehålla något ni vill undvika, tydlig varning att kontrollera förpackningen | Medel (kräver att användaren kontrollerar) |
 
 **Slutsats.** Kvarvarande risk bedöms som låg. Bedömningen görs om vid ny funktion som rör barn, nya uppgiftstyper eller ny leverantör.
 
@@ -59,6 +70,8 @@ En fullständig konsekvensbedömning krävs troligen inte (ingen storskalig beha
 
 - Under 13 år: vårdnadshavare skapar hushållet och intygar samtycke innan barnet läggs till (sparas som `parentConsent`). Barnet loggar in med en barnkod.
 - 13 år och äldre: kan använda appen med vårdnadshavarens kännedom. Vårdnadshavaren kan alltid se barnets sysslor och ta bort barnet ur hushållet.
+- Ungdomsläge (13–17): en vuxen slår på det per person. Ungdomen ser alla sysslor, bockar alltid av sina egna och kan lägga till egna sysslor (0 stjärnor). Kräver databasändringen `supabase/migrations/20261028_teen_mode_and_reports.sql`.
+- Barn och ungdomar kan rapportera inlägg och kommentarer till vårdnadshavaren och dölja en person på sin egen telefon.
 - Barn ser bara sina egna sysslor om vårdnadshavaren inte väljer annat, kan inte se andra hushåll, inte använda AI och inte ändra inställningar.
 - Texten till barn är kort och enkel. Ingen reklam och inga köp i appen.
 
@@ -115,3 +128,4 @@ Kontakt vid incident: ludvig.j.bohlin@gmail.com.
 - [ ] Höj minsta lösenordslängd till 8 tecken: Supabase → Authentication → Sign In / Providers → Email → Minimum password length.
 - [ ] Överväg Supabase Pro för riktiga databasbackuper och längre loggar.
 - [ ] Testa återställning av backup.
+- [ ] Kör `supabase/migrations/20261028_teen_mode_and_reports.sql` i Supabase → SQL Editor (ungdomsläge och rapporter för barn). Appen visar de funktionerna först när den är körd.

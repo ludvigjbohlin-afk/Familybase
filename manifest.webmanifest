@@ -1,7 +1,7 @@
 {
   "name": "Hushållsbalans",
   "short_name": "Hushåll",
-  "description": "Dela hushållets sysslor rättvist.",
+  "description": "Den smarta familjeassistenten som gör hela hushållsarbetet synligt och hjälper hushållet att dela det rättvist. Ingen reklam.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -9,8 +9,73 @@
   "theme_color": "#f2f2f7",
   "lang": "sv",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Vad ska jag göra i dag?",
+      "short_name": "I dag",
+      "url": "./?view=today",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Inköpslistan",
+      "short_name": "Inköp",
+      "url": "./?view=shop",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Lägg till syssla",
+      "short_name": "Ny syssla",
+      "url": "./?add=1",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Säg något",
+      "short_name": "Röst",
+      "url": "./?voice=1",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
   ]
 }

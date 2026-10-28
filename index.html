@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-Ddk6IpNwdv+H7soYHdVYmLRrqCdp/FYoUmQon6lPCNs='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-+YgwZDDQyeI2vgsnz9LHEqIJTGnFTvdc7pXXp3l9s6k='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Household Balance</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -18,9 +18,9 @@
 <style>
 :root {
   /* Apple: systemfärger och grupperade listor */
-  --bg: #f2f2f7; --surface: #ffffff; --inset: #f2f2f7; --fill: rgba(118,118,128,.12); --field: rgba(118,118,128,.12); --tint-fill: rgba(0,104,217,.10);
+  --bg: #f2f2f7; --surface: #ffffff; --inset: #f2f2f7; --fill: rgba(118,118,128,.12); --field: rgba(118,118,128,.12); --tint-fill: rgba(0,96,199,.10);
   --ink: #000000; --muted: #6c6c70; --line: #c6c6c8; --line-strong: #8e8e93; --edge: #c6c6c8;
-  --primary: #0068d9; --on-primary: #ffffff; --focus: rgba(0,104,217,.4); --danger: #d70015; --danger-fill: rgba(255,59,48,.12);
+  --primary: #0060c7; --on-primary: #ffffff; --focus: rgba(0,96,199,.45); --danger: #d70015; --danger-fill: rgba(255,59,48,.12);
   --sun: #ffcc00; --green: #34c759; --green-text: #248a3d; --orange: #ff9500; --pink: #ff2d55;
   --switch-off: #e9e9eb; --toast: rgba(28,28,30,.88); --bar: rgba(249,249,249,.94); --bar-line: rgba(0,0,0,.3); --tab-off: #6c6c70;
   --m0: #007aff; --m1: #ff9500; --m2: #34c759; --m3: #ff2d55; --m4: #af52de; --m5: #30b0c7;
@@ -34,8 +34,8 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #000000; --surface: #1c1c1e; --inset: #2c2c2e; --fill: rgba(118,118,128,.24); --field: rgba(118,118,128,.24); --tint-fill: rgba(10,132,255,.18);
-    --ink: #ffffff; --muted: #98989f; --line: #38383a; --line-strong: #636366; --edge: #38383a;
-    --primary: #0a84ff; --focus: rgba(10,132,255,.5); --danger: #ff6961; --danger-fill: rgba(255,69,58,.18);
+    --ink: #ffffff; --muted: #a1a1a6; --line: #38383a; --line-strong: #636366; --edge: #38383a;
+    --primary: #409cff; --btn-bg: #0a6cd6; --focus: rgba(64,156,255,.55); --danger: #ff6961; --danger-fill: rgba(255,69,58,.18);
     --sun: #ffd60a; --green: #30d158; --green-text: #30d158; --orange: #ff9f0a; --pink: #ff375f;
     --switch-off: #39393d; --toast: rgba(44,44,46,.92); --bar: rgba(22,22,22,.9); --bar-line: rgba(255,255,255,.15); --tab-off: #98989f;
     --m0: #0a84ff; --m1: #ff9f0a; --m2: #30d158; --m3: #ff375f; --m4: #bf5af2; --m5: #40c8e0;
@@ -43,8 +43,8 @@
 }
 :root[data-theme="dark"] {
   --bg: #000000; --surface: #1c1c1e; --inset: #2c2c2e; --fill: rgba(118,118,128,.24); --field: rgba(118,118,128,.24); --tint-fill: rgba(10,132,255,.18);
-  --ink: #ffffff; --muted: #98989f; --line: #38383a; --line-strong: #636366; --edge: #38383a;
-  --primary: #0a84ff; --focus: rgba(10,132,255,.5); --danger: #ff6961; --danger-fill: rgba(255,69,58,.18);
+  --ink: #ffffff; --muted: #a1a1a6; --line: #38383a; --line-strong: #636366; --edge: #38383a;
+  --primary: #409cff; --btn-bg: #0a6cd6; --focus: rgba(64,156,255,.55); --danger: #ff6961; --danger-fill: rgba(255,69,58,.18);
   --sun: #ffd60a; --green: #30d158; --green-text: #30d158; --orange: #ff9f0a; --pink: #ff375f;
   --switch-off: #39393d; --toast: rgba(44,44,46,.92); --bar: rgba(22,22,22,.9); --bar-line: rgba(255,255,255,.15); --tab-off: #98989f;
   --m0: #0a84ff; --m1: #ff9f0a; --m2: #30d158; --m3: #ff375f; --m4: #bf5af2; --m5: #40c8e0;
@@ -74,7 +74,7 @@ h1 { font-size: 1.7rem; margin: 0; letter-spacing: -.02em; }
   border: 0; background: transparent; color: var(--muted); padding: 6px 14px; border-radius: 999px;
   cursor: pointer; font: inherit; font-size: .9rem;
 }
-.lang button[aria-pressed="true"] { background: var(--primary); color: #fff; }
+.lang button[aria-pressed="true"] { background: var(--btn-bg, var(--primary)); color: #fff; }
 .grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
 @media (min-width: 800px) { .grid { grid-template-columns: 1.4fr 1fr; } }
 .card {
@@ -95,7 +95,7 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary); o
 .row > * { flex: 1 1 120px; }
 .row > .narrow { flex: 0 0 90px; }
 button.btn {
-  background: var(--primary); color: #fff; border: 0; border-radius: 10px;
+  background: var(--btn-bg, var(--primary)); color: #fff; border: 0; border-radius: 10px;
   padding: 10px 16px; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap;
 }
 button.btn:hover { filter: brightness(1.08); }
@@ -218,7 +218,7 @@ body[data-cur="week"] [data-view="week"], body[data-cur="settings"] [data-view="
 button.btn.big { width: 100%; padding: 14px 16px; font-size: 1.05rem; }
 .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 .chip { border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 7px 16px; font: inherit; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
+.chip[aria-pressed="true"] { background: var(--btn-bg, var(--primary)); border-color: var(--primary); color: #fff; font-weight: 600; }
 ul.tasks.big li { padding: 16px 0; }
 ul.tasks.big .task-title { font-size: 1.08rem; }
 .check.big { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; font-size: 1.125rem; }
@@ -255,7 +255,7 @@ ul.tasks.big .task-title { font-size: 1.08rem; }
 .cal-day:first-child { border-top: 0; }
 .cal-day h3 { margin: 0 0 6px; font-size: .95rem; font-weight: 700; display: flex; gap: 8px; align-items: center; }
 .cal-day.today h3 { color: var(--primary); }
-.cal-day .tag { background: var(--primary); color: var(--surface); border-radius: 6px; padding: 0 7px; font-size: .75rem; }
+.cal-day .tag { background: var(--btn-bg, var(--primary)); color: var(--surface); border-radius: 6px; padding: 0 7px; font-size: .75rem; }
 .cal-item { display: flex; align-items: center; gap: 10px; padding: 5px 0; }
 .cal-item .bar-dot { width: 4px; align-self: stretch; min-height: 22px; border-radius: 4px; flex: none; }
 .cal-item .ci-time { font-variant-numeric: tabular-nums; min-width: 44px; color: var(--muted); font-size: .9rem; }
@@ -410,7 +410,7 @@ label, .lbl { color: var(--muted); font-size: 0.8125rem; font-weight: 400; text-
 input, select, textarea { background: var(--field); color: var(--ink); border: 0; border-radius: 10px; padding: 11px 12px; }
 select { -webkit-appearance: none; appearance: none; padding-right: 32px; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 17px) 52%, calc(100% - 12px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
 input:focus, select:focus, textarea:focus, button:focus-visible, .check:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-button.btn { background: var(--primary); color: var(--on-primary); border-radius: 12px; padding: 13px 18px; font-family: var(--body); font-weight: 600; font-size: 1.0625rem; letter-spacing: -.01em; }
+button.btn { background: var(--btn-bg, var(--primary)); color: var(--on-primary); border-radius: 12px; padding: 13px 18px; font-family: var(--body); font-weight: 600; font-size: 1.0625rem; letter-spacing: -.01em; }
 button.btn:hover { filter: brightness(1.06); }
 button.btn:active { opacity: .7; }
 button.ghost { background: var(--tint-fill); border: 0; color: var(--primary); border-radius: 999px; padding: 6px 14px; font-size: 0.9375rem; font-weight: 600; min-height: 32px; }
@@ -423,7 +423,7 @@ button.ghost.danger { color: var(--danger); background: var(--danger-fill); }
 .owner { --mc: var(--muted); background: color-mix(in srgb, var(--mc) 16%, transparent); color: color-mix(in srgb, var(--mc) 62%, var(--ink)); border-radius: 6px; font-weight: 600; font-size: 0.8125rem; padding: 1px 8px; }
 .meta { color: var(--muted); }
 .check { border-radius: 50%; border: 1.5px solid var(--line-strong); background: transparent; color: #fff; font-weight: 700; width: 24px; height: 24px; flex: 0 0 24px; font-size: 0.8125rem; }
-.check[aria-checked="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+.check[aria-checked="true"] { background: var(--btn-bg, var(--primary)); border-color: var(--primary); color: #fff; }
 .check.big { border-radius: 50%; width: 26px; height: 26px; flex: 0 0 26px; font-size: 0.875rem; }
 ul.tasks li { border-top: .5px solid var(--line); }
 ul.tasks li:first-child { border-top: 0; }
@@ -437,7 +437,7 @@ ul.tasks li:first-child { border-top: 0; }
 .gear:hover { background: var(--tint-fill); }
 .gear svg { width: 26px; height: 26px; }
 .chip { background: var(--fill); border: 0; border-radius: 999px; font-weight: 500; font-size: 0.9375rem; color: var(--ink); padding: 7px 14px; }
-.chip[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
+.chip[aria-pressed="true"] { background: var(--btn-bg, var(--primary)); color: var(--on-primary); }
 .add-panel { background: var(--inset); border: 0; border-radius: 12px; }
 .add-panel input, .add-panel select, .add-panel textarea { background: var(--surface); }
 .suggest, .banner, .invite-note { background: var(--tint-fill); color: var(--ink); border: 0; border-radius: 12px; }
@@ -448,7 +448,7 @@ ul.tasks li:first-child { border-top: 0; }
 .set-msg { color: var(--muted); }
 .set-msg.err, #auth-err, #setup-err { color: var(--danger); }
 .cal-day.today h3 { color: var(--primary); }
-.cal-day .tag { background: var(--primary); color: var(--on-primary); border-radius: 6px; font-weight: 600; }
+.cal-day .tag { background: var(--btn-bg, var(--primary)); color: var(--on-primary); border-radius: 6px; font-weight: 600; }
 .cal-day { border-top: .5px solid var(--line); }
 .meal-row { border-top: .5px solid var(--line); }
 .meal-row .day.today { color: var(--primary); }
@@ -475,7 +475,7 @@ ul.tasks li:first-child { border-top: 0; }
 .welcome { background: var(--surface); color: var(--ink); }
 .welcome h2 { color: var(--ink); }
 .welcome p { opacity: 1; color: var(--muted); }
-.welcome button { background: var(--primary); color: var(--on-primary); border-radius: 12px; font-weight: 600; }
+.welcome button { background: var(--btn-bg, var(--primary)); color: var(--on-primary); border-radius: 12px; font-weight: 600; }
 
 /* Idag: stor rubrik, rutor som i Påminnelser, listan som en grupperad lista */
 #sec-today { background: none; border: 0; padding: 0; color: var(--ink); }
@@ -503,7 +503,7 @@ ul.tasks.big .task-title { font-size: 1.0625rem; }
 .role-child .cat-ico { display: inline; }
 .bday-line { background: color-mix(in srgb, var(--pink) 14%, var(--surface)); color: var(--ink); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-weight: 600; }
 .swap-banner { background: var(--surface); color: var(--ink); border: 0; border-radius: 12px; }
-.swap-banner .yes { background: var(--primary); color: var(--on-primary); border-radius: 999px; }
+.swap-banner .yes { background: var(--btn-bg, var(--primary)); color: var(--on-primary); border-radius: 999px; }
 .swap-banner .no { background: var(--fill); color: var(--ink); border: 0; border-radius: 999px; }
 #sec-today .swap-ask { background: var(--tint-fill); color: var(--primary); border: 0; border-radius: 999px; font-weight: 600; padding: 4px 12px; }
 #sec-today .swap-pick button { background: var(--fill); color: var(--ink); border: 0; border-radius: 999px; }
@@ -523,7 +523,7 @@ ul.tasks.big .task-title { font-size: 1.0625rem; }
 .act-add .lbl { margin-top: 12px; }
 .act-days { margin: 0 0 6px; gap: 6px; }
 .act-days .chip { padding: 6px 12px; text-transform: capitalize; background: var(--surface); }
-.act-days .chip[aria-pressed="true"] { background: var(--primary); }
+.act-days .chip[aria-pressed="true"] { background: var(--btn-bg, var(--primary)); }
 .act-add .act-err:empty { display: none; }
 .act-add .btn { margin-top: 10px; }
 .acts-list .pill { text-transform: capitalize; }
@@ -652,6 +652,74 @@ body.no-rewards .star-card, body.no-rewards .star-pill, body.no-rewards #sec-rew
 .mfa-key { font-family: ui-monospace, Menlo, monospace; font-size: .8125rem; word-break: break-all; color: var(--muted); }
 .cal-incl { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 0; }
 .cal-incl .set-check { margin: 0; }
+/* ===== Accessibility: contrast and touch targets ===== */
+.tile .av, .mt-hero .av { color: #000; }
+.tile .av svg { stroke: #000; }
+.sc-star { color: #5c4300; }
+button.fx-done { background: var(--green-text); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) button.fx-done { color: #000; } }
+:root[data-theme="dark"] button.fx-done { color: #000; }
+button.btn, .cal-day .tag { background: var(--btn-bg, var(--primary)); }
+.linkish { min-height: 24px; }
+.promise-line { padding: 10px 12px; border-radius: 10px; background: var(--tint-fill); }
+/* ===== AI dinners ===== */
+.ai-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+@media (min-width: 520px) { .ai-row { grid-template-columns: 2fr 1fr; } }
+.ai-alert { margin: 4px 0; padding: 8px 10px; border-radius: 10px; background: rgba(255, 59, 48, .12); color: var(--ink); font-weight: 600; }
+.ai-bad { box-shadow: inset 3px 0 0 #ff3b30; padding-left: 10px; }
+/* ===== Weekly meeting lists ===== */
+.mt-list { list-style: none; margin: 0; padding: 0; }
+.mt-list li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-top: .5px solid var(--line); }
+.mt-list li:first-child { border-top: 0; }
+.mt-list .meta { white-space: nowrap; margin: 0; }
+#mt-card textarea { width: 100%; }
+/* ===== Teen mode, reports ===== */
+.role-child.role-teen .teen-ok:not([hidden]) { display: revert !important; }
+.role-child.role-teen .teen-ok.add-panel:not([hidden]) { display: block !important; }
+.role-teen .add-mode, .role-teen #pick-wrap-1, .role-teen #pick-wrap-2, .role-teen #k-lead-row, .role-teen .fld:has(#k-stars), .role-teen #k-rot-row { display: none !important; }
+.rp-link { font-size: inherit; padding: 6px 2px; min-height: 24px; color: var(--muted); text-decoration: underline; }
+.rp-quote { margin: 8px 0 12px; padding: 10px 12px; border-left: 3px solid var(--line); background: var(--fill, rgba(0,0,0,.04)); border-radius: 6px; }
+.rp-quote cite { display: block; margin-top: 4px; font-style: normal; font-size: .85rem; color: var(--muted); }
+.rp-help { margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--tint-fill); }
+.rp-item { padding: 12px 0; border-top: .5px solid var(--line); }
+.mod-log { margin: 0; padding-left: 18px; color: var(--muted); font-size: .9rem; }
+#report-sheet[hidden], #set-reports[hidden], #set-muted[hidden] { display: none; }
+/* ===== Simple view ===== */
+body.simple [data-view="today"]:not(#simple) { display: none !important; }
+body.simple .tabbar [data-tab="chores"], body.simple .tabbar [data-tab="family"], body.simple .tabbar [data-tab="week"] { display: none; }
+#simple h2 { font-size: 1.9rem; line-height: 1.15; margin: 2px 0 6px; }
+.simple-count { font-size: 1.25rem; margin: 0 0 16px; color: var(--ink); }
+.simple-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.simple-item { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 72px; padding: 14px 16px; border-radius: 16px; border: 2px solid var(--ink); background: var(--surface); color: var(--ink); font: inherit; font-size: 1.35rem; font-weight: 600; text-align: left; cursor: pointer; }
+.simple-item .box { flex: 0 0 44px; height: 44px; border-radius: 12px; border: 3px solid var(--ink); display: grid; place-items: center; font-size: 1.6rem; line-height: 1; }
+.simple-item.is-done { font-weight: 500; border-style: dashed; }
+.simple-item.is-done .txt { text-decoration: line-through; }
+.simple-item.is-done .box { background: var(--ink); color: var(--surface); }
+.simple-item small { display: block; font-size: 1.05rem; font-weight: 500; color: var(--ink); margin-top: 2px; }
+.simple-done-h { margin: 24px 0 10px; font-size: 1.15rem; }
+.simple-btns { display: grid; gap: 10px; margin-top: 24px; }
+.simple-btns .btn, .simple-btns .ghost { min-height: 56px; font-size: 1.15rem; width: 100%; }
+/* ===== Voice ===== */
+.voice-open[hidden], .voice-mic[hidden] { display: none; }
+.voice-ex { margin: 0 0 14px; padding-left: 20px; color: var(--muted); }
+.voice-mic { width: 100%; min-height: 56px; font-size: 1.15rem; }
+.voice-heard { min-height: 1.4em; margin: 12px 0 0; color: var(--muted); }
+.voice-out { min-height: 1.4em; margin: 6px 0 0; font-weight: 600; font-size: 1.1rem; }
+.voice-form { margin-top: 14px; }
+.voice-row { display: flex; gap: 8px; }
+.voice-row input { flex: 1; min-width: 0; }
+.voice-sheet[hidden] { display: none; }
+/* ===== Household types, promise ===== */
+.g-q { margin: 0 0 6px; font-weight: 600; }
+.g-types { margin: 0 0 14px; }
+.promise { margin: 0 0 8px; line-height: 1.45; }
+.promise-block h3::before { content: "🔒 "; }
+/* ===== Fairness: doing and keeping track ===== */
+.bar.bar-split { height: 10px; border-radius: 5px; }
+.bar.bar-split > span { display: block; height: 100%; border-radius: 0; }
+.bar-split > span.think { background: repeating-linear-gradient(135deg, var(--bc) 0 3px, transparent 3px 6px); }
+.bar-sub { margin: 4px 0 0; font-size: .82rem; color: var(--muted); }
+.bar-legend { margin: 6px 0 0; font-size: .8rem; color: var(--muted); }
 /* ===== Chore form for phones ===== */
 .task-form { display: grid; gap: 16px; }
 .task-form .fld { min-width: 0; }
@@ -660,7 +728,7 @@ body.no-rewards .star-card, body.no-rewards .star-pill, body.no-rewards #sec-rew
 .fld-hint { margin: 6px 0 0; font-size: .8125rem; color: var(--muted); }
 .seg { display: flex; flex-wrap: wrap; gap: 8px; }
 .seg button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: .9375rem; cursor: pointer; }
-.seg button[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); font-weight: 600; }
+.seg button[aria-pressed="true"] { background: var(--btn-bg, var(--primary)); border-color: var(--primary); color: var(--on-primary); font-weight: 600; }
 .seg-days button { min-width: 52px; padding: 8px 10px; }
 .seg-days button:first-child { flex: 1 1 100% !important; }
 .seg-src { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; border: 0 !important; opacity: 0; }
@@ -711,7 +779,7 @@ body.no-rewards .star-card, body.no-rewards .star-pill, body.no-rewards #sec-rew
 /* ===== Calendar link, trend, streaks ===== */
 .cal-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .cal-btns a { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 600; min-height: 44px; padding: 10px 18px; }
-.cal-btns a.btn { background: var(--primary); color: var(--on-primary); }
+.cal-btns a.btn { background: var(--btn-bg, var(--primary)); color: var(--on-primary); }
 .cal-btns a.ghost { background: var(--tint-fill); color: var(--primary); }
 .cal-btns a:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
 .streak { display: inline-flex; align-items: center; gap: 6px; margin: 8px 0 0; padding: 6px 12px; border-radius: 999px; background: rgba(255,149,0,.16); color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -738,7 +806,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .fx-dots { display: flex; gap: 6px; flex-wrap: wrap; max-width: 560px; width: 100%; margin: 12px auto 0; }
 .fx-dots span { flex: 1 1 0; min-width: 10px; height: 8px; border-radius: 4px; background: var(--line); }
 .fx-dots span.ok { background: var(--green); }
-.fx-dots span.cur { background: var(--primary); }
+.fx-dots span.cur { background: var(--btn-bg, var(--primary)); }
 .fx-card { flex: 1 0 auto; display: flex; flex-direction: column; justify-content: center; gap: 14px; max-width: 560px; width: 100%; margin: 0 auto; padding: 24px 0; }
 .fx-label { font-size: .8125rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 0; }
 .fx-title { font-size: 2.25rem; line-height: 1.12; font-weight: 800; letter-spacing: -.02em; margin: 0; }
@@ -777,7 +845,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .auth-alt { text-align: center; margin: 10px 0 0; }
 .auth-alt[hidden] { display: none; }
 .consent-note { font-size: .8125rem; color: var(--muted); text-align: center; margin: 2px 0 0; }
-#demo-bar { position: sticky; top: 0; z-index: 9; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: center; padding: 10px 16px; background: var(--primary); color: var(--on-primary); font-size: .9375rem; text-align: center; }
+#demo-bar { position: sticky; top: 0; z-index: 9; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: center; padding: 10px 16px; background: var(--btn-bg, var(--primary)); color: var(--on-primary); font-size: .9375rem; text-align: center; }
 #demo-bar[hidden] { display: none; }
 #demo-bar button { background: var(--on-primary); color: var(--primary); border: 0; border-radius: 999px; padding: 8px 14px; font: inherit; font-weight: 600; cursor: pointer; min-height: 36px; }
 #demo-bar button.plain { background: transparent; color: var(--on-primary); text-decoration: underline; padding: 8px 4px; }
@@ -881,6 +949,25 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
   <div class="fx-card" id="fx-card"></div>
   <div class="fx-btns" id="fx-btns"></div>
 </div>
+<div id="voice" class="login setup inv-sheet voice-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="voice-h">
+  <div class="setup-inner">
+    <div class="card">
+      <h2 id="voice-h" data-i="voiceTitle"></h2>
+      <p class="summary" style="margin:0 0 4px" data-i="voiceHint"></p>
+      <ul class="voice-ex" id="voice-ex"></ul>
+      <button type="button" class="btn big voice-mic" id="voice-mic"><span aria-hidden="true">🎤</span> <span id="voice-mic-l"></span></button>
+      <p class="voice-heard" id="voice-heard" aria-live="polite"></p>
+      <p class="voice-out" id="voice-out" role="status"></p>
+      <p id="voice-undo-row" hidden><button type="button" class="ghost" id="voice-undo" data-i="undo"></button></p>
+      <form id="voice-form" class="voice-form"><label for="voice-in" data-i="voiceType"></label><div class="voice-row"><input id="voice-in" maxlength="120" autocomplete="off"><button class="btn" type="submit" data-i="voiceDo"></button></div></form>
+      <p class="footnote" style="text-align:left" data-i="voicePrivacy"></p>
+      <button type="button" class="ghost" id="voice-close" data-i="close"></button>
+    </div>
+  </div>
+</div>
+<div id="report-sheet" class="login setup inv-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rp-h">
+  <div class="setup-inner"><div class="card" id="rp-card"></div></div>
+</div>
 <div id="inv-sheet" class="login setup inv-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="inv-h">
   <div class="setup-inner">
     <div class="card">
@@ -956,6 +1043,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
   </header>
 
   <div class="grid">
+    <section class="card full simple-view" id="simple" data-view="today" aria-labelledby="simple-h" hidden></section>
     <section class="card full about-card" id="sec-about" data-view="today" aria-labelledby="h-about" hidden>
       <h2 id="h-about"><span class="dot"></span><span data-i="aboutTitle"></span></h2>
       <p class="summary" style="margin-top:-6px" data-i="aboutHint"></p>
@@ -979,6 +1067,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
       <div id="today-rewards"></div>
       <div id="today-progress"></div>
       <button type="button" class="focus-open" id="focus-open" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg><span data-i="focusOpen"></span></button>
+      <button type="button" class="focus-open voice-open" id="voice-open" data-voice-open="1" hidden><span aria-hidden="true">🎤</span><span data-i="voiceOpen"></span></button>
       <ul class="tasks big" id="today-list"></ul>
     </section>
 
@@ -1053,6 +1142,8 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <div><label for="set-theme" data-i="themeLabel"></label><select id="set-theme"></select></div>
         <div><label for="set-textsize" data-i="textSize"></label><select id="set-textsize"></select></div>
       </div>
+      <label class="set-check" style="margin-top:14px"><input type="checkbox" id="set-simple"><span data-i="simpleToggle"></span></label>
+      <p class="footnote" style="text-align:left;margin-top:0" data-i="simpleHint"></p>
       <div class="set-sub cloud-only" id="set-notify"></div>
       <div class="set-sub cloud-only adult-only" id="set-cal"></div>
       <div class="set-sub cloud-only" id="set-feedback">
@@ -1085,6 +1176,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <div class="set-grid" style="margin-top:12px">
           <div><label for="set-weekstart" data-i="setWeekStart"></label><select id="set-weekstart"></select></div>
           <div><label for="set-deflang" data-i="setDefLang"></label><select id="set-deflang"></select></div>
+          <div><label for="set-hhtype" data-i="setHhType"></label><select id="set-hhtype"></select></div>
         </div>
         <h3 style="margin-top:16px" data-i="setChildTitle"></h3>
         <label class="set-check"><input type="checkbox" id="set-c-seeall"><span data-i="setChildSeeAll"></span></label>
@@ -1122,6 +1214,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         </form>
         <p class="set-msg" id="set-account-msg" role="status"></p>
         <div class="set-sub adult-only" id="set-mfa"></div>
+        <div class="set-sub" id="set-muted" hidden></div>
         <div class="danger-block" style="margin-top:18px">
           <h3 data-i="delTitle"></h3>
           <p class="summary" style="margin:0 0 10px" data-i="delHint"></p>
@@ -1133,6 +1226,12 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         </div>
       </div>
 
+      <div class="set-block" id="set-reports" hidden></div>
+      <div class="set-block promise-block" id="set-promise">
+        <h3 data-i="promiseTitle"></h3>
+        <p class="promise" data-i="promise"></p>
+        <button type="button" class="linkish" data-legal="privacy" data-i="promisePolicy"></button>
+      </div>
       <div class="set-block" id="set-export">
         <h3 data-i="setExportTitle"></h3>
         <p class="summary" style="margin-top:0" data-i="setExportHint"></p>
@@ -1157,7 +1256,12 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <div id="ai-panel" class="add-panel" hidden>
           <label for="ai-prefs" data-i="aiDescribe"></label>
           <textarea id="ai-prefs" maxlength="600" rows="3"></textarea>
+          <div class="ai-row">
+            <div><label for="ai-allergy" data-i="aiAllergy"></label><input id="ai-allergy" maxlength="200" autocomplete="off"></div>
+            <div><label for="ai-budget" data-i="aiBudget"></label><input id="ai-budget" type="number" min="0" max="20000" step="50" inputmode="numeric"></div>
+          </div>
           <p class="fld-hint" data-i="aiPrivacy"></p>
+          <p class="ai-warn" data-i="aiWarn"></p>
           <div style="margin-top:10px"><button class="btn" type="button" id="ai-go" data-i="aiGo"></button></div>
           <p class="set-msg" id="ai-status" role="status"></p>
           <div id="ai-result"></div>
@@ -1198,8 +1302,8 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
 
     <section class="card full" id="sec-chores" data-view="chores" aria-labelledby="h-tasks">
       <h2 id="h-tasks"><span class="dot"></span><span data-i="tasksTitle"></span></h2>
-      <div class="adult-only"><button class="btn big" id="add-toggle" type="button" aria-expanded="false" aria-controls="add-panel" data-i="addToggle"></button></div>
-      <div id="add-panel" class="add-panel adult-only" hidden>
+      <div class="adult-only teen-ok"><button class="btn big" id="add-toggle" type="button" aria-expanded="false" aria-controls="add-panel" data-i="addToggle"></button></div>
+      <div id="add-panel" class="add-panel adult-only teen-ok" hidden>
         <div class="add-mode" role="group" aria-label="Add">
           <button type="button" id="own-toggle" aria-pressed="false" aria-controls="own-wrap" data-i="ownTask"></button>
           <button type="button" id="pick-toggle" aria-pressed="true" data-i="pickTask"></button>
@@ -1216,6 +1320,10 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <div class="fld"><span class="lbl" id="k-min-l" data-i="kHowLong"></span><div class="seg" id="k-min-seg" role="group" aria-labelledby="k-min-l"><button type="button" data-min="5" aria-pressed="false">5</button><button type="button" data-min="10" aria-pressed="false">10</button><button type="button" data-min="15" aria-pressed="false">15</button><button type="button" data-min="20" aria-pressed="false">20</button><button type="button" data-min="30" aria-pressed="false">30</button><button type="button" data-min="45" aria-pressed="false">45</button><button type="button" data-min="60" aria-pressed="false">60</button></div><div class="min-row"><input id="k-min" type="number" min="1" max="600" value="15" inputmode="numeric" aria-labelledby="k-min-l"><span class="meta" data-i="kMinUnit"></span></div></div>
         <details class="more-opts" id="k-more"><summary data-i="moreOpts"></summary>
           <div class="task-form more-in">
+            <div class="fld"><span class="lbl" id="k-effort-l" data-i="kEffort"></span><div class="seg" data-for="k-effort" role="group" aria-labelledby="k-effort-l"></div><select id="k-effort" class="seg-src" aria-hidden="true" tabindex="-1"></select></div>
+            <div class="fld"><span class="lbl" id="k-mental-l" data-i="kMental"></span><div class="seg" data-for="k-mental" role="group" aria-labelledby="k-mental-l"></div><select id="k-mental" class="seg-src" aria-hidden="true" tabindex="-1"></select><p class="fld-hint" data-i="kMentalHint"></p></div>
+            <div class="fld"><span class="lbl" id="k-kind-l" data-i="kKind"></span><div class="seg" data-for="k-kind" role="group" aria-labelledby="k-kind-l"></div><select id="k-kind" class="seg-src" aria-hidden="true" tabindex="-1"></select></div>
+            <div class="fld" id="k-lead-row"><span class="lbl" id="k-lead-l" data-i="kLead"></span><div class="seg" data-for="k-lead" role="group" aria-labelledby="k-lead-l"></div><select id="k-lead" class="seg-src" aria-hidden="true" tabindex="-1"></select><p class="fld-hint" data-i="kLeadHint"></p></div>
             <div class="fld"><label for="k-cat" data-i="category"></label><select id="k-cat"></select></div>
             <div class="fld"><label for="k-stars" data-i="starsLabel"></label><input id="k-stars" type="number" min="0" max="10" value="1" inputmode="numeric"></div>
             <div class="fld"><label for="k-note" data-i="noteLabel"></label><input id="k-note" maxlength="200"></div>
@@ -1307,7 +1415,7 @@ const LOCAL_MODE = DEMO;
 /* ---------- Text ---------- */
 const T = {
   en: {
-    title: "Household Balance", sub: "Make the invisible work of family life visible, and share it fairly.",
+    title: "Household Balance", sub: "The smart family assistant that makes all the housework visible and helps your household share it fairly.", subShort: "Make all the housework visible and share it fairly.",
     loadTitle: "How are we sharing the work?", membersTitle: "Family members", name: "Name", add: "Add",
     tasksTitle: "All chores", taskName: "Chore", owner: "Responsible", category: "Area", minutes: "Time (min)",
     addTask: "Add chore", leaveTitle: "Parental leave days", leaveNote: "Days taken, per family member. The figures are for your own planning.",
@@ -1364,7 +1472,7 @@ const T = {
     memInvite: "Invite the family", memNoAcc: "+ Add someone without an account", noAccLabel: "No account",
     calLinkTitle: "Calendar on your phone", calHint: "Chores with a day or time, activities, events and birthdays show up in your normal calendar and update by themselves.", calMake: "Turn on the calendar link", calLinkWho: "Show", calAll: "The whole family", calApple: "Add to Apple Calendar", calGoogle: "Add to Google Calendar", calCopy: "Copy link", calCopied: "Link copied!", calNew: "Change link", calNewSure: "Old link stops working. Tap again", calNote: "Anyone with the link can see the family calendar. Change the link if it ends up in the wrong place.", calAskOwner: "Ask the guardian to turn on the calendar link.",
     streakDays: "{n} days in a row", trendTitle: "Fairness over time", trendUp: "From {a} to {b} since week {w}", trendDown: "From {a} to {b} since week {w}. Talk about it under Week.", trendSame: "Steady at {b} since week {w}", trendShare: "{name}: {a} % → {b} %",
-    meetStart: "Start the weekly meeting", meetCardTitle: "Time for the weekly meeting", meetCardHint: "Five minutes together: how did the week go, and who does what next week?", meetLater: "Not now",
+    meetStart: "Start the weekly meeting", meetCardTitle: "Time for the weekly meeting", meetCardHint: "Five minutes together: how did the week go, and who does what next week? Ends with a suggested split for next week.", meetLater: "Not now",
     meetStep: "Step {n} of {total}", meetNext: "Next", meetBack: "Back", meetDone: "Done",
     meet1Title: "How did the week go?", meet1Done: "{n} chores done", meet1Best: "Most ticked off: {name} ({n})", meet1None: "Nothing ticked off this week yet. A new week is a new chance.", meet1Fair: "Fairness this week: {s} of 100",
     meet2Title: "Next week", meet2Hint: "Planned time per person, from the chores you have now.", meet2Move: "Move", meet2Moved: "Moved {task} to {to}.", meet2Ok: "Looks evenly shared. Nice.",
@@ -1374,6 +1482,35 @@ const T = {
     pocketTitle: "Pocket money", pocketHint: "Turn stars into money. Leave at 0 to switch it off.", pocketRate: "Kronor per star", pocketSave: "Save",
     pocketOwed: "{kr} kr to pay out", pocketNone: "Nothing to pay out", pocketPay: "Paid {kr} kr", pocketPaidToast: "Paid {kr} kr to {name}", pocketKid: "You have earned {kr} kr",
     mfaTitle: "Two-step sign-in", mfaHint: "Extra protection for adults: besides the password you type a code from an authenticator app (for example Google Authenticator or 1Password).", mfaOn: "Two-step sign-in is on.", mfaOff: "Turn on two-step sign-in", mfaDisable: "Turn off", mfaScan: "Scan the code with your authenticator app, or type the key by hand. Then type the 6-digit code it shows.", mfaKey: "Key: {k}", mfaCode: "6-digit code", mfaConfirm: "Confirm", mfaDone: "Two-step sign-in is now on.", mfaRemoved: "Two-step sign-in is turned off.", mfaBad: "The code did not match. Try the newest code.", mfaNeedFresh: "Sign in again with your code first, then you can turn it off.", mfaUnavailable: "Two-step sign-in is not available right now.",
+    mq2Title: "Who had the most work?", mq2Hint: "Both what each person does and what they keep track of.", mq3Title: "What didn't get done?", mq3None: "Everything got done. Nice!",
+    mq3Hint: "These are included when you share out next week.", mq4Title: "What needs to move?", mq4Hint: "Someone with a lot going on next week may need fewer chores.", mq4Busy: "{h} hours of activities next week",
+    mq5Title: "What's happening next week?", mq6Title: "How do we share it?", mq6Hint: "The suggestion weighs time, effort, keeping track and what each person has going on.", mq6Create: "Create next week",
+    mq6Changes: "Suggestion: {n} chores change hands", mq6Same: "The split already looks good. Nothing needs to change.", mq6Score: "Fairness: {a} → {b} of 100", mq6Use: "Use the suggestion", mq6Keep: "Keep it as it is",
+    mq6Done: "Done! Next week is shared out.", mq6Kept: "Kept as it is.",
+    teenLabel: "Teen 13–17", teenHint: "Teens see all chores, can always tick off their own and can add chores of their own.", colorN: "Colour {n} for {name}",
+    reportBtn: "Report", flagTitle: "Report", reportWhy: "What is wrong?", whys: { unsafe: "Inappropriate", mean: "Mean or nagging", threat: "Threat", spam: "Spam", other: "Something else" },
+    reportMute: "Hide everything from {name} on this phone", reportHint: "A guardian in the household will see it. No one else.", reportSend: "Send", reportThanks: "Thank you. A guardian will see it.",
+    reportHelp: "Feeling scared or threatened? Talk to an adult you trust. If it's urgent, call 112.",
+    reportsTitle: "Reports", reportsHint: "Someone in the household thought this was wrong.", reportBy: "{by} reported {author}: {why}", reportRemove: "Remove the post", reportDismiss: "Nothing to do",
+    reportGone: "The post is already removed.", modLogTitle: "Latest actions", modRemoved: "{by} removed a post by {author}", modDismissed: "{by} closed a report about {author}",
+    reportsBanner: "New reports to look at: {n}", reportsOpen: "Show", mutedTitle: "Hidden people", mutedHint: "Their posts and comments don't show on this phone.", unmute: "Show again",
+    simpleToggle: "Simple view", simpleHint: "Large text, large buttons and only what matters: what you need to do today. Applies to this phone.",
+    simpleQ: "What should I do now?", simpleLeft: "{n} things to do today", simpleLeft1: "1 thing to do today", simpleAllDone: "Everything is done for today. Well done!", simpleNothing: "Nothing to do today.",
+    simpleDoneH: "Done today", simpleRead: "Read aloud", simpleShop: "Shopping list", simpleExit: "Normal view",
+    voiceOpen: "Say something", voiceTitle: "Say what you want to do", voiceHint: "For example:", voiceEx: ["Add wash the car on Saturday", "What should I do today?", "The dishes are done", "Buy milk"],
+    voiceListen: "Tap and talk", voiceListening: "Listening …", voiceHeard: "You said: “{t}”", voiceType: "Or type it", voiceDo: "Do it",
+    voicePrivacy: "Speech is turned into text by your phone's or browser's speech recognition (Apple or Google). The app keeps no audio.", voiceNoMic: "The microphone could not be used. Type instead.",
+    voiceAdded: "Added “{t}”{when}{who}.", voiceWho: " for {n}", voiceLeft: "You have {n} things left: {list}.", voiceLeft1: "You have one thing left: {list}.", voiceNone: "You have nothing left today.",
+    voiceTicked: "Great! “{t}” is done.", voiceAlready: "“{t}” was already done.", voiceNoTask: "I couldn't find a chore called “{t}”.", voiceShop: "Added {t} to the shopping list.",
+    voiceNotAllowed: "Only adults can do that.", voiceUnknown: "I didn't get that. Try for example “What should I do today?”", listAnd: " and ",
+    calWidgetTip: "Tip: add the link to your phone's calendar, and the chores show up in the calendar widget on your home screen.",
+    hhTypeQ: "What kind of household are you?", hhTypes: { family: "Family", couple: "Couple", shared: "Shared home", single: "Living alone", other: "Other" }, setHhType: "Kind of household", nameNick: "Name or nickname",
+    calInclKids: "Children's chores, activities and birthdays",
+    kEffort: "How hard is it?", effortOpts: ["Easy", "Normal", "Hard"], kMental: "How much do you have to keep in mind?", mentalOpts: ["Nothing", "Some", "A lot"],
+    kMentalHint: "Planning, remembering and booking is work too, even when no one sees it.", kKind: "What is it mostly?", kindOpts: { do: "Doing", plan: "Planning", remember: "Remembering", buy: "Buying", book: "Booking" },
+    kLead: "Who keeps track of it?", leadSame: "The one who does it", kLeadHint: "The one who makes sure it happens, even if someone else does it.",
+    loadDoThink: "Does about {do} min/week · keeps track ≈ {think} min", loadDo: "Does about {do} min/week", loadLegend: "Solid part: doing. Striped part: planning and remembering.",
+    insightLead: "{name} doesn't do the most chores, but keeps track of {pct}% of what has to be planned and remembered.", leadPill: "{name} keeps track", mentalPill: "Keep in mind",
     mfaLoginTitle: "Two-step sign-in", mfaLoginHint: "Type the 6-digit code from your authenticator app.", mfaContinue: "Continue", mfaCancel: "Sign out",
     setRewards: "Use stars and rewards", setRewardsHint: "Turn off if your household does not want a reward system.",
     calIncl: "Show in the calendar:", calInclChores: "Chores", calInclActs: "Activities and events", calInclBdays: "Birthdays",
@@ -1384,7 +1521,8 @@ const T = {
     startCreate: "Create the household", startDoneTitle: "You're up and running!", startDoneHint: "Everything is set. Know another family who argues about the dishes?",
     tipBtn: "Tell another family", tipText: "We use Household Balance to share the chores at home fairly. Free to try:", tipCopied: "Link copied!", tipTitle: "Know another family?", tipHint: "Glad it works for you! Tips from one family to another is how the app grows.",
     skipLink: "Skip to content", close: "Close", stepDone: "done",
-    why: [["⚖️", "rgba(0,104,217,.14)", "Fair at home", "See who does what, and share it out evenly with one tap."], ["⭐", "rgba(255,204,0,.25)", "Children join in", "Their own list, stars and rewards that motivate."], ["🛒", "rgba(52,199,89,.18)", "Shopping and dinners", "A shared list and the week's dinners in one place."]],
+    why: [["⚖️", "rgba(0,104,217,.14)", "Fair for real", "Counts time, effort and the invisible work: planning, remembering and booking."], ["🗓️", "rgba(52,199,89,.18)", "Everything in one place", "Chores, calendar, shopping and dinners, for every kind of household."], ["🔒", "rgba(88,86,214,.16)", "Private from the start", "No ads. No public profiles. Children's data stays in the household."]],
+    promise: "No ads. No selling of personal data. No public profiles. Children's data stays in the household.", promiseTitle: "Our promise", promisePolicy: "How we handle your data",
     demoStart: "Try with an example family", demoText: "You are trying an example family. Nothing is saved.", demoSignup: "Create my own", demoReset: "Start over",
     withApple: "Continue with Apple", withGoogle: "Continue with Google", orEmail: "or with email", oauthConsent: "By continuing you accept the {terms} and the {privacy}.",
     magicUse: "Email me a sign-in link instead", magicBack: "Use a password instead", magicSend: "Send link", magicSent: "Check your email and tap the link to sign in.", magicNotReady: "Sign-in links are not available yet. Use a password.",
@@ -1431,7 +1569,10 @@ const T = {
     syncOffline: "Offline. Saves when you are back online.", mineTitle: "My own things", mineHint: "Only you can see these. They do not count as chores.", mineWhat: "What do you need to do?", mineEmpty: "Nothing for today.",
     mineMore: "Show coming up ({n})", mineLess: "Hide coming up", mineNeedsSql: "Run the SQL file update-4 in Supabase to use your own things.",
     aiOpen: "✨ Help me plan the week", aiDescribe: "Describe how the food should be", aiPh: "E.g. lactose free, one of us is gluten free, two kids who dislike vegetables but should start eating more, max 30 minutes on weekdays",
-    aiGo: "Plan the week", aiWorking: "Planning this week's dinners …", aiUse: "Use this plan", aiAgain: "Make a new suggestion", aiStaple: "basic", aiWarn: "Always check ingredients and packaging for allergies or coeliac disease.",
+    aiGo: "Plan the week", aiWorking: "Planning this week's dinners …", aiUse: "Use this plan", aiAgain: "Make a new suggestion", aiStaple: "basic", aiWarn: "AI can be wrong. Always check allergens and ingredients on the packaging.",
+    aiAllergy: "Allergies and things that must not be included", aiBudget: "Budget for the week's dinners (SEK, optional)", aiContains: "Contains: {list}", aiCost: "about {n} SEK",
+    aiTotal: "About {n} SEK for the week's dinners (estimated by the AI).", aiAlert: "May contain {list}, which you asked to avoid. Choose another dish or check carefully.",
+    allergenNames: { gluten: "gluten", milk: "milk", egg: "egg", nuts: "nuts", peanuts: "peanuts", fish: "fish", shellfish: "shellfish", soy: "soy", celery: "celery", mustard: "mustard", sesame: "sesame" },
     aiApplied: "This week's dinners are planned", aiNotSetup: "The AI help is not set up yet. Follow the guide to add the key and the function.", aiLimit: "Today's limit for AI planning is reached (15 per person). Try again tomorrow.",
     aiNotAllowed: "Only adults can use AI planning.", aiNoCredit: "The AI credit has run out. Top up in the Anthropic console.", aiBadKey: "The AI key is wrong. Check ANTHROPIC_API_KEY in Supabase.",
     aiError: "The AI could not make a plan right now. Try again.", aiNet: "No contact with the AI service. Check your connection.", mealStaples: "Basics: {x}",
@@ -1461,7 +1602,7 @@ const T = {
     setNameEmpty: "The name cannot be empty."
   },
   sv: {
-    title: "Hushållsbalans", sub: "Gör familjelivets osynliga arbete synligt och dela det rättvist.",
+    title: "Hushållsbalans", sub: "Den smarta familjeassistenten som gör hela hushållsarbetet synligt och hjälper hushållet att dela det rättvist.", subShort: "Gör hela hushållsarbetet synligt och dela det rättvist.",
     loadTitle: "Hur delar vi på arbetet?", membersTitle: "Familjemedlemmar", name: "Namn", add: "Lägg till",
     tasksTitle: "Alla sysslor", taskName: "Syssla", owner: "Ansvarig", category: "Område", minutes: "Tid (min)",
     addTask: "Lägg till syssla", leaveTitle: "Dagar med föräldrapenning", leaveNote: "Antal uttagna dagar per familjemedlem. Siffrorna är till för er egen planering.",
@@ -1518,7 +1659,7 @@ const T = {
     memInvite: "Bjud in familjen", memNoAcc: "+ Lägg till någon utan konto, t.ex. ett litet barn", noAccLabel: "Utan konto",
     calLinkTitle: "Kalendern i telefonen", calHint: "Sysslor med dag eller tid, aktiviteter, händelser och födelsedagar syns i din vanliga kalender och uppdateras av sig själva.", calMake: "Slå på kalenderlänken", calLinkWho: "Visa", calAll: "Hela familjen", calApple: "Lägg till i Apple-kalendern", calGoogle: "Lägg till i Google Kalender", calCopy: "Kopiera länk", calCopied: "Länk kopierad!", calNew: "Byt länk", calNewSure: "Gamla länken slutar fungera. Tryck igen", calNote: "Alla som har länken kan se familjens kalender. Byt länk om den hamnat fel.", calAskOwner: "Be vårdnadshavaren slå på kalenderlänken.",
     streakDays: "{n} dagar i rad", trendTitle: "Rättvisan över tid", trendUp: "Från {a} till {b} sedan vecka {w}", trendDown: "Från {a} till {b} sedan vecka {w}. Prata om det under Vecka.", trendSame: "Stabilt på {b} sedan vecka {w}", trendShare: "{name}: {a} % → {b} %",
-    meetStart: "Starta veckomötet", meetCardTitle: "Dags för veckomöte", meetCardHint: "Fem minuter tillsammans: hur gick veckan, och vem gör vad nästa vecka?", meetLater: "Inte nu",
+    meetStart: "Starta veckomötet", meetCardTitle: "Dags för veckomöte", meetCardHint: "Fem minuter tillsammans: hur gick veckan, och vem gör vad nästa vecka? Slutar med ett förslag på fördelning.", meetLater: "Inte nu",
     meetStep: "Steg {n} av {total}", meetNext: "Nästa", meetBack: "Tillbaka", meetDone: "Klart",
     meet1Title: "Hur gick veckan?", meet1Done: "{n} sysslor gjorda", meet1Best: "Flest avbockade: {name} ({n})", meet1None: "Inget avbockat den här veckan än. Ny vecka, ny chans.", meet1Fair: "Rättvisa den här veckan: {s} av 100",
     meet2Title: "Nästa vecka", meet2Hint: "Planerad tid per person, utifrån sysslorna ni har nu.", meet2Move: "Flytta", meet2Moved: "Flyttade {task} till {to}.", meet2Ok: "Ser jämnt fördelat ut. Snyggt.",
@@ -1528,6 +1669,35 @@ const T = {
     pocketTitle: "Fickpengar", pocketHint: "Gör stjärnor till pengar. Låt stå på 0 för att stänga av.", pocketRate: "Kronor per stjärna", pocketSave: "Spara",
     pocketOwed: "{kr} kr att betala ut", pocketNone: "Inget att betala ut", pocketPay: "Betalat {kr} kr", pocketPaidToast: "Betalade {kr} kr till {name}", pocketKid: "Du har tjänat {kr} kr",
     mfaTitle: "Tvåstegsverifiering", mfaHint: "Extra skydd för vuxna: utöver lösenordet skriver du en kod från en autentiseringsapp (till exempel Google Authenticator eller 1Password).", mfaOn: "Tvåstegsverifiering är på.", mfaOff: "Slå på tvåstegsverifiering", mfaDisable: "Stäng av", mfaScan: "Skanna koden med din autentiseringsapp, eller skriv in nyckeln för hand. Skriv sedan den sexsiffriga koden som visas.", mfaKey: "Nyckel: {k}", mfaCode: "Sexsiffrig kod", mfaConfirm: "Bekräfta", mfaDone: "Tvåstegsverifiering är nu på.", mfaRemoved: "Tvåstegsverifiering är avstängd.", mfaBad: "Koden stämde inte. Prova den senaste koden.", mfaNeedFresh: "Logga in igen med din kod först, sedan kan du stänga av.", mfaUnavailable: "Tvåstegsverifiering går inte att använda just nu.",
+    mq2Title: "Vem hade mest arbete?", mq2Hint: "Både det var och en gör och det de håller koll på.", mq3Title: "Vad blev inte gjort?", mq3None: "Allt blev gjort. Snyggt!",
+    mq3Hint: "Det här tas med när ni delar upp nästa vecka.", mq4Title: "Vad behöver flyttas?", mq4Hint: "Den som har mycket på gång nästa vecka kan behöva färre sysslor.", mq4Busy: "{h} timmar aktiviteter nästa vecka",
+    mq5Title: "Vad händer nästa vecka?", mq6Title: "Hur delar vi på det?", mq6Hint: "Förslaget väger tid, ansträngning, att hålla koll och vad var och en har på gång.", mq6Create: "Skapa nästa vecka",
+    mq6Changes: "Förslag: {n} sysslor byter person", mq6Same: "Fördelningen ser redan bra ut. Inget behöver ändras.", mq6Score: "Rättvisa: {a} → {b} av 100", mq6Use: "Använd förslaget", mq6Keep: "Behåll som det är",
+    mq6Done: "Klart! Nästa vecka är uppdelad.", mq6Kept: "Ni behåller det som det är.",
+    teenLabel: "Ungdom 13–17", teenHint: "Ungdomar ser alla sysslor, kan alltid bocka av sina egna och kan lägga till egna sysslor.", colorN: "Färg {n} för {name}",
+    reportBtn: "Rapportera", flagTitle: "Rapportera", reportWhy: "Vad är fel?", whys: { unsafe: "Olämpligt", mean: "Elakt eller tjat", threat: "Hot", spam: "Skräp", other: "Något annat" },
+    reportMute: "Dölj allt från {name} på den här telefonen", reportHint: "En vårdnadshavare i hushållet får se det. Ingen annan.", reportSend: "Skicka", reportThanks: "Tack. En vårdnadshavare får se det.",
+    reportHelp: "Känner du dig rädd eller hotad? Prata med en vuxen du litar på. Är det akut, ring 112. Barn och unga kan också ringa Bris på 116 111.",
+    reportsTitle: "Rapporter", reportsHint: "Någon i hushållet tyckte att det här var fel.", reportBy: "{by} rapporterade {author}: {why}", reportRemove: "Ta bort inlägget", reportDismiss: "Inget att göra",
+    reportGone: "Inlägget är redan borttaget.", modLogTitle: "Senaste åtgärder", modRemoved: "{by} tog bort ett inlägg av {author}", modDismissed: "{by} stängde en rapport om {author}",
+    reportsBanner: "Nya rapporter att titta på: {n}", reportsOpen: "Visa", mutedTitle: "Dolda personer", mutedHint: "Deras inlägg och kommentarer syns inte på den här telefonen.", unmute: "Visa igen",
+    simpleToggle: "Enkel visning", simpleHint: "Stor text, stora knappar och bara det viktigaste: vad du ska göra i dag. Gäller den här telefonen.",
+    simpleQ: "Vad ska jag göra nu?", simpleLeft: "{n} saker att göra i dag", simpleLeft1: "1 sak att göra i dag", simpleAllDone: "Allt är klart för i dag. Bra jobbat!", simpleNothing: "Inget att göra i dag.",
+    simpleDoneH: "Gjort i dag", simpleRead: "Läs upp", simpleShop: "Inköpslistan", simpleExit: "Vanlig visning",
+    voiceOpen: "Säg något", voiceTitle: "Säg vad du vill göra", voiceHint: "Till exempel:", voiceEx: ["Lägg till tvätta bilen på lördag", "Vad ska jag göra i dag?", "Diska är klar", "Köp mjölk"],
+    voiceListen: "Tryck och prata", voiceListening: "Lyssnar …", voiceHeard: "Du sa: ”{t}”", voiceType: "Eller skriv det", voiceDo: "Gör det",
+    voicePrivacy: "Talet blir text med hjälp av telefonens eller webbläsarens taligenkänning (Apple eller Google). Appen sparar inget ljud.", voiceNoMic: "Mikrofonen gick inte att använda. Skriv i stället.",
+    voiceAdded: "La till ”{t}”{when}{who}.", voiceWho: " åt {n}", voiceLeft: "Du har {n} saker kvar: {list}.", voiceLeft1: "Du har en sak kvar: {list}.", voiceNone: "Du har inget kvar i dag.",
+    voiceTicked: "Bra! ”{t}” är klar.", voiceAlready: "”{t}” var redan klar.", voiceNoTask: "Hittade ingen syssla som heter ”{t}”.", voiceShop: "La till {t} på inköpslistan.",
+    voiceNotAllowed: "Det får bara vuxna göra.", voiceUnknown: "Det förstod jag inte. Prova till exempel ”Vad ska jag göra i dag?”", listAnd: " och ",
+    calWidgetTip: "Tips: lägg till länken i telefonens kalender, så syns sysslorna i kalenderns widget på hemskärmen.",
+    hhTypeQ: "Vilken typ av hushåll är ni?", hhTypes: { family: "Familj", couple: "Par", shared: "Delat boende", single: "Bor ensam", other: "Annat" }, setHhType: "Typ av hushåll", nameNick: "Namn eller smeknamn",
+    calInclKids: "Barnens sysslor, aktiviteter och födelsedagar",
+    kEffort: "Hur jobbig är den?", effortOpts: ["Lätt", "Normal", "Jobbig"], kMental: "Hur mycket måste man hålla i huvudet?", mentalOpts: ["Inget", "Lite", "Mycket"],
+    kMentalHint: "Att planera, komma ihåg och boka är också arbete, även när ingen ser det.", kKind: "Vad är det mest?", kindOpts: { do: "Göra", plan: "Planera", remember: "Komma ihåg", buy: "Köpa", book: "Boka" },
+    kLead: "Vem håller koll på den?", leadSame: "Den som gör den", kLeadHint: "Den som ser till att det blir gjort, även om någon annan gör det.",
+    loadDoThink: "Gör ca {do} min/vecka · håller koll ≈ {think} min", loadDo: "Gör ca {do} min/vecka", loadLegend: "Fylld del: göra. Randig del: planera och komma ihåg.",
+    insightLead: "{name} gör inte flest sysslor, men håller koll på {pct} % av det som ska planeras och kommas ihåg.", leadPill: "{name} håller koll", mentalPill: "Att hålla i huvudet",
     mfaLoginTitle: "Tvåstegsverifiering", mfaLoginHint: "Skriv den sexsiffriga koden från din autentiseringsapp.", mfaContinue: "Fortsätt", mfaCancel: "Logga ut",
     setRewards: "Använd stjärnor och belöningar", setRewardsHint: "Stäng av om ert hushåll inte vill ha ett belöningssystem.",
     calIncl: "Visa i kalendern:", calInclChores: "Sysslor", calInclActs: "Aktiviteter och händelser", calInclBdays: "Födelsedagar",
@@ -1538,7 +1708,8 @@ const T = {
     startCreate: "Skapa hushållet", startDoneTitle: "Nu är ni igång!", startDoneHint: "Allt är klart. Känner du en familj som också bråkar om disken?",
     tipBtn: "Tipsa en annan familj", tipText: "Vi använder Hushållsbalans för att dela på sysslorna hemma rättvist. Gratis att prova:", tipCopied: "Länk kopierad!", tipTitle: "Känner du en annan familj?", tipHint: "Kul att den fungerar för er! Tips från familj till familj är hur appen växer.",
     skipLink: "Hoppa till innehållet", close: "Stäng", stepDone: "klart",
-    why: [["⚖️", "rgba(0,104,217,.14)", "Rättvist hemma", "Se vem som gör vad, och fördela jämnt med ett tryck."], ["⭐", "rgba(255,204,0,.25)", "Barnen är med", "Egen lista, stjärnor och belöningar som peppar."], ["🛒", "rgba(52,199,89,.18)", "Inköp och middagar", "Gemensam inköpslista och veckans middagar på ett ställe."]],
+    why: [["⚖️", "rgba(0,104,217,.14)", "Rättvist på riktigt", "Räknar tid, ansträngning och det osynliga: att planera, komma ihåg och boka."], ["🗓️", "rgba(52,199,89,.18)", "Allt på ett ställe", "Sysslor, kalender, inköp och middagar, för alla sorters hushåll."], ["🔒", "rgba(88,86,214,.16)", "Privat från början", "Ingen reklam. Inga offentliga profiler. Barnens data stannar inom hushållet."]],
+    promise: "Ingen reklam. Ingen försäljning av personuppgifter. Inga offentliga profiler. Barnens data stannar inom hushållet.", promiseTitle: "Vårt löfte", promisePolicy: "Så hanterar vi era uppgifter",
     demoStart: "Prova med en exempelfamilj", demoText: "Du provar med en exempelfamilj. Inget sparas.", demoSignup: "Skapa egen", demoReset: "Börja om",
     withApple: "Fortsätt med Apple", withGoogle: "Fortsätt med Google", orEmail: "eller med e-post", oauthConsent: "Genom att fortsätta godkänner du {terms} och {privacy}.",
     magicUse: "Skicka en inloggningslänk till min e-post i stället", magicBack: "Använd lösenord i stället", magicSend: "Skicka länk", magicSent: "Titta i din e-post och tryck på länken för att logga in.", magicNotReady: "Inloggningslänkar fungerar inte än. Använd lösenord.",
@@ -1585,7 +1756,10 @@ const T = {
     syncOffline: "Offline. Sparas när nätet är tillbaka.", mineTitle: "Mina egna saker", mineHint: "Bara du ser dessa. De räknas inte som sysslor.", mineWhat: "Vad behöver du göra?", mineEmpty: "Inget för idag.",
     mineMore: "Visa kommande ({n})", mineLess: "Dölj kommande", mineNeedsSql: "Kör SQL-filen update-4 i Supabase för att använda egna saker.",
     aiOpen: "✨ Hjälp mig planera veckan", aiDescribe: "Beskriv hur maten ska vara", aiPh: "T.ex. laktosfritt, en av oss äter glutenfritt, två barn som inte gillar grönsaker men ska börja äta mer, max 30 minuter på vardagar",
-    aiGo: "Planera veckan", aiWorking: "Planerar veckans middagar …", aiUse: "Använd planen", aiAgain: "Gör ett nytt förslag", aiStaple: "basvara", aiWarn: "Kontrollera alltid ingredienser och förpackningar vid allergi eller celiaki.",
+    aiGo: "Planera veckan", aiWorking: "Planerar veckans middagar …", aiUse: "Använd planen", aiAgain: "Gör ett nytt förslag", aiStaple: "basvara", aiWarn: "AI kan ha fel. Kontrollera alltid allergener och ingredienser på förpackningen.",
+    aiAllergy: "Allergier och sådant som inte får ingå", aiBudget: "Budget för veckans middagar (kr, valfritt)", aiContains: "Innehåller: {list}", aiCost: "ca {n} kr",
+    aiTotal: "Ungefär {n} kr för veckans middagar (uppskattat av AI).", aiAlert: "Kan innehålla {list}, som ni vill undvika. Välj en annan rätt eller kontrollera noga.",
+    allergenNames: { gluten: "gluten", milk: "mjölk", egg: "ägg", nuts: "nötter", peanuts: "jordnötter", fish: "fisk", shellfish: "skaldjur", soy: "soja", celery: "selleri", mustard: "senap", sesame: "sesam" },
     aiApplied: "Veckans middagar är planerade", aiNotSetup: "AI-hjälpen är inte uppsatt än. Följ guiden för att lägga in nyckeln och funktionen.", aiLimit: "Dagens gräns för AI-planering är nådd (15 per person). Försök igen i morgon.",
     aiNotAllowed: "Bara vuxna kan använda AI-planeringen.", aiNoCredit: "AI-krediten är slut. Fyll på i Anthropic-konsolen.", aiBadKey: "AI-nyckeln stämmer inte. Kontrollera ANTHROPIC_API_KEY i Supabase.",
     aiError: "AI:n kunde inte göra en plan just nu. Försök igen.", aiNet: "Ingen kontakt med AI-tjänsten. Kontrollera nätet.", mealStaples: "Basvaror: {x}",
@@ -1618,6 +1792,28 @@ const T = {
 
 const COLORS = ["var(--m0)", "var(--m1)", "var(--m2)", "var(--m3)", "var(--m4)", "var(--m5)"];
 
+const HH_WORDS = {
+  sv: { membersTitle: "Vi som bor här", scoreNeed: "Lägg till minst två personer och några sysslor för att se poängen.", tabFamily: "Hushåll", calTitle: "Hushållets vecka",
+    memInvite: "Bjud in de andra", calAll: "Hela hushållet", calNote: "Alla som har länken kan se hushållets kalender. Byt länk om den hamnat fel.",
+    startDoneHint: "Allt är klart. Känner du fler som också bråkar om disken?", tipBtn: "Tipsa någon annan", tipTitle: "Känner du fler som skulle gilla appen?",
+    tipHint: "Kul att den fungerar för er! Tips från hushåll till hushåll är hur appen växer.", startFamily: "Lägg till de andra", invTitle: "Bjud in de andra", g2Title: "Bjud in de andra",
+    msNoneAdult: "Lägg till belöningar under Hushåll så får stjärnorna ett mål.", actsHint: "Till exempel tennisträning varje tisdag kl 15. De syns i hushållets kalender.",
+    aboutHint: "Lägg till din födelsedag och dina fasta aktiviteter, så syns de i hushållets kalender. Du kan ändra allt senare under Hushåll → Profiler.", g1Title: "Vilka bor här?" },
+  en: { membersTitle: "Who lives here", scoreNeed: "Add at least two people and some chores to see your score.", tabFamily: "Household", calTitle: "The household's week",
+    memInvite: "Invite the others", calAll: "The whole household", calNote: "Anyone with the link can see the household calendar. Change the link if it ends up in the wrong place.",
+    startDoneHint: "Everything is set. Know others who argue about the dishes?", tipBtn: "Tell someone else", tipTitle: "Know others who would like the app?",
+    tipHint: "Glad it works for you! Tips from one household to another is how the app grows.", startFamily: "Add the others", invTitle: "Invite the others", g2Title: "Invite the others",
+    msNoneAdult: "Add rewards under Household to give the stars a goal.", actsHint: "For example tennis practice every Tuesday at 15:00. They show up in the household calendar.",
+    aboutHint: "Add your birthday and your weekly activities so they show up in the household calendar. You can change everything later under Household → Profiles.", g1Title: "Who lives here?" }
+};
+const HH_ORIG = { sv: {}, en: {} };
+function isFamilyHh() { return ["", "family"].includes(settings().hhType || ""); }
+function applyHhWords() {
+  ["sv", "en"].forEach(l => Object.keys(HH_WORDS[l]).forEach(k => {
+    if (!(k in HH_ORIG[l])) HH_ORIG[l][k] = T[l][k];
+    T[l][k] = isFamilyHh() ? HH_ORIG[l][k] : HH_WORDS[l][k];
+  }));
+}
 const HOUSEHOLD = [
   { sv: "Dammsuga", en: "Vacuum", c: 2, m: 20 },
   { sv: "Moppa golv", en: "Mop floors", c: 2, m: 20 },
@@ -1704,6 +1900,17 @@ function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 let draft = lsGet("hb-draft") || "";
 function isChild() { return !LOCAL_MODE && !!hh && hh.role === "child"; }
 function isOwner() { return LOCAL_MODE || (!!hh && hh.role === "owner"); }
+/* features the database supports (the app hides them until the database is updated) */
+var serverFeatures = null;
+function hasFeature(f) { return LOCAL_MODE || (Array.isArray(serverFeatures) && serverFeatures.includes(f)); }
+async function loadFeatures() {
+  if (LOCAL_MODE) return;
+  try { const { data, error } = await sb.rpc("hb_features"); serverFeatures = !error && Array.isArray(data) ? data : []; }
+  catch (e) { serverFeatures = []; }
+  if (state) renderAll();
+}
+/* teen mode (13-17): set by an adult on a child's profile */
+function isTeen() { return isChild() && hasFeature("teen") && !!(state && memberById(hh.memberId) || {}).teen; }
 function setSyncStatus(key) {
   document.getElementById("sync-status").textContent = key ? T[lang][key] : "";
 }
@@ -1769,13 +1976,13 @@ window.addEventListener("pagehide", flushSave);
 document.addEventListener("visibilitychange", () => { if (document.hidden) flushSave(); });
 
 /* ---------- Shared household (cloud) ---------- */
-const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true, parentConsent: "", calToken: "", rewardsOff: false, calChores: true, calActs: true, calBdays: true };
+const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true, parentConsent: "", calToken: "", rewardsOff: false, calChores: true, calActs: true, calBdays: true, calKids: false, hhType: "" };
 function settings() { return { ...SETTINGS_DEFAULT, ...((state && state.settings) || {}) }; }
 const SAFE_ID = /^[A-Za-z0-9_-]{1,64}$/;
 function safeList(a) { return (Array.isArray(a) ? a : []).filter(x => x && typeof x === "object" && SAFE_ID.test(String(x.id))); }
 function cleanData(o) {
   // data is shared between family members: ids end up inside HTML attributes, so only plain ids and real numbers get through
-  ["members", "tasks", "checkins", "shopping", "swaps", "starLog", "doneLog", "rewards", "redeems", "starResets", "comments", "timeLog", "rewardsGiven", "board", "payouts"].forEach(key => { o[key] = safeList(o[key]); });
+  ["members", "tasks", "checkins", "shopping", "swaps", "starLog", "doneLog", "rewards", "redeems", "starResets", "comments", "timeLog", "rewardsGiven", "board", "payouts", "reports", "modLog"].forEach(key => { o[key] = safeList(o[key]); });
   o.members = o.members.map(m => {
     const x = { ...m, color: Math.abs(Math.floor(Number(m.color))) || 0 };
     if (Array.isArray(m.hobbies)) x.hobbies = m.hobbies.filter(h => typeof h === "string" || (h && typeof h === "object" && (!("id" in h) || SAFE_ID.test(String(h.id)))));
@@ -1816,6 +2023,8 @@ function normalizeState0(d) {
     timeLog: Array.isArray(d.timeLog) ? d.timeLog : [],
     rewardsGiven: Array.isArray(d.rewardsGiven) ? d.rewardsGiven : [],
     board: Array.isArray(d.board) ? d.board : [],
+    reports: Array.isArray(d.reports) ? d.reports : [],
+    modLog: Array.isArray(d.modLog) ? d.modLog : [],
     meals: d.meals && typeof d.meals === "object" && !Array.isArray(d.meals) ? d.meals : {},
     mealPrefs: typeof d.mealPrefs === "string" ? d.mealPrefs : "",
     welcomeDismissed: !!d.welcomeDismissed,
@@ -1960,7 +2169,8 @@ async function refreshHousehold(force) {
 function applyRole() {
   document.body.classList.toggle("role-child", isChild());
   document.body.classList.toggle("role-owner", !LOCAL_MODE && isOwner());
-  document.body.classList.toggle("child-nocheck", isChild() && !settings().childCheck);
+  document.body.classList.toggle("child-nocheck", isChild() && !settings().childCheck && !isTeen());
+  document.body.classList.toggle("role-teen", isTeen());
   document.body.classList.toggle("child-noprofile", isChild() && !settings().childProfile);
   document.body.classList.toggle("local-mode", LOCAL_MODE);
   document.body.classList.toggle("no-rewards", !!settings().rewardsOff);
@@ -1989,6 +2199,37 @@ const FREQ_BY_SV = {
 };
 function freqFor(item) { return FREQ_BY_SV[item.sv] || "weekly"; }
 function weeklyMins(k) { return Number(k.minutes || 0) * (WEEK_W[k.freq || "weekly"] || 1); }
+/* Smarter fairness: effort, invisible work (planning, remembering, booking) and who keeps track */
+const EFFORT_W = { 1: 0.75, 2: 1, 3: 1.5 }, MENTAL_MIN = { 0: 0, 1: 5, 2: 15 }, KINDS = ["do", "plan", "remember", "buy", "book"];
+function inferMeta(k) {
+  const n = norm((k && (k.ref || k.title)) || "");
+  if (/^(boka|book)|tandlak|dentist|hantverk/.test(n)) return { kind: "book", mental: 1 };
+  if (/^(planera|organisera|ordna|plan |plan$|organi)|budget|veckans middag|weekly menu|meal plan/.test(n)) return { kind: "plan", mental: 2 };
+  if (/betala|deklarera|blankett|fylla i|forsakring|kontoutdrag|fodelsedagskort|recept pa apotek|packa vaskan|pay |bills|tax|insurance|forms|birthday card|prescription/.test(n)) return { kind: "remember", mental: 2 };
+  if (/^(handla|kopa|buy|shop)|inkop|groceries/.test(n)) return { kind: "buy", mental: 1 };
+  if (Number(k && k.cat) === 4) return { kind: "plan", mental: 1 };
+  return { kind: "do", mental: 0 };
+}
+function metaOf(k) {
+  const g = inferMeta(k);
+  const e = Number(k.effort), m = Number(k.mental);
+  return { effort: e >= 1 && e <= 3 ? e : 2, mental: k.mental !== undefined && k.mental !== null && k.mental !== "" && m >= 0 && m <= 2 ? m : g.mental, kind: KINDS.includes(k.kind) ? k.kind : g.kind };
+}
+function leadOf(k) { return k.lead && memberById(k.lead) ? k.lead : k.owner; }
+function doLoad(k) { return weeklyMins(k) * EFFORT_W[metaOf(k).effort]; }
+// keeping something in mind every day gets lighter once it is a routine, so daily counts as three times a week
+const THINK_W = { once: 1, daily: 3, weekly: 1, biweekly: 0.5, monthly: 0.25 };
+function thinkLoad(k) { return MENTAL_MIN[metaOf(k).mental] * (THINK_W[k.freq || "weekly"] || 1); }
+/* what moving the owner moves: the doing, plus the keeping-track when nobody else is set to keep track */
+function ownerWeight(k) { return doLoad(k) + (k.lead && memberById(k.lead) ? 0 : thinkLoad(k)); }
+function memberTotals() {
+  return state.members.map(m => {
+    const own = state.tasks.filter(k => k.owner === m.id);
+    const real = own.reduce((s, k) => s + weeklyMins(k), 0), doing = own.reduce((s, k) => s + doLoad(k), 0);
+    const thinking = state.tasks.filter(k => leadOf(k) === m.id).reduce((s, k) => s + thinkLoad(k), 0);
+    return { m, real, doing, thinking, mins: doing + thinking };
+  });
+}
 function isoWeek(d) {
   const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const day = t.getUTCDay() || 7;
@@ -2031,7 +2272,7 @@ document.addEventListener("visibilitychange", () => {
 
 function computeScore() {
   const n = state.members.length;
-  const totals = state.members.map(m => state.tasks.filter(k => k.owner === m.id).reduce((s, k) => s + weeklyMins(k), 0));
+  const totals = memberTotals().map(x => x.mins);
   const total = totals.reduce((a, b) => a + b, 0);
   if (n < 2 || !total) return null;
   const e = 100 / n;
@@ -2051,7 +2292,8 @@ function applyStatic() {
   const t = T[lang];
   document.documentElement.lang = lang;
   document.getElementById("t-title").textContent = t.title;
-  document.getElementById("t-sub").textContent = t.sub;
+  applyHhWords();
+  document.getElementById("t-sub").textContent = T[lang].subShort;
   document.querySelectorAll("[data-i]").forEach(el => { el.textContent = t[el.dataset.i]; });
   document.getElementById("checkin").placeholder = t.checkPrompt;
   document.getElementById("shop-in").placeholder = t.shopPh;
@@ -2073,6 +2315,11 @@ function applyStatic() {
   const prevF = fSel.value || "weekly";
   fSel.innerHTML = Object.keys(t.freqs).map(k => `<option value="${k}"${k === "weekly" ? " selected" : ""}>${esc(t.freqs[k])}</option>`).join("");
   fSel.value = prevF;
+  [["k-effort", t.effortOpts.map((l, i) => [String(i + 1), l])], ["k-mental", t.mentalOpts.map((l, i) => [String(i), l])], ["k-kind", KINDS.map(k => [k, t.kindOpts[k]])]].forEach(([id, opts]) => {
+    const sel = document.getElementById(id), pv = sel.value;
+    sel.innerHTML = opts.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("");
+    sel.value = pv || opts[id === "k-effort" ? 1 : 0][0];
+  });
   const wSel = document.getElementById("k-wday");
   const prevW = wSel.value;
   const ws = Number(settings().weekStart) === 0 ? 0 : 1;
@@ -2088,6 +2335,7 @@ function applyStatic() {
   const ts = document.getElementById("set-textsize");
   ts.innerHTML = [["", t.textAuto], ["n", t.textNormal], ["l", t.textLarge], ["xl", t.textXL]].map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("");
   ts.value = textSizeKey();
+  document.getElementById("set-simple").checked = simpleOn();
 }
 function renderRotPicker(sel) {
   const box = document.getElementById("k-rot");
@@ -2148,9 +2396,13 @@ function renderMembers() {
   addBtn.title = state.members.length >= 6 ? t.maxMembers : "";
   const ownerSel = document.getElementById("k-owner");
   const prev = ownerSel.value;
-  ownerSel.innerHTML = state.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+  ownerSel.innerHTML = (isTeen() ? state.members.filter(m => m.id === hh.memberId) : state.members).map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
   renderRotPicker();
-  if (prev && memberById(prev)) ownerSel.value = prev;
+  if (prev && [...ownerSel.options].some(o => o.value === prev)) ownerSel.value = prev; else ownerSel.selectedIndex = 0;
+  const leadSel = document.getElementById("k-lead"), prevL = leadSel.value;
+  leadSel.innerHTML = `<option value="">${esc(t.leadSame)}</option>` + state.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+  leadSel.value = prevL && memberById(prevL) ? prevL : "";
+  document.getElementById("k-lead-row").hidden = state.members.length < 2;
   const fo = document.getElementById("f-owner");
   const prevF = fo.value;
   fo.innerHTML = `<option value="">${t.allOwners}</option>` + state.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
@@ -2162,7 +2414,7 @@ function renderTasks() {
   const ul = document.getElementById("tasks");
   document.getElementById("clear-done").hidden = !state.tasks.some(k => k.done && (k.freq || "weekly") === "once");
   if (!state.tasks.length) { ul.innerHTML = `<li class="empty">${t.noTasks}</li>`; return; }
-  const fo = isChild() ? (settings().childSeeAll ? "" : hh.memberId) : document.getElementById("f-owner").value;
+  const fo = isChild() ? (settings().childSeeAll || isTeen() ? "" : hh.memberId) : document.getElementById("f-owner").value;
   const shown = fo ? state.tasks.filter(k => k.owner === fo) : state.tasks;
   if (!shown.length) { ul.innerHTML = `<li class="empty">${t.noFiltered}</li>`; return; }
   if (typingIn(ul)) return;
@@ -2170,43 +2422,45 @@ function renderTasks() {
     const m = memberById(k.owner);
     const color = m ? COLORS[m.color % COLORS.length] : "var(--muted)";
     return `<li>
-      <div class="check" role="checkbox" tabindex="0" aria-checked="${k.done}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
+      <div class="check" role="checkbox" tabindex="0" aria-checked="${k.done}" aria-label="${esc(taskName(k))}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
       <div class="task-main">
         <div class="task-title ${k.done ? "done" : ""}">${esc(taskName(k))}</div>
         <div class="meta">
           <span class="owner" style="--mc:${color}">${m ? esc(m.name) : esc(t.unassigned)}</span>
           <span class="pill">${esc(t.cats[k.cat] || t.cats[6])}</span>
           <span class="pill">${k.minutes} ${t.minLabel}</span>${isKid(m) && starsOf(k) ? `<span class="pill star-pill">${esc(t.starPill.replace("{n}", starsOf(k)))}</span>` : ""}
-          <span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span>${whenText(k) ? `<span class="pill">${esc(whenText(k))}</span>` : ""}${rotNames(k) ? `<span class="pill">${esc(t.rotPill.replace("{names}", rotNames(k)))}</span>` : ""}${(k.steps || []).length ? `<span class="pill">${esc(t.stepsPill.replace("{n}", k.steps.length))}</span>` : ""}${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}
+          <span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span>${whenText(k) ? `<span class="pill">${esc(whenText(k))}</span>` : ""}${rotNames(k) ? `<span class="pill">${esc(t.rotPill.replace("{names}", rotNames(k)))}</span>` : ""}${(k.steps || []).length ? `<span class="pill">${esc(t.stepsPill.replace("{n}", k.steps.length))}</span>` : ""}${k.lead && k.lead !== k.owner && memberById(k.lead) ? `<span class="pill">${esc(t.leadPill.replace("{name}", memberById(k.lead).name))}</span>` : metaOf(k).mental === 2 ? `<span class="pill">${esc(t.mentalPill)}</span>` : ""}${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}
         </div>
       </div>
       ${k.note ? `<div class="task-note" style="grid-column:2">${esc(k.note)}</div>` : ""}
       <div class="row-extra">${timeAskBlock(k)}${timeSugBlock(k)}${commentsBlock(k)}</div>
-      <button class="ghost adult-only" data-edit="${k.id}">${t.edit}</button>
-      <button class="ghost adult-only" data-delete="${k.id}">${t.remove}</button>
+      <button class="ghost adult-only${isTeen() && k.owner === hh.memberId ? " teen-ok" : ""}" data-edit="${k.id}">${t.edit}</button>
+      <button class="ghost adult-only${isTeen() && k.owner === hh.memberId ? " teen-ok" : ""}" data-delete="${k.id}">${t.remove}</button>
     </li>`;
   }).join("");
 }
 
 function renderLoad() {
   const t = T[lang];
-  const totals = state.members.map(m => ({
-    m, mins: state.tasks.filter(k => k.owner === m.id).reduce((s, k) => s + weeklyMins(k), 0)
-  }));
+  const totals = memberTotals();
   const total = totals.reduce((s, x) => s + x.mins, 0);
+  const anyThink = totals.some(x => x.thinking > 0);
   const loadEl = document.getElementById("load");
   const note = document.getElementById("load-note");
   const fair = document.getElementById("fair");
   if (!total) {
     loadEl.innerHTML = ""; note.textContent = t.noLoad; fair.innerHTML = ""; return;
   }
-  loadEl.innerHTML = totals.map(({ m, mins }) => {
-    const pct = Math.round((mins / total) * 100);
+  loadEl.innerHTML = totals.map(({ m, mins, real, doing, thinking }) => {
+    const pct = Math.round((mins / total) * 100), c = COLORS[m.color % COLORS.length];
+    const dp = mins ? pct * doing / mins : 0, tp = mins ? pct * thinking / mins : 0;
+    const line = anyThink && thinking >= 1 ? t.loadDoThink.replace("{do}", Math.round(real)).replace("{think}", Math.round(thinking)) : t.loadDo.replace("{do}", Math.round(real));
     return `<div class="bar-wrap">
-      <div class="bar-head"><span>${esc(m.name)}</span><span>${pct}% (${Math.round(mins)} ${t.minWeek})</span></div>
-      <div class="bar"><span style="width:${pct}%;background:${COLORS[m.color % COLORS.length]}"></span></div>
+      <div class="bar-head"><span>${esc(m.name)}</span><span>${pct}%</span></div>
+      <div class="bar bar-split"><span style="width:${dp}%;background:${c}"></span><span class="think" style="width:${tp}%;--bc:${c}"></span></div>
+      <p class="bar-sub">${esc(line)}</p>
     </div>`;
-  }).join("");
+  }).join("") + (anyThink ? `<p class="bar-legend">${esc(t.loadLegend)}</p>` : "");
   const top = totals.reduce((a, b) => (b.mins > a.mins ? b : a));
   const topPct = Math.round((top.mins / total) * 100);
   const inRange = totals.length < 2 || totals.every(x => {
@@ -2215,6 +2469,8 @@ function renderLoad() {
   note.textContent = totals.length >= 2 && topPct > 60
     ? t.lean.replace("{name}", top.m.name).replace("{pct}", topPct)
     : t.balanced;
+  const ins = leadInsight(totals);
+  if (ins) note.textContent = note.textContent.replace(/[.!]?$/, ". ") + ins;
   fair.innerHTML = `<span class="badge-fair" style="background:${inRange ? "rgba(95,143,107,.18)" : "rgba(224,165,38,.2)"};color:var(--ink)">${inRange ? t.fairOk : t.fairOff}</span>`;
   const sg = computeSuggestion();
   if (sg) {
@@ -2223,9 +2479,18 @@ function renderLoad() {
   }
 }
 
+function leadInsight(totals) {
+  const thinkAll = totals.reduce((a, x) => a + x.thinking, 0);
+  if (totals.length < 2 || thinkAll < 20) return "";
+  const lead = totals.reduce((a, b) => (b.thinking > a.thinking ? b : a));
+  const topDoer = totals.reduce((a, b) => (b.real > a.real ? b : a));
+  const pct = Math.round(lead.thinking / thinkAll * 100);
+  if (pct < 55 || lead.m.id === topDoer.m.id) return "";
+  return T[lang].insightLead.replace("{name}", lead.m.name).replace("{pct}", pct);
+}
 function computeSuggestion() {
   if (state.members.length < 2) return null;
-  const totals = state.members.map(m => ({ m, mins: state.tasks.filter(k => k.owner === m.id).reduce((a, k) => a + weeklyMins(k), 0) }));
+  const totals = memberTotals();
   const total = totals.reduce((a, x) => a + x.mins, 0);
   if (!total) return null;
   const hi = totals.reduce((a, b) => (b.mins > a.mins ? b : a));
@@ -2236,7 +2501,7 @@ function computeSuggestion() {
   const diff = hi.mins - lo.mins;
   let best = null;
   state.tasks.filter(k => k.owner === hi.m.id && !(k.done && (k.freq || "weekly") === "once")).forEach(k => {
-    const w = weeklyMins(k);
+    const w = ownerWeight(k);
     if (w <= 0 || w >= diff) return;
     const after = Math.abs((hi.mins - w) - (lo.mins + w));
     if (!best || after < best.after) best = { k, after };
@@ -2479,6 +2744,7 @@ function syncEdit() {
   document.getElementById("cancel-edit").hidden = !editId;
 }
 function openAdd(own) {
+  if (isTeen()) own = true;
   document.getElementById("add-panel").hidden = false;
   document.getElementById("add-toggle").setAttribute("aria-expanded", "true");
   if (own) setOwn(true);
@@ -2497,16 +2763,26 @@ function closeAdd() {
   setOwn(false);
 }
 document.getElementById("add-toggle").onclick = () => {
-  if (isChild()) return;
-  if (document.getElementById("add-panel").hidden) { openAdd(false); document.getElementById("clean-q").focus(); } else closeAdd();
+  if (isChild() && !isTeen()) return;
+  if (document.getElementById("add-panel").hidden) { openAdd(false); document.getElementById(isTeen() ? "k-title" : "clean-q").focus(); } else closeAdd();
 };
 const kMore = document.getElementById("k-more");
 kMore.open = lsGet("hb-more") === "1";
 kMore.addEventListener("toggle", () => lsSet("hb-more", kMore.open ? "1" : "0"));
+var metaTouched = false;
+/* guess planning/remembering from the title until the person picks something themselves */
+document.getElementById("k-title").addEventListener("input", () => {
+  if (metaTouched) return;
+  const g = inferMeta({ title: document.getElementById("k-title").value, cat: Number(document.getElementById("k-cat").value) });
+  document.getElementById("k-mental").value = String(g.mental);
+  document.getElementById("k-kind").value = g.kind;
+  syncSegs();
+});
+["k-mental", "k-kind"].forEach(id => document.getElementById(id).addEventListener("change", () => { metaTouched = true; }));
 function setEditMode(id) {
   editId = id;
   const k = id && state.tasks.find(x => x.id === id);
-  if (k && (k.note || (k.steps || []).length || (k.rot && k.rot.ids) || k.time || starsOf(k) !== 1)) kMore.open = true;
+  if (k && (k.note || (k.steps || []).length || (k.rot && k.rot.ids) || k.time || starsOf(k) !== 1 || (k.lead && k.lead !== k.owner) || Number(k.effort) === 3)) kMore.open = true;
   if (k) {
     openAdd(true);
     document.getElementById("k-title").value = taskName(k);
@@ -2523,10 +2799,22 @@ function setEditMode(id) {
     renderRotPicker(k.rot ? k.rot.ids : []);
     document.getElementById("k-note").value = k.note || "";
     document.getElementById("k-steps").value = (k.steps || []).map(x => x.text).join("\n");
+    const mt = metaOf(k);
+    document.getElementById("k-effort").value = String(mt.effort);
+    document.getElementById("k-mental").value = String(mt.mental);
+    document.getElementById("k-kind").value = mt.kind;
+    document.getElementById("k-lead").value = k.lead && memberById(k.lead) ? k.lead : "";
+    metaTouched = true;
+    syncSegs();
     document.getElementById("k-title").focus();
   } else {
     document.getElementById("task-form").reset();
     document.getElementById("k-cat").value = "2";
+    document.getElementById("k-effort").value = "2";
+    document.getElementById("k-mental").value = "0";
+    document.getElementById("k-kind").value = "do";
+    document.getElementById("k-lead").value = "";
+    metaTouched = false;
     editId = null;
     syncFreqFields();
     renderRotPicker([]);
@@ -2537,7 +2825,7 @@ function setEditMode(id) {
 function renderAll() {
   applyStatic();
   renderAuth();
-  if (!state) { document.getElementById("guide").hidden = true; return; }
+  if (!state) { document.getElementById("guide").hidden = true; document.body.classList.remove("simple"); return; }
   applyRole();
   if (editId && !state.tasks.some(k => k.id === editId)) setEditMode(null);
   renderMembers();
@@ -2576,6 +2864,10 @@ function renderAll() {
   renderProfile();
   renderAbout();
   renderNotify();
+  renderSimple();
+  updateBadge();
+  renderReports();
+  renderMuted();
 }
 
 function setLang(l) {
@@ -2600,7 +2892,8 @@ document.getElementById("member-form").onsubmit = e => {
 
 document.getElementById("task-form").onsubmit = e => {
   e.preventDefault();
-  if (isChild()) return;
+  if (isChild() && !isTeen()) return;
+  if (isTeen() && editId && (state.tasks.find(x => x.id === editId) || {}).owner !== hh.memberId) return;
   const title = document.getElementById("k-title").value.trim();
   const owner = document.getElementById("k-owner").value;
   if (!title || !owner) return;
@@ -2618,6 +2911,11 @@ document.getElementById("task-form").onsubmit = e => {
   if (data.freq === "biweekly") { const st = weekStartOf(new Date()); st.setDate(st.getDate() + (document.getElementById("k-bi").value === "1" ? 7 : 0)); data.start = isoDay(st); }
   else data.start = "";
   data.note = document.getElementById("k-note").value.trim().slice(0, 200);
+  data.effort = Math.min(3, Math.max(1, Number(document.getElementById("k-effort").value) || 2));
+  data.mental = Math.min(2, Math.max(0, Number(document.getElementById("k-mental").value) || 0));
+  data.kind = KINDS.includes(document.getElementById("k-kind").value) ? document.getElementById("k-kind").value : "do";
+  const ld = document.getElementById("k-lead").value;
+  data.lead = ld && memberById(ld) && ld !== data.owner ? ld : "";
   const prevSteps = (editId && (state.tasks.find(x => x.id === editId) || {}).steps) || [];
   data.steps = document.getElementById("k-steps").value.split("\n").map(x => x.trim().slice(0, 60)).filter(Boolean).slice(0, 12)
     .map(text => { const old = prevSteps.find(x => x.text === text); return old ? old : { id: uid(), text, done: false }; });
@@ -2628,6 +2926,7 @@ document.getElementById("task-form").onsubmit = e => {
     const same = prevTask && prevTask.rot && JSON.stringify(prevTask.rot.ids) === JSON.stringify(rotIds) && prevTask.owner === data.owner;
     data.rot = same ? prevTask.rot : { ids: rotIds, first: data.owner, start: isoDay(weekStartOf(new Date())) };
   } else data.rot = null;
+  if (isTeen()) { data.owner = hh.memberId; data.rot = null; data.lead = ""; const was = editId && state.tasks.find(x => x.id === editId); data.stars = was ? starsOf(was) : 0; }
   if (editId) {
     const k = state.tasks.find(x => x.id === editId);
     if (k) { if (data.title !== taskName(k)) k.ref = null; Object.assign(k, data); }
@@ -2643,11 +2942,14 @@ const onTaskClick = e => {
   const tog = e.target.closest("[data-toggle]");
   const del = e.target.closest("[data-delete]");
   const edit = e.target.closest("[data-edit]");
-  if (isChild() && (edit || del)) return;
+  if (isChild() && (edit || del)) {
+    const own = state.tasks.find(x => x.id === (edit || del).dataset[edit ? "edit" : "delete"]);
+    if (!isTeen() || !own || own.owner !== hh.memberId) return;
+  }
   if (edit) { setEditMode(edit.dataset.edit); return; }
   if (tog) {
     const k = state.tasks.find(x => x.id === tog.dataset.toggle);
-    if (k && (!isChild() || (settings().childCheck && k.owner === hh.memberId))) {
+    if (k && canTick(k)) {
       toggleDone(k);
       timeAsk = k.done && timeEntries(k).length < 5 ? k.id : null;
       if (k.done) {
@@ -2670,7 +2972,7 @@ const onTaskKey = e => {
     e.preventDefault(); e.target.click();
   }
 };
-["tasks", "today-list"].forEach(id => {
+["tasks", "today-list", "simple"].forEach(id => {
   document.getElementById(id).addEventListener("click", onTaskClick);
   document.getElementById(id).addEventListener("keydown", onTaskKey);
 });
@@ -3043,6 +3345,14 @@ document.getElementById("about-skip").onclick = closeAbout;
 const TAB_VIEWS = ["today", "chores", "shop", "family", "week"];
 let view = "today", lastTab = "today";
 { const sv0 = lsGet("hb-view"); if (TAB_VIEWS.includes(sv0)) { view = sv0; lastTab = sv0; } }
+/* home-screen shortcuts: ?view=shop, ?add=1, ?voice=1 */
+var deepLink = {};
+try {
+  const q = new URLSearchParams(location.search);
+  if (TAB_VIEWS.includes(q.get("view"))) { view = q.get("view"); lastTab = view; }
+  deepLink = { add: q.get("add") === "1", voice: q.get("voice") === "1" };
+  if (q.has("view") || q.has("add") || q.has("voice")) { ["view", "add", "voice"].forEach(k => q.delete(k)); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash); }
+} catch (e) {}
 function setView(v, noScroll) {
   if (!TAB_VIEWS.includes(v) && v !== "settings") v = "today";
   if (v !== "settings") { lastTab = v; lsSet("hb-view", v); }
@@ -3101,7 +3411,8 @@ function renderToday() {
   document.getElementById("today-rewards").innerHTML = "";
   const incoming = m ? (state.swaps || []).filter(w => w.to === m.id && state.tasks.some(k => k.id === w.task)) : [];
   const invs = m && canAnswerFor(m.id) ? pendingInvites(m.id) : [];
-  document.getElementById("today-swaps").innerHTML = incoming.map(w => {
+  const nRep = isOwner() && !LOCAL_MODE ? openReports().length : 0;
+  document.getElementById("today-swaps").innerHTML = (nRep ? `<div class="swap-banner rp-banner"><div>${esc(t.reportsBanner.replace("{n}", nRep))}</div><div class="row-btns"><button type="button" class="yes" data-goto="settings">${esc(t.reportsOpen)}</button></div></div>` : "") + incoming.map(w => {
     const from = memberById(w.from), k = state.tasks.find(x => x.id === w.task);
     return `<div class="swap-banner"><div>${esc(t.swapIncoming.replace("{from}", from ? from.name : "?").replace("{task}", taskName(k)))}</div><div class="row-btns"><button type="button" class="yes" data-swap-accept="${w.id}">${esc(t.swapYes)}</button><button type="button" class="no" data-swap-decline="${w.id}">${esc(t.swapNo)}</button></div></div>`;
   }).join("") + invs.map(({ kind, o, item }) => {
@@ -3118,6 +3429,7 @@ function renderToday() {
   } else prog.innerHTML = "";
   const ul = document.getElementById("today-list");
   renderFocusButton();
+  document.getElementById("voice-open").hidden = !SpeechRec;
   if (!mine.length) {
     ul.innerHTML = `<li class="empty" style="display:block"><p class="hint">${esc(t.todayEmpty)}</p>${isChild() ? "" : `<button class="btn big" type="button" data-goto="chores">${esc(t.todayEmptyBtn)}</button>`}</li>`;
     return;
@@ -3133,7 +3445,7 @@ function renderToday() {
     else if (!k.done && swapAsk === k.id) extra = `<div class="meta" style="color:#cfe3da;margin-top:6px">${esc(t.swapTo)}</div><div class="swap-pick">${state.members.filter(x => x.id !== k.owner).map(x => `<button type="button" data-swap-to="${x.id}" data-swap-task="${k.id}">${esc(x.name)}</button>`).join("")}<button type="button" class="cancel" data-swap-close="1">${esc(t.cancel)}</button></div>`;
     else if (!k.done && state.members.length > 1 && canSwap(k)) extra = `<div style="margin-top:6px"><button type="button" class="swap-ask" data-swap-open="${k.id}">${esc(t.swapAsk)}</button></div>`;
     return `<li>
-      <div class="check big${justDone === k.id ? " pop" : ""}" role="checkbox" tabindex="0" aria-checked="${k.done}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
+      <div class="check big${justDone === k.id ? " pop" : ""}" role="checkbox" tabindex="0" aria-checked="${k.done}" aria-label="${esc(taskName(k))}" data-toggle="${k.id}">${k.done ? "✓" : ""}</div>
       <div class="task-main"><div class="task-title ${k.done ? "done" : ""}"><span class="cat-ico" aria-hidden="true">${CAT_ICONS[k.cat] || CAT_ICONS[6]}</span>${esc(taskName(k))}</div>
       <div class="meta">${!k.done && dueStatus(k) === "late" ? `<span class="pill late">${esc(t.late)}</span>` : ""}${k.time ? `<span class="pill">${esc(t.atTime.replace("{t}", k.time))}</span>` : ""}<span class="pill">${esc(t.freqs[k.freq || "weekly"])}</span><span class="pill">${k.minutes} ${t.minLabel}</span>${isKid(m) && starsOf(k) ? `<span class="pill star-pill">${esc(t.starPill.replace("{n}", starsOf(k)))}</span>` : ""}</div>${k.note ? `<div class="task-note">${esc(k.note)}</div>` : ""}${(k.steps || []).length ? `<div class="steps">${k.steps.map(x => `<label class="step${x.done ? " done" : ""}"><input type="checkbox" data-step="${k.id}|${x.id}"${x.done ? " checked" : ""}><span>${esc(x.text)}</span></label>`).join("")}</div>` : ""}${extra}${timeAskBlock(k)}${commentsBlock(k)}</div>
     </li>`;
@@ -3168,9 +3480,9 @@ function renderShopping() {
   const ordered = open.concat(done);
   ul.innerHTML = ordered.length
     ? ordered.map(x => `<li>
-        <div class="check big" role="checkbox" tabindex="0" aria-checked="${!!x.done}" data-shop-toggle="${x.id}">${x.done ? "✓" : ""}</div>
+        <div class="check big" role="checkbox" tabindex="0" aria-checked="${!!x.done}" aria-label="${esc(x.text)}" data-shop-toggle="${x.id}">${x.done ? "✓" : ""}</div>
         <div class="task-main"><div class="task-title ${x.done ? "done" : ""}">${esc(x.text)}</div><div class="meta">${x.amount ? `<span class="pill">${esc(x.amount)}</span>` : ""}${(x.qty || 1) > 1 ? `<span class="pill">${x.qty} st</span>` : ""}${x.done ? "" : `<span class="pill dept">${esc(t.depts[deptOf(x.text)])}</span>`}</div></div>
-        <button class="ghost" data-shop-del="${x.id}" aria-label="${esc(t.remove)}">✕</button>
+        <button class="ghost" data-shop-del="${x.id}" aria-label="${esc(t.remove + " " + x.text)}">✕</button>
       </li>`).join("")
     : `<li class="empty">${esc(t.shopEmpty)}</li>`;
   const have = new Set(open.map(x => x.text.toLowerCase()));
@@ -3649,9 +3961,9 @@ function mineChanged() { mineStore(); renderMine(); mineSync(); }
 function mineRow(x, today, showDate) {
   const t = T[lang];
   const late = !x.done && x.date && x.date < today;
-  return `<li><div class="check big" role="checkbox" tabindex="0" aria-checked="${!!x.done}" data-mine-toggle="${x.id}">${x.done ? "✓" : ""}</div>
+  return `<li><div class="check big" role="checkbox" tabindex="0" aria-checked="${!!x.done}" aria-label="${esc(x.title)}" data-mine-toggle="${x.id}">${x.done ? "✓" : ""}</div>
     <div class="task-main"><div class="task-title ${x.done ? "done" : ""}">${esc(x.title)}</div><div class="meta">${late ? `<span class="pill late">${esc(t.late)}</span>` : ""}${(showDate || late) && x.date ? `<span class="pill">${esc(fmtDate(x.date))}</span>` : ""}${x.time ? `<span class="pill">${esc(t.atTime.replace("{t}", x.time))}</span>` : ""}</div></div>
-    <button class="ghost" data-mine-del="${x.id}" aria-label="${esc(t.remove)}">✕</button></li>`;
+    <button class="ghost" data-mine-del="${x.id}" aria-label="${esc(t.remove + " " + x.title)}">✕</button></li>`;
 }
 function renderMine() {
   const t = T[lang], today = isoDay(new Date());
@@ -3763,14 +4075,21 @@ function aiErrorText(code) {
   const t = T[lang];
   return { not_setup: t.aiNotSetup, limit: t.aiLimit, not_allowed: t.aiNotAllowed, no_credit: t.aiNoCredit, bad_key: t.aiBadKey, net: t.aiNet }[code] || t.aiError;
 }
+/* allergens the household asked to avoid, read from what they wrote (a second check on the AI) */
+const ALLERGEN_WORDS = { gluten: /gluten|vete|celiaki|coeliac|celiac|wheat/, milk: /laktos|mj[öo]lk|mejeri|lactose|milk|dairy/, egg: /(^|[^a-zåäö])([äa]gg|egg)/, nuts: /(?<!jord)n[öo]t(?!k[öo]tt|f[äa]rs|stek)|\bnuts?\b|mandel|almond|hassel|cashew|pistage|pecan/, peanuts: /jordn[öo]t|peanut/, fish: /fisk|\bfish/, shellfish: /skaldjur|r[äa]k|shellfish|shrimp|prawn|krabba|hummer/, soy: /soja|\bsoy/, celery: /selleri|celery/, mustard: /senap|mustard/, sesame: /sesam/ };
+function avoidedAllergens(text) { const n = String(text || "").toLowerCase(); return Object.keys(ALLERGEN_WORDS).filter(k => ALLERGEN_WORDS[k].test(n)); }
 function renderAiResult() {
   const t = T[lang], loc = lang === "sv" ? "sv-SE" : "en-GB", box = document.getElementById("ai-result");
   if (!aiPlan) { box.innerHTML = ""; return; }
+  const avoid = avoidedAllergens((state && state.mealAllergy) || document.getElementById("ai-allergy").value);
+  const total = aiPlan.days.reduce((a, d) => a + (Number(d.cost) || 0), 0);
   box.innerHTML = aiPlan.days.map(d => {
     const day = new Date(d.date + "T00:00:00").toLocaleDateString(loc, { weekday: "long", day: "numeric", month: "short" });
-    return `<div class="ai-day"><div class="meta" style="margin:0">${esc(day)}</div><h4>${esc(d.dish)}</h4>${d.note ? `<div class="task-note">${esc(d.note)}</div>` : ""}
+    const al = Array.isArray(d.allergens) ? d.allergens : [], bad = al.filter(x => avoid.includes(x));
+    const facts = [al.length ? t.aiContains.replace("{list}", al.map(x => t.allergenNames[x] || x).join(", ")) : "", Number(d.cost) ? t.aiCost.replace("{n}", Math.round(d.cost)) : ""].filter(Boolean).join(" · ");
+    return `<div class="ai-day${bad.length ? " ai-bad" : ""}"><div class="meta" style="margin:0">${esc(day)}</div><h4>${esc(d.dish)}</h4>${bad.length ? `<p class="ai-alert" role="alert">⚠️ ${esc(t.aiAlert.replace("{list}", bad.map(x => t.allergenNames[x] || x).join(", ")))}</p>` : ""}${facts ? `<div class="meta" style="margin:2px 0 4px">${esc(facts)}</div>` : ""}${d.note ? `<div class="task-note">${esc(d.note)}</div>` : ""}
       <ul class="ai-ing">${d.ingredients.map(x => `<li class="${x.staple ? "staple" : ""}">${esc([x.amount, x.name].filter(Boolean).join(" "))}${x.staple ? ` (${esc(t.aiStaple)})` : ""}</li>`).join("")}</ul></div>`;
-  }).join("") + (aiPlan.tip ? `<p class="summary">${esc(aiPlan.tip)}</p>` : "")
+  }).join("") + (total ? `<p class="summary">${esc(t.aiTotal.replace("{n}", Math.round(total)))}</p>` : "") + (aiPlan.tip ? `<p class="summary">${esc(aiPlan.tip)}</p>` : "")
     + `<p class="ai-warn">${esc(t.aiWarn)}</p><div class="ai-actions"><button class="btn" type="button" id="ai-use">${esc(t.aiUse)}</button><button class="ghost" type="button" id="ai-again">${esc(t.aiAgain)}</button></div>`;
 }
 // data minimisation: names of the people in the household are replaced before the wishes are sent to the AI
@@ -3788,6 +4107,9 @@ async function aiPlanWeek() {
   const t = T[lang], status = document.getElementById("ai-status");
   const prefs = document.getElementById("ai-prefs").value.trim().slice(0, 600);
   if (prefs !== (state.mealPrefs || "")) { state.mealPrefs = prefs; save(); }
+  const allergy = document.getElementById("ai-allergy").value.trim().slice(0, 200);
+  const budget = Math.max(0, Math.min(20000, Math.round(Number(document.getElementById("ai-budget").value) || 0)));
+  if (allergy !== (state.mealAllergy || "") || budget !== (Number(state.mealBudget) || 0)) { state.mealAllergy = allergy; state.mealBudget = budget; save(); }
   const dates = weekDays().map(isoDay);
   const recent = Object.keys(state.meals || {}).filter(d => !dates.includes(d)).map(d => state.meals[d].dish).filter(Boolean);
   aiBusy = true; aiPlan = null; renderAiResult();
@@ -3795,7 +4117,7 @@ async function aiPlanWeek() {
   document.getElementById("ai-go").disabled = true;
   try {
     const { data, error } = await sb.functions.invoke("plan-meals", {
-      body: { lang, dates, prefs: scrubNames(prefs), people: state.members.length, kids: state.members.filter(isKid).length, avoid: recent.slice(-14) }
+      body: { lang, dates, prefs: scrubNames(prefs), allergy: scrubNames(allergy), budget, people: state.members.length, kids: state.members.filter(isKid).length, avoid: recent.slice(-14) }
     });
     if (error) {
       let code = "";
@@ -3840,7 +4162,12 @@ document.getElementById("ai-open").onclick = () => {
   const p = document.getElementById("ai-panel"), open = p.hidden;
   p.hidden = !open;
   document.getElementById("ai-open").setAttribute("aria-expanded", String(open));
-  if (open) { const ta = document.getElementById("ai-prefs"); if (!ta.value) ta.value = (state && state.mealPrefs) || ""; ta.focus(); }
+  if (open) {
+    const ta = document.getElementById("ai-prefs"); if (!ta.value) ta.value = (state && state.mealPrefs) || "";
+    const al = document.getElementById("ai-allergy"); if (!al.value) al.value = (state && state.mealAllergy) || "";
+    const bu = document.getElementById("ai-budget"); if (!bu.value && state && Number(state.mealBudget)) bu.value = String(state.mealBudget);
+    ta.focus();
+  }
 };
 document.getElementById("ai-go").onclick = aiPlanWeek;
 document.getElementById("ai-result").addEventListener("click", e => {
@@ -4056,16 +4383,18 @@ const LEGAL = {
   sv: {
     privacy: `<h2 id="legal-h">Integritetspolicy</h2>
 <p class="meta">Gäller från 28 oktober 2026</p>
+<p class="promise-line"><b>Vårt löfte:</b> Ingen reklam. Ingen försäljning av personuppgifter. Inga offentliga profiler. Barnens data stannar inom hushållet.</p>
 <h3>Vem ansvarar?</h3>
 <p>Personuppgiftsansvarig är Ludvig Bohlin, som driver Hushållsbalans privat. Frågor, begäran om kopia, rättelse eller radering: mejla <a href="mailto:${CONTACT}">${CONTACT}</a>. Vi svarar inom en månad.</p>
 <h3>Vilka uppgifter sparas?</h3>
 <ul>
 <li><b>Konto:</b> e-postadress, lösenord (krypterat, vi kan inte se det), namnet du visar i appen och, om du slår på det, uppgifter för tvåstegsverifiering.</li>
-<li><b>Hushållets innehåll:</b> sysslor, vem som gjort vad, kalender, födelsedagar, fasta aktiviteter, inbjudningar, kommentarer, anslagstavla, inköpslista, middagar, veckoavstämningar, stjärnor, belöningar och fickpengar. Det syns för alla i ert hushåll.</li>
+<li><b>Hushållets innehåll:</b> sysslor, vem som gjort vad, kalender, födelsedagar, fasta aktiviteter, inbjudningar, kommentarer, anslagstavla, inköpslista, middagar, veckoavstämningar, stjärnor, belöningar och fickpengar, samt hur jobbig en syssla är och vem som håller koll på den. Det syns för alla i ert hushåll.</li>
+<li><b>Rapporter:</b> om någon rapporterar ett inlägg eller en kommentar sparas en kopia av texten, vem som rapporterade och varför. Bara vårdnadshavaren ser rapporten i appen. Hanterade rapporter tas bort efter 90 dagar.</li>
 <li><b>Mina egna saker:</b> dina privata att-göra. De syns bara för dig.</li>
 <li><b>Påminnelser:</b> om du slår på dem, en adress från din webbläsare som behövs för att skicka notiser och vilken tid du vill ha dem.</li>
 <li><b>Felrapporter och synpunkter:</b> om något går fel sparas en kort teknisk beskrivning (felmeddelande, webbläsare, appversion). Det du skriver under Tyck till sparas också.</li>
-<li><b>Kalenderlänk:</b> om vårdnadshavaren slår på den skapas en lång slumpad, hemlig adress. Vårdnadshavaren väljer vad som visas (sysslor, aktiviteter, födelsedagar) och kan byta adress när som helst, då slutar den gamla fungera. Kalendern ber sökmotorer att inte indexera den.</li>
+<li><b>Kalenderlänk:</b> om vårdnadshavaren slår på den skapas en lång slumpad, hemlig adress. Vårdnadshavaren väljer vad som visas (sysslor, aktiviteter, födelsedagar). Barnens sysslor, aktiviteter och födelsedagar finns inte med om vårdnadshavaren inte slår på det. Vårdnadshavaren kan byta adress när som helst, då slutar den gamla fungera. Kalendern ber sökmotorer att inte indexera den.</li>
 </ul>
 <p>Vi samlar inte in plats, kontakter, bilder, personnummer, adress eller hälsouppgifter. Namn i appen kan vara smeknamn, till exempel "Barn 1".</p>
 <h3>Varför och med vilken rätt?</h3>
@@ -4074,11 +4403,13 @@ const LEGAL = {
 <ul>
 <li><b>Supabase</b>: databas, inloggning och säkerhetskopior. Servrar i Frankfurt, EU.</li>
 <li><b>GitHub Pages</b>: visar själva appen. GitHub kan logga IP-adresser när sidan laddas (USA, EU-kommissionens standardavtalsklausuler och EU–US Data Privacy Framework).</li>
-<li><b>Anthropic</b>: AI-förslag på middagar (USA, standardavtalsklausuler). Bara när en vuxen trycker på AI-knappen skickas önskemålen, veckans datum och hur många ni är (varav barn). Namn på personer i hushållet tas bort innan något skickas, och inga konton, e-postadresser eller hushålls-ID skickas. Barn kan inte använda AI-funktionen.</li>
+<li><b>Anthropic</b>: AI-förslag på middagar (USA, standardavtalsklausuler). Bara när en vuxen trycker på AI-knappen skickas önskemålen, eventuella allergier och budget, veckans datum och hur många ni är (varav barn). Namn på personer i hushållet tas bort innan något skickas, och inga konton, e-postadresser eller hushålls-ID skickas. Barn kan inte använda AI-funktionen.</li>
 <li><b>Notistjänster</b> (Apple, Google, Mozilla): levererar påminnelser till telefonen om du slår på dem.</li>
+<li><b>Taligenkänning</b> (frivillig): om du trycker på mikrofonen gör telefonens eller webbläsarens taligenkänning om talet till text. Det sköts av Apple eller Google enligt deras villkor. Appen får bara texten, tolkar den på telefonen och sparar inget ljud.</li>
 </ul>
 <h3>Barn</h3>
 <p>Barn under 13 år får bara använda appen om en vårdnadshavare har godkänt det. Vårdnadshavaren som sköter hushållet godkänner innan barnens inbjudan kan delas, bestämmer vad barn får se och göra, och kan när som helst ta bort barnets konto. Barn kan inte kontakta någon utanför sitt eget hushåll: det finns inga offentliga profiler, ingen sökning efter andra användare, ingen reklam och inga externa länkar i barnens vy.</p>
+<p>Ungdomar 13–17 år kan få ungdomsläge av en vuxen i hushållet: de ser alla sysslor och kan lägga till egna. Barn och ungdomar kan rapportera inlägg och kommentarer som känns fel, och dölja det någon skriver på sin egen telefon.</p>
 <h3>Hur länge?</h3>
 <p>Så länge kontot finns. Felrapporter raderas efter 90 dagar. När du raderar ditt konto (Inställningar → Radera mitt konto) tas dina uppgifter bort direkt. Säkerhetskopior sparas i högst 14 dagar och raderas sedan automatiskt.</p>
 <h3>Säkerhet</h3>
@@ -4088,7 +4419,7 @@ const LEGAL = {
 <h3>Dina rättigheter</h3>
 <p>Du har rätt att få veta vilka uppgifter som finns om dig och få en kopia (Inställningar → Ladda ner mina uppgifter), få dem rättade, raderade eller begränsade, invända mot behandling som bygger på berättigat intresse och ta med dig dina uppgifter. Du kan också klaga till Integritetsskyddsmyndigheten (imy.se).</p>
 <h3>Lagring i webbläsaren</h3>
-<p>Appen sparar bara det som behövs i din webbläsare: inloggning, språk, utseende och en kopia så att appen fungerar utan nät. Inga spårningscookies och ingen analys.</p>
+<p>Appen sparar bara det som behövs i din webbläsare: inloggning, språk, utseende, enkel visning, vilka personer du valt att dölja och en kopia så att appen fungerar utan nät. Inga spårningscookies och ingen analys.</p>
 <h3>Ändringar</h3>
 <p>Ändras policyn står det nya datumet högst upp.</p>`,
     terms: `<h2 id="legal-h">Användarvillkor</h2>
@@ -4101,7 +4432,8 @@ const LEGAL = {
 <li>Vårdnadshavaren som sköter ett hushåll bestämmer vem som är med och kan ta bort konton från hushållet.</li>
 <li>Barn under 13 år får bara använda appen med godkännande från en vårdnadshavare. Belöningar och fickpengar kan stängas av.</li>
 <li>Den som har en kalenderlänk kan se det som vårdnadshavaren valt att dela. Dela den bara med personer du litar på.</li>
-<li>AI-förslag på middagar är bara förslag och kan vara fel. Kontrollera alltid ingredienser och förpackningar vid allergier.</li>
+<li>AI-förslag på middagar är bara förslag och kan vara fel. Kontrollera alltid allergener och ingredienser på förpackningen. Allergimarkeringar är en hjälp, inte en garanti.</li>
+<li>Rapportera inlägg och kommentarer som är elaka, hotfulla eller olämpliga. Vårdnadshavaren kan ta bort inlägg och kommentarer i hushållet.</li>
 <li>Du kan sluta använda appen, ladda ner dina uppgifter och radera ditt konto när du vill. Konton som missbrukar appen kan stängas av.</li>
 <li>Villkoren kan ändras. Då står det nya datumet högst upp.</li>
 <li>Svensk lag gäller.</li>
@@ -4110,16 +4442,18 @@ const LEGAL = {
   en: {
     privacy: `<h2 id="legal-h">Privacy policy</h2>
 <p class="meta">Valid from 28 October 2026</p>
+<p class="promise-line"><b>Our promise:</b> No ads. No selling of personal data. No public profiles. Children's data stays in the household.</p>
 <h3>Who is responsible?</h3>
 <p>The data controller is Ludvig Bohlin, who runs Household Balance privately. Questions, a copy, correction or deletion: email <a href="mailto:${CONTACT}">${CONTACT}</a>. We answer within one month.</p>
 <h3>What is stored?</h3>
 <ul>
 <li><b>Account:</b> email address, password (encrypted, we cannot see it), the name you show in the app and, if you turn it on, two-step sign-in data.</li>
-<li><b>The household's content:</b> chores, who did what, calendar, birthdays, weekly activities, invitations, comments, notice board, shopping list, dinners, weekly check-ins, stars, rewards and pocket money. Everyone in your household can see it.</li>
+<li><b>The household's content:</b> chores, who did what, calendar, birthdays, weekly activities, invitations, comments, notice board, shopping list, dinners, weekly check-ins, stars, rewards and pocket money, plus how hard a chore is and who keeps track of it. Everyone in your household can see it.</li>
+<li><b>Reports:</b> if someone reports a post or comment, a copy of the text, who reported it and why is stored. Only the guardian sees the report in the app. Handled reports are removed after 90 days.</li>
 <li><b>My own things:</b> your private to-dos. Only you can see them.</li>
 <li><b>Reminders:</b> if you turn them on, an address from your browser needed to send notifications, and the time you want them.</li>
 <li><b>Error reports and feedback:</b> if something goes wrong, a short technical description (error message, browser, app version). What you write under Feedback is also stored.</li>
-<li><b>Calendar link:</b> if the guardian turns it on, a long random secret address is created. The guardian chooses what it shows (chores, activities, birthdays) and can change the address at any time, which stops the old one working. The calendar asks search engines not to index it.</li>
+<li><b>Calendar link:</b> if the guardian turns it on, a long random secret address is created. The guardian chooses what it shows (chores, activities, birthdays). Children's chores, activities and birthdays are left out unless the guardian turns them on. The guardian can change the address at any time, which stops the old one working. The calendar asks search engines not to index it.</li>
 </ul>
 <p>We do not collect location, contacts, photos, ID numbers, addresses or health data. Names in the app can be nicknames, for example "Child 1".</p>
 <h3>Why, and on what legal basis?</h3>
@@ -4128,11 +4462,13 @@ const LEGAL = {
 <ul>
 <li><b>Supabase</b>: database, sign-in and backups. Servers in Frankfurt, EU.</li>
 <li><b>GitHub Pages</b>: serves the app. GitHub may log IP addresses when the page loads (USA, EU standard contractual clauses and the EU–US Data Privacy Framework).</li>
-<li><b>Anthropic</b>: AI dinner suggestions (USA, standard contractual clauses). Only when an adult taps the AI button: the wishes, the week's dates and how many you are (and how many children). Names of people in the household are removed before anything is sent, and no accounts, email addresses or household IDs are sent. Children cannot use the AI feature.</li>
+<li><b>Anthropic</b>: AI dinner suggestions (USA, standard contractual clauses). Only when an adult taps the AI button: the wishes, any allergies and budget, the week's dates and how many you are (and how many children). Names of people in the household are removed before anything is sent, and no accounts, email addresses or household IDs are sent. Children cannot use the AI feature.</li>
 <li><b>Notification services</b> (Apple, Google, Mozilla): deliver reminders to your phone if you turn them on.</li>
+<li><b>Speech recognition</b> (optional): if you tap the microphone, your phone's or browser's speech recognition turns speech into text. This is handled by Apple or Google under their terms. The app only gets the text, understands it on the phone and keeps no audio.</li>
 </ul>
 <h3>Children</h3>
 <p>Children under 13 may only use the app if a guardian has agreed. The guardian who manages the household agrees before the children's invite can be shared, decides what children may see and do, and can remove a child's account at any time. Children cannot contact anyone outside their own household: there are no public profiles, no search for other users, no ads and no external links in the children's view.</p>
+<p>Teens aged 13–17 can be given teen mode by an adult in the household: they see all chores and can add their own. Children and teens can report posts and comments that feel wrong, and hide what someone writes on their own phone.</p>
 <h3>How long?</h3>
 <p>As long as the account exists. Error reports are deleted after 90 days. When you delete your account (Settings → Delete my account) your data is removed at once. Backups are kept for at most 14 days and then deleted automatically.</p>
 <h3>Security</h3>
@@ -4142,7 +4478,7 @@ const LEGAL = {
 <h3>Your rights</h3>
 <p>You can find out what data there is about you and get a copy (Settings → Download my data), have it corrected, deleted or restricted, object to processing based on legitimate interest, and take your data with you. You can also complain to the Swedish Authority for Privacy Protection (imy.se).</p>
 <h3>Browser storage</h3>
-<p>The app only stores what it needs in your browser: sign-in, language, appearance and a copy so the app works offline. No tracking cookies and no analytics.</p>
+<p>The app only stores what it needs in your browser: sign-in, language, appearance, simple view, which people you chose to hide and a copy so the app works offline. No tracking cookies and no analytics.</p>
 <h3>Changes</h3>
 <p>If the policy changes, the new date is shown at the top.</p>`,
     terms: `<h2 id="legal-h">Terms of use</h2>
@@ -4155,7 +4491,8 @@ const LEGAL = {
 <li>The guardian who manages a household decides who is in it and can remove accounts from it.</li>
 <li>Children under 13 may only use the app with the consent of a guardian. Rewards and pocket money can be turned off.</li>
 <li>Anyone with a calendar link can see what the guardian chose to share. Only share it with people you trust.</li>
-<li>AI dinner suggestions are only suggestions and can be wrong. Always check ingredients and packaging for allergies.</li>
+<li>AI dinner suggestions are only suggestions and can be wrong. Always check allergens and ingredients on the packaging. Allergen labels are a help, not a guarantee.</li>
+<li>Report posts and comments that are mean, threatening or inappropriate. The guardian can remove posts and comments in the household.</li>
 <li>You can stop using the app, download your data and delete your account whenever you like. Accounts that misuse the app may be closed.</li>
 <li>These terms may change. The new date is then shown at the top.</li>
 <li>Swedish law applies.</li>
@@ -4233,7 +4570,8 @@ document.getElementById("fb-send").onclick = async () => {
 let commentOpen = null, timeAsk = null;
 function typingIn(el) { const a = document.activeElement; return !!(a && el.contains(a) && a.closest && a.closest(".cm-form") && a.value); }
 function memberName(id) { const m = memberById(id); return m ? m.name : "?"; }
-function commentsFor(k) { return (state.comments || []).filter(c => c.k === k.id).sort((a, b) => a.at - b.at); }
+function commentsFor0(k) { return (state.comments || []).filter(c => c.k === k.id).sort((a, b) => a.at - b.at); }
+function commentsFor(k) { const muted = mutedIds(); return commentsFor0(k).filter(c => !muted.includes(c.by)); }
 function shopGuess(text) {
   const s0 = String(text || "").trim().replace(/[.!]+$/, "");
   const m = s0.match(/^(.{2,40}?)\s+(?:är\s+)?(?:nästan\s+|snart\s+)?slut$/i) || s0.match(/^(?:vi\s+)?(?:måste\s+|behöver\s+)?(?:köpa?|handla)\s+(.{2,40})$/i) || s0.match(/^(?:we(?:'re| are)\s+)?(?:out of|need|buy)\s+(.{2,40})$/i) || s0.match(/^(.{2,40}?)\s+(?:is|are)\s+(?:almost\s+)?(?:out|empty|gone)$/i);
@@ -4250,7 +4588,7 @@ function commentsBlock(k) {
   if (open) {
     h += `<div class="cm-thread">${cs.map(c => {
       const g = shopGuess(c.text);
-      return `<div class="cm"><div class="cm-head"><b>${esc(memberName(c.by))}</b> <span class="meta" style="display:inline">${esc(fmtDate(isoDay(new Date(c.at))))}</span></div><div class="cm-text">${esc(c.text)}</div>${g || canDelComment(c) ? `<div class="cm-act">${g ? `<button type="button" class="ghost" data-cm-shop="${c.id}">${esc(t.cmToShop)}: ${esc(g)}</button>` : ""}${canDelComment(c) ? `<button type="button" class="ghost" data-cm-del="${c.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}</div>` : ""}</div>`;
+      return `<div class="cm"><div class="cm-head"><b>${esc(memberName(c.by))}</b> <span class="meta" style="display:inline">${esc(fmtDate(isoDay(new Date(c.at))))}</span></div><div class="cm-text">${esc(c.text)}</div>${g || canDelComment(c) ? `<div class="cm-act">${g ? `<button type="button" class="ghost" data-cm-shop="${c.id}">${esc(t.cmToShop)}: ${esc(g)}</button>` : ""}${canDelComment(c) ? `<button type="button" class="ghost" data-cm-del="${c.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}</div>` : ""}${c.by !== boardAuthor() && canReport() ? `<button type="button" class="linkish rp-link" data-report="comment|${c.id}">${esc(t.reportBtn)}</button>` : ""}</div>`;
     }).join("")}<form class="cm-form" data-cm-form="${k.id}"><input maxlength="140" autocomplete="off" aria-label="${esc(t.cmPh)}" placeholder="${esc(t.cmPh)}"><button class="btn" type="submit">${esc(t.cmSend)}</button></form></div>`;
   }
   return `<div class="cm-wrap">${h}</div>`;
@@ -4421,10 +4759,11 @@ document.getElementById("tpl-btns").addEventListener("click", e => {
 function boardAuthor() { return !LOCAL_MODE && hh ? hh.memberId : todayPerson(); }
 function renderBoard() {
   const t = T[lang];
-  const items = (state.board || []).slice().sort((a, b) => b.at - a.at);
+  const muted = mutedIds();
+  const items = (state.board || []).filter(x => !muted.includes(x.by)).sort((a, b) => b.at - a.at);
   const me = boardAuthor();
   document.getElementById("board-list").innerHTML = items.length
-    ? items.map(x => { const m = memberById(x.by); const mine = x.by === me; return `<li style="--mc:${m ? COLORS[m.color % COLORS.length] : "var(--sun)"}"><div class="task-main"><div class="task-title" style="font-weight:500">${esc(x.text)}</div><div class="meta">${esc(m ? m.name : "?")}, ${esc(fmtDate(isoDay(new Date(x.at))))}</div></div>${mine || !isChild() ? `<button class="ghost" data-del-note="${x.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}</li>`; }).join("")
+    ? items.map(x => { const m = memberById(x.by); const mine = x.by === me; return `<li style="--mc:${m ? COLORS[m.color % COLORS.length] : "var(--sun)"}"><div class="task-main"><div class="task-title" style="font-weight:500">${esc(x.text)}</div><div class="meta">${esc(m ? m.name : "?")}, ${esc(fmtDate(isoDay(new Date(x.at))))}${!mine && canReport() ? ` · <button type="button" class="linkish rp-link" data-report="board|${x.id}">${esc(t.reportBtn)}</button>` : ""}</div></div>${mine || !isChild() ? `<button class="ghost" data-del-note="${x.id}" aria-label="${esc(t.remove)}">✕</button>` : ""}</li>`; }).join("")
     : `<li class="empty">${esc(t.boardEmpty)}</li>`;
 }
 document.getElementById("board-form").onsubmit = e => {
@@ -5961,8 +6300,8 @@ function renderCalSet() {
     const web = calUrl("webcal:"), https = calUrl();
     html += `<label for="cal-who">${esc(t.calLinkWho)}</label><select id="cal-who"><option value="">${esc(t.calAll)}</option>${state.members.map(m => `<option value="${m.id}"${m.id === calWho ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select>
       <div class="cal-btns"><a class="btn" href="${esc(web)}" data-cal="apple">${esc(t.calApple)}</a><a class="ghost" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(web)}" target="_blank" rel="noopener" data-cal="google">${esc(t.calGoogle)}</a><button type="button" class="ghost" data-cal="copy" data-url="${esc(https)}">${esc(t.calCopy)}</button>${isOwner() ? `<button type="button" class="ghost${calConfirm ? " danger" : ""}" data-cal="new">${esc(calConfirm ? t.calNewSure : t.calNew)}</button>` : ""}</div>
-      ${isOwner() ? `<p class="meta" style="margin:12px 0 0">${esc(t.calIncl)}</p><div class="cal-incl">${[["calChores", t.calInclChores], ["calActs", t.calInclActs], ["calBdays", t.calInclBdays]].map(([k, l]) => `<label class="set-check"><input type="checkbox" data-cal-incl="${k}"${settings()[k] ? " checked" : ""}><span>${esc(l)}</span></label>`).join("")}</div>` : ""}
-      <p class="footnote" style="text-align:left">${esc(t.calNote)}</p>`;
+      ${isOwner() ? `<p class="meta" style="margin:12px 0 0">${esc(t.calIncl)}</p><div class="cal-incl">${[["calChores", t.calInclChores], ["calActs", t.calInclActs], ["calBdays", t.calInclBdays], ["calKids", t.calInclKids]].map(([k, l]) => `<label class="set-check"><input type="checkbox" data-cal-incl="${k}"${settings()[k] ? " checked" : ""}><span>${esc(l)}</span></label>`).join("")}</div>` : ""}
+      <p class="footnote" style="text-align:left">${esc(t.calNote)}</p><p class="footnote" style="text-align:left">${esc(t.calWidgetTip)}</p>`;
   }
   box.innerHTML = html;
 }
@@ -6119,7 +6458,7 @@ function weekDone(fromMs, toMs) {
   return per;
 }
 function openMeet(from) {
-  meetOn = true; meetStepN = 1; meetMsg = "";
+  meetOn = true; meetStepN = 1; meetMsg = ""; meetPlan = null;
   document.getElementById("meet").hidden = false;
   document.body.style.overflow = "hidden";
   renderMeet();
@@ -6131,14 +6470,28 @@ function closeMeet() {
   document.body.style.overflow = "";
   renderAll();
 }
+function nextWeekDays() {
+  const st = weekStartOf(new Date()), next = new Date(st); next.setDate(st.getDate() + 7);
+  return [...Array(7)].map((_, i) => { const d = new Date(next); d.setDate(next.getDate() + i); return d; });
+}
+function scoreWith(plan) {
+  const keep = state.tasks.map(k => k.owner);
+  plan.forEach((mid, id) => { const k = state.tasks.find(x => x.id === id); if (k) k.owner = mid; });
+  const sc = computeScore();
+  state.tasks.forEach((k, i) => { k.owner = keep[i]; });
+  return sc;
+}
+var meetPlan = null;
 function renderMeet() {
   const box = document.getElementById("meet");
   if (!meetOn || !state) { box.hidden = true; return; }
-  const t = T[lang], total = 4, card = document.getElementById("mt-card"), btns = document.getElementById("mt-btns");
+  const t = T[lang], total = 6, card = document.getElementById("mt-card"), btns = document.getElementById("mt-btns");
   if (card.contains(document.activeElement) && document.activeElement.tagName === "TEXTAREA") return;
   document.getElementById("mt-step").textContent = t.meetStep.replace("{n}", meetStepN).replace("{total}", total);
-  document.getElementById("mt-dots").innerHTML = [1, 2, 3, 4].map(i => `<span class="${i < meetStepN ? "ok" : i === meetStepN ? "cur" : ""}"></span>`).join("");
+  document.getElementById("mt-dots").innerHTML = [1, 2, 3, 4, 5, 6].map(i => `<span class="${i < meetStepN ? "ok" : i === meetStepN ? "cur" : ""}"></span>`).join("");
   const st = weekStartOf(new Date()), next = new Date(st); next.setDate(st.getDate() + 7);
+  const days = nextWeekDays();
+  const bar = (m, p, label) => `<div class="bar-wrap"><div class="bar-head"><span>${esc(m.name)}</span><span>${esc(label)}</span></div><div class="bar"><span style="width:${p}%;background:${COLORS[m.color % COLORS.length]}"></span></div></div>`;
   let html = "";
   if (meetStepN === 1) {
     const per = weekDone(st.getTime(), next.getTime());
@@ -6150,23 +6503,50 @@ function renderMeet() {
     const score = wt && who.length >= 2 ? Math.max(0, Math.round(100 * (1 - (Math.max(...wm) / wt * 100 - 100 / who.length) / (100 - 100 / who.length)))) : null;
     html = `<h2 id="mt-title">${esc(t.meet1Title)}</h2>` + (n ? `<div class="mt-box"><p class="mt-big">${esc(t.meet1Done.replace("{n}", n))}</p>${score !== null ? `<p class="mt-sub">${esc(t.meet1Fair.replace("{s}", score))}</p>` : ""}</div>
       ${best && best.n ? `<div class="mt-box mt-hero"><span class="av" style="background:${COLORS[best.m.color % COLORS.length]}" aria-hidden="true">${esc(best.m.name.charAt(0).toUpperCase())}</span><span>\u{1F3C6} ${esc(t.meet1Best.replace("{name}", best.m.name).replace("{n}", best.n))}</span></div>` : ""}
-      ${tot ? `<div class="mt-box">${state.members.filter(m => per.get(m.id).min).map(m => { const p = Math.round(per.get(m.id).min / tot * 100); return `<div class="bar-wrap"><div class="bar-head"><span>${esc(m.name)}</span><span>${p}%</span></div><div class="bar"><span style="width:${p}%;background:${COLORS[m.color % COLORS.length]}"></span></div></div>`; }).join("")}</div>` : ""}`
+      ${tot ? `<div class="mt-box">${state.members.filter(m => per.get(m.id).min).map(m => bar(m, Math.round(per.get(m.id).min / tot * 100), Math.round(per.get(m.id).min / tot * 100) + "%")).join("")}</div>` : ""}`
       : `<div class="mt-box"><p style="margin:0">${esc(t.meet1None)}</p></div>`);
   } else if (meetStepN === 2) {
-    const totals = state.members.map(m => ({ m, mins: state.tasks.filter(k => k.owner === m.id).reduce((a, k) => a + weeklyMins(k), 0) }));
-    const tot = totals.reduce((a, x) => a + x.mins, 0) || 1;
+    const totals = memberTotals(), tot = totals.reduce((a, x) => a + x.mins, 0) || 1, ins = leadInsight(totals);
+    html = `<h2 id="mt-title">${esc(t.mq2Title)}</h2><p class="mt-sub">${esc(t.mq2Hint)}</p><div class="mt-box">${totals.map(x => {
+      const p = Math.round(x.mins / tot * 100), c = COLORS[x.m.color % COLORS.length];
+      return `<div class="bar-wrap"><div class="bar-head"><span>${esc(x.m.name)}</span><span>${p}%</span></div><div class="bar bar-split"><span style="width:${x.mins ? p * x.doing / x.mins : 0}%;background:${c}"></span><span class="think" style="width:${x.mins ? p * x.thinking / x.mins : 0}%;--bc:${c}"></span></div><p class="bar-sub">${esc((x.thinking >= 1 ? t.loadDoThink : t.loadDo).replace("{do}", Math.round(x.real)).replace("{think}", Math.round(x.thinking)))}</p></div>`;
+    }).join("")}</div>${ins ? `<div class="mt-box"><p style="margin:0">\u{1F9E0} ${esc(ins)}</p></div>` : ""}`;
+  } else if (meetStepN === 3) {
+    const undone = state.tasks.filter(k => !k.done && k.freq !== "daily" && dueStatus(k) !== "later");
+    html = `<h2 id="mt-title">${esc(t.mq3Title)}</h2>` + (undone.length
+      ? `<p class="mt-sub">${esc(t.mq3Hint)}</p><div class="mt-box"><ul class="mt-list">${undone.slice(0, 10).map(k => `<li><span>${esc(taskName(k))}</span><span class="meta">${esc(memberName(k.owner))}${dueStatus(k) === "late" ? " · " + esc(t.late) : ""}</span></li>`).join("")}</ul></div>`
+      : `<div class="mt-box"><p class="mt-big">${esc(t.mq3None)}</p></div>`);
+  } else if (meetStepN === 4) {
+    const busy = state.members.map(m => ({ m, h: Math.round(busyHours(m, days)) })).filter(x => x.h > 0).sort((a, b) => b.h - a.h);
     const sg = computeSuggestion();
-    html = `<h2 id="mt-title">${esc(t.meet2Title)}</h2><p class="mt-sub">${esc(t.meet2Hint)}</p><div class="mt-box">${totals.map(({ m, mins }) => { const p = Math.round(mins / tot * 100); return `<div class="bar-wrap"><div class="bar-head"><span>${esc(m.name)}</span><span>${Math.round(mins)} ${esc(t.minWeek)}</span></div><div class="bar"><span style="width:${p}%;background:${COLORS[m.color % COLORS.length]}"></span></div></div>`; }).join("")}</div>
+    html = `<h2 id="mt-title">${esc(t.mq4Title)}</h2><p class="mt-sub">${esc(t.mq4Hint)}</p>
+      ${busy.length ? `<div class="mt-box"><ul class="mt-list">${busy.map(x => `<li><span>${esc(x.m.name)}</span><span class="meta">${esc(t.mq4Busy.replace("{h}", x.h))}</span></li>`).join("")}</ul></div>` : ""}
       ${sg ? `<div class="suggest"><span>${t.suggest.replace("{task}", esc(taskName(sg.k))).replace("{from}", esc(sg.from.name)).replace("{to}", esc(sg.to.name))}</span><button type="button" class="ghost" data-mt-move="${sg.k.id}" data-to="${sg.to.id}">${esc(t.meet2Move)}</button></div>` : `<div class="mt-box"><p style="margin:0">${esc(t.meet2Ok)}</p></div>`}
       ${meetMsg ? `<p class="mt-sub" role="status">${esc(meetMsg)}</p>` : ""}`;
-  } else if (meetStepN === 3) {
-    const days = [...Array(7)].map((_, i) => { const d = new Date(next); d.setDate(next.getDate() + i); return d; });
+  } else if (meetStepN === 5) {
     const planned = days.filter(d => ((state.meals || {})[isoDay(d)] || {}).dish).length;
-    const isos = days.map(isoDay);
-    const evs = state.members.reduce((a, m) => a + (m.events || []).filter(e => e && isos.includes(e.date)).length + actsOf(m).reduce((b, x) => b + days.filter(d => x.days.includes(d.getDay())).length, 0), 0);
-    html = `<h2 id="mt-title">${esc(t.meet3Title)}</h2><div class="mt-box"><p class="mt-big">${esc(t.meet3Meals.replace("{n}", planned))}</p>${planned < 7 ? `<p style="margin:8px 0 0"><button type="button" class="ghost" data-mt-meals="1">${esc(t.meet3PlanMeals)}</button></p>` : ""}</div><div class="mt-box"><p style="margin:0">\u{1F4C5} ${esc(t.meet3Events.replace("{n}", evs))}</p></div>`;
+    const isos = days.map(isoDay), items = [];
+    state.members.forEach(m => {
+      (m.events || []).forEach(e => { const i = e && isos.indexOf(e.date); if (e && i >= 0) items.push({ i, time: e.time || "", text: e.title, who: m.name }); });
+      actsOf(m).forEach(a => days.forEach((d, i) => { if (a.days.includes(d.getDay())) items.push({ i, time: a.time || "", text: a.title, who: m.name }); }));
+    });
+    items.sort((a, b) => a.i - b.i || a.time.localeCompare(b.time));
+    html = `<h2 id="mt-title">${esc(t.mq5Title)}</h2><div class="mt-box"><p class="mt-big">${esc(t.meet3Meals.replace("{n}", planned))}</p>${planned < 7 ? `<p style="margin:8px 0 0"><button type="button" class="ghost" data-mt-meals="1">${esc(t.meet3PlanMeals)}</button></p>` : ""}</div>
+      <div class="mt-box"><p style="margin:0 0 6px">\u{1F4C5} ${esc(t.meet3Events.replace("{n}", items.length))}</p>${items.length ? `<ul class="mt-list">${items.slice(0, 8).map(x => `<li><span>${esc(dayShort(days[x.i].getDay()))} ${esc(x.time)} ${esc(x.text)}</span><span class="meta">${esc(x.who)}</span></li>`).join("")}</ul>` : ""}</div>`;
   } else {
-    html = `<h2 id="mt-title">${esc(t.meet4Title)}</h2><p class="mt-sub">${esc(t.meet4Hint)}</p><textarea id="mt-note" maxlength="500" aria-labelledby="mt-title" placeholder="${esc(t.meet4Ph)}"></textarea>`;
+    html = `<h2 id="mt-title">${esc(t.mq6Title)}</h2><p class="mt-sub">${esc(t.mq6Hint)}</p>`;
+    if (!meetPlan) html += `<p><button type="button" class="btn" data-mt-plan="1">${esc(t.mq6Create)}</button></p>`;
+    else {
+      const ch = [...meetPlan].filter(([id, mid]) => { const k = state.tasks.find(x => x.id === id); return k && k.owner !== mid; });
+      if (!ch.length) html += `<div class="mt-box"><p style="margin:0">${esc(t.mq6Same)}</p></div>`;
+      else {
+        const a0 = computeScore(), a1 = scoreWith(meetPlan);
+        html += `<div class="mt-box"><p style="margin:0 0 6px"><b>${esc(t.mq6Changes.replace("{n}", ch.length))}</b></p><ul class="mt-list">${ch.slice(0, 10).map(([id, mid]) => { const k = state.tasks.find(x => x.id === id); return `<li><span>${esc(taskName(k))}</span><span class="meta">${esc(memberName(k.owner))} → ${esc(memberName(mid))}</span></li>`; }).join("")}</ul>${a0 !== null && a1 !== null ? `<p class="mt-sub" style="margin-top:8px">${esc(t.mq6Score.replace("{a}", a0).replace("{b}", a1))}</p>` : ""}</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0"><button type="button" class="btn" data-mt-use="1">${esc(t.mq6Use)}</button><button type="button" class="ghost" data-mt-keep="1">${esc(t.mq6Keep)}</button></div>`;
+      }
+    }
+    if (meetMsg) html += `<p class="mt-sub" role="status">${esc(meetMsg)}</p>`;
+    html += `<label class="lbl" for="mt-note" style="display:block;margin-top:14px">${esc(t.meet4Title)}</label><textarea id="mt-note" maxlength="500" placeholder="${esc(t.meet4Ph)}"></textarea>`;
   }
   card.innerHTML = html;
   btns.innerHTML = `<button type="button" class="fx-done" data-mt="${meetStepN < total ? "next" : "done"}">${esc(meetStepN < total ? t.meetNext : t.meetDone)}</button>${meetStepN > 1 ? `<button type="button" class="fx-skip" data-mt="back">${esc(t.meetBack)}</button>` : ""}`;
@@ -6180,6 +6560,12 @@ document.addEventListener("click", e => {
 document.getElementById("mt-close").onclick = closeMeet;
 document.getElementById("meet").addEventListener("click", e => {
   const t = T[lang];
+  if (e.target.closest("[data-mt-plan]")) { meetPlan = planDistribution({ sticky: true, days: nextWeekDays() }); meetMsg = ""; renderMeet(); const u = document.querySelector("[data-mt-use]") || document.querySelector("#mt-btns .fx-done"); if (u) u.focus(); return; }
+  if (e.target.closest("[data-mt-use]") && meetPlan) {
+    meetPlan.forEach((mid, id) => { const k = state.tasks.find(x => x.id === id); if (k && k.owner !== mid && memberById(mid)) { k.owner = mid; k.rot = null; } });
+    meetPlan = new Map(); meetMsg = t.mq6Done; save(); renderMeet(); return;
+  }
+  if (e.target.closest("[data-mt-keep]")) { meetPlan = new Map(); meetMsg = t.mq6Kept; renderMeet(); return; }
   const mv = e.target.closest("[data-mt-move]");
   if (mv) {
     const k = state.tasks.find(x => x.id === mv.dataset.mtMove), to = memberById(mv.dataset.to);
@@ -6198,6 +6584,309 @@ document.getElementById("meet").addEventListener("click", e => {
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && meetOn) closeMeet(); });
 
+/* ---------- Simple view: large, clear, only what to do today ---------- */
+function simpleOn() { return lsGet("hb-simple") === "1"; }
+function rankToday(k) { return k.done ? 3 : dueStatus(k) === "late" ? 0 : (k.time ? 1 : 2); }
+function renderSimple() {
+  const box = document.getElementById("simple");
+  const on = simpleOn() && !!state;
+  document.body.classList.toggle("simple", on);
+  box.hidden = !on;
+  if (!on) { box.innerHTML = ""; return; }
+  if (!["today", "shop", "settings"].includes(view)) setView("today", true);
+  if (box.contains(document.activeElement) && document.activeElement.dataset.toggle) { /* keep focus on the item just ticked */ }
+  const t = T[lang], pid = todayPerson();
+  const list = pid ? state.tasks.filter(k => k.owner === pid && dueStatus(k) !== "later").sort((x, y) => rankToday(x) - rankToday(y) || String(x.time || "").localeCompare(String(y.time || ""))) : [];
+  const left = list.filter(k => !k.done), done = list.filter(k => k.done);
+  const item = k => `<li><button type="button" class="simple-item${k.done ? " is-done" : ""}" data-toggle="${k.id}" aria-pressed="${k.done}"><span class="box" aria-hidden="true">${k.done ? "✓" : ""}</span><span class="txt">${esc(taskName(k))}${k.time ? `<small>${esc(t.atTime.replace("{t}", k.time))}</small>` : dueStatus(k) === "late" && !k.done ? `<small>${esc(t.late)}</small>` : ""}</span></button></li>`;
+  const dd = new Date().toLocaleDateString(lang === "sv" ? "sv-SE" : "en-GB", { weekday: "long", day: "numeric", month: "long" });
+  const focusId = document.activeElement && box.contains(document.activeElement) ? document.activeElement.dataset.toggle : null;
+  box.innerHTML = `<p class="kicker">${esc(dd)}</p><h2 id="simple-h">${esc(t.simpleQ)}</h2>
+    <p class="simple-count">${esc(left.length ? (left.length === 1 ? t.simpleLeft1 : t.simpleLeft.replace("{n}", left.length)) : list.length ? t.simpleAllDone : t.simpleNothing)}</p>
+    ${left.length ? `<ul class="simple-list">${left.map(item).join("")}</ul>` : ""}
+    ${done.length ? `<h3 class="simple-done-h">${esc(t.simpleDoneH)}</h3><ul class="simple-list">${done.map(item).join("")}</ul>` : ""}
+    <div class="simple-btns">${"speechSynthesis" in window ? `<button type="button" class="btn" data-simple-read="1"><span aria-hidden="true">🔊</span> ${esc(t.simpleRead)}</button>` : ""}${SpeechRec ? `<button type="button" class="btn" data-voice-open="1"><span aria-hidden="true">🎤</span> ${esc(t.voiceOpen)}</button>` : ""}<button type="button" class="ghost" data-goto="shop"><span aria-hidden="true">🛒</span> ${esc(t.simpleShop)}</button><button type="button" class="ghost" data-simple-exit="1">${esc(t.simpleExit)}</button></div>`;
+  if (focusId) { const b = box.querySelector(`[data-toggle="${focusId}"]`); if (b) b.focus(); }
+}
+function todayLeftText() {
+  const t = T[lang], pid = todayPerson();
+  const left = pid ? state.tasks.filter(k => k.owner === pid && !k.done && dueStatus(k) !== "later").sort((x, y) => rankToday(x) - rankToday(y)) : [];
+  if (!left.length) return t.voiceNone;
+  const names = left.map(taskName);
+  const list = names.length > 1 ? names.slice(0, -1).join(", ") + t.listAnd + names[names.length - 1] : names[0];
+  return (left.length === 1 ? t.voiceLeft1 : t.voiceLeft.replace("{n}", left.length)).replace("{list}", list);
+}
+function speak(text) {
+  try {
+    if (!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang === "sv" ? "sv-SE" : "en-GB";
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+document.getElementById("simple").addEventListener("click", e => {
+  if (e.target.closest("[data-simple-read]")) { speak(todayLeftText()); return; }
+  if (e.target.closest("[data-simple-exit]")) { lsSet("hb-simple", ""); renderAll(); return; }
+});
+document.getElementById("set-simple").onchange = e => { lsSet("hb-simple", e.target.checked ? "1" : ""); if (e.target.checked) setView("today"); renderAll(); };
+
+/* ---------- App icon badge: how many of my chores are left today ---------- */
+function updateBadge() {
+  try {
+    if (!("setAppBadge" in navigator)) return;
+    const me = !LOCAL_MODE && hh ? hh.memberId : null;
+    const n = state && me ? state.tasks.filter(k => k.owner === me && !k.done && dueStatus(k) !== "later").length : 0;
+    (n ? navigator.setAppBadge(n) : navigator.clearAppBadge()).catch(() => {});
+  } catch (e) {}
+}
+
+/* ---------- Voice: speak (or type) a command; understood here in the app ---------- */
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+const VOICE_DAYS = { sv: ["söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag"], en: ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"] };
+const pad2 = n => String(n).padStart(2, "0");
+function nextDow(d) { const x = new Date(); x.setHours(12, 0, 0, 0); x.setDate(x.getDate() + ((d - x.getDay() + 7) % 7)); return x; }
+function voiceParseChore(rest, L) {
+  let s = " " + rest.toLowerCase().replace(/[.!?]+$/, "") + " ";
+  const o = { freq: "once", date: "", wday: null, time: "", owner: "" };
+  const days = VOICE_DAYS[L], dayAlt = days.join("|");
+  const cut = m => { s = s.replace(m[0], " "); };
+  let m = L === "sv" ? s.match(/\s(?:kl(?:ockan)?\.?|klockan)\s*(\d{1,2})(?:[:.](\d{2}))?(?=\s)/) : s.match(/\s(?:at)\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)?(?=\s)/);
+  if (m) { let h = Number(m[1]); if (m[3] && /p/.test(m[3]) && h < 12) h += 12; if (m[3] && /a/.test(m[3]) && h === 12) h = 0; if (h < 24) o.time = pad2(h) + ":" + pad2(Number(m[2] || 0)); cut(m); }
+  m = L === "sv" ? s.match(new RegExp("\\s(varje|varannan)\\s+(dag|vecka|månad|" + dayAlt + ")(?:ar)?(?=\\s)")) : s.match(new RegExp("\\s(every(?: other)?)\\s+(day|week|month|" + dayAlt + ")s?(?=\\s)"));
+  if (m) {
+    const other = /varannan|other/.test(m[1]), what = m[2], di = days.indexOf(what);
+    if (di >= 0) { o.freq = other ? "biweekly" : "weekly"; o.wday = di; }
+    else o.freq = /dag|day/.test(what) ? "daily" : /m[åa]nad|month/.test(what) ? "monthly" : (other ? "biweekly" : "weekly");
+    cut(m);
+  } else {
+    m = s.match(new RegExp("\\s(?:på|on)\\s+(" + dayAlt + ")(?:ar|s)(?=\\s)"));
+    if (m) { o.freq = "weekly"; o.wday = days.indexOf(m[1]); cut(m); }
+  }
+  if (o.freq === "once") {
+    const today = new Date(); today.setHours(12, 0, 0, 0);
+    if ((m = s.match(L === "sv" ? /\s(i ?dag)(?=\s)/ : /\s(today)(?=\s)/))) { o.date = isoDay(today); cut(m); }
+    else if ((m = s.match(L === "sv" ? /\s(i ?morgon)(?=\s)/ : /\s(tomorrow)(?=\s)/))) { const d = new Date(today); d.setDate(d.getDate() + 1); o.date = isoDay(d); cut(m); }
+    else if ((m = s.match(L === "sv" ? /\s(i helgen)(?=\s)/ : /\s(this weekend|at the weekend|on the weekend)(?=\s)/))) { o.date = isoDay(nextDow(6)); cut(m); }
+    else if ((m = s.match(new RegExp("\\s(?:på |on |nu på |this )?(" + dayAlt + ")(?=\\s)")))) { o.date = isoDay(nextDow(days.indexOf(m[1]))); cut(m); }
+  }
+  m = s.match(L === "sv" ? /\s(?:åt|för|till)\s+(\S+)\s*$/ : /\s(?:for)\s+(\S+)\s*$/);
+  if (m) { const who = state.members.find(x => norm(x.name) === norm(m[1])); if (who) { o.owner = who.id; cut(m); } }
+  let title = s.replace(L === "sv" ? /\s(på|den)\s*$/ : /\s(on|the)\s*$/, " ").replace(/\s+/g, " ").trim();
+  o.title = title.charAt(0).toUpperCase() + title.slice(1);
+  return o;
+}
+function findTaskBySaying(q, pool) {
+  const nq = norm(q).replace(/^(att |the |to )/, "").trim();
+  if (!nq) return null;
+  const words = nq.split(/\s+/).filter(w => w.length > 2);
+  let best = null, bestScore = 0;
+  pool.forEach(k => {
+    const nk = norm(taskName(k));
+    let sc = nk === nq ? 5 : nk.includes(nq) || nq.includes(nk) ? 3 : words.filter(w => nk.includes(w.replace(/(en|et|na|s)$/, ""))).length ? 1 : 0;
+    // "diska" matches "diskat", "disken": compare stems
+    if (!sc && nk.length >= 4 && nq.startsWith(nk.slice(0, 4))) sc = 1;
+    if (sc && !k.done) sc += 0.5;
+    if (sc > bestScore) { bestScore = sc; best = k; }
+  });
+  return best;
+}
+function canAddChores() { return !isChild() || isTeen(); }
+function voiceRun(raw) {
+  const t = T[lang], L = lang;
+  const text = String(raw || "").trim().replace(/[.!?]+$/, "");
+  const lo = text.toLowerCase();
+  if (!text || !state) return { msg: t.voiceUnknown };
+  let m;
+  // shopping
+  m = L === "sv" ? (lo.match(/^lägg\s+(?:till\s+)?(.+?)\s+(?:på|i)\s+(?:inköpslistan|inköpslista|listan|handlingslistan)$/) || lo.match(/^(?:köp|köpa|handla|skriv upp)\s+(.+)$/))
+                 : (lo.match(/^add\s+(.+?)\s+to\s+(?:the\s+)?(?:shopping\s+)?list$/) || lo.match(/^(?:buy|get|pick up)\s+(.+)$/));
+  if (m) {
+    const before = JSON.stringify(state.shopping || []);
+    addShopItem(m[1]);
+    return { msg: t.voiceShop.replace("{t}", m[1]), undo: () => { state.shopping = JSON.parse(before); } };
+  }
+  // what is left
+  if (L === "sv" ? /vad (?:ska|behöver|måste) jag göra|vad har jag kvar|vad är kvar|vad ska göras/.test(lo) : /what (?:should|do|must) i do|what(?:'s| is) left|what do i have/.test(lo)) return { msg: todayLeftText() };
+  // tick off
+  m = L === "sv" ? (lo.match(/^(?:bocka av|kryssa av|klar med|jag är klar med|jag har gjort|markera)\s+(.+)$/) || lo.match(/^(.+?)\s+(?:är|e)\s+(?:klar|klart|klara|gjord|gjort|fixad|fixat)$/) || lo.match(/^jag har (\S+at)(?:\s.*)?$/))
+                 : (lo.match(/^(?:tick off|check off|done with|i(?:'m| am) done with|i did|mark)\s+(.+?)(?:\s+as done)?$/) || lo.match(/^(.+?)\s+(?:is|are)\s+(?:done|finished)$/) || lo.match(/^i (?:have )?(?:done|finished) (.+)$/));
+  if (m) {
+    const pid = todayPerson();
+    const pool = isChild() ? state.tasks.filter(k => k.owner === hh.memberId) : state.tasks.filter(k => !pid || k.owner === pid).concat(state.tasks.filter(k => pid && k.owner !== pid));
+    const k = findTaskBySaying(m[1], pool);
+    if (!k) return { msg: t.voiceNoTask.replace("{t}", m[1]) };
+    if (k.done) return { msg: t.voiceAlready.replace("{t}", taskName(k)) };
+    if (!canTick(k)) return { msg: t.voiceNotAllowed };
+    toggleDone(k); save();
+    return { msg: t.voiceTicked.replace("{t}", taskName(k)), undo: () => { if (k.done) toggleDone(k); } };
+  }
+  // add a chore
+  m = L === "sv" ? lo.match(/^(?:lägg till|ny syssla|skapa|påminn mig (?:om )?att|jag (?:ska|måste))\s+(.+)$/) : lo.match(/^(?:add|new chore|create|remind me to|i (?:need|have) to)\s+(.+)$/);
+  if (m) {
+    if (!canAddChores()) return { msg: t.voiceNotAllowed };
+    const o = voiceParseChore(text.slice(text.length - m[1].length), L);
+    if (!o.title) return { msg: t.voiceUnknown };
+    const me = !LOCAL_MODE && hh ? hh.memberId : (todayPerson() || state.members[0].id);
+    const h = HOUSEHOLD.find(x => norm(x.sv) === norm(o.title) || norm(x.en) === norm(o.title));
+    if (isTeen()) o.owner = "";
+    const k = { id: uid(), title: o.title, ref: h ? h.sv : null, cat: h ? h.c : 2, minutes: h ? h.m : 15, freq: o.freq, owner: o.owner || me, done: false, time: o.time, date: o.date, wday: o.wday, start: "" };
+    if (isTeen()) k.stars = 0;
+    if (k.freq === "biweekly") k.start = isoDay(weekStartOf(new Date()));
+    state.tasks.push(k); save();
+    const when = o.date ? " " + new Date(o.date + "T12:00:00").toLocaleDateString(lang === "sv" ? "sv-SE" : "en-GB", { weekday: "long", day: "numeric", month: "short" }).replace(/\.$/, "") : o.freq !== "once" ? " (" + t.freqs[o.freq].toLowerCase() + (o.wday !== null ? ", " + VOICE_DAYS[L][o.wday] : "") + ")" : "";
+    const whoTxt = o.owner && o.owner !== me ? t.voiceWho.replace("{n}", memberById(o.owner).name) : "";
+    return { msg: t.voiceAdded.replace("{t}", o.title).replace("{when}", (when + (o.time ? " " + t.atTime.replace("{t}", o.time) : ""))).replace("{who}", whoTxt), undo: () => { state.tasks = state.tasks.filter(x => x.id !== k.id); } };
+  }
+  return { msg: t.voiceUnknown };
+}
+var voiceRec = null, voiceUndoFn = null, voiceReturn = null;
+function openVoice() {
+  if (!state) return;
+  const t = T[lang];
+  voiceReturn = document.activeElement;
+  document.getElementById("voice").hidden = false;
+  document.getElementById("voice-ex").innerHTML = t.voiceEx.map(x => `<li>”${esc(x)}”</li>`).join("");
+  document.getElementById("voice-mic").hidden = !SpeechRec;
+  document.getElementById("voice-mic-l").textContent = t.voiceListen;
+  document.getElementById("voice-heard").textContent = "";
+  document.getElementById("voice-out").textContent = "";
+  document.getElementById("voice-undo-row").hidden = true;
+  document.getElementById("voice-in").value = "";
+  setTimeout(() => document.getElementById(SpeechRec ? "voice-mic" : "voice-in").focus(), 30);
+}
+function closeVoice() {
+  try { if (voiceRec) voiceRec.abort(); } catch (e) {}
+  voiceRec = null;
+  document.getElementById("voice").hidden = true;
+  renderAll();
+  if (voiceReturn && voiceReturn.focus) try { voiceReturn.focus(); } catch (e) {}
+}
+function voiceDo(text, spoken) {
+  const res = voiceRun(text);
+  voiceUndoFn = res.undo || null;
+  document.getElementById("voice-out").textContent = res.msg;
+  document.getElementById("voice-undo-row").hidden = !voiceUndoFn;
+  if (spoken) speak(res.msg);
+  renderAll();
+  return res;
+}
+function voiceListen() {
+  if (!SpeechRec) return;
+  const t = T[lang], lbl = document.getElementById("voice-mic-l"), heard = document.getElementById("voice-heard");
+  try { if (voiceRec) voiceRec.abort(); } catch (e) {}
+  let r;
+  try { r = new SpeechRec(); } catch (e) { document.getElementById("voice-out").textContent = t.voiceNoMic; return; }
+  voiceRec = r;
+  r.lang = lang === "sv" ? "sv-SE" : "en-GB"; r.interimResults = true; r.maxAlternatives = 1;
+  lbl.textContent = t.voiceListening;
+  r.onresult = e => {
+    const res = e.results[e.results.length - 1], said = res[0].transcript;
+    heard.textContent = t.voiceHeard.replace("{t}", said);
+    if (res.isFinal) voiceDo(said, true);
+  };
+  r.onerror = e => { if (e.error === "not-allowed" || e.error === "service-not-allowed" || e.error === "audio-capture") document.getElementById("voice-out").textContent = t.voiceNoMic; };
+  r.onend = () => { lbl.textContent = t.voiceListen; voiceRec = null; };
+  try { r.start(); } catch (e) { lbl.textContent = t.voiceListen; }
+}
+document.addEventListener("click", e => { if (e.target.closest("[data-voice-open]")) openVoice(); });
+document.getElementById("voice-mic").onclick = voiceListen;
+document.getElementById("voice-close").onclick = closeVoice;
+document.getElementById("voice-undo").onclick = () => { if (voiceUndoFn && state) { voiceUndoFn(); save(); } voiceUndoFn = null; document.getElementById("voice-undo-row").hidden = true; document.getElementById("voice-out").textContent = T[lang].undoDone || ""; renderAll(); };
+document.getElementById("voice-form").onsubmit = e => { e.preventDefault(); const v = document.getElementById("voice-in").value; if (v.trim()) { voiceDo(v, false); document.getElementById("voice-in").value = ""; } };
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !document.getElementById("voice").hidden) closeVoice(); });
+
+/* ---------- Report, hide and remove posts and comments ---------- */
+function canReport() { return !LOCAL_MODE && !!hh && !isOwner() && (!isChild() || hasFeature("reports")); }
+function mutedKey() { return "hb-muted-" + (currentUser ? currentUser.id : "local"); }
+function mutedIds() { try { const v = JSON.parse(lsGet(mutedKey()) || "[]"); return Array.isArray(v) ? v.filter(x => typeof x === "string") : []; } catch (e) { return []; } }
+function setMuted(ids) { lsSet(mutedKey(), JSON.stringify([...new Set(ids)].slice(0, 20))); }
+function findPost(what, id) { return what === "comment" ? (state.comments || []).find(c => c.id === id) : (state.board || []).find(b => b.id === id); }
+var reportFor = null, reportReturn = null;
+function openReport(what, id, from) {
+  const x = findPost(what, id);
+  if (!x) return;
+  reportFor = { what, id, why: "" }; reportReturn = from || document.activeElement;
+  document.getElementById("report-sheet").hidden = false;
+  renderReport2();
+  setTimeout(() => { const b = document.querySelector("#rp-card [data-rp-why]"); if (b) b.focus(); }, 30);
+}
+function renderReport2() {
+  if (!reportFor) return;
+  const t = T[lang], x = findPost(reportFor.what, reportFor.id), who = x ? memberName(x.by) : "?";
+  document.getElementById("rp-card").innerHTML = `<h2 id="rp-h">${esc(t.flagTitle)}</h2><blockquote class="rp-quote">${esc(x ? x.text : "")}<cite>${esc(who)}</cite></blockquote>
+    <p class="g-q" id="rp-why-l">${esc(t.reportWhy)}</p><div class="chips" role="group" aria-labelledby="rp-why-l">${Object.keys(t.whys).map(k => `<button type="button" class="chip" data-rp-why="${k}" aria-pressed="${reportFor.why === k}">${esc(t.whys[k])}</button>`).join("")}</div>
+    <label class="set-check" style="margin-top:12px"><input type="checkbox" id="rp-mute"><span>${esc(t.reportMute.replace("{name}", who))}</span></label>
+    <p class="summary" style="margin:8px 0 0">${esc(t.reportHint)}</p>
+    <p class="rp-help">${esc(t.reportHelp)}</p>
+    <div class="row-btns" style="margin-top:12px;display:flex;gap:10px"><button type="button" class="btn" id="rp-send"${reportFor.why ? "" : " disabled"}>${esc(t.reportSend)}</button><button type="button" class="ghost" id="rp-cancel">${esc(t.cancel)}</button></div>`;
+}
+function closeReport() {
+  reportFor = null;
+  document.getElementById("report-sheet").hidden = true;
+  if (reportReturn && reportReturn.focus) try { reportReturn.focus(); } catch (e) {}
+}
+document.addEventListener("click", e => {
+  const r = e.target.closest("[data-report]");
+  if (r) { const [what, id] = r.dataset.report.split("|"); openReport(what, id, r); }
+});
+document.getElementById("report-sheet").addEventListener("click", e => {
+  const t = T[lang];
+  const w = e.target.closest("[data-rp-why]");
+  if (w && reportFor) { reportFor.why = w.dataset.rpWhy; renderReport2(); const b = document.querySelector(`#rp-card [data-rp-why="${w.dataset.rpWhy}"]`); if (b) b.focus(); return; }
+  if (e.target.id === "rp-cancel") { closeReport(); return; }
+  if (e.target.id === "rp-send" && reportFor && reportFor.why) {
+    const x = findPost(reportFor.what, reportFor.id);
+    if (x) {
+      if (document.getElementById("rp-mute").checked) setMuted(mutedIds().concat(x.by));
+      state.reports = (state.reports || []).concat({ id: uid(), by: boardAuthor(), what: reportFor.what, ref: x.id, text: String(x.text || "").slice(0, 140), author: x.by, why: reportFor.why, at: Date.now(), done: false });
+      save();
+    }
+    closeReport(); showNote(t.reportThanks); renderAll();
+  }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && reportFor) closeReport(); });
+function openReports() { return (state.reports || []).filter(r => !r.done); }
+function renderReports() {
+  const box = document.getElementById("set-reports");
+  if (!state || LOCAL_MODE || !isOwner()) { box.hidden = true; box.innerHTML = ""; return; }
+  const t = T[lang], open = openReports(), log = (state.modLog || []).slice(-5).reverse();
+  box.hidden = !open.length && !log.length;
+  if (box.hidden) { box.innerHTML = ""; return; }
+  box.innerHTML = `<h3 id="reports-h">${esc(t.reportsTitle)}</h3>${open.length ? `<p class="summary" style="margin-top:0">${esc(t.reportsHint)}</p>` : ""}
+    ${open.map(r => { const live = findPost(r.what, r.ref); return `<div class="rp-item"><p style="margin:0 0 6px"><b>${esc(t.reportBy.replace("{by}", memberName(r.by)).replace("{author}", memberName(r.author)).replace("{why}", (t.whys[r.why] || t.whys.other).toLowerCase()))}</b></p><blockquote class="rp-quote">${esc(r.text || "")}</blockquote><div style="display:flex;gap:8px;flex-wrap:wrap">${live ? `<button type="button" class="ghost danger" data-rp-remove="${r.id}">${esc(t.reportRemove)}</button>` : `<span class="meta">${esc(t.reportGone)}</span>`}<button type="button" class="ghost" data-rp-dismiss="${r.id}">${esc(t.reportDismiss)}</button></div></div>`; }).join("")}
+    ${log.length ? `<p class="meta" style="margin:12px 0 4px"><b>${esc(t.modLogTitle)}</b></p><ul class="mod-log">${log.map(l => `<li>${esc(fmtDate(isoDay(new Date(l.at))))}: ${esc((l.act === "removed" ? t.modRemoved : t.modDismissed).replace("{by}", memberName(l.by)).replace("{author}", memberName(l.author)))}</li>`).join("")}</ul>` : ""}`;
+}
+document.getElementById("set-reports").addEventListener("click", e => {
+  if (!isOwner()) return;
+  const rm = e.target.closest("[data-rp-remove]"), ok = e.target.closest("[data-rp-dismiss]");
+  const r = (state.reports || []).find(x => x.id === ((rm || ok) || { dataset: {} }).dataset[rm ? "rpRemove" : "rpDismiss"]);
+  if (!r) return;
+  const me = boardAuthor();
+  if (rm) {
+    const key = r.what === "comment" ? "comments" : "board", gone = findPost(r.what, r.ref);
+    state[key] = (state[key] || []).filter(x => x.id !== r.ref);
+    if (gone) showUndo(String(gone.text).slice(0, 30), () => { state[key].push(gone); state.reports.forEach(x => { if (x.ref === r.ref) x.done = false; }); state.modLog.pop(); });
+  }
+  state.reports.forEach(x => { if (x.ref === r.ref && (rm || x.id === r.id)) x.done = true; });
+  state.modLog = (state.modLog || []).concat({ id: uid(), at: Date.now(), by: me, act: rm ? "removed" : "dismissed", author: r.author }).slice(-50);
+  const old = Date.now() - 90 * 864e5;
+  state.reports = state.reports.filter(x => !x.done || (Number(x.at) || 0) > old);
+  state.modLog = state.modLog.filter(x => (Number(x.at) || 0) > old);
+  save(); renderAll();
+});
+function renderMuted() {
+  const box = document.getElementById("set-muted"), ids = mutedIds().filter(id => memberById(id));
+  box.hidden = !ids.length;
+  if (!ids.length) { box.innerHTML = ""; return; }
+  const t = T[lang];
+  box.innerHTML = `<h3>${esc(t.mutedTitle)}</h3><p class="summary" style="margin-top:0">${esc(t.mutedHint)}</p>${ids.map(id => `<div class="g-row"><span class="grow">${esc(memberName(id))}</span><button type="button" class="ghost" data-unmute="${id}">${esc(t.unmute)}</button></div>`).join("")}`;
+}
+document.getElementById("set-muted").addEventListener("click", e => {
+  const b = e.target.closest("[data-unmute]");
+  if (b) { setMuted(mutedIds().filter(x => x !== b.dataset.unmute)); renderAll(); }
+});
+
 /* ---------- One thing at a time (focus mode) ---------- */
 var focusOn = false, focusSkip = [], focusReturn = null, focusStart = 0;
 function focusList() {
@@ -6208,7 +6897,7 @@ function focusList() {
   const notYet = k => !k.done && /^\d{2}:\d{2}$/.test(k.time || "") && dueStatus(k) !== "late" && Number(k.time.slice(0, 2)) * 60 + Number(k.time.slice(3)) - nowM > 30;
   return state.tasks.filter(k => k.owner === pid && dueStatus(k) !== "later" && !notYet(k)).sort((x, y) => rank(x) - rank(y) || String(x.time || "").localeCompare(String(y.time || "")));
 }
-function canTick(k) { return !isChild() || (settings().childCheck && k.owner === hh.memberId); }
+function canTick(k) { return !isChild() || ((settings().childCheck || isTeen()) && k.owner === hh.memberId); }
 function openFocus(from) {
   focusOn = true; focusSkip = []; focusReturn = from || document.activeElement;
   focusStart = focusList().filter(k => k.done).length;
@@ -6369,8 +7058,10 @@ function renderGuide() {
   hint.textContent = t["g" + guideStep + "Hint"];
   if (guideStep === 1) {
     const meId = !LOCAL_MODE && hh ? hh.memberId : state.members[0] && state.members[0].id;
-    body.innerHTML = `<div>${state.members.map(m => `<div class="g-row"><span class="swatch" style="background:${COLORS[m.color % COLORS.length]}"></span><span class="grow">${esc(m.name)}${m.id === meId ? ` (${esc(t.gYou)})` : ""}</span>${m.id === meId || accountOf(m) ? "" : `<button type="button" class="chip" data-g-kid="${m.id}" aria-pressed="${!!m.kid}">${esc(t.kidLabel)}</button><button type="button" class="ghost" data-g-del="${m.id}" aria-label="${esc(t.remove)}">✕</button>`}</div>`).join("")}</div>
-      <form class="g-add" id="g-add-form"><input id="g-name" maxlength="24" placeholder="${esc(t.name)}" aria-label="${esc(t.name)}" required><button class="btn" type="submit"${state.members.length >= 6 ? " disabled" : ""}>${esc(t.add)}</button></form>`;
+    const ty = settings().hhType || "", kids = ["", "family", "other"].includes(ty);
+    body.innerHTML = `<p class="g-q" id="g-type-l">${esc(t.hhTypeQ)}</p><div class="chips g-types" role="group" aria-labelledby="g-type-l">${Object.keys(t.hhTypes).map(k => `<button type="button" class="chip" data-g-type="${k}" aria-pressed="${ty === k}">${esc(t.hhTypes[k])}</button>`).join("")}</div>
+      <div>${state.members.map(m => `<div class="g-row"><span class="swatch" style="background:${COLORS[m.color % COLORS.length]}"></span><span class="grow">${esc(m.name)}${m.id === meId ? ` (${esc(t.gYou)})` : ""}</span>${m.id === meId || accountOf(m) ? "" : `${kids || m.kid ? `<button type="button" class="chip" data-g-kid="${m.id}" aria-pressed="${!!m.kid}">${esc(t.kidLabel)}</button>` : ""}<button type="button" class="ghost" data-g-del="${m.id}" aria-label="${esc(t.remove)} ${esc(m.name)}">✕</button>`}</div>`).join("")}</div>
+      <form class="g-add" id="g-add-form"><input id="g-name" maxlength="24" placeholder="${esc(ty === "single" ? t.name : t.nameNick)}" aria-label="${esc(t.nameNick)}" required><button class="btn" type="submit"${state.members.length >= 6 ? " disabled" : ""}>${esc(t.add)}</button></form>`;
   } else if (guideStep === 2) {
     const inv = hh && hh.invites;
     body.innerHTML = inv ? [["adult_code", t.gLinkAdult], ["child_code", t.gLinkChild]].map(([k, label]) => k === "child_code" && !settings().parentConsent ? consentRow() : `<div class="g-row"><span class="grow">${esc(label)}</span><button type="button" class="ghost" data-g-qr="${k === "child_code" ? "child" : "adult"}">${esc(t.qrBtn)}</button><button type="button" class="ghost" data-g-copy="${esc(inv[k])}">${esc(t.inviteLinkBtn)}</button>${navigator.share ? `<button type="button" class="ghost" data-g-share="${esc(inv[k])}">${esc(t.inviteShareBtn)}</button>` : ""}</div>`).join("") : "";
@@ -6386,19 +7077,55 @@ function renderGuide() {
     body.innerHTML = `<p><button type="button" class="btn" id="g-even">${esc(t.gEven)}</button></p><div class="g-assign">${state.tasks.map(k => `<span>${esc(taskName(k))}${k.rot ? ` <span class="pill">${esc(t.gRotate)}</span>` : ""}</span><select data-g-owner="${k.id}" aria-label="${esc(t.owner)}">${state.members.map(m => `<option value="${m.id}"${m.id === k.owner ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select>`).join("")}</div>`;
   }
 }
-function shareEvenly() {
-  const cap = m => isKid(m) ? 0.4 : 1;
+/* Automatic distribution: weighs time, effort and keeping track, gives children lighter loads,
+   and gives people with many activities in the coming week a bit less. */
+function actHours(a) {
+  if (/^\d{2}:\d{2}$/.test(a.time || "") && /^\d{2}:\d{2}$/.test(a.end || "")) {
+    const h = (Number(a.end.slice(0, 2)) * 60 + Number(a.end.slice(3)) - Number(a.time.slice(0, 2)) * 60 - Number(a.time.slice(3))) / 60;
+    if (h > 0) return Math.min(8, h);
+  }
+  return 1.5;
+}
+function busyHours(m, days) {
+  const isos = days.map(isoDay);
+  let h = 0;
+  actsOf(m).forEach(a => { h += days.filter(d => (a.days || []).includes(d.getDay())).length * actHours(a); });
+  (m.events || []).forEach(ev => { if (ev && isos.includes(ev.date)) h += 2; });
+  return h;
+}
+function capacityOf(m, days) {
+  const base = isKid(m) ? (m.teen ? 0.6 : 0.4) : 1;
+  return base * Math.max(0.4, 1 - (days ? busyHours(m, days) : 0) / 40);
+}
+function unfitFor(m, k) {
+  if (!isKid(m)) return false;
+  const mt = metaOf(k);
+  if (m.teen) return Number(k.minutes) > 60;
+  return Number(k.minutes) > 25 || mt.effort === 3 || mt.kind === "plan" || mt.kind === "book";
+}
+function planDistribution(opts) {
+  const o = opts || {}, out = new Map();
+  if (!state.members.length) return out;
   const load = new Map(state.members.map(m => [m.id, 0]));
-  const sorted = state.tasks.slice().sort((x, y) => weeklyMins(y) - weeklyMins(x));
-  sorted.forEach(k => {
+  // keeping track stays with whoever is set to keep track
+  state.tasks.forEach(k => { if (k.lead && memberById(k.lead)) load.set(k.lead, load.get(k.lead) + thinkLoad(k)); });
+  const fixed = k => !o.all && ((k.rot && k.rot.ids) || (k.done && (k.freq || "weekly") === "once"));
+  state.tasks.filter(fixed).forEach(k => { if (load.has(k.owner)) load.set(k.owner, load.get(k.owner) + ownerWeight(k)); });
+  const cap = new Map(state.members.map(m => [m.id, capacityOf(m, o.days)]));
+  state.tasks.filter(k => !fixed(k)).sort((x, y) => ownerWeight(y) - ownerWeight(x)).forEach(k => {
+    const w = ownerWeight(k);
     let best = null, bestScore = Infinity;
     state.members.forEach(m => {
-      const heavy = isKid(m) && Number(k.minutes) > 25;
-      const score = (load.get(m.id) + weeklyMins(k)) / cap(m) + (heavy ? 1e6 : 0);
+      const stay = o.sticky && m.id === k.owner ? -0.15 * w : 0; // avoid moving chores around for tiny gains
+      const score = (load.get(m.id) + w) / cap.get(m.id) + stay + (unfitFor(m, k) ? 1e6 : 0);
       if (score < bestScore) { bestScore = score; best = m; }
     });
-    if (best) { k.owner = best.id; k.rot = null; load.set(best.id, load.get(best.id) + weeklyMins(k)); }
+    if (best) { out.set(k.id, best.id); load.set(best.id, load.get(best.id) + w); }
   });
+  return out;
+}
+function shareEvenly() {
+  planDistribution({ all: true }).forEach((mid, id) => { const k = state.tasks.find(x => x.id === id); if (k) { k.owner = mid; k.rot = null; } });
 }
 document.getElementById("guide").addEventListener("click", async e => {
   const t = T[lang];
@@ -6407,6 +7134,14 @@ document.getElementById("guide").addEventListener("click", async e => {
   const copy = e.target.closest("[data-g-copy]"), share = e.target.closest("[data-g-share]");
   const qr = e.target.closest("[data-g-qr]");
   if (qr) { openInvite(qr.dataset.gQr, qr); return; }
+  const gty = e.target.closest("[data-g-type]");
+  if (gty) {
+    const ty = gty.dataset.gType, patch = { hhType: ty };
+    if (ty === "family") patch.rewardsOff = false;
+    if (ty === "couple" || ty === "shared" || ty === "single") patch.rewardsOff = !state.members.some(isKid);
+    state.settings = { ...settings(), ...patch };
+    save(); applyRole(); renderAll(); return;
+  }
   if (kid) { const m = memberById(kid.dataset.gKid); if (m) { m.kid = !m.kid; save(); renderGuide(); } return; }
   if (del) { const id = del.dataset.gDel; state.members = state.members.filter(m => m.id !== id); state.tasks.forEach(k => { if (k.owner === id) k.owner = state.members[0].id; }); save(); renderAll(); return; }
   if (pick) {
@@ -6467,6 +7202,9 @@ function renderSettings() {
     const dl = document.getElementById("set-deflang");
     dl.innerHTML = `<option value="">${t.setLangNone}</option><option value="sv">Svenska</option><option value="en">English</option>`;
     dl.value = st.lang || "";
+    const ht = document.getElementById("set-hhtype");
+    ht.innerHTML = Object.keys(t.hhTypes).map(k => `<option value="${k}">${esc(t.hhTypes[k])}</option>`).join("");
+    ht.value = st.hhType || "family";
     document.getElementById("set-c-seeall").checked = !!st.childSeeAll;
     document.getElementById("set-c-check").checked = !!st.childCheck;
     document.getElementById("set-c-profile").checked = !!st.childProfile;
@@ -6481,8 +7219,9 @@ function renderSettings() {
   if (!isChild() && !(list.contains(active) && active.tagName === "INPUT")) {
     list.innerHTML = state.members.map(m => `<div class="hh-row" data-pm="${m.id}">
       <input class="grow" data-pm-name="${m.id}" value="${esc(m.name)}" maxlength="24" aria-label="${esc(t.name)}">
-      <div class="swatches">${COLORS.map((c, i) => `<button type="button" data-pm-color="${m.id}" data-c="${i}" aria-pressed="${m.color % COLORS.length === i}" style="background:${c}" aria-label="${i + 1}"></button>`).join("")}</div>
-    </div>`).join("");
+      <div class="swatches">${COLORS.map((c, i) => `<button type="button" data-pm-color="${m.id}" data-c="${i}" aria-pressed="${m.color % COLORS.length === i}" style="background:${c}" aria-label="${esc(t.colorN.replace("{n}", i + 1).replace("{name}", m.name))}"></button>`).join("")}</div>
+      ${isKid(m) && hasFeature("teen") ? `<button type="button" class="chip" data-pm-teen="${m.id}" aria-pressed="${!!m.teen}">${esc(t.teenLabel)}</button>` : ""}
+    </div>`).join("") + (state.members.some(isKid) && hasFeature("teen") ? `<p class="footnote" style="text-align:left">${esc(t.teenHint)}</p>` : "");
   }
 }
 function updateSettings(patch) {
@@ -6510,6 +7249,7 @@ document.getElementById("set-c-seeall").onchange = e => updateSettings({ childSe
 document.getElementById("set-c-check").onchange = e => updateSettings({ childCheck: e.target.checked });
 document.getElementById("set-c-profile").onchange = e => updateSettings({ childProfile: e.target.checked });
 document.getElementById("set-rewards").onchange = e => updateSettings({ rewardsOff: !e.target.checked });
+document.getElementById("set-hhtype").onchange = e => updateSettings({ hhType: e.target.value });
 
 const peopleBox = document.getElementById("set-people-list");
 peopleBox.addEventListener("change", e => {
@@ -6523,6 +7263,8 @@ peopleBox.addEventListener("change", e => {
   save(); renderAll();
 });
 peopleBox.addEventListener("click", e => {
+  const tb = e.target.closest("[data-pm-teen]");
+  if (tb && !isChild()) { const m = memberById(tb.dataset.pmTeen); if (m) { m.teen = !m.teen; save(); renderAll(); } return; }
   const b = e.target.closest("[data-pm-color]");
   if (!b || isChild()) return;
   const m = memberById(b.dataset.pmColor);
@@ -6931,7 +7673,14 @@ async function onSignedIn(user) {
   if (!opened) { showSetup(); return; }
   finishSignIn();
 }
+function runDeepLink() {
+  if (deepLink.add && !isChild()) { setView("chores"); openAdd(true); }
+  if (deepLink.voice) openVoice();
+  deepLink = {};
+}
 function finishSignIn() {
+  setTimeout(runDeepLink, 50);
+  loadFeatures();
   lsSet("hb-invite", "");
   document.getElementById("setup").hidden = true;
   document.getElementById("logout").hidden = false;

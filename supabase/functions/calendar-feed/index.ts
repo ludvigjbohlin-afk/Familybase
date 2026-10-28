@@ -96,9 +96,12 @@ export function buildIcs(household, opts) {
   const ws = Number((data.settings || {}).weekStart) === 0 ? 0 : 1;
   // what the guardian chose to share (all on unless switched off)
   const inc = k => (data.settings || {})[k] !== false;
+  // children's chores, activities and birthdays are left out unless the guardian turned them on
+  const kidsOk = (data.settings || {}).calKids === true;
+  const hideKid = id => { const p = members.find(x => x.id === id); return !kidsOk && !!(p && p.kid); };
   // invitations: a.with lists invited members; their answer is stored in their own hobbies as { re: "act|org|id", ans: "yes" }
   const saidYes = (mid, key) => { const p = members.find(x => x.id === mid); return !!(p && Array.isArray(p.hobbies) && p.hobbies.some(r => r && r.re === key && r.ans === "yes")); };
-  const going = (kind, org, item) => (Array.isArray(item.with) ? item.with : []).filter(id => id !== org.id && saidYes(id, kind + "|" + org.id + "|" + item.id));
+  const going = (kind, org, item) => (Array.isArray(item.with) ? item.with : []).filter(id => id !== org.id && !hideKid(id) && saidYes(id, kind + "|" + org.id + "|" + item.id));
   const show = (kind, org, item) => !only || org.id === only.id || going(kind, org, item).includes(only.id);
   const whoAll = (kind, org, item) => {
     const names = [org.id, ...going(kind, org, item)].filter(id => !only || id !== only.id).map(nameOf).filter(Boolean);
@@ -107,7 +110,7 @@ export function buildIcs(household, opts) {
 
   // chores
   (inc("calChores") && Array.isArray(data.tasks) ? data.tasks : []).forEach(k => {
-    if (!k || typeof k !== "object" || !mine(k.owner)) return;
+    if (!k || typeof k !== "object" || !mine(k.owner) || hideKid(k.owner)) return;
     const f = k.freq || "weekly", time = isTime(k.time) ? k.time : "", end = time ? addMin(time, k.minutes) : "";
     const name = String(k.title || k.ref || "").trim();
     if (!name) return;
@@ -128,6 +131,7 @@ export function buildIcs(household, opts) {
   });
 
   members.forEach(m => {
+    if (hideKid(m.id)) return;
     // one-off events in the family calendar
     (inc("calActs") && Array.isArray(m.events) ? m.events : []).forEach(ev => {
       if (!ev || !isDate(ev.date) || !ev.title || !show("ev", m, ev)) return;
