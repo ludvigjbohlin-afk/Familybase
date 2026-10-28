@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-Vg7a56APb0gLGDag+DD+ZbynVmCkVPJK+7+OiyPx8YE='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-ReThp8szcv1DkBfVS4SFMuadxyLmnPBZFfcxpgfxq6k='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Household Balance</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -1158,6 +1158,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <div><label for="k-owner" data-i="owner"></label><select id="k-owner"></select></div>
         <div><label for="k-freq" data-i="repeats"></label><select id="k-freq"></select></div>
         <div id="k-wday-row"><label for="k-wday" data-i="kWday"></label><select id="k-wday"></select></div>
+        <div id="k-bi-row" hidden><label for="k-bi" data-i="biFirst"></label><select id="k-bi"></select></div>
         <div id="k-date-row"><label for="k-date" data-i="kDate"></label><input id="k-date" type="date"></div>
         <div class="narrow"><label for="k-min" data-i="minutes"></label><input id="k-min" type="number" min="1" max="600" value="15"></div>
         <details class="more-opts" id="k-more"><summary data-i="moreOpts"></summary>
@@ -1279,7 +1280,7 @@ const T = {
     filterBy: "Show chores for", hobbyPh: "For example running or choir", noFiltered: "No chores for this person.", sure: "Sure?", clearDone: "Clear completed one-time chores",
     suggest: 'Suggestion: move "{task}" from {from} to {to} to even things out.', move: "Move", maxMembers: "A household can have up to 6 members.",
     navOverview: "Overview", navChores: "Chores", navProfiles: "Profiles", navWeek: "This week",
-    repeats: "Repeats", freqs: { once: "Once", daily: "Daily", weekly: "Weekly", monthly: "Monthly" }, minWeek: "min/week",
+    repeats: "Repeats", freqs: { once: "Once", daily: "Daily", weekly: "Weekly", biweekly: "Every other week", monthly: "Monthly" }, biFirst: "First time", biThis: "This week", biNext: "Next week", biNextShort: "next week", minWeek: "min/week",
     scoreTitle: "How fair is it?", scoreHigh: "The load is shared very evenly.", scoreMid: "Fairly even, with room to improve.", scoreLow: "One person carries most of the load.", scoreNeed: "Add at least two family members and some chores to see your score.",
     progressText: "{done} of {total} chores done", allDone: "Everything is done. Great work together!",
     copySummary: "Copy weekly summary", copied: "Copied!", copyManual: "Select the text below and copy it.",
@@ -1427,7 +1428,7 @@ const T = {
     filterBy: "Visa sysslor för", hobbyPh: "Till exempel löpning eller kör", noFiltered: "Inga sysslor för den här personen.", sure: "Säker?", clearDone: "Rensa klara engångssysslor",
     suggest: 'Förslag: flytta "{task}" från {from} till {to} för att jämna ut.', move: "Flytta", maxMembers: "Ett hushåll kan ha upp till 6 medlemmar.",
     navOverview: "Översikt", navChores: "Sysslor", navProfiles: "Profiler", navWeek: "Veckan",
-    repeats: "Återkommer", freqs: { once: "En gång", daily: "Varje dag", weekly: "Varje vecka", monthly: "Varje månad" }, minWeek: "min/vecka",
+    repeats: "Återkommer", freqs: { once: "En gång", daily: "Varje dag", weekly: "Varje vecka", biweekly: "Varannan vecka", monthly: "Varje månad" }, biFirst: "Första gången", biThis: "Den här veckan", biNext: "Nästa vecka", biNextShort: "nästa vecka", minWeek: "min/vecka",
     scoreTitle: "Hur rättvist är det?", scoreHigh: "Arbetet är mycket jämnt fördelat.", scoreMid: "Ganska jämnt, men det finns utrymme att förbättra.", scoreLow: "En person bär det mesta av arbetet.", scoreNeed: "Lägg till minst två familjemedlemmar och några sysslor för att se poängen.",
     progressText: "{done} av {total} sysslor klara", allDone: "Allt är klart. Bra jobbat tillsammans!",
     copySummary: "Kopiera veckosammanfattning", copied: "Kopierat!", copyManual: "Markera texten nedan och kopiera den.",
@@ -1909,7 +1910,7 @@ async function loadHouseholdFor(user) {
 
 
 /* ---------- Repeats, weekly load, auto-reset ---------- */
-const WEEK_W = { once: 1, daily: 7, weekly: 1, monthly: 0.25 };
+const WEEK_W = { once: 1, daily: 7, weekly: 1, biweekly: 0.5, monthly: 0.25 };
 const FREQ_BY_SV = {
   "Diska": "daily", "Laga middag": "daily", "Packa matlådor": "daily", "Packa väskan till förskolan": "daily",
   "Hämta och lämna barn": "daily", "Mata husdjuret": "daily", "Gå ut med hunden": "daily", "Plocka i och ur diskmaskinen": "daily",
@@ -1927,8 +1928,14 @@ function isoWeek(d) {
   const y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
   return { year: t.getUTCFullYear(), week: Math.ceil(((t - y) / 86400000 + 1) / 7) };
 }
-function periodKey(freq, d) {
+/* every other week: k.start is the first day of a week the chore is on; it is on every second week from there */
+function weeksBetween(aIso, bIso) { return Math.round((new Date(bIso + "T12:00:00") - new Date(aIso + "T12:00:00")) / 604800000); }
+function biAnchor(k) { return isoDay(weekStartOf(new Date(((k && /^\d{4}-\d{2}-\d{2}$/.test(k.start || "")) ? k.start : "2024-01-01") + "T00:00:00"))); }
+function biIndex(k, d) { return weeksBetween(biAnchor(k), isoDay(weekStartOf(d || new Date()))); }
+function biOn(k, d) { return ((biIndex(k, d) % 2) + 2) % 2 === 0; }
+function periodKey(freq, d, k) {
   if (freq === "daily") return d.toDateString();
+  if (freq === "biweekly") return "b" + Math.floor(biIndex(k, d) / 2);
   if (freq === "weekly") {
     const ws = Number(settings().weekStart) === 0 ? 0 : 1;
     const st = new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -1944,7 +1951,7 @@ function autoReset() {
   let changed = false;
   state.tasks.forEach(k => {
     if (k.done && k.doneAt && k.freq && k.freq !== "once") {
-      if (periodKey(k.freq, new Date(k.doneAt)) !== periodKey(k.freq, now)) { k.done = false; k.doneAt = null; (k.steps || []).forEach(x => { x.done = false; }); changed = true; }
+      if (periodKey(k.freq, new Date(k.doneAt), k) !== periodKey(k.freq, now, k)) { k.done = false; k.doneAt = null; (k.steps || []).forEach(x => { x.done = false; }); changed = true; }
     }
   });
   if (applyRotation()) changed = true;
@@ -2023,7 +2030,10 @@ function renderRotPicker(sel) {
 function syncFreqFields() {
   const f = document.getElementById("k-freq").value || "weekly";
   document.getElementById("k-rot-row").hidden = f === "once";
-  document.getElementById("k-wday-row").hidden = f !== "weekly";
+  document.getElementById("k-wday-row").hidden = f !== "weekly" && f !== "biweekly";
+  document.getElementById("k-bi-row").hidden = f !== "biweekly";
+  const bi = document.getElementById("k-bi");
+  if (!bi.options.length || bi.options[0].textContent !== T[lang].biThis) { const v = bi.value || "0"; bi.innerHTML = `<option value="0">${esc(T[lang].biThis)}</option><option value="1">${esc(T[lang].biNext)}</option>`; bi.value = v; }
   document.getElementById("k-date-row").hidden = !(f === "once" || f === "monthly");
 }
 
@@ -2433,6 +2443,7 @@ function setEditMode(id) {
     document.getElementById("k-stars").value = starsOf(k);
     document.getElementById("k-freq").value = k.freq || "weekly";
     syncFreqFields();
+    document.getElementById("k-bi").value = k.freq === "biweekly" && !biOn(k) ? "1" : "0";
     document.getElementById("k-date").value = k.date || "";
     document.getElementById("k-time").value = k.time || "";
     document.getElementById("k-wday").value = k.wday === null || k.wday === undefined ? "" : String(k.wday);
@@ -2528,7 +2539,9 @@ document.getElementById("task-form").onsubmit = e => {
   const kd = document.getElementById("k-date").value, kt = document.getElementById("k-time").value, kw = document.getElementById("k-wday").value;
   data.time = kt || "";
   data.date = (data.freq === "once" || data.freq === "monthly") ? (kd || "") : "";
-  data.wday = data.freq === "weekly" && kw !== "" ? Number(kw) : null;
+  data.wday = (data.freq === "weekly" || data.freq === "biweekly") && kw !== "" ? Number(kw) : null;
+  if (data.freq === "biweekly") { const st = weekStartOf(new Date()); st.setDate(st.getDate() + (document.getElementById("k-bi").value === "1" ? 7 : 0)); data.start = isoDay(st); }
+  else data.start = "";
   data.note = document.getElementById("k-note").value.trim().slice(0, 200);
   const prevSteps = (editId && (state.tasks.find(x => x.id === editId) || {}).steps) || [];
   data.steps = document.getElementById("k-steps").value.split("\n").map(x => x.trim().slice(0, 60)).filter(Boolean).slice(0, 12)
@@ -3166,6 +3179,14 @@ function occurrence(k, now) {
   now = now || new Date();
   const f = k.freq || "weekly";
   if (f === "daily") return isoDay(now);
+  if (f === "biweekly") {
+    // on-week: this week's day; off-week: last on-week if not done yet (late), otherwise the next on-week (later)
+    const on = biOn(k, now), st = weekStartOf(now), hasDay = k.wday !== null && k.wday !== undefined && k.wday !== "";
+    if (!on) st.setDate(st.getDate() + (k.done ? 7 : -7));
+    if (!hasDay) return on ? null : isoDay(st);
+    const d = new Date(st); d.setDate(st.getDate() + (Number(k.wday) - st.getDay() + 7) % 7);
+    return isoDay(d);
+  }
   if (f === "weekly") {
     if (k.wday === null || k.wday === undefined || k.wday === "") return null;
     const st = weekStartOf(now);
@@ -3192,7 +3213,8 @@ function dueStatus(k) {
 }
 function whenText(k) {
   const t = T[lang], f = k.freq || "weekly", parts = [];
-  if (f === "weekly" && k.wday !== null && k.wday !== undefined && k.wday !== "") parts.push(t.wdays[Number(k.wday)]);
+  if ((f === "weekly" || f === "biweekly") && k.wday !== null && k.wday !== undefined && k.wday !== "") parts.push(t.wdays[Number(k.wday)]);
+  if (f === "biweekly" && !biOn(k)) parts.push(t.biNextShort);
   if (f === "once" && k.date) parts.push(fmtDate(k.date));
   if (f === "monthly" && k.date) parts.push(t.monthDay.replace("{d}", Number(k.date.slice(8, 10))));
   if (k.time) parts.push(t.atTime.replace("{t}", k.time));
@@ -3203,6 +3225,7 @@ function choreOnDay(k, iso) {
   const f = k.freq || "weekly", d = new Date(iso + "T00:00:00");
   if (f === "daily") return false;
   if (f === "weekly") return k.wday !== null && k.wday !== undefined && k.wday !== "" && Number(k.wday) === d.getDay();
+  if (f === "biweekly") return k.wday !== null && k.wday !== undefined && k.wday !== "" && Number(k.wday) === d.getDay() && biOn(k, d);
   if (!k.date) return false;
   if (f === "monthly") { const day = Number(k.date.slice(8, 10)); const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); return d.getDate() === Math.min(day, last); }
   return k.date === iso;
@@ -4454,7 +4477,8 @@ function rotOwner(k) {
   const ids = r.ids.filter(id => memberById(id));
   if (ids.length < 2) return null;
   const cur = isoDay(weekStartOf(new Date()));
-  const n = Math.round((new Date(cur + "T00:00:00") - new Date((r.start || cur) + "T00:00:00")) / 604800000);
+  let n = Math.round((new Date(cur + "T00:00:00") - new Date((r.start || cur) + "T00:00:00")) / 604800000);
+  if (k.freq === "biweekly") n = Math.floor(biIndex(k, new Date()) / 2) - Math.floor(biIndex(k, new Date((r.start || cur) + "T00:00:00")) / 2);
   const base = Math.max(0, ids.indexOf(r.first));
   return ids[(((base + n) % ids.length) + ids.length) % ids.length];
 }

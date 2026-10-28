@@ -103,8 +103,16 @@ export function localParts(ms, tz) {
 function isoDay(d) { return d.getUTCFullYear() + "-" + String(d.getUTCMonth() + 1).padStart(2, "0") + "-" + String(d.getUTCDate()).padStart(2, "0"); }
 function dayOnly(d) { return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())); }
 function weekStartOf(d, ws) { const st = dayOnly(d); st.setUTCDate(st.getUTCDate() - ((st.getUTCDay() - ws + 7) % 7)); return st; }
-function periodKey(freq, d, ws) {
+// every other week: k.start is the first day of a week the chore is on
+function biIndex(k, d, ws) {
+  const a = /^\d{4}-\d{2}-\d{2}$/.test(String(k.start || "")) ? k.start : "2024-01-01";
+  const anchor = weekStartOf(new Date(Date.UTC(+a.slice(0, 4), +a.slice(5, 7) - 1, +a.slice(8, 10))), ws);
+  return Math.round((weekStartOf(d, ws) - anchor) / 604800000);
+}
+function biOn(k, d, ws) { return ((biIndex(k, d, ws) % 2) + 2) % 2 === 0; }
+function periodKey(freq, d, ws, k) {
   if (freq === "daily") return isoDay(d);
+  if (freq === "biweekly") return "b" + Math.floor(biIndex(k || {}, d, ws) / 2);
   if (freq === "weekly") return "w" + isoDay(weekStartOf(d, ws));
   if (freq === "monthly") return d.getUTCFullYear() + "-" + d.getUTCMonth();
   return "once";
@@ -112,6 +120,13 @@ function periodKey(freq, d, ws) {
 function occurrence(k, now, ws) {
   const f = k.freq || "weekly";
   if (f === "daily") return isoDay(now);
+  if (f === "biweekly") {
+    const on = biOn(k, now, ws), st = weekStartOf(now, ws), hasDay = !(k.wday === null || k.wday === undefined || k.wday === "");
+    if (!on) st.setUTCDate(st.getUTCDate() + (k.done ? 7 : -7));
+    if (!hasDay) return on ? null : isoDay(st);
+    const d = new Date(st); d.setUTCDate(st.getUTCDate() + ((Number(k.wday) - st.getUTCDay() + 7) % 7));
+    return isoDay(d);
+  }
   if (f === "weekly") {
     if (k.wday === null || k.wday === undefined || k.wday === "") return null;
     const st = weekStartOf(now, ws);
@@ -132,7 +147,8 @@ function rotOwner(k, members, now, ws) {
   const ids = r.ids.filter(id => members.some(m => m.id === id));
   if (ids.length < 2) return null;
   const cur = isoDay(weekStartOf(now, ws));
-  const n = Math.round((Date.parse(cur + "T00:00:00Z") - Date.parse((r.start || cur) + "T00:00:00Z")) / 604800000);
+  let n = Math.round((Date.parse(cur + "T00:00:00Z") - Date.parse((r.start || cur) + "T00:00:00Z")) / 604800000);
+  if (k.freq === "biweekly") n = Math.floor(biIndex(k, now, ws) / 2) - Math.floor(biIndex(k, new Date(Date.parse((r.start || cur) + "T00:00:00Z")), ws) / 2);
   const base = Math.max(0, ids.indexOf(r.first));
   return ids[(((base + n) % ids.length) + ids.length) % ids.length];
 }
@@ -146,7 +162,7 @@ export function todaysChores(data, memberId, nowMs, tz) {
     if ((rotOwner(k, members, now, ws) || k.owner) !== memberId) return false;
     const f = k.freq || "weekly";
     let done = !!k.done;
-    if (done && f !== "once" && k.doneAt) done = periodKey(f, localParts(Number(k.doneAt), tz).date, ws) === periodKey(f, now, ws);
+    if (done && f !== "once" && k.doneAt) done = periodKey(f, localParts(Number(k.doneAt), tz).date, ws, k) === periodKey(f, now, ws, k);
     if (done) return false;
     const o = occurrence(k, now, ws);
     return !o || o <= today;

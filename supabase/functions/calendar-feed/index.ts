@@ -51,6 +51,15 @@ function lastWeekday(today, wd) {
   return isoDay(d);
 }
 
+function addDays(day, n) { const d = new Date(Date.UTC(+day.slice(0, 4), +day.slice(5, 7) - 1, +day.slice(8, 10) + n)); return isoDay(d); }
+function weekStartIso(day, ws) { const d = new Date(Date.UTC(+day.slice(0, 4), +day.slice(5, 7) - 1, +day.slice(8, 10))); d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() - ws + 7) % 7)); return isoDay(d); }
+// every other week: k.start is the first day of a week the chore is on
+function onWeek(k, day, ws) {
+  const a = weekStartIso(isDate(k.start) ? k.start : "2024-01-01", ws), b = weekStartIso(day, ws);
+  const n = Math.round((Date.parse(b + "T00:00:00Z") - Date.parse(a + "T00:00:00Z")) / 604800000);
+  return ((n % 2) + 2) % 2 === 0;
+}
+
 function vevent(uid, summary, day, time, end, rrule, stamp, desc) {
   const L = ["BEGIN:VEVENT", "UID:" + uid + "@hushallsbalans", "DTSTAMP:" + stamp, "SUMMARY:" + esc(summary)];
   if (time) {
@@ -84,6 +93,7 @@ export function buildIcs(household, opts) {
   const out = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Hushallsbalans//Kalender//SV", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
     "X-WR-CALNAME:" + esc(title), "X-WR-TIMEZONE:" + TZ, "REFRESH-INTERVAL;VALUE=DURATION:PT1H", "X-PUBLISHED-TTL:PT1H", ...VTIMEZONE];
   const who = id => (only ? "" : nameOf(id) ? " (" + nameOf(id) + ")" : "");
+  const ws = Number((data.settings || {}).weekStart) === 0 ? 0 : 1;
   // invitations: a.with lists invited members; their answer is stored in their own hobbies as { re: "act|org|id", ans: "yes" }
   const saidYes = (mid, key) => { const p = members.find(x => x.id === mid); return !!(p && Array.isArray(p.hobbies) && p.hobbies.some(r => r && r.re === key && r.ans === "yes")); };
   const going = (kind, org, item) => (Array.isArray(item.with) ? item.with : []).filter(id => id !== org.id && saidYes(id, kind + "|" + org.id + "|" + item.id));
@@ -102,10 +112,12 @@ export function buildIcs(household, opts) {
     const sum = name + who(k.owner), desc = Number(k.minutes) ? T.min.replace("{n}", Math.round(Number(k.minutes))) : "";
     const uid = "task-" + safeId(k.id);
     if (f === "daily") { if (time) out.push(...vevent(uid, sum, today, time, end, "FREQ=DAILY", stamp, desc)); return; }
-    if (f === "weekly") {
+    if (f === "weekly" || f === "biweekly") {
       if (k.wday === null || k.wday === undefined || k.wday === "" || isNaN(Number(k.wday))) return;
       const wd = Number(k.wday) % 7;
-      out.push(...vevent(uid, sum, lastWeekday(today, wd), time, end, "FREQ=WEEKLY;BYDAY=" + DAYS[wd], stamp, desc));
+      let first = lastWeekday(today, wd);
+      if (f === "biweekly" && !onWeek(k, first, ws)) first = addDays(first, -7);
+      out.push(...vevent(uid, sum, first, time, end, "FREQ=WEEKLY;" + (f === "biweekly" ? "INTERVAL=2;" : "") + "BYDAY=" + DAYS[wd], stamp, desc));
       return;
     }
     if (!isDate(k.date)) return;
