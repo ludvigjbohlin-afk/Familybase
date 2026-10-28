@@ -94,6 +94,8 @@ export function buildIcs(household, opts) {
     "X-WR-CALNAME:" + esc(title), "X-WR-TIMEZONE:" + TZ, "REFRESH-INTERVAL;VALUE=DURATION:PT1H", "X-PUBLISHED-TTL:PT1H", ...VTIMEZONE];
   const who = id => (only ? "" : nameOf(id) ? " (" + nameOf(id) + ")" : "");
   const ws = Number((data.settings || {}).weekStart) === 0 ? 0 : 1;
+  // what the guardian chose to share (all on unless switched off)
+  const inc = k => (data.settings || {})[k] !== false;
   // invitations: a.with lists invited members; their answer is stored in their own hobbies as { re: "act|org|id", ans: "yes" }
   const saidYes = (mid, key) => { const p = members.find(x => x.id === mid); return !!(p && Array.isArray(p.hobbies) && p.hobbies.some(r => r && r.re === key && r.ans === "yes")); };
   const going = (kind, org, item) => (Array.isArray(item.with) ? item.with : []).filter(id => id !== org.id && saidYes(id, kind + "|" + org.id + "|" + item.id));
@@ -104,7 +106,7 @@ export function buildIcs(household, opts) {
   };
 
   // chores
-  (Array.isArray(data.tasks) ? data.tasks : []).forEach(k => {
+  (inc("calChores") && Array.isArray(data.tasks) ? data.tasks : []).forEach(k => {
     if (!k || typeof k !== "object" || !mine(k.owner)) return;
     const f = k.freq || "weekly", time = isTime(k.time) ? k.time : "", end = time ? addMin(time, k.minutes) : "";
     const name = String(k.title || k.ref || "").trim();
@@ -127,12 +129,12 @@ export function buildIcs(household, opts) {
 
   members.forEach(m => {
     // one-off events in the family calendar
-    (Array.isArray(m.events) ? m.events : []).forEach(ev => {
+    (inc("calActs") && Array.isArray(m.events) ? m.events : []).forEach(ev => {
       if (!ev || !isDate(ev.date) || !ev.title || !show("ev", m, ev)) return;
       out.push(...vevent("ev-" + safeId(ev.id), String(ev.title) + whoAll("ev", m, ev), ev.date, isTime(ev.time) ? ev.time : "", isTime(ev.end) ? ev.end : "", "", stamp, ""));
     });
     // weekly activities (football on Tuesdays...)
-    (Array.isArray(m.hobbies) ? m.hobbies : []).forEach((a, i) => {
+    (inc("calActs") && Array.isArray(m.hobbies) ? m.hobbies : []).forEach((a, i) => {
       if (!a || typeof a !== "object" || !a.title || !Array.isArray(a.days) || !a.days.length || !show("act", m, a)) return;
       const days = a.days.map(Number).filter(d => d >= 0 && d <= 6);
       if (!days.length) return;
@@ -141,7 +143,7 @@ export function buildIcs(household, opts) {
     });
     // birthdays for everyone
     const b = String(m.birthday || "");
-    if (/^\d{4}-\d{2}-\d{2}$/.test(b) && b.slice(5) !== "02-29") {
+    if (inc("calBdays") && /^\d{4}-\d{2}-\d{2}$/.test(b) && b.slice(5) !== "02-29") {
       out.push(...vevent("bday-" + safeId(m.id), "\u{1F382} " + T.bday.replace("{n}", m.name || ""), today.slice(0, 4) + "-" + b.slice(5), "", "", "FREQ=YEARLY", stamp, ""));
     }
   });
@@ -152,14 +154,15 @@ export function buildIcs(household, opts) {
 export async function handle(req, env, makeClient) {
   const url = new URL(req.url);
   const token = url.searchParams.get("t") || "";
-  if (!/^[A-Za-z0-9_-]{24,64}$/.test(token)) return new Response("Not found", { status: 404 });
+  const NOINDEX = { "X-Robots-Tag": "noindex, nofollow, noarchive", "Referrer-Policy": "no-referrer" };
+  if (!/^[A-Za-z0-9_-]{24,64}$/.test(token)) return new Response("Not found", { status: 404, headers: NOINDEX });
   const sb = makeClient(env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
   const { data, error } = await sb.from("households").select("name, data").eq("data->settings->>calToken", token).limit(1).maybeSingle();
-  if (error || !data) return new Response("Not found", { status: 404 });
+  if (error || !data) return new Response("Not found", { status: 404, headers: NOINDEX });
   const ics = buildIcs(data, { member: url.searchParams.get("m") || "", lang: url.searchParams.get("lang") || "sv" });
   return new Response(ics, {
     status: 200,
-    headers: { "Content-Type": "text/calendar; charset=utf-8", "Cache-Control": "private, max-age=900", "Content-Disposition": 'inline; filename="hushallsbalans.ics"' },
+    headers: { ...NOINDEX, "Content-Type": "text/calendar; charset=utf-8", "Cache-Control": "private, max-age=900", "Content-Disposition": 'inline; filename="hushallsbalans.ics"' },
   });
 }
 

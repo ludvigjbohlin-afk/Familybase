@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-ReThp8szcv1DkBfVS4SFMuadxyLmnPBZFfcxpgfxq6k='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-Ddk6IpNwdv+H7soYHdVYmLRrqCdp/FYoUmQon6lPCNs='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://gkqbqrtmpftjsgguxiff.supabase.co wss://gkqbqrtmpftjsgguxiff.supabase.co; worker-src 'self'; manifest-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Household Balance</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -643,6 +643,44 @@ input, select, textarea { font-size: max(16px, 1rem) !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 
 
+/* ===== Privacy and security ===== */
+body.no-rewards .star-card, body.no-rewards .star-pill, body.no-rewards #sec-rewards, body.no-rewards .pocket-line, body.no-rewards #today-rewards, body.no-rewards .fld:has(#k-stars) { display: none !important; }
+#login.mfa-mode .login-card > :not(#mfa-form), #login.mfa-mode .login-why, #login.mfa-mode .demo-row { display: none !important; }
+#mfa-form[hidden] { display: none; }
+.mfa-qr { background: #fff; border-radius: 12px; padding: 8px; width: 200px; margin: 8px 0; }
+.mfa-qr img { display: block; width: 100%; height: auto; }
+.mfa-key { font-family: ui-monospace, Menlo, monospace; font-size: .8125rem; word-break: break-all; color: var(--muted); }
+.cal-incl { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 0; }
+.cal-incl .set-check { margin: 0; }
+/* ===== Chore form for phones ===== */
+.task-form { display: grid; gap: 16px; }
+.task-form .fld { min-width: 0; }
+.task-form .fld > label, .task-form .fld > .lbl { display: block; margin: 0 0 6px; }
+.task-form input, .task-form select, .task-form textarea { width: 100%; }
+.fld-hint { margin: 6px 0 0; font-size: .8125rem; color: var(--muted); }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: .9375rem; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); font-weight: 600; }
+.seg-days button { min-width: 52px; padding: 8px 10px; }
+.seg-days button:first-child { flex: 1 1 100% !important; }
+.seg-src { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; border: 0 !important; opacity: 0; }
+.min-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.min-row input { width: 96px !important; }
+.k-time { max-width: 180px; }
+.more-opts summary { min-height: 44px; display: flex; align-items: center; }
+.more-in { margin-top: 12px; }
+.form-actions { display: flex; gap: 10px; position: sticky; bottom: calc(76px + env(safe-area-inset-bottom)); z-index: 2; padding: 10px 0; background: var(--bg); }
+.form-actions .btn { flex: 1 1 auto; min-height: 50px; }
+.form-actions .ghost { flex: 0 0 auto; }
+.add-mode { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 12px; background: var(--fill, rgba(120,120,128,.12)); margin: 0 0 4px; }
+.add-mode button { min-height: 44px; border: 0; border-radius: 9px; background: transparent; color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; }
+.add-mode button[aria-pressed="true"] { background: var(--surface); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+#pick-wrap-1[hidden], #pick-wrap-2[hidden] { display: none; }
+@media (max-width: 560px) {
+  .add-panel { padding: 12px; margin-left: -4px; margin-right: -4px; }
+  .seg button { flex: 1 1 auto; }
+  .seg-days button { flex: 1 0 calc(25% - 8px); }
+}
 /* ===== Weekly meeting, pocket money ===== */
 #meet { position: fixed; inset: 0; z-index: 30; background: var(--bg); display: flex; flex-direction: column; overflow-y: auto; padding: max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)); }
 #meet[hidden] { display: none; }
@@ -869,6 +907,13 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
       <p class="consent-note" id="oauth-consent"></p>
       <p class="or-line" data-i="orEmail"></p>
     </div>
+    <form id="mfa-form" hidden>
+      <h3 style="margin:0 0 4px" data-i="mfaLoginTitle"></h3>
+      <p class="summary" style="margin:0 0 10px" data-i="mfaLoginHint"></p>
+      <label for="mfa-code" class="sr-only" data-i="mfaCode"></label><input id="mfa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}">
+      <div style="margin-top:12px;display:flex;gap:10px"><button class="btn" type="submit" style="flex:1" data-i="mfaContinue"></button><button class="ghost" type="button" id="mfa-cancel" data-i="mfaCancel"></button></div>
+      <p class="set-msg err" id="mfa-err" role="alert"></p>
+    </form>
     <form id="auth-form">
       <div id="reg-only" hidden><label for="a-name" data-i="yourName"></label><input id="a-name" maxlength="24" autocomplete="name"></div>
       <div style="margin-top:10px"><label for="a-email" data-i="email"></label><input id="a-email" type="email" inputmode="email" autocomplete="email" required></div>
@@ -1045,6 +1090,8 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <label class="set-check"><input type="checkbox" id="set-c-seeall"><span data-i="setChildSeeAll"></span></label>
         <label class="set-check"><input type="checkbox" id="set-c-check"><span data-i="setChildCheck"></span></label>
         <label class="set-check"><input type="checkbox" id="set-c-profile"><span data-i="setChildProfile"></span></label>
+        <label class="set-check" style="margin-top:10px"><input type="checkbox" id="set-rewards"><span data-i="setRewards"></span></label>
+        <p class="footnote" style="text-align:left;margin-top:0" data-i="setRewardsHint"></p>
         <p class="footnote" data-i="setChildNote"></p>
         <p class="set-msg" id="set-admin-msg" role="status"></p>
       </div>
@@ -1074,6 +1121,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
           <div><button class="btn" type="submit" data-i="setChangePw"></button></div>
         </form>
         <p class="set-msg" id="set-account-msg" role="status"></p>
+        <div class="set-sub adult-only" id="set-mfa"></div>
         <div class="danger-block" style="margin-top:18px">
           <h3 data-i="delTitle"></h3>
           <p class="summary" style="margin:0 0 10px" data-i="delHint"></p>
@@ -1085,7 +1133,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         </div>
       </div>
 
-      <div class="set-block adult-only" id="set-export">
+      <div class="set-block" id="set-export">
         <h3 data-i="setExportTitle"></h3>
         <p class="summary" style="margin-top:0" data-i="setExportHint"></p>
         <button class="ghost" type="button" id="set-export-btn" data-i="setExportBtn"></button>
@@ -1109,6 +1157,7 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
         <div id="ai-panel" class="add-panel" hidden>
           <label for="ai-prefs" data-i="aiDescribe"></label>
           <textarea id="ai-prefs" maxlength="600" rows="3"></textarea>
+          <p class="fld-hint" data-i="aiPrivacy"></p>
           <div style="margin-top:10px"><button class="btn" type="button" id="ai-go" data-i="aiGo"></button></div>
           <p class="set-msg" id="ai-status" role="status"></p>
           <div id="ai-result"></div>
@@ -1151,32 +1200,34 @@ a:focus-visible, .chip:focus-visible, .linkish:focus-visible, .oauth-btn:focus-v
       <h2 id="h-tasks"><span class="dot"></span><span data-i="tasksTitle"></span></h2>
       <div class="adult-only"><button class="btn big" id="add-toggle" type="button" aria-expanded="false" aria-controls="add-panel" data-i="addToggle"></button></div>
       <div id="add-panel" class="add-panel adult-only" hidden>
-        <button class="ghost own-btn" type="button" id="own-toggle" aria-expanded="false" aria-controls="own-wrap" data-i="ownTask"></button>
+        <div class="add-mode" role="group" aria-label="Add">
+          <button type="button" id="own-toggle" aria-pressed="false" aria-controls="own-wrap" data-i="ownTask"></button>
+          <button type="button" id="pick-toggle" aria-pressed="true" data-i="pickTask"></button>
+        </div>
         <div id="own-wrap" class="own-wrap" hidden>
-      <form id="task-form" class="row">
-        <div style="flex:2 1 220px"><label for="k-title" data-i="taskName"></label><input id="k-title" maxlength="80" required></div>
-        <div><label for="k-owner" data-i="owner"></label><select id="k-owner"></select></div>
-        <div><label for="k-freq" data-i="repeats"></label><select id="k-freq"></select></div>
-        <div id="k-wday-row"><label for="k-wday" data-i="kWday"></label><select id="k-wday"></select></div>
-        <div id="k-bi-row" hidden><label for="k-bi" data-i="biFirst"></label><select id="k-bi"></select></div>
-        <div id="k-date-row"><label for="k-date" data-i="kDate"></label><input id="k-date" type="date"></div>
-        <div class="narrow"><label for="k-min" data-i="minutes"></label><input id="k-min" type="number" min="1" max="600" value="15"></div>
+      <form id="task-form" class="task-form">
+        <div class="fld"><label for="k-title" data-i="kWhat"></label><input id="k-title" maxlength="80" required autocomplete="off"></div>
+        <div class="fld"><span class="lbl" id="k-owner-l" data-i="kWho"></span><div class="seg" data-for="k-owner" role="group" aria-labelledby="k-owner-l"></div><select id="k-owner" class="seg-src" aria-hidden="true" tabindex="-1"></select></div>
+        <div class="fld"><span class="lbl" id="k-freq-l" data-i="kHowOften"></span><div class="seg" data-for="k-freq" role="group" aria-labelledby="k-freq-l"></div><select id="k-freq" class="seg-src" aria-hidden="true" tabindex="-1"></select></div>
+        <div class="fld" id="k-wday-row"><span class="lbl" id="k-wday-l" data-i="kWday"></span><div class="seg seg-days" data-for="k-wday" data-short="1" role="group" aria-labelledby="k-wday-l"></div><select id="k-wday" class="seg-src" aria-hidden="true" tabindex="-1"></select></div>
+        <div class="fld" id="k-bi-row" hidden><span class="lbl" id="k-bi-l" data-i="biFirst"></span><div class="seg" data-for="k-bi" role="group" aria-labelledby="k-bi-l"></div><select id="k-bi" class="seg-src" aria-hidden="true" tabindex="-1"></select></div>
+        <div class="fld" id="k-date-row"><label for="k-date" data-i="kDate"></label><input id="k-date" type="date"></div>
+        <div class="fld"><label for="k-time" data-i="kClock"></label><input id="k-time" type="time" class="k-time"><p class="fld-hint" data-i="kClockHint"></p></div>
+        <div class="fld"><span class="lbl" id="k-min-l" data-i="kHowLong"></span><div class="seg" id="k-min-seg" role="group" aria-labelledby="k-min-l"><button type="button" data-min="5" aria-pressed="false">5</button><button type="button" data-min="10" aria-pressed="false">10</button><button type="button" data-min="15" aria-pressed="false">15</button><button type="button" data-min="20" aria-pressed="false">20</button><button type="button" data-min="30" aria-pressed="false">30</button><button type="button" data-min="45" aria-pressed="false">45</button><button type="button" data-min="60" aria-pressed="false">60</button></div><div class="min-row"><input id="k-min" type="number" min="1" max="600" value="15" inputmode="numeric" aria-labelledby="k-min-l"><span class="meta" data-i="kMinUnit"></span></div></div>
         <details class="more-opts" id="k-more"><summary data-i="moreOpts"></summary>
-          <div class="row">
-            <div><label for="k-cat" data-i="category"></label><select id="k-cat"></select></div>
-            <div class="narrow" style="flex:0 0 120px"><label for="k-time" data-i="kTime"></label><input id="k-time" type="time"></div>
-            <div class="narrow"><label for="k-stars" data-i="starsLabel"></label><input id="k-stars" type="number" min="0" max="10" value="1"></div>
-            <div style="flex:1 1 100%"><label for="k-note" data-i="noteLabel"></label><input id="k-note" maxlength="200"></div>
-            <div style="flex:1 1 100%"><label for="k-steps" data-i="stepsLabel"></label><textarea id="k-steps" rows="3" style="min-height:70px"></textarea></div>
-            <div id="k-rot-row" style="flex:1 1 100%"><label data-i="rotLabel"></label><div class="chips" id="k-rot" style="margin:0"></div><p class="meta" style="margin:4px 0 0" data-i="rotHint"></p></div>
+          <div class="task-form more-in">
+            <div class="fld"><label for="k-cat" data-i="category"></label><select id="k-cat"></select></div>
+            <div class="fld"><label for="k-stars" data-i="starsLabel"></label><input id="k-stars" type="number" min="0" max="10" value="1" inputmode="numeric"></div>
+            <div class="fld"><label for="k-note" data-i="noteLabel"></label><input id="k-note" maxlength="200"></div>
+            <div class="fld"><label for="k-steps" data-i="stepsLabel"></label><textarea id="k-steps" rows="3" style="min-height:70px"></textarea></div>
+            <div class="fld" id="k-rot-row"><span class="lbl" data-i="rotLabel"></span><div class="chips" id="k-rot" style="margin:0"></div><p class="fld-hint" data-i="rotHint"></p></div>
           </div>
         </details>
-        <div class="narrow"><button class="btn" type="submit" data-i="addTask"></button></div>
-        <div class="narrow"><button class="ghost" type="button" id="cancel-edit" data-i="cancel" hidden></button></div>
+        <div class="form-actions"><button class="btn" type="submit" data-i="addTask"></button><button class="ghost" type="button" id="cancel-edit" data-i="cancel" hidden></button></div>
       </form>
         </div>
-        <div class="tpl-row"><span class="meta" style="margin:0" data-i="tplLabel"></span><span id="tpl-btns"></span></div>
-        <div class="clean-search">
+        <div class="tpl-row" id="pick-wrap-1"><span class="meta" style="margin:0" data-i="tplLabel"></span><span id="tpl-btns"></span></div>
+        <div class="clean-search" id="pick-wrap-2">
           <h3 class="clean-h" data-i="cleanTitle"></h3>
           <input id="clean-q" type="search" autocomplete="off">
           <div class="clean-results" id="clean-results"></div>
@@ -1301,7 +1352,7 @@ const T = {
     deleteWarn: "Deleting removes all data for everyone in the household.", ownerNote: "Only the guardian who manages the household can manage accounts.",
     tabToday: "Today", tabChores: "Chores", tabFamily: "Family", tabWeek: "Week",
     todayHi: "Hi {name}!", todayFor: "Today: {name}", todayEmpty: "No chores here yet.", todayEmptyBtn: "Add the first chore",
-    addToggle: "+ Add a chore", ownTask: "✎ Write your own chore", back: "← Back", generalTitle: "General", langLabel: "Language",
+    addToggle: "+ Add a chore", ownTask: "Write your own", back: "← Back", generalTitle: "General", langLabel: "Language",
     todayLeft: "{n} left today", kDate: "Date (optional)", kTime: "Time (optional)", kWday: "Which day?", wdayAny: "Any day",
     wdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], late: "Late", atTime: "at {t}", monthDay: "day {d} each month",
     calTitle: "The family's week", calWho: "Who?", calAdd: "Add to calendar", calEmpty: "Nothing planned", calToday: "Today",
@@ -1322,6 +1373,12 @@ const T = {
     meetThanks: "Saved. Have a good week!",
     pocketTitle: "Pocket money", pocketHint: "Turn stars into money. Leave at 0 to switch it off.", pocketRate: "Kronor per star", pocketSave: "Save",
     pocketOwed: "{kr} kr to pay out", pocketNone: "Nothing to pay out", pocketPay: "Paid {kr} kr", pocketPaidToast: "Paid {kr} kr to {name}", pocketKid: "You have earned {kr} kr",
+    mfaTitle: "Two-step sign-in", mfaHint: "Extra protection for adults: besides the password you type a code from an authenticator app (for example Google Authenticator or 1Password).", mfaOn: "Two-step sign-in is on.", mfaOff: "Turn on two-step sign-in", mfaDisable: "Turn off", mfaScan: "Scan the code with your authenticator app, or type the key by hand. Then type the 6-digit code it shows.", mfaKey: "Key: {k}", mfaCode: "6-digit code", mfaConfirm: "Confirm", mfaDone: "Two-step sign-in is now on.", mfaRemoved: "Two-step sign-in is turned off.", mfaBad: "The code did not match. Try the newest code.", mfaNeedFresh: "Sign in again with your code first, then you can turn it off.", mfaUnavailable: "Two-step sign-in is not available right now.",
+    mfaLoginTitle: "Two-step sign-in", mfaLoginHint: "Type the 6-digit code from your authenticator app.", mfaContinue: "Continue", mfaCancel: "Sign out",
+    setRewards: "Use stars and rewards", setRewardsHint: "Turn off if your household does not want a reward system.",
+    calIncl: "Show in the calendar:", calInclChores: "Chores", calInclActs: "Activities and events", calInclBdays: "Birthdays",
+    aiPrivacy: "Write only food wishes. Names in the household are removed before anything is sent, and nothing about health or allergies leaves the app other than what you write here.",
+    kWhat: "What needs doing?", kWho: "Who does it?", kHowOften: "How often?", kClock: "At a set time? (optional)", kClockHint: "For example 22:00. Then it only shows up in One thing at a time half an hour before.", kHowLong: "How long does it take?", kMinUnit: "minutes", pickTask: "Pick a suggestion",
     invTo: "Invite", invWith: "with {names}", invBanner: "{name} invites you: {what}", invYes: "Yes please", invNo: "No thanks", invSaidYes: "{name}, coming", invSaidNo: "{name}, can't come", invWait: "{name}, no answer yet", invJoined: "You're joining {name}", invEvWhen: "{date} {time}", invOrganizer: "Organised by {name}",
     focusOpen: "One thing at a time", focusOf: "{done} of {total} done", focusNow: "Now", focusAbout: "About {n} min", focusDone: "Done ✓", focusLater: "Later", focusAllDone: "All done for today!", focusAllHint: "{n} chores ticked off. Nice work.", focusStars: "You got {n} ★ today.", focusBack: "Back to Today",
     startCreate: "Create the household", startDoneTitle: "You're up and running!", startDoneHint: "Everything is set. Know another family who argues about the dishes?",
@@ -1359,7 +1416,7 @@ const T = {
     rewardsTitle: "Stars and rewards", rewardsHint: "Children earn stars for their chores. You decide how many stars each chore gives (when you add or edit a chore) and how many stars each reward needs.", rewardName: "Reward", rewardCost: "Stars needed", rewardsNone: "No rewards yet. Add one below.",
     starsLabel: "Stars ★", starPill: "{n} ★", msNext: "{left} more to {r}", msAllDone: "Every reward reached! Ask a parent for a new one.", msNoneKid: "Ask a parent to add rewards to collect stars for.", msNoneAdult: "Add rewards under Family to give the stars a goal.",
     msReached: "{m} reached {c} ★: {r}", msGive: "Mark as given", msGivenToast: "{r} marked as given", msHit: "You reached {c} ★! Reward: {r}", msHitOther: "{m} reached {c} ★! Reward: {r}",
-    msReset: "Start {m}'s stars over", msResetDone: "{m}'s stars start again from 0", msGivenTitle: "Recently given", msGivenLog: "{m} got {r} ({c} ★)", moreOpts: "More options: area, time of day, stars, note, steps, take turns", ntTitle: "Reminders", ntHint: "Get a reminder on your phone about today's chores, and before your activities start. Applies to this phone or computer.", ntOn: "Turn on reminders", ntDaily: "Reminder about today's chores", ntOffOpt: "Off", ntActs: "Remind me an hour before my activities and events, and half an hour before chores with a time", ntTest: "Send a test notification", ntOff: "Turn off reminders", ntOnDone: "Reminders are on.", ntSaved: "Saved.", ntTestSent: "The test notification was sent. It arrives in a few seconds.", ntDenied: "Notifications are blocked for the app. Allow them in your phone's settings for the browser or app, then try again.", ntUnsupported: "This browser cannot receive reminders.", ntIosHome: "On iPhone: first add the app to your home screen (Share → Add to Home Screen), open it from there and turn reminders on there.", ntFail: "That did not work. Try again.", ntNotSetup: "Reminders are not switched on on the server yet.", ntOffDone: "Reminders are off on this device.",
+    msReset: "Start {m}'s stars over", msResetDone: "{m}'s stars start again from 0", msGivenTitle: "Recently given", msGivenLog: "{m} got {r} ({c} ★)", moreOpts: "More options", ntTitle: "Reminders", ntHint: "Get a reminder on your phone about today's chores, and before your activities start. Applies to this phone or computer.", ntOn: "Turn on reminders", ntDaily: "Reminder about today's chores", ntOffOpt: "Off", ntActs: "Remind me an hour before my activities and events, and half an hour before chores with a time", ntTest: "Send a test notification", ntOff: "Turn off reminders", ntOnDone: "Reminders are on.", ntSaved: "Saved.", ntTestSent: "The test notification was sent. It arrives in a few seconds.", ntDenied: "Notifications are blocked for the app. Allow them in your phone's settings for the browser or app, then try again.", ntUnsupported: "This browser cannot receive reminders.", ntIosHome: "On iPhone: first add the app to your home screen (Share → Add to Home Screen), open it from there and turn reminders on there.", ntFail: "That did not work. Try again.", ntNotSetup: "Reminders are not switched on on the server yet.", ntOffDone: "Reminders are off on this device.",
     privacyLink: "Privacy policy", termsLink: "Terms of use", termsAccept: "I accept the {terms} and have read the {privacy}.", termsWordT: "terms of use", termsWordP: "privacy policy", termsNeeded: "Please accept the terms to create an account.",
     consentLabel: "I am a parent or guardian and agree that the children in our family use the app.", consentHint: "Needed before the children's invite can be shared.",
     fbTitle: "Feedback", fbHint: "Something odd, something missing, an idea? Write it here. It goes straight to the person who builds the app.", fbSend: "Send", fbThanks: "Thanks! Your feedback was sent.", fbFail: "It could not be sent right now. Try again later.",
@@ -1398,7 +1455,7 @@ const T = {
     setNotOwner: "The guardian manages the household name, week start and what children may do.",
     setPeopleTitle: "People", setPeopleHint: "Change names and colours. This is the list used for assigning chores.",
     setAccountTitle: "My account", setChangeEmail: "Change email", setNewPw: "New password", setChangePw: "Change password",
-    setExportTitle: "Export data", setExportHint: "Download all household data as a backup file.", setExportBtn: "Download backup",
+    setExportTitle: "Download my data", setExportHint: "A copy of everything the app has about you and your household, as a file. Children get only their own data.", setExportBtn: "Download my data",
     setSaved: "Saved.", setPwMismatch: "The passwords do not match.", setPwShort: "The password must be at least 6 characters.",
     setPwDone: "Password changed.", setEmailSent: "Check your inbox and confirm the new address.", setNeedRelogin: "For security, log in again and retry.",
     setNameEmpty: "The name cannot be empty."
@@ -1449,7 +1506,7 @@ const T = {
     deleteWarn: "Raderingen tar bort all data för alla i hushållet.", ownerNote: "Bara vårdnadshavaren som sköter hushållet kan hantera konton.",
     tabToday: "Idag", tabChores: "Sysslor", tabFamily: "Familj", tabWeek: "Vecka",
     todayHi: "Hej {name}!", todayFor: "Idag: {name}", todayEmpty: "Inga sysslor här än.", todayEmptyBtn: "Lägg till första sysslan",
-    addToggle: "+ Lägg till syssla", ownTask: "✎ Skriv en egen syssla", back: "← Tillbaka", generalTitle: "Allmänt", langLabel: "Språk",
+    addToggle: "+ Lägg till syssla", ownTask: "Skriv egen", back: "← Tillbaka", generalTitle: "Allmänt", langLabel: "Språk",
     todayLeft: "{n} kvar idag", kDate: "Datum (valfritt)", kTime: "Tid (valfritt)", kWday: "Vilken dag?", wdayAny: "Valfri dag",
     wdays: ["söndag", "måndag", "tisdag", "onsdag", "torsdag", "fredag", "lördag"], late: "Sen", atTime: "kl {t}", monthDay: "den {d}:e varje månad",
     calTitle: "Familjens vecka", calWho: "Vem?", calAdd: "Lägg till i kalendern", calEmpty: "Inget planerat", calToday: "Idag",
@@ -1470,6 +1527,12 @@ const T = {
     meetThanks: "Sparat. Ha en bra vecka!",
     pocketTitle: "Fickpengar", pocketHint: "Gör stjärnor till pengar. Låt stå på 0 för att stänga av.", pocketRate: "Kronor per stjärna", pocketSave: "Spara",
     pocketOwed: "{kr} kr att betala ut", pocketNone: "Inget att betala ut", pocketPay: "Betalat {kr} kr", pocketPaidToast: "Betalade {kr} kr till {name}", pocketKid: "Du har tjänat {kr} kr",
+    mfaTitle: "Tvåstegsverifiering", mfaHint: "Extra skydd för vuxna: utöver lösenordet skriver du en kod från en autentiseringsapp (till exempel Google Authenticator eller 1Password).", mfaOn: "Tvåstegsverifiering är på.", mfaOff: "Slå på tvåstegsverifiering", mfaDisable: "Stäng av", mfaScan: "Skanna koden med din autentiseringsapp, eller skriv in nyckeln för hand. Skriv sedan den sexsiffriga koden som visas.", mfaKey: "Nyckel: {k}", mfaCode: "Sexsiffrig kod", mfaConfirm: "Bekräfta", mfaDone: "Tvåstegsverifiering är nu på.", mfaRemoved: "Tvåstegsverifiering är avstängd.", mfaBad: "Koden stämde inte. Prova den senaste koden.", mfaNeedFresh: "Logga in igen med din kod först, sedan kan du stänga av.", mfaUnavailable: "Tvåstegsverifiering går inte att använda just nu.",
+    mfaLoginTitle: "Tvåstegsverifiering", mfaLoginHint: "Skriv den sexsiffriga koden från din autentiseringsapp.", mfaContinue: "Fortsätt", mfaCancel: "Logga ut",
+    setRewards: "Använd stjärnor och belöningar", setRewardsHint: "Stäng av om ert hushåll inte vill ha ett belöningssystem.",
+    calIncl: "Visa i kalendern:", calInclChores: "Sysslor", calInclActs: "Aktiviteter och händelser", calInclBdays: "Födelsedagar",
+    aiPrivacy: "Skriv bara önskemål om mat. Namn i hushållet tas bort innan något skickas, och inget om hälsa eller allergier lämnar appen utöver det du skriver här.",
+    kWhat: "Vad ska göras?", kWho: "Vem gör det?", kHowOften: "Hur ofta?", kClock: "Vid en viss tid? (valfritt)", kClockHint: "Till exempel 22:00. Då kommer den fram i En sak i taget först en halvtimme innan.", kHowLong: "Hur lång tid tar det?", kMinUnit: "minuter", pickTask: "Välj ett förslag",
     invTo: "Bjud in", invWith: "med {names}", invBanner: "{name} bjuder in dig: {what}", invYes: "Gärna", invNo: "Nej tack", invSaidYes: "{name}, kommer", invSaidNo: "{name}, kan inte", invWait: "{name}, har inte svarat", invJoined: "Du följer med {name}", invEvWhen: "{date} {time}", invOrganizer: "Ordnas av {name}",
     focusOpen: "En sak i taget", focusOf: "{done} av {total} klara", focusNow: "Nu", focusAbout: "Cirka {n} min", focusDone: "Klar ✓", focusLater: "Senare", focusAllDone: "Allt klart för idag!", focusAllHint: "{n} sysslor avbockade. Snyggt jobbat.", focusStars: "Du fick {n} ★ idag.", focusBack: "Tillbaka till Idag",
     startCreate: "Skapa hushållet", startDoneTitle: "Nu är ni igång!", startDoneHint: "Allt är klart. Känner du en familj som också bråkar om disken?",
@@ -1507,7 +1570,7 @@ const T = {
     rewardsTitle: "Stjärnor och belöningar", rewardsHint: "Barnen får stjärnor när de gör sina sysslor. Ni bestämmer hur många stjärnor varje syssla ger (när ni lägger till eller ändrar en syssla) och hur många stjärnor som behövs för varje belöning.", rewardName: "Belöning", rewardCost: "Stjärnor som behövs", rewardsNone: "Inga belöningar än. Lägg till en nedan.",
     starsLabel: "Stjärnor ★", starPill: "{n} ★", msNext: "{left} kvar till {r}", msAllDone: "Alla belöningar är nådda! Fråga en förälder om en ny.", msNoneKid: "Fråga en förälder om belöningar att samla stjärnor till.", msNoneAdult: "Lägg till belöningar under Familj så får stjärnorna ett mål.",
     msReached: "{m} har nått {c} ★: {r}", msGive: "Markera som given", msGivenToast: "{r} markerad som given", msHit: "Du har nått {c} ★! Belöning: {r}", msHitOther: "{m} har nått {c} ★! Belöning: {r}",
-    msReset: "Börja om {m}s stjärnor", msResetDone: "{m}s stjärnor börjar om från 0", msGivenTitle: "Senast givna", msGivenLog: "{m} fick {r} ({c} ★)", moreOpts: "Fler val: område, klockslag, stjärnor, anteckning, delmoment, turas om", ntTitle: "Påminnelser", ntHint: "Få en påminnelse i telefonen om dagens sysslor, och innan dina aktiviteter börjar. Gäller den här telefonen eller datorn.", ntOn: "Slå på påminnelser", ntDaily: "Påminnelse om dagens sysslor", ntOffOpt: "Av", ntActs: "Påminn mig en timme före mina aktiviteter och händelser, och en halvtimme före sysslor med klockslag", ntTest: "Skicka en testnotis", ntOff: "Stäng av påminnelser", ntOnDone: "Påminnelser är påslagna.", ntSaved: "Sparat.", ntTestSent: "Testnotisen är skickad. Den kommer om några sekunder.", ntDenied: "Notiser är blockerade för appen. Tillåt dem i telefonens inställningar för webbläsaren eller appen och försök igen.", ntUnsupported: "Den här webbläsaren kan inte ta emot påminnelser.", ntIosHome: "På iPhone: lägg först till appen på hemskärmen (Dela → Lägg till på hemskärmen), öppna den därifrån och slå på påminnelser där.", ntFail: "Det gick inte. Försök igen.", ntNotSetup: "Påminnelser är inte aktiverade på servern än.", ntOffDone: "Påminnelser är avstängda på den här enheten.",
+    msReset: "Börja om {m}s stjärnor", msResetDone: "{m}s stjärnor börjar om från 0", msGivenTitle: "Senast givna", msGivenLog: "{m} fick {r} ({c} ★)", moreOpts: "Fler val", ntTitle: "Påminnelser", ntHint: "Få en påminnelse i telefonen om dagens sysslor, och innan dina aktiviteter börjar. Gäller den här telefonen eller datorn.", ntOn: "Slå på påminnelser", ntDaily: "Påminnelse om dagens sysslor", ntOffOpt: "Av", ntActs: "Påminn mig en timme före mina aktiviteter och händelser, och en halvtimme före sysslor med klockslag", ntTest: "Skicka en testnotis", ntOff: "Stäng av påminnelser", ntOnDone: "Påminnelser är påslagna.", ntSaved: "Sparat.", ntTestSent: "Testnotisen är skickad. Den kommer om några sekunder.", ntDenied: "Notiser är blockerade för appen. Tillåt dem i telefonens inställningar för webbläsaren eller appen och försök igen.", ntUnsupported: "Den här webbläsaren kan inte ta emot påminnelser.", ntIosHome: "På iPhone: lägg först till appen på hemskärmen (Dela → Lägg till på hemskärmen), öppna den därifrån och slå på påminnelser där.", ntFail: "Det gick inte. Försök igen.", ntNotSetup: "Påminnelser är inte aktiverade på servern än.", ntOffDone: "Påminnelser är avstängda på den här enheten.",
     privacyLink: "Integritetspolicy", termsLink: "Användarvillkor", termsAccept: "Jag godkänner {terms} och har läst {privacy}.", termsWordT: "användarvillkoren", termsWordP: "integritetspolicyn", termsNeeded: "Du behöver godkänna villkoren för att skapa ett konto.",
     consentLabel: "Jag är förälder eller vårdnadshavare och godkänner att barnen i vår familj använder appen.", consentHint: "Behövs innan barnens inbjudan kan delas.",
     fbTitle: "Tyck till", fbHint: "Något konstigt, något som saknas, en idé? Skriv här. Det går direkt till den som bygger appen.", fbSend: "Skicka", fbThanks: "Tack! Det är skickat.", fbFail: "Det gick inte att skicka just nu. Försök igen senare.",
@@ -1546,7 +1609,7 @@ const T = {
     setNotOwner: "Vårdnadshavaren styr hushållets namn, veckostart och vad barn får göra.",
     setPeopleTitle: "Personer", setPeopleHint: "Ändra namn och färger. Listan används när sysslor delas ut.",
     setAccountTitle: "Mitt konto", setChangeEmail: "Byt e-post", setNewPw: "Nytt lösenord", setChangePw: "Byt lösenord",
-    setExportTitle: "Exportera data", setExportHint: "Ladda ned hushållets alla uppgifter som en säkerhetskopia.", setExportBtn: "Ladda ned säkerhetskopia",
+    setExportTitle: "Ladda ner mina uppgifter", setExportHint: "En kopia av allt appen har om dig och ert hushåll, som en fil. Barn får bara sina egna uppgifter.", setExportBtn: "Ladda ner mina uppgifter",
     setSaved: "Sparat.", setPwMismatch: "Lösenorden matchar inte.", setPwShort: "Lösenordet måste vara minst 6 tecken.",
     setPwDone: "Lösenordet är bytt.", setEmailSent: "Kolla din inkorg och bekräfta den nya adressen.", setNeedRelogin: "Av säkerhetsskäl: logga in igen och försök på nytt.",
     setNameEmpty: "Namnet får inte vara tomt."
@@ -1706,7 +1769,7 @@ window.addEventListener("pagehide", flushSave);
 document.addEventListener("visibilitychange", () => { if (document.hidden) flushSave(); });
 
 /* ---------- Shared household (cloud) ---------- */
-const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true, parentConsent: "", calToken: "" };
+const SETTINGS_DEFAULT = { weekStart: 1, lang: "", childSeeAll: false, childCheck: true, childProfile: true, parentConsent: "", calToken: "", rewardsOff: false, calChores: true, calActs: true, calBdays: true };
 function settings() { return { ...SETTINGS_DEFAULT, ...((state && state.settings) || {}) }; }
 const SAFE_ID = /^[A-Za-z0-9_-]{1,64}$/;
 function safeList(a) { return (Array.isArray(a) ? a : []).filter(x => x && typeof x === "object" && SAFE_ID.test(String(x.id))); }
@@ -1868,7 +1931,11 @@ async function refreshHousehold(force) {
   if (LOCAL_MODE || !currentUser || !hh) return;
   if (force) { while (saving) await new Promise(r => setTimeout(r, 50)); } else if (saving) return;
   const { data, error } = await sb.rpc("my_household");
-  if (error) return;
+  if (error) {
+    // two-step sign-in was switched on from another device: ask for the code here too
+    if (/mfa_required/.test(error.message || "")) { stopPolling(); showMfaStep(currentUser); }
+    return;
+  }
   if (!data) {
     stopPolling(); hh = null; state = null; baseState = null;
     applyRole(); showSetup();
@@ -1896,6 +1963,7 @@ function applyRole() {
   document.body.classList.toggle("child-nocheck", isChild() && !settings().childCheck);
   document.body.classList.toggle("child-noprofile", isChild() && !settings().childProfile);
   document.body.classList.toggle("local-mode", LOCAL_MODE);
+  document.body.classList.toggle("no-rewards", !!settings().rewardsOff);
   if (isChild()) profileId = hh.memberId;
 }
 
@@ -2032,6 +2100,7 @@ function syncFreqFields() {
   document.getElementById("k-rot-row").hidden = f === "once";
   document.getElementById("k-wday-row").hidden = f !== "weekly" && f !== "biweekly";
   document.getElementById("k-bi-row").hidden = f !== "biweekly";
+  setTimeout(syncSegs, 0);
   const bi = document.getElementById("k-bi");
   if (!bi.options.length || bi.options[0].textContent !== T[lang].biThis) { const v = bi.value || "0"; bi.innerHTML = `<option value="0">${esc(T[lang].biThis)}</option><option value="1">${esc(T[lang].biNext)}</option>`; bi.value = v; }
   document.getElementById("k-date-row").hidden = !(f === "once" || f === "monthly");
@@ -2416,7 +2485,11 @@ function openAdd(own) {
 }
 function setOwn(open) {
   document.getElementById("own-wrap").hidden = !open;
-  document.getElementById("own-toggle").setAttribute("aria-expanded", String(open));
+  document.getElementById("own-toggle").setAttribute("aria-pressed", String(open));
+  document.getElementById("pick-toggle").setAttribute("aria-pressed", String(!open));
+  document.getElementById("pick-wrap-1").hidden = open;
+  document.getElementById("pick-wrap-2").hidden = open;
+  if (open) syncSegs();
 }
 function closeAdd() {
   document.getElementById("add-panel").hidden = true;
@@ -2469,6 +2542,7 @@ function renderAll() {
   if (editId && !state.tasks.some(k => k.id === editId)) setEditMode(null);
   renderMembers();
   renderTasks();
+  syncSegs();
   renderToday();
   renderShopping();
   renderCalendar();
@@ -2487,6 +2561,7 @@ function renderAll() {
   renderCheckins();
   renderHousehold();
   renderCalSet();
+  renderMfa();
   renderInvite();
   renderFocusButton();
   if (focusOn) renderFocus();
@@ -2746,11 +2821,36 @@ document.getElementById("reset-week").onclick = () => {
 };
 
 document.getElementById("clean-q").oninput = renderCleaning;
-document.getElementById("own-toggle").onclick = () => {
-  const open = document.getElementById("own-wrap").hidden;
-  setOwn(open);
-  if (open) document.getElementById("k-title").focus();
-};
+document.getElementById("own-toggle").onclick = () => { setOwn(true); document.getElementById("k-title").focus(); };
+document.getElementById("pick-toggle").onclick = () => { if (editId) setEditMode(null); setOwn(false); document.getElementById("clean-q").focus(); };
+/* buttons that stand in for the drop-downs (easier to tap on a phone) */
+function syncSegs() {
+  document.querySelectorAll("#task-form .seg[data-for]").forEach(box => {
+    const sel = document.getElementById(box.dataset.for);
+    if (!sel) return;
+    const short = box.dataset.short === "1";
+    const html = [...sel.options].map(o => {
+      const txt = short && o.value !== "" ? o.textContent.slice(0, 3) : o.textContent;
+      return `<button type="button" data-seg-val="${esc(o.value)}" aria-pressed="${o.value === sel.value}"${short && o.value !== "" ? ` aria-label="${esc(o.textContent)}"` : ""}>${esc(txt.charAt(0).toUpperCase() + txt.slice(1))}</button>`;
+    }).join("");
+    if (box._h !== html) { box.innerHTML = html; box._h = html; }
+  });
+  const m = String(document.getElementById("k-min").value);
+  document.querySelectorAll("#k-min-seg [data-min]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.min === m)));
+}
+document.getElementById("task-form").addEventListener("click", e => {
+  const b = e.target.closest("[data-seg-val]");
+  if (b) {
+    const sel = document.getElementById(b.closest(".seg").dataset.for);
+    sel.value = b.dataset.segVal;
+    sel.dispatchEvent(new Event("change", { bubbles: true }));
+    syncSegs();
+    return;
+  }
+  const mn = e.target.closest("[data-min]");
+  if (mn) { document.getElementById("k-min").value = mn.dataset.min; syncSegs(); }
+});
+document.getElementById("task-form").addEventListener("input", () => syncSegs());
 document.getElementById("k-freq").addEventListener("change", syncFreqFields);
 document.getElementById("clean-results").onclick = e => {
   if (isChild()) return;
@@ -3673,6 +3773,16 @@ function renderAiResult() {
   }).join("") + (aiPlan.tip ? `<p class="summary">${esc(aiPlan.tip)}</p>` : "")
     + `<p class="ai-warn">${esc(t.aiWarn)}</p><div class="ai-actions"><button class="btn" type="button" id="ai-use">${esc(t.aiUse)}</button><button class="ghost" type="button" id="ai-again">${esc(t.aiAgain)}</button></div>`;
 }
+// data minimisation: names of the people in the household are replaced before the wishes are sent to the AI
+function scrubNames(text) {
+  let out = String(text || "");
+  const names = state.members.map(m => String(m.name || "").trim()).concat(hh ? hh.members.map(a => String(a.display_name || "").trim()) : []).filter(n => n.length >= 2);
+  names.sort((a, b) => b.length - a.length).forEach(n => {
+    const safe = n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    out = out.replace(new RegExp("(^|[^\\p{L}])" + safe + "(?=[^\\p{L}]|$)", "giu"), "$1" + (lang === "sv" ? "en i familjen" : "someone"));
+  });
+  return out;
+}
 async function aiPlanWeek() {
   if (!AI_ENABLED || aiBusy || isChild() || LOCAL_MODE || !state) return;
   const t = T[lang], status = document.getElementById("ai-status");
@@ -3685,7 +3795,7 @@ async function aiPlanWeek() {
   document.getElementById("ai-go").disabled = true;
   try {
     const { data, error } = await sb.functions.invoke("plan-meals", {
-      body: { lang, dates, prefs, people: state.members.length, kids: state.members.filter(isKid).length, avoid: recent.slice(-14) }
+      body: { lang, dates, prefs: scrubNames(prefs), people: state.members.length, kids: state.members.filter(isKid).length, avoid: recent.slice(-14) }
     });
     if (error) {
       let code = "";
@@ -3779,6 +3889,7 @@ function giveReward(mid, rid) {
   save(); renderAll();
 }
 function checkMilestone(mid, before) {
+  if (settings().rewardsOff) return;
   const after = starsEarned(mid);
   if (after <= before) return;
   const hit = milestones().filter(r => (Number(r.cost) || 0) > before && (Number(r.cost) || 0) <= after).pop();
@@ -3944,94 +4055,108 @@ const CONTACT = "ludvig.j.bohlin@gmail.com";
 const LEGAL = {
   sv: {
     privacy: `<h2 id="legal-h">Integritetspolicy</h2>
-<p class="meta">Gäller från 9 oktober 2026</p>
+<p class="meta">Gäller från 28 oktober 2026</p>
 <h3>Vem ansvarar?</h3>
-<p>Hushållsbalans drivs privat av Ludvig Bohlin. Har du frågor, vill se dina uppgifter eller vill att något raderas: mejla <a href="mailto:${CONTACT}">${CONTACT}</a>.</p>
+<p>Personuppgiftsansvarig är Ludvig Bohlin, som driver Hushållsbalans privat. Frågor, begäran om kopia, rättelse eller radering: mejla <a href="mailto:${CONTACT}">${CONTACT}</a>. Vi svarar inom en månad.</p>
 <h3>Vilka uppgifter sparas?</h3>
 <ul>
-<li><b>Konto:</b> e-postadress, lösenord (krypterat, vi kan inte se det) och namnet du visar i appen.</li>
-<li><b>Familjens innehåll:</b> sysslor, vem som gjort vad, kalender, födelsedagar, fasta aktiviteter, kommentarer, anslagstavla, inköpslista, middagar, stjärnor och belöningar. Det syns för alla i ert hushåll.</li>
+<li><b>Konto:</b> e-postadress, lösenord (krypterat, vi kan inte se det), namnet du visar i appen och, om du slår på det, uppgifter för tvåstegsverifiering.</li>
+<li><b>Hushållets innehåll:</b> sysslor, vem som gjort vad, kalender, födelsedagar, fasta aktiviteter, inbjudningar, kommentarer, anslagstavla, inköpslista, middagar, veckoavstämningar, stjärnor, belöningar och fickpengar. Det syns för alla i ert hushåll.</li>
 <li><b>Mina egna saker:</b> dina privata att-göra. De syns bara för dig.</li>
-<li><b>Påminnelser:</b> om du slår på dem sparas en adress från din webbläsare som behövs för att skicka notiser, samt vilken tid du vill ha dem.</li>
-<li><b>Felrapporter och synpunkter:</b> om något går fel i appen sparas en kort teknisk beskrivning (felmeddelande, webbläsare, appversion). Det du skriver under Tyck till sparas också.</li>
-<li><b>Kalenderlänk:</b> om vårdnadshavaren slår på kalenderlänken skapas en hemlig adress. Den som har adressen kan se hushållets sysslor, aktiviteter, händelser och födelsedagar i sin kalenderapp. Vårdnadshavaren kan byta adress när som helst, då slutar den gamla att fungera. Kalenderappen (till exempel Google eller Apple) hämtar uppgifterna enligt sina egna villkor.</li>
+<li><b>Påminnelser:</b> om du slår på dem, en adress från din webbläsare som behövs för att skicka notiser och vilken tid du vill ha dem.</li>
+<li><b>Felrapporter och synpunkter:</b> om något går fel sparas en kort teknisk beskrivning (felmeddelande, webbläsare, appversion). Det du skriver under Tyck till sparas också.</li>
+<li><b>Kalenderlänk:</b> om vårdnadshavaren slår på den skapas en lång slumpad, hemlig adress. Vårdnadshavaren väljer vad som visas (sysslor, aktiviteter, födelsedagar) och kan byta adress när som helst, då slutar den gamla fungera. Kalendern ber sökmotorer att inte indexera den.</li>
 </ul>
-<h3>Varför?</h3>
-<p>Bara för att appen ska fungera: dela upp sysslor rättvist, visa er kalender, skicka påminnelser du har bett om och rätta fel. Uppgifterna säljs inte, används inte för reklam och delas inte med någon annan än tjänsterna nedan. Den rättsliga grunden är avtalet med dig när du skapar konto, och för barn förälderns samtycke.</p>
-<h3>Var lagras det?</h3>
+<p>Vi samlar inte in plats, kontakter, bilder, personnummer, adress eller hälsouppgifter. Namn i appen kan vara smeknamn, till exempel "Barn 1".</p>
+<h3>Varför och med vilken rätt?</h3>
+<p>Bara för att appen ska fungera: dela upp sysslor rättvist, visa er kalender, skicka påminnelser du bett om, hålla tjänsten säker och rätta fel. Rättslig grund är avtalet med dig (användarvillkoren). För barn under 13 år krävs dessutom samtycke från vårdnadshavare. Felrapporter och säkerhetsloggar behandlas med stöd av berättigat intresse att hålla appen säker och fungerande. Uppgifterna säljs inte, används inte för reklam och delas inte med andra än tjänsterna nedan.</p>
+<h3>Vilka hjälper oss? (personuppgiftsbiträden)</h3>
 <ul>
-<li><b>Supabase</b> (databas och inloggning), servrar i Frankfurt, EU.</li>
-<li><b>GitHub Pages</b> visar själva appen. GitHub kan logga din IP-adress när sidan laddas.</li>
-<li><b>Anthropic</b> (AI-hjälp med middagar), USA. Bara om en vuxen trycker på AI-knappen skickas önskemålen ni skriver, veckans datum och hur många ni är. Inga namn eller konton skickas.</li>
-<li><b>Notistjänster</b> (Apple, Google, Mozilla) levererar påminnelser till telefonen om du slår på dem.</li>
+<li><b>Supabase</b>: databas, inloggning och säkerhetskopior. Servrar i Frankfurt, EU.</li>
+<li><b>GitHub Pages</b>: visar själva appen. GitHub kan logga IP-adresser när sidan laddas (USA, EU-kommissionens standardavtalsklausuler och EU–US Data Privacy Framework).</li>
+<li><b>Anthropic</b>: AI-förslag på middagar (USA, standardavtalsklausuler). Bara när en vuxen trycker på AI-knappen skickas önskemålen, veckans datum och hur många ni är (varav barn). Namn på personer i hushållet tas bort innan något skickas, och inga konton, e-postadresser eller hushålls-ID skickas. Barn kan inte använda AI-funktionen.</li>
+<li><b>Notistjänster</b> (Apple, Google, Mozilla): levererar påminnelser till telefonen om du slår på dem.</li>
 </ul>
 <h3>Barn</h3>
-<p>Barn under 13 år får bara använda appen om en förälder eller vårdnadshavare har godkänt det. Föräldern som äger hushållet godkänner det innan barnens inbjudan kan delas, och kan när som helst ta bort barnets konto.</p>
+<p>Barn under 13 år får bara använda appen om en vårdnadshavare har godkänt det. Vårdnadshavaren som sköter hushållet godkänner innan barnens inbjudan kan delas, bestämmer vad barn får se och göra, och kan när som helst ta bort barnets konto. Barn kan inte kontakta någon utanför sitt eget hushåll: det finns inga offentliga profiler, ingen sökning efter andra användare, ingen reklam och inga externa länkar i barnens vy.</p>
 <h3>Hur länge?</h3>
-<p>Så länge kontot finns. Felrapporter raderas efter 90 dagar. När du raderar ditt konto (Inställningar → Ta bort konto och data) försvinner dina uppgifter direkt. Raderar vårdnadshavaren hushållet försvinner hela hushållets innehåll.</p>
+<p>Så länge kontot finns. Felrapporter raderas efter 90 dagar. När du raderar ditt konto (Inställningar → Radera mitt konto) tas dina uppgifter bort direkt. Säkerhetskopior sparas i högst 14 dagar och raderas sedan automatiskt.</p>
+<h3>Säkerhet</h3>
+<p>All trafik är krypterad (HTTPS). Varje rad i databasen är skyddad så att bara rätt hushåll och rätt person kommer åt den (Row Level Security), och barnens ändringar kontrolleras på servern. Appen tillåter bara sin egen kod (Content Security Policy). Vuxna kan slå på tvåstegsverifiering. Vi tar säkerhetskopior varje natt.</p>
+<h3>Om något går fel</h3>
+<p>Om uppgifter skulle läcka eller förstöras utreder vi direkt, anmäler till Integritetsskyddsmyndigheten inom 72 timmar när det krävs och informerar de som berörs om risken är hög.</p>
 <h3>Dina rättigheter</h3>
-<p>Du har rätt att få veta vilka uppgifter som finns om dig, få dem rättade, få en kopia (vuxna kan exportera allt under Inställningar) och få dem raderade. Du kan också klaga till Integritetsskyddsmyndigheten (imy.se).</p>
+<p>Du har rätt att få veta vilka uppgifter som finns om dig och få en kopia (Inställningar → Ladda ner mina uppgifter), få dem rättade, raderade eller begränsade, invända mot behandling som bygger på berättigat intresse och ta med dig dina uppgifter. Du kan också klaga till Integritetsskyddsmyndigheten (imy.se).</p>
 <h3>Lagring i webbläsaren</h3>
-<p>Appen sparar bara det som behövs för att den ska fungera i din webbläsare: inloggning, språk, utseende och en kopia så att appen fungerar utan nät. Inga spårningscookies.</p>
+<p>Appen sparar bara det som behövs i din webbläsare: inloggning, språk, utseende och en kopia så att appen fungerar utan nät. Inga spårningscookies och ingen analys.</p>
 <h3>Ändringar</h3>
 <p>Ändras policyn står det nya datumet högst upp.</p>`,
     terms: `<h2 id="legal-h">Användarvillkor</h2>
-<p class="meta">Gäller från 9 oktober 2026</p>
+<p class="meta">Gäller från 28 oktober 2026</p>
 <ul>
-<li>Hushållsbalans är gratis och drivs privat av Ludvig Bohlin (<a href="mailto:${CONTACT}">${CONTACT}</a>).</li>
-<li>Appen erbjuds som den är. Vi gör vårt bästa, men kan inte lova att den alltid fungerar eller att inget går förlorat.</li>
-<li>Du ansvarar för ditt konto och ditt lösenord, och för det du skriver i appen. Skriv inget som är olagligt eller kränkande.</li>
+<li>Hushållsbalans drivs privat av Ludvig Bohlin (<a href="mailto:${CONTACT}">${CONTACT}</a>). Grundfunktionerna är gratis.</li>
+<li>Appen är till för hushåll av alla slag: familjer, par, sambor, kompisar som delar bostad med flera.</li>
+<li>Appen erbjuds som den är. Vi gör vårt bästa och tar säkerhetskopior varje natt, men kan inte lova att den alltid fungerar.</li>
+<li>Du ansvarar för ditt konto och ditt lösenord, och för det du skriver i appen. Skriv inget olagligt, hotfullt eller kränkande, och inga känsliga uppgifter som hälsa, personnummer eller adress.</li>
 <li>Vårdnadshavaren som sköter ett hushåll bestämmer vem som är med och kan ta bort konton från hushållet.</li>
-<li>Barn under 13 år får bara använda appen med en förälders eller vårdnadshavares godkännande.</li>
-<li>AI-förslag på middagar är bara förslag. Kontrollera alltid ingredienser vid allergier.</li>
-<li>Du kan sluta använda appen och radera ditt konto när du vill. Konton som missbrukar appen kan stängas av.</li>
+<li>Barn under 13 år får bara använda appen med godkännande från en vårdnadshavare. Belöningar och fickpengar kan stängas av.</li>
+<li>Den som har en kalenderlänk kan se det som vårdnadshavaren valt att dela. Dela den bara med personer du litar på.</li>
+<li>AI-förslag på middagar är bara förslag och kan vara fel. Kontrollera alltid ingredienser och förpackningar vid allergier.</li>
+<li>Du kan sluta använda appen, ladda ner dina uppgifter och radera ditt konto när du vill. Konton som missbrukar appen kan stängas av.</li>
 <li>Villkoren kan ändras. Då står det nya datumet högst upp.</li>
 <li>Svensk lag gäller.</li>
 </ul>`
   },
   en: {
     privacy: `<h2 id="legal-h">Privacy policy</h2>
-<p class="meta">Valid from 9 October 2026</p>
+<p class="meta">Valid from 28 October 2026</p>
 <h3>Who is responsible?</h3>
-<p>Household Balance is run privately by Ludvig Bohlin. Questions, a copy of your data or deletion: email <a href="mailto:${CONTACT}">${CONTACT}</a>.</p>
+<p>The data controller is Ludvig Bohlin, who runs Household Balance privately. Questions, a copy, correction or deletion: email <a href="mailto:${CONTACT}">${CONTACT}</a>. We answer within one month.</p>
 <h3>What is stored?</h3>
 <ul>
-<li><b>Account:</b> email address, password (encrypted, we cannot see it) and the name you show in the app.</li>
-<li><b>The family's content:</b> chores, who did what, calendar, birthdays, weekly activities, comments, notice board, shopping list, dinners, stars and rewards. Everyone in your household can see it.</li>
+<li><b>Account:</b> email address, password (encrypted, we cannot see it), the name you show in the app and, if you turn it on, two-step sign-in data.</li>
+<li><b>The household's content:</b> chores, who did what, calendar, birthdays, weekly activities, invitations, comments, notice board, shopping list, dinners, weekly check-ins, stars, rewards and pocket money. Everyone in your household can see it.</li>
 <li><b>My own things:</b> your private to-dos. Only you can see them.</li>
-<li><b>Reminders:</b> if you turn them on, an address from your browser that is needed to send notifications, and the time you want them.</li>
+<li><b>Reminders:</b> if you turn them on, an address from your browser needed to send notifications, and the time you want them.</li>
 <li><b>Error reports and feedback:</b> if something goes wrong, a short technical description (error message, browser, app version). What you write under Feedback is also stored.</li>
-<li><b>Calendar link:</b> if the guardian turns on the calendar link, a secret address is created. Anyone with the address can see the household's chores, activities, events and birthdays in their calendar app. The guardian can change the address at any time, which stops the old one working. The calendar app (for example Google or Apple) fetches the data under its own terms.</li>
+<li><b>Calendar link:</b> if the guardian turns it on, a long random secret address is created. The guardian chooses what it shows (chores, activities, birthdays) and can change the address at any time, which stops the old one working. The calendar asks search engines not to index it.</li>
 </ul>
-<h3>Why?</h3>
-<p>Only to make the app work: share chores fairly, show your calendar, send reminders you asked for and fix errors. The data is not sold, not used for ads and not shared with anyone except the services below. The legal basis is the agreement with you when you create an account, and for children the consent of a parent.</p>
-<h3>Where is it stored?</h3>
+<p>We do not collect location, contacts, photos, ID numbers, addresses or health data. Names in the app can be nicknames, for example "Child 1".</p>
+<h3>Why, and on what legal basis?</h3>
+<p>Only to make the app work: share chores fairly, show your calendar, send reminders you asked for, keep the service secure and fix errors. The legal basis is the agreement with you (the terms of use). For children under 13 the consent of a guardian is also required. Error reports and security logs are processed on the basis of our legitimate interest in keeping the app secure and working. The data is not sold, not used for ads and not shared with anyone except the services below.</p>
+<h3>Who helps us? (processors)</h3>
 <ul>
-<li><b>Supabase</b> (database and sign-in), servers in Frankfurt, EU.</li>
-<li><b>GitHub Pages</b> serves the app itself. GitHub may log your IP address when the page loads.</li>
-<li><b>Anthropic</b> (AI help with dinners), USA. Only if an adult taps the AI button: the wishes you write, the week's dates and how many you are. No names or accounts are sent.</li>
-<li><b>Notification services</b> (Apple, Google, Mozilla) deliver reminders to your phone if you turn them on.</li>
+<li><b>Supabase</b>: database, sign-in and backups. Servers in Frankfurt, EU.</li>
+<li><b>GitHub Pages</b>: serves the app. GitHub may log IP addresses when the page loads (USA, EU standard contractual clauses and the EU–US Data Privacy Framework).</li>
+<li><b>Anthropic</b>: AI dinner suggestions (USA, standard contractual clauses). Only when an adult taps the AI button: the wishes, the week's dates and how many you are (and how many children). Names of people in the household are removed before anything is sent, and no accounts, email addresses or household IDs are sent. Children cannot use the AI feature.</li>
+<li><b>Notification services</b> (Apple, Google, Mozilla): deliver reminders to your phone if you turn them on.</li>
 </ul>
 <h3>Children</h3>
-<p>Children under 13 may only use the app if a parent or guardian has agreed. The guardian who manages the household agrees before the children's invite can be shared, and can remove a child's account at any time.</p>
+<p>Children under 13 may only use the app if a guardian has agreed. The guardian who manages the household agrees before the children's invite can be shared, decides what children may see and do, and can remove a child's account at any time. Children cannot contact anyone outside their own household: there are no public profiles, no search for other users, no ads and no external links in the children's view.</p>
 <h3>How long?</h3>
-<p>As long as the account exists. Error reports are deleted after 90 days. When you delete your account (Settings → Delete account and data) your data is removed at once. If the guardian deletes the household, all its content is removed.</p>
+<p>As long as the account exists. Error reports are deleted after 90 days. When you delete your account (Settings → Delete my account) your data is removed at once. Backups are kept for at most 14 days and then deleted automatically.</p>
+<h3>Security</h3>
+<p>All traffic is encrypted (HTTPS). Every row in the database is protected so only the right household and person can reach it (Row Level Security), and children's changes are checked on the server. The app only allows its own code to run (Content Security Policy). Adults can turn on two-step sign-in. We take backups every night.</p>
+<h3>If something goes wrong</h3>
+<p>If data were to leak or be destroyed we investigate at once, report to the Swedish Authority for Privacy Protection within 72 hours where required, and inform those affected if the risk is high.</p>
 <h3>Your rights</h3>
-<p>You can find out what data there is about you, have it corrected, get a copy (adults can export everything under Settings) and have it deleted. You can also complain to the Swedish Authority for Privacy Protection (imy.se).</p>
+<p>You can find out what data there is about you and get a copy (Settings → Download my data), have it corrected, deleted or restricted, object to processing based on legitimate interest, and take your data with you. You can also complain to the Swedish Authority for Privacy Protection (imy.se).</p>
 <h3>Browser storage</h3>
-<p>The app only stores what it needs to work in your browser: sign-in, language, appearance and a copy so the app works offline. No tracking cookies.</p>
+<p>The app only stores what it needs in your browser: sign-in, language, appearance and a copy so the app works offline. No tracking cookies and no analytics.</p>
 <h3>Changes</h3>
 <p>If the policy changes, the new date is shown at the top.</p>`,
     terms: `<h2 id="legal-h">Terms of use</h2>
-<p class="meta">Valid from 9 October 2026</p>
+<p class="meta">Valid from 28 October 2026</p>
 <ul>
-<li>Household Balance is free and run privately by Ludvig Bohlin (<a href="mailto:${CONTACT}">${CONTACT}</a>).</li>
-<li>The app is provided as is. We do our best but cannot promise it always works or that nothing is ever lost.</li>
-<li>You are responsible for your account, your password and what you write. Do not write anything illegal or offensive.</li>
+<li>Household Balance is run privately by Ludvig Bohlin (<a href="mailto:${CONTACT}">${CONTACT}</a>). The basic features are free.</li>
+<li>The app is for households of all kinds: families, couples, flatmates and more.</li>
+<li>The app is provided as is. We do our best and take backups every night, but cannot promise it always works.</li>
+<li>You are responsible for your account, your password and what you write. Do not write anything illegal, threatening or offensive, and no sensitive data such as health, ID numbers or addresses.</li>
 <li>The guardian who manages a household decides who is in it and can remove accounts from it.</li>
-<li>Children under 13 may only use the app with the consent of a parent or guardian.</li>
-<li>AI dinner suggestions are only suggestions. Always check ingredients for allergies.</li>
-<li>You can stop using the app and delete your account whenever you like. Accounts that misuse the app may be closed.</li>
+<li>Children under 13 may only use the app with the consent of a guardian. Rewards and pocket money can be turned off.</li>
+<li>Anyone with a calendar link can see what the guardian chose to share. Only share it with people you trust.</li>
+<li>AI dinner suggestions are only suggestions and can be wrong. Always check ingredients and packaging for allergies.</li>
+<li>You can stop using the app, download your data and delete your account whenever you like. Accounts that misuse the app may be closed.</li>
 <li>These terms may change. The new date is then shown at the top.</li>
 <li>Swedish law applies.</li>
 </ul>`
@@ -5836,6 +5961,7 @@ function renderCalSet() {
     const web = calUrl("webcal:"), https = calUrl();
     html += `<label for="cal-who">${esc(t.calLinkWho)}</label><select id="cal-who"><option value="">${esc(t.calAll)}</option>${state.members.map(m => `<option value="${m.id}"${m.id === calWho ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select>
       <div class="cal-btns"><a class="btn" href="${esc(web)}" data-cal="apple">${esc(t.calApple)}</a><a class="ghost" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(web)}" target="_blank" rel="noopener" data-cal="google">${esc(t.calGoogle)}</a><button type="button" class="ghost" data-cal="copy" data-url="${esc(https)}">${esc(t.calCopy)}</button>${isOwner() ? `<button type="button" class="ghost${calConfirm ? " danger" : ""}" data-cal="new">${esc(calConfirm ? t.calNewSure : t.calNew)}</button>` : ""}</div>
+      ${isOwner() ? `<p class="meta" style="margin:12px 0 0">${esc(t.calIncl)}</p><div class="cal-incl">${[["calChores", t.calInclChores], ["calActs", t.calInclActs], ["calBdays", t.calInclBdays]].map(([k, l]) => `<label class="set-check"><input type="checkbox" data-cal-incl="${k}"${settings()[k] ? " checked" : ""}><span>${esc(l)}</span></label>`).join("")}</div>` : ""}
       <p class="footnote" style="text-align:left">${esc(t.calNote)}</p>`;
   }
   box.innerHTML = html;
@@ -5853,6 +5979,8 @@ document.getElementById("set-cal").addEventListener("click", async e => {
   if (act === "copy") { if (await copyText(b.dataset.url)) { b.textContent = t.calCopied; setTimeout(renderCalSet, 1500); } }
 });
 document.getElementById("set-cal").addEventListener("change", e => {
+  const inc = e.target.closest("[data-cal-incl]");
+  if (inc) { if (isOwner()) { state.settings = { ...settings(), [inc.dataset.calIncl]: inc.checked }; save(); } return; }
   if (e.target.id !== "cal-who") return;
   calWho = e.target.value; e.target.blur(); renderCalSet();
 });
@@ -6076,7 +6204,9 @@ function focusList() {
   const pid = todayPerson();
   if (!pid) return [];
   const rank = k => k.done ? 3 : dueStatus(k) === "late" ? 0 : (k.time ? 1 : 2);
-  return state.tasks.filter(k => k.owner === pid && dueStatus(k) !== "later").sort((x, y) => rank(x) - rank(y) || String(x.time || "").localeCompare(String(y.time || "")));
+  const nowM = new Date().getHours() * 60 + new Date().getMinutes();
+  const notYet = k => !k.done && /^\d{2}:\d{2}$/.test(k.time || "") && dueStatus(k) !== "late" && Number(k.time.slice(0, 2)) * 60 + Number(k.time.slice(3)) - nowM > 30;
+  return state.tasks.filter(k => k.owner === pid && dueStatus(k) !== "later" && !notYet(k)).sort((x, y) => rank(x) - rank(y) || String(x.time || "").localeCompare(String(y.time || "")));
 }
 function canTick(k) { return !isChild() || (settings().childCheck && k.owner === hh.memberId); }
 function openFocus(from) {
@@ -6340,6 +6470,7 @@ function renderSettings() {
     document.getElementById("set-c-seeall").checked = !!st.childSeeAll;
     document.getElementById("set-c-check").checked = !!st.childCheck;
     document.getElementById("set-c-profile").checked = !!st.childProfile;
+    document.getElementById("set-rewards").checked = !st.rewardsOff;
   }
   if (!editing("set-name")) {
     const mine = hh.members.find(a => a.user_id === currentUser.id);
@@ -6378,6 +6509,7 @@ document.getElementById("set-deflang").onchange = e => updateSettings({ lang: e.
 document.getElementById("set-c-seeall").onchange = e => updateSettings({ childSeeAll: e.target.checked });
 document.getElementById("set-c-check").onchange = e => updateSettings({ childCheck: e.target.checked });
 document.getElementById("set-c-profile").onchange = e => updateSettings({ childProfile: e.target.checked });
+document.getElementById("set-rewards").onchange = e => updateSettings({ rewardsOff: !e.target.checked });
 
 const peopleBox = document.getElementById("set-people-list");
 peopleBox.addEventListener("change", e => {
@@ -6442,9 +6574,30 @@ document.getElementById("set-pw-form").onsubmit = async e => {
     setMsg("set-account-msg", t.setPwDone);
   } catch (ex) { setMsg("set-account-msg", authErrorText(ex), true); }
 };
+function myDataExport() {
+  const me = !LOCAL_MODE && hh ? hh.memberId : null;
+  let data = state;
+  if (isChild()) {
+    data = {
+      member: memberById(me) || null,
+      tasks: state.tasks.filter(k => k.owner === me),
+      doneLog: (state.doneLog || []).filter(e => e.m === me),
+      starLog: (state.starLog || []).filter(e => e.m === me),
+      comments: (state.comments || []).filter(c => c.by === me),
+      board: (state.board || []).filter(b => b.by === me)
+    };
+  }
+  return {
+    exportedAt: new Date().toISOString(),
+    account: currentUser && !LOCAL_MODE ? { email: currentUser.email || "", name: (currentUser.user_metadata || {}).name || "", created: currentUser.created_at || "" } : null,
+    role: hh ? hh.role : "", household: hh ? hh.name : "",
+    myPrivateItems: typeof mine !== "undefined" ? mine : [],
+    data
+  };
+}
 document.getElementById("set-export-btn").onclick = () => {
-  if (isChild() || !state) return;
-  const payload = { exportedAt: new Date().toISOString(), household: hh ? hh.name : "", data: state };
+  if (!state) return;
+  const payload = myDataExport();
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -6453,6 +6606,112 @@ document.getElementById("set-export-btn").onclick = () => {
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 };
 
+
+
+/* ---------- Two-step sign-in (Supabase Auth MFA, TOTP) ---------- */
+var mfaInfo = null, mfaEnroll = null, mfaMsg = "", mfaErr = false, mfaBusy = false, mfaPendingUser = null;
+function mfaApi() { return !LOCAL_MODE && sb.auth && sb.auth.mfa ? sb.auth.mfa : null; }
+async function mfaLoad() {
+  const api = mfaApi();
+  if (!api) { mfaInfo = { off: true }; renderMfa(); return; }
+  try {
+    const { data, error } = await api.listFactors();
+    if (error) throw error;
+    mfaInfo = { totp: (data && data.totp) || [], all: (data && data.all) || [] };
+  } catch (e) { mfaInfo = { off: true }; }
+  renderMfa();
+}
+function renderMfa() {
+  const box = document.getElementById("set-mfa");
+  if (!box) return;
+  if (LOCAL_MODE || !currentUser || isChild()) { box.innerHTML = ""; return; }
+  if (!mfaInfo) { box.innerHTML = ""; mfaInfo = { loading: true }; mfaLoad(); return; }
+  if (mfaInfo.loading) return;
+  if (box.contains(document.activeElement) && document.activeElement.tagName === "INPUT") return;
+  const t = T[lang];
+  let html = `<h3 id="mfa-h">${esc(t.mfaTitle)}</h3><p class="summary" style="margin-top:0">${esc(t.mfaHint)}</p>`;
+  const on = (mfaInfo.totp || []).some(f => f.status === "verified");
+  if (mfaInfo.off) html += `<p class="meta">${esc(t.mfaUnavailable)}</p>`;
+  else if (mfaEnroll) {
+    html += `<p class="summary">${esc(t.mfaScan)}</p><div class="mfa-qr"><img alt="QR" src="${esc(mfaEnroll.qr)}"></div><p class="mfa-key">${esc(t.mfaKey.replace("{k}", mfaEnroll.secret))}</p>
+      <form id="mfa-enroll-form" class="row"><div class="narrow" style="flex:0 0 170px"><label for="mfa-new-code">${esc(t.mfaCode)}</label><input id="mfa-new-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div><div class="narrow"><button class="btn" type="submit">${esc(t.mfaConfirm)}</button></div></form>`;
+  } else if (on) html += `<p style="margin:0 0 8px"><b>${esc(t.mfaOn)}</b></p><button type="button" class="ghost danger" data-mfa="off">${esc(t.mfaDisable)}</button>`;
+  else html += `<button type="button" class="btn" data-mfa="on">${esc(t.mfaOff)}</button>`;
+  html += `<p class="set-msg${mfaErr ? " err" : ""}" role="status">${esc(mfaMsg)}</p>`;
+  box.innerHTML = html;
+}
+document.getElementById("set-mfa").addEventListener("click", async e => {
+  const b = e.target.closest("[data-mfa]");
+  const api = mfaApi();
+  if (!b || !api || mfaBusy) return;
+  const t = T[lang];
+  mfaBusy = true; mfaMsg = ""; mfaErr = false;
+  try {
+    if (b.dataset.mfa === "on") {
+      for (const f of (mfaInfo.all || []).filter(f => f.factor_type === "totp" && f.status !== "verified")) { try { await api.unenroll({ factorId: f.id }); } catch (ex) {} }
+      const { data, error } = await api.enroll({ factorType: "totp", friendlyName: "Hushållsbalans " + new Date().toISOString().slice(0, 10) });
+      if (error) throw error;
+      mfaEnroll = { id: data.id, qr: data.totp.qr_code, secret: data.totp.secret };
+      renderMfa();
+      setTimeout(() => { const i = document.getElementById("mfa-new-code"); if (i) i.focus(); }, 30);
+    } else {
+      const f = (mfaInfo.totp || []).find(x => x.status === "verified");
+      const { error } = await api.unenroll({ factorId: f.id });
+      if (error) { mfaErr = true; mfaMsg = /aal2|assurance/i.test(error.message || "") ? t.mfaNeedFresh : (error.message || t.mfaUnavailable); }
+      else { mfaMsg = t.mfaRemoved; try { await sb.auth.refreshSession(); } catch (ex) {} }
+      await mfaLoad();
+    }
+  } catch (ex) { mfaErr = true; mfaMsg = t.mfaUnavailable; renderMfa(); }
+  finally { mfaBusy = false; }
+});
+document.getElementById("set-mfa").addEventListener("submit", async e => {
+  if (e.target.id !== "mfa-enroll-form") return;
+  e.preventDefault();
+  const api = mfaApi(), t = T[lang];
+  if (!api || !mfaEnroll) return;
+  const code = document.getElementById("mfa-new-code").value.replace(/\D/g, "");
+  const { error } = await api.challengeAndVerify({ factorId: mfaEnroll.id, code });
+  if (error) { mfaErr = true; mfaMsg = t.mfaBad; document.activeElement.blur(); renderMfa(); return; }
+  mfaEnroll = null; mfaErr = false; mfaMsg = t.mfaDone;
+  document.activeElement && document.activeElement.blur();
+  await mfaLoad();
+});
+async function needsMfa() {
+  const api = mfaApi();
+  if (!api || !api.getAuthenticatorAssuranceLevel) return false;
+  try {
+    const { data } = await api.getAuthenticatorAssuranceLevel();
+    return !!data && data.nextLevel === "aal2" && data.currentLevel !== "aal2";
+  } catch (e) { return false; }
+}
+function showMfaStep(user) {
+  mfaPendingUser = user;
+  const login = document.getElementById("login");
+  login.hidden = false; login.classList.add("mfa-mode");
+  document.getElementById("setup").hidden = true;
+  document.getElementById("mfa-form").hidden = false;
+  document.getElementById("mfa-err").textContent = "";
+  setTimeout(() => document.getElementById("mfa-code").focus(), 30);
+}
+function hideMfaStep() {
+  document.getElementById("login").classList.remove("mfa-mode");
+  document.getElementById("mfa-form").hidden = true;
+  document.getElementById("mfa-code").value = "";
+}
+document.getElementById("mfa-form").onsubmit = async e => {
+  e.preventDefault();
+  const api = mfaApi(), t = T[lang], err = document.getElementById("mfa-err");
+  const code = document.getElementById("mfa-code").value.replace(/\D/g, "");
+  try {
+    const { data: fl } = await api.listFactors();
+    const f = ((fl && fl.totp) || []).find(x => x.status === "verified");
+    const { error } = await api.challengeAndVerify({ factorId: f.id, code });
+    if (error) { err.textContent = t.mfaBad; return; }
+    const u = mfaPendingUser; hideMfaStep(); mfaPendingUser = null;
+    await onSignedIn(u);
+  } catch (ex) { err.textContent = t.mfaBad; }
+};
+document.getElementById("mfa-cancel").onclick = async () => { hideMfaStep(); try { await sb.auth.signOut(); } catch (e) {} currentUser = null; document.getElementById("login").hidden = false; renderAll(); };
 
 /* ---------- Demo: an example family to try without an account ---------- */
 function demoState() {
@@ -6661,9 +6920,13 @@ async function onSignedIn(user) {
   }
   document.getElementById("a-pw").value = "";
   document.getElementById("a-pw2").value = "";
+  if (!LOCAL_MODE && await needsMfa()) { showMfaStep(user); return; }
   let opened = true;
   if (LOCAL_MODE) state = await loadHouseholdFor(user);
-  else opened = await openHousehold();
+  else {
+    try { opened = await openHousehold(); }
+    catch (ex) { if (/mfa_required/.test(String((ex && ex.message) || ""))) { showMfaStep(user); return; } throw ex; }
+  }
   document.getElementById("login").hidden = true;
   if (!opened) { showSetup(); return; }
   finishSignIn();
@@ -6752,6 +7015,7 @@ document.getElementById("join-form").onsubmit = async e => {
 
 async function doLogout() {
   if (DEMO) { demoExit(false); return; }
+  mfaInfo = null; mfaEnroll = null; mfaMsg = "";
   stopPolling();
   if (state && currentUser) { try { await saveNow(); } catch (e) {} }
   if (cacheKey()) { try { localStorage.removeItem(cacheKey()); } catch (e) {} }
